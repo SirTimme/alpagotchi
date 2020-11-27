@@ -1,6 +1,7 @@
 package Bot;
 
 import me.duncte123.botcommons.BotCommons;
+import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
@@ -20,6 +21,8 @@ public class CommandListener extends ListenerAdapter {
         String rawMsg = event.getMessage().getContentRaw();
 
         if (rawMsg.equalsIgnoreCase(prefix + "shutdown") && user.getId().equals(Config.get("OWNER_ID"))) {
+            event.getChannel().sendMessage("Alpagotchi is shutting down...").queue();
+
             event.getJDA().shutdown();
             BotCommons.shutdown(event.getJDA());
 
