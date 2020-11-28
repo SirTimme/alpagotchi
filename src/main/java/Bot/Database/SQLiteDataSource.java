@@ -47,10 +47,6 @@ public class SQLiteDataSource {
         }
     }
 
-    private SQLiteDataSource() {
-
-    }
-
     public static Connection getConnection() throws SQLException {
         return dataSource.getConnection();
     }
