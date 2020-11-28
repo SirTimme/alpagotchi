@@ -40,8 +40,7 @@ public class SQLiteDataSource {
             statement.execute("CREATE TABLE IF NOT EXISTS guild_settings (" +
                     "id INTEGER PRIMARY KEY AUTOINCREMENT," +
                     "guild_id VARCHAR(20) NOT NULL," +
-                    "prefix VARCHAR(255) NOT NULL DEFAULT '" + defaultPrefix + "'" +
-                    ")");
+                    "prefix VARCHAR(255) NOT NULL DEFAULT '" + defaultPrefix + "'" + ")");
         } catch (SQLException error) {
             error.printStackTrace();
         }
