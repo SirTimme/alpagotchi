@@ -1,4 +1,4 @@
-package Bot.Command.Commands;
+package Bot.Command.MemberCommands;
 
 import Bot.Command.CommandContext;
 import Bot.Command.ICommand;
@@ -8,7 +8,6 @@ import net.dv8tion.jda.api.entities.Member;
 
 import java.io.File;
 import java.time.Instant;
-import java.util.List;
 
 public class MyAlpacaCommand implements ICommand {
 
@@ -38,10 +37,5 @@ public class MyAlpacaCommand implements ICommand {
     @Override
     public String getName() {
         return "myalpaca";
-    }
-
-    @Override
-    public List<String> getAliases() {
-        return List.of("alpaca", "stats");
     }
 }

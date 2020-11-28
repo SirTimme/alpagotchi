@@ -1,8 +1,9 @@
 package Bot;
 
+import Bot.Command.AdminCommands.SetPrefixCommand;
 import Bot.Command.CommandContext;
-import Bot.Command.Commands.HelpCommand;
-import Bot.Command.Commands.MyAlpacaCommand;
+import Bot.Command.MemberCommands.HelpCommand;
+import Bot.Command.MemberCommands.MyAlpacaCommand;
 import Bot.Command.ICommand;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
@@ -18,6 +19,7 @@ public class CommandManager {
     public CommandManager() {
         addCommand(new MyAlpacaCommand());
         addCommand(new HelpCommand(this));
+        addCommand(new SetPrefixCommand());
     }
 
     private void addCommand(ICommand command) {
@@ -45,9 +47,9 @@ public class CommandManager {
         return null;
     }
 
-    void handle(GuildMessageReceivedEvent event) {
+    void handle(GuildMessageReceivedEvent event, String prefix) {
         String[] split = event.getMessage().getContentRaw()
-                .replaceFirst("(?i)" + Pattern.quote(Config.get("PREFIX")), "")
+                .replaceFirst("(?i)" + Pattern.quote(prefix), "")
                 .split("\\s+");
 
         String invoke = split[0].toLowerCase();
