@@ -3,7 +3,6 @@ package Bot.Command.MemberCommands;
 import Bot.Command.CommandContext;
 import Bot.CommandManager;
 import Bot.Command.ICommand;
-import Bot.Config;
 import Bot.Constants;
 import net.dv8tion.jda.api.entities.TextChannel;
 

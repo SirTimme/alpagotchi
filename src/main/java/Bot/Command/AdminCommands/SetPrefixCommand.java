@@ -3,13 +3,11 @@ package Bot.Command.AdminCommands;
 import Bot.Command.CommandContext;
 import Bot.Command.ICommand;
 import Bot.Constants;
-import Bot.Database.SQLiteDataSource;
+import Bot.Database.IDataBaseManager;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
 
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.util.List;
 
 public class SetPrefixCommand implements ICommand {
@@ -48,19 +46,6 @@ public class SetPrefixCommand implements ICommand {
 
     private void updatePrefix(long guildID, String newPrefix) {
         Constants.PREFIXES.put(guildID, newPrefix);
-
-        try (final PreparedStatement preparedStatement = SQLiteDataSource
-                .getConnection()
-                // language=SQLite
-                .prepareStatement("UPDATE guild_settings SET prefix = ? WHERE guild_id = ?")) {
-
-            preparedStatement.setString(1, newPrefix);
-            preparedStatement.setString(2, String.valueOf(guildID));
-
-            preparedStatement.executeUpdate();
-
-        } catch (SQLException error) {
-            error.printStackTrace();
-        }
+        IDataBaseManager.INSTANCE.setPrefix(guildID, newPrefix);
     }
 }

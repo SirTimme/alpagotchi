@@ -13,7 +13,7 @@ public class MyAlpacaCommand implements ICommand {
 
     @Override
     public void handle(CommandContext commandContext) {
-        File alpacaFile = new File("C:\\Users\\timpi\\Documents\\GitHub\\Alpagotchi\\src\\main\\resources\\alpaka.gif");
+        File alpacaFile = new File("src\\main\\resources\\alpaka.gif");
         EmbedBuilder embedBuilder = new EmbedBuilder();
         Member botCreator = commandContext.getGuild().getMemberById(Config.get("OWNER_ID"));
 

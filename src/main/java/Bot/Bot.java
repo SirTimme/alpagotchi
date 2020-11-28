@@ -1,18 +1,15 @@
 package Bot;
 
-import Bot.Database.SQLiteDataSource;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
 
 import javax.security.auth.login.LoginException;
-import java.sql.SQLException;
 
 public class Bot {
 
-    public static void main(String[] args) throws LoginException, SQLException {
-        SQLiteDataSource.getConnection();
+    public static void main(String[] args) throws LoginException {
 
         JDABuilder.createDefault(
                 Config.get("TOKEN"),
