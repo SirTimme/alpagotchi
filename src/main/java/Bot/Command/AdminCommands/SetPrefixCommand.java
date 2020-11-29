@@ -2,7 +2,6 @@ package Bot.Command.AdminCommands;
 
 import Bot.Command.CommandContext;
 import Bot.Command.ICommand;
-import Bot.Constants;
 import Bot.Database.IDataBaseManager;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
@@ -29,23 +28,18 @@ public class SetPrefixCommand implements ICommand {
         }
 
         final String newPrefix = String.join("", args);
-        updatePrefix(commandContext.getGuild().getIdLong(), newPrefix);
+        IDataBaseManager.INSTANCE.setPrefix(commandContext.getGuild().getIdLong(), newPrefix);
 
         channel.sendMessageFormat("<:GreenTick:782229268914372609> New Prefix has been set to `%s`", newPrefix).queue();
     }
 
     @Override
-    public String getHelp() {
-        return "`Usage: a!setprefix [prefix]`\nSets the prefix for this server";
+    public String getHelp(CommandContext commandContext) {
+        return "`Usage: " + IDataBaseManager.INSTANCE.getPrefix(commandContext.getGuild().getIdLong()) + "setprefix [prefix]`\nSets the prefix for this server";
     }
 
     @Override
     public String getName() {
         return "setprefix";
-    }
-
-    private void updatePrefix(long guildID, String newPrefix) {
-        Constants.PREFIXES.put(guildID, newPrefix);
-        IDataBaseManager.INSTANCE.setPrefix(guildID, newPrefix);
     }
 }

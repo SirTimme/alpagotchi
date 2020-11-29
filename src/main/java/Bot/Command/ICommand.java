@@ -8,7 +8,7 @@ public interface ICommand {
 
     void handle(CommandContext commandContext);
 
-    String getHelp();
+    String getHelp(CommandContext commandContext);
 
     String getName();
 

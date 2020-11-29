@@ -3,7 +3,7 @@ package Bot.Command.MemberCommands;
 import Bot.Command.CommandContext;
 import Bot.CommandManager;
 import Bot.Command.ICommand;
-import Bot.Constants;
+import Bot.Database.IDataBaseManager;
 import net.dv8tion.jda.api.entities.TextChannel;
 
 import java.util.List;
@@ -22,7 +22,7 @@ public class HelpCommand implements ICommand {
 
         if (args.isEmpty()) {
             StringBuilder builder = new StringBuilder();
-            String prefix = Constants.PREFIXES.get(commandContext.getGuild().getIdLong());
+            String prefix = IDataBaseManager.INSTANCE.getPrefix(commandContext.getGuild().getIdLong());
 
             builder.append("List of Commands\n");
 
@@ -42,12 +42,12 @@ public class HelpCommand implements ICommand {
             return;
         }
 
-        channel.sendMessage(command.getHelp()).queue();
+        channel.sendMessage(command.getHelp(commandContext)).queue();
     }
 
     @Override
-    public String getHelp() {
-        return "`Usage: a!help [command]`\nDisplays further information to a specific command";
+    public String getHelp(CommandContext commandContext) {
+        return "`Usage: " + IDataBaseManager.INSTANCE.getPrefix(commandContext.getGuild().getIdLong()) + "help [command]`\nDisplays further information to a specific command";
     }
 
     @Override

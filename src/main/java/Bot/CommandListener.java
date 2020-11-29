@@ -18,7 +18,7 @@ public class CommandListener extends ListenerAdapter {
         }
 
         final long guildID = event.getGuild().getIdLong();
-        String prefix = Constants.PREFIXES.computeIfAbsent(guildID, IDataBaseManager.INSTANCE::getPrefix);
+        String prefix = IDataBaseManager.INSTANCE.getPrefix(guildID);
         String rawMsg = event.getMessage().getContentRaw();
 
         if (rawMsg.equalsIgnoreCase(prefix + "shutdown") && user.getId().equals(Config.get("OWNER_ID"))) {
