@@ -9,5 +9,11 @@ public interface IDataBaseManager {
 
     String getAlpacaStats(long memberID, String keyWord);
 
-    void setAlpacaStats(long memberID, String keyWord, String newValue);
+    void setHunger(long memberID, String newValue);
+
+    void setThirst(long memberID, String newValue);
+
+    void setEnergy(long memberID, String newValue);
+
+    void setCurrency(long memberID, String newValue);
 }

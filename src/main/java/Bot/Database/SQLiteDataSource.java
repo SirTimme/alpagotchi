@@ -137,14 +137,72 @@ public class SQLiteDataSource implements IDataBaseManager {
     }
 
     @Override
-    public void setAlpacaStats(long memberID, String keyWord, String newValue) {
+    public void setHunger(long memberID, String newValue) {
+        String oldValue = IDataBaseManager.INSTANCE.getAlpacaStats(memberID, "hunger");
 
         try (Connection connection = dataSource.getConnection();
              final PreparedStatement preparedStatement = connection
                      // language=SQLite
-                     .prepareStatement("UPDATE alpacas_manager SET " + keyWord + " = ? WHERE member_id = ?")) {
+                     .prepareStatement("UPDATE alpacas_manager SET hunger = ? WHERE member_id = ?")) {
 
-            preparedStatement.setString(1, newValue);
+            preparedStatement.setString(1, String.valueOf(Integer.parseInt(oldValue) - Integer.parseInt(newValue)));
+            preparedStatement.setString(2, String.valueOf(memberID));
+
+            preparedStatement.executeUpdate();
+
+        } catch (SQLException error) {
+            error.printStackTrace();
+        }
+    }
+
+    @Override
+    public void setThirst(long memberID, String newValue) {
+        String oldValue = IDataBaseManager.INSTANCE.getAlpacaStats(memberID, "thirst");
+
+        try (Connection connection = dataSource.getConnection();
+             final PreparedStatement preparedStatement = connection
+                     // language=SQLite
+                     .prepareStatement("UPDATE alpacas_manager SET thirst = ? WHERE member_id = ?")) {
+
+            preparedStatement.setString(1, String.valueOf(Integer.parseInt(oldValue) - Integer.parseInt(newValue)));
+            preparedStatement.setString(2, String.valueOf(memberID));
+
+            preparedStatement.executeUpdate();
+
+        } catch (SQLException error) {
+            error.printStackTrace();
+        }
+    }
+
+    @Override
+    public void setEnergy(long memberID, String newValue) {
+        String oldValue = IDataBaseManager.INSTANCE.getAlpacaStats(memberID, "energy");
+
+        try (Connection connection = dataSource.getConnection();
+             final PreparedStatement preparedStatement = connection
+                     // language=SQLite
+                     .prepareStatement("UPDATE alpacas_manager SET energy = ? WHERE member_id = ?")) {
+
+            preparedStatement.setString(1, String.valueOf(Integer.parseInt(oldValue) - Integer.parseInt(newValue)));
+            preparedStatement.setString(2, String.valueOf(memberID));
+
+            preparedStatement.executeUpdate();
+
+        } catch (SQLException error) {
+            error.printStackTrace();
+        }
+    }
+
+    @Override
+    public void setCurrency(long memberID, String newValue) {
+        String oldValue = IDataBaseManager.INSTANCE.getAlpacaStats(memberID, "currency");
+
+        try (Connection connection = dataSource.getConnection();
+             final PreparedStatement preparedStatement = connection
+                     // language=SQLite
+                     .prepareStatement("UPDATE alpacas_manager SET currency = ? WHERE member_id = ?")) {
+
+            preparedStatement.setString(1, String.valueOf(Integer.parseInt(oldValue) + Integer.parseInt(newValue)));
             preparedStatement.setString(2, String.valueOf(memberID));
 
             preparedStatement.executeUpdate();

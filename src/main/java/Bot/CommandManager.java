@@ -5,6 +5,8 @@ import Bot.Command.CommandContext;
 import Bot.Command.MemberCommands.HelpCommand;
 import Bot.Command.MemberCommands.MyAlpacaCommand;
 import Bot.Command.ICommand;
+import Bot.Command.MemberCommands.WalletCommand;
+import Bot.Command.MemberCommands.WorkCommand;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 import javax.annotation.Nullable;
@@ -20,6 +22,8 @@ public class CommandManager {
         addCommand(new MyAlpacaCommand());
         addCommand(new HelpCommand(this));
         addCommand(new SetPrefixCommand());
+        addCommand(new WalletCommand());
+        addCommand(new WorkCommand());
     }
 
     private void addCommand(ICommand command) {
