@@ -1,7 +1,3 @@
-*.class
-.mtj.tmp/
 *.jar
-.env
 .idea/
 target/
-database.db
