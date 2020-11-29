@@ -4,4 +4,4 @@
 .env
 .idea/
 target/
-database.db 
+database.db
