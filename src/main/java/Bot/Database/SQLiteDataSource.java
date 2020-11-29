@@ -152,6 +152,5 @@ public class SQLiteDataSource implements IDataBaseManager {
         } catch (SQLException error) {
             error.printStackTrace();
         }
-
     }
 }
