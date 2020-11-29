@@ -37,13 +37,11 @@ public class SQLiteDataSource implements IDataBaseManager {
 
             //language=SQLite
             statement.execute("CREATE TABLE IF NOT EXISTS guild_settings (" +
-                    "id INTEGER PRIMARY KEY AUTOINCREMENT," +
-                    "guild_id VARCHAR(20) NOT NULL," +
+                    "guild_id VARCHAR(20) PRIMARY KEY NOT NULL," +
                     "prefix VARCHAR(255) NOT NULL DEFAULT '" + defaultPrefix + "'" + ")");
 
             statement.execute("CREATE TABLE IF NOT EXISTS alpacas_manager (" +
-                    "id INTEGER PRIMARY KEY AUTOINCREMENT," +
-                    "member_id VARCHAR(20) NOT NULL, " +
+                    "member_id VARCHAR(20) PRIMARY KEY NOT NULL, " +
                     "hunger VARCHAR(3) DEFAULT 100, " +
                     "thirst VARCHAR(3) DEFAULT 100, " +
                     "energy VARCHAR(3) DEFAULT 100, " +
@@ -103,18 +101,19 @@ public class SQLiteDataSource implements IDataBaseManager {
         }
     }
 
-    public String getHunger(long memberID) {
+    @Override
+    public String getAlpacaStats(long memberID, String keyWord) {
 
         try (Connection connection = dataSource.getConnection();
              final PreparedStatement preparedStatement = connection
                      // language=SQLite
-                     .prepareStatement("SELECT hunger FROM alpacas_manager WHERE member_id = ?")) {
+                     .prepareStatement("SELECT " + keyWord + " FROM alpacas_manager WHERE member_id = ?")) {
 
             preparedStatement.setString(1, String.valueOf(memberID));
 
             try (final ResultSet resultSet = preparedStatement.executeQuery()) {
                 if (resultSet.next()) {
-                    return resultSet.getString("hunger");
+                    return resultSet.getString(keyWord);
                 }
             }
 
@@ -134,72 +133,25 @@ public class SQLiteDataSource implements IDataBaseManager {
             error.printStackTrace();
         }
 
-        return Config.get("HUNGER");
+        return Config.get(keyWord.toUpperCase());
     }
 
     @Override
-    public String getThirst(long memberID) {
+    public void setAlpacaStats(long memberID, String keyWord, String newValue) {
+
         try (Connection connection = dataSource.getConnection();
              final PreparedStatement preparedStatement = connection
                      // language=SQLite
-                     .prepareStatement("SELECT thirst FROM alpacas_manager WHERE member_id = ?")) {
+                     .prepareStatement("UPDATE alpacas_manager SET " + keyWord + " = ? WHERE member_id = ?")) {
 
-            preparedStatement.setString(1, String.valueOf(memberID));
+            preparedStatement.setString(1, newValue);
+            preparedStatement.setString(2, String.valueOf(memberID));
 
-            try (final ResultSet resultSet = preparedStatement.executeQuery()) {
-                if (resultSet.next()) {
-                    return resultSet.getString("thirst");
-                }
-            }
+            preparedStatement.executeUpdate();
 
         } catch (SQLException error) {
             error.printStackTrace();
         }
 
-        return Config.get("THIRST");
-    }
-
-    @Override
-    public String getEnergy(long memberID) {
-        try (Connection connection = dataSource.getConnection();
-             final PreparedStatement preparedStatement = connection
-                     // language=SQLite
-                     .prepareStatement("SELECT energy FROM alpacas_manager WHERE member_id = ?")) {
-
-            preparedStatement.setString(1, String.valueOf(memberID));
-
-            try (final ResultSet resultSet = preparedStatement.executeQuery()) {
-                if (resultSet.next()) {
-                    return resultSet.getString("energy");
-                }
-            }
-
-        } catch (SQLException error) {
-            error.printStackTrace();
-        }
-
-        return Config.get("ENERGY");
-    }
-
-    @Override
-    public String getCurrency(long memberID) {
-        try (Connection connection = dataSource.getConnection();
-             final PreparedStatement preparedStatement = connection
-                     // language=SQLite
-                     .prepareStatement("SELECT currency FROM alpacas_manager WHERE member_id = ?")) {
-
-            preparedStatement.setString(1, String.valueOf(memberID));
-
-            try (final ResultSet resultSet = preparedStatement.executeQuery()) {
-                if (resultSet.next()) {
-                    return resultSet.getString("hunger");
-                }
-            }
-
-        } catch (SQLException error) {
-            error.printStackTrace();
-        }
-
-        return Config.get("CURRENCY");
     }
 }
