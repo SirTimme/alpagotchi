@@ -2,11 +2,8 @@ package Bot;
 
 import Bot.Command.AdminCommands.SetPrefixCommand;
 import Bot.Command.CommandContext;
-import Bot.Command.MemberCommands.HelpCommand;
-import Bot.Command.MemberCommands.MyAlpacaCommand;
+import Bot.Command.MemberCommands.*;
 import Bot.Command.ICommand;
-import Bot.Command.MemberCommands.WalletCommand;
-import Bot.Command.MemberCommands.WorkCommand;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 import javax.annotation.Nullable;
@@ -24,6 +21,8 @@ public class CommandManager {
         addCommand(new SetPrefixCommand());
         addCommand(new WalletCommand());
         addCommand(new WorkCommand());
+        addCommand(new ShopCommand());
+        addCommand(new BuyCommand(new ShopItemManager()));
     }
 
     private void addCommand(ICommand command) {

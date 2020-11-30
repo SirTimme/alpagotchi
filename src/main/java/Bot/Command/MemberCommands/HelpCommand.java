@@ -17,8 +17,8 @@ public class HelpCommand implements ICommand {
 
     @Override
     public void handle(CommandContext commandContext) {
-        List<String> args = commandContext.getArgs();
-        TextChannel channel = commandContext.getChannel();
+        final List<String> args = commandContext.getArgs();
+        final TextChannel channel = commandContext.getChannel();
 
         if (args.isEmpty()) {
             StringBuilder builder = new StringBuilder();

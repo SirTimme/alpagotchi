@@ -133,50 +133,18 @@ public class SQLiteDataSource implements IDataBaseManager {
     }
 
     @Override
-    public void setAlpacaStats(long memberID, String newValue, String keyWord) {
+    public void setAlpacaStats(long memberID, String newValue, String keyWord, String operator) {
         String oldValue = IDataBaseManager.INSTANCE.getAlpacaStats(memberID, keyWord);
 
         try (Connection connection = dataSource.getConnection();
              final PreparedStatement preparedStatement = connection.prepareStatement("UPDATE alpacas_manager SET " + keyWord + " = ? WHERE member_id = ?")) {
 
-            preparedStatement.setString(1, String.valueOf(Integer.parseInt(oldValue) - Integer.parseInt(newValue)));
-            preparedStatement.setString(2, String.valueOf(memberID));
-
-            preparedStatement.executeUpdate();
-
-        } catch (SQLException error) {
-            error.printStackTrace();
-        }
-    }
-
-    @Override
-    public String getCurrency(long memberID) {
-        try (Connection connection = dataSource.getConnection();
-             final PreparedStatement preparedStatement = connection.prepareStatement("SELECT currency FROM alpacas_manager WHERE member_id = ?")) {
-
-            preparedStatement.setString(1, String.valueOf(memberID));
-
-            try (final ResultSet resultSet = preparedStatement.executeQuery()) {
-                if (resultSet.next()) {
-                    return resultSet.getString("currency");
-                }
+            if (operator.equals("add")) {
+                preparedStatement.setString(1, String.valueOf(Integer.parseInt(oldValue) + Integer.parseInt(newValue)));
             }
-
-        } catch (SQLException error) {
-            error.printStackTrace();
-        }
-
-        return Config.get("CURRENCY");
-    }
-
-    @Override
-    public void setCurrency(long memberID, String newValue) {
-        String oldValue = IDataBaseManager.INSTANCE.getAlpacaStats(memberID, "currency");
-
-        try (Connection connection = dataSource.getConnection();
-             final PreparedStatement preparedStatement = connection.prepareStatement("UPDATE alpacas_manager SET currency = ? WHERE member_id = ?")) {
-
-            preparedStatement.setString(1, String.valueOf(Integer.parseInt(oldValue) + Integer.parseInt(newValue)));
+            else {
+                preparedStatement.setString(1, String.valueOf(Integer.parseInt(oldValue) - Integer.parseInt(newValue)));
+            }
             preparedStatement.setString(2, String.valueOf(memberID));
 
             preparedStatement.executeUpdate();

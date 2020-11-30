@@ -16,8 +16,8 @@ public class MyAlpacaCommand implements ICommand {
     public void handle(CommandContext commandContext) {
         File alpacaFile = new File("src\\main\\resources\\alpaka.gif");
         EmbedBuilder embedBuilder = new EmbedBuilder();
-        Member botCreator = commandContext.getGuild().getMemberById(Config.get("OWNER_ID"));
-        long memberID = commandContext.getMessage().getAuthor().getIdLong();
+        final Member botCreator = commandContext.getGuild().getMemberById(Config.get("OWNER_ID"));
+        final long memberID = commandContext.getMessage().getAuthor().getIdLong();
 
         embedBuilder.setTitle("" + commandContext.getMember().getEffectiveName() + "'s Alpaca");
         embedBuilder.addField("Hunger \uD83C\uDF56", IDataBaseManager.INSTANCE.getAlpacaStats(memberID, "hunger") + "/100", true);
