@@ -11,7 +11,7 @@ public class WalletCommand implements ICommand {
         long memberID = commandContext.getGuild().getMember(commandContext.getAuthor()).getIdLong();
         TextChannel channel = commandContext.getChannel();
 
-        channel.sendMessage("\uD83D\uDCB5 Your current balance is **" + IDataBaseManager.INSTANCE.getAlpacaStats(memberID, "currency") + "** fluffies").queue();
+        channel.sendMessage("\uD83D\uDCB5 Your current balance is **" + IDataBaseManager.INSTANCE.getCurrency(memberID) + "** fluffies").queue();
     }
 
     @Override
