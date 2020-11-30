@@ -14,6 +14,7 @@ import java.util.regex.Pattern;
 
 public class CommandManager {
     private final List<ICommand> commands = new ArrayList<>();
+    ShopItemManager shopItemManager = new ShopItemManager();
 
     public CommandManager() {
         addCommand(new MyAlpacaCommand());
@@ -21,8 +22,8 @@ public class CommandManager {
         addCommand(new SetPrefixCommand());
         addCommand(new WalletCommand());
         addCommand(new WorkCommand());
-        addCommand(new ShopCommand());
-        addCommand(new BuyCommand(new ShopItemManager()));
+        addCommand(new ShopCommand(this.shopItemManager));
+        addCommand(new BuyCommand(this.shopItemManager));
     }
 
     private void addCommand(ICommand command) {

@@ -2,7 +2,7 @@ package Bot.Command.Shop;
 
 public interface IShopItem {
 
-    int getItemValue();
+    String getItemValue();
 
     String getItemDescription();
 

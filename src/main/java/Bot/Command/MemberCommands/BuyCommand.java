@@ -15,6 +15,7 @@ public class BuyCommand implements ICommand {
     public BuyCommand(ShopItemManager shopItemManager) {
         this.shopItemManager = shopItemManager;
     }
+
     @Override
     public void handle(CommandContext commandContext) {
         final List<String> args = commandContext.getArgs();

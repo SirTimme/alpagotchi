@@ -2,8 +2,8 @@ package Bot.Command.Shop;
 
 public class Salad implements IShopItem {
     @Override
-    public int getItemValue() {
-        return 10;
+    public String getItemValue() {
+        return "10";
     }
 
     @Override

@@ -14,6 +14,10 @@ public class ShopItemManager {
         addShopItem(new Salad());
     }
 
+    public List<IShopItem> getShopItems() {
+        return this.shopItems;
+    }
+
     @Nullable
     public IShopItem getShopItem(String search) {
         String searchLower = search.toLowerCase();
