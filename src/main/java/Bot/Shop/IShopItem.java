@@ -1,4 +1,4 @@
-package Bot.Command.Shop;
+package Bot.Shop;
 
 public interface IShopItem {
 

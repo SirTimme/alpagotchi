@@ -2,7 +2,7 @@ package Bot.Command.MemberCommands;
 
 import Bot.Command.CommandContext;
 import Bot.Command.ICommand;
-import Bot.Command.Shop.IShopItem;
+import Bot.Shop.IShopItem;
 import Bot.Database.IDataBaseManager;
 import Bot.ShopItemManager;
 import net.dv8tion.jda.api.entities.TextChannel;

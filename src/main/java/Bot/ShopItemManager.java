@@ -1,7 +1,7 @@
 package Bot;
 
-import Bot.Command.Shop.IShopItem;
-import Bot.Command.Shop.Salad;
+import Bot.Shop.IShopItem;
+import Bot.Shop.Salad;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
