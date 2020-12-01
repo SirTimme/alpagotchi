@@ -1,7 +1,5 @@
 package Bot.Command;
 
-import Bot.Command.CommandContext;
-
 import java.util.List;
 
 public interface ICommand {

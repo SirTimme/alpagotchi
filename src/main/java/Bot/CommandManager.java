@@ -24,6 +24,7 @@ public class CommandManager {
         addCommand(new WorkCommand());
         addCommand(new ShopCommand(this.shopItemManager));
         addCommand(new BuyCommand(this.shopItemManager));
+        addCommand(new InventoryCommand());
     }
 
     private void addCommand(ICommand command) {

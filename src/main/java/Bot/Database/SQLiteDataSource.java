@@ -45,7 +45,8 @@ public class SQLiteDataSource implements IDataBaseManager {
                     "hunger VARCHAR(3) DEFAULT 100, " +
                     "thirst VARCHAR(3) DEFAULT 100, " +
                     "energy VARCHAR(3) DEFAULT 100, " +
-                    "currency VARCHAR(3) DEFAULT 0 " + ")");
+                    "currency VARCHAR(3) DEFAULT 0, " +
+                    "inventory VARCHAR(3) DEFAULT 0 )");
 
         } catch (SQLException error) {
             error.printStackTrace();
@@ -115,13 +116,14 @@ public class SQLiteDataSource implements IDataBaseManager {
                 }
             }
 
-            try (final PreparedStatement insertStatement = connection.prepareStatement("INSERT INTO alpacas_manager(member_id, hunger, thirst, energy, currency) VALUES(?, ?, ?, ?, ?)")) {
+            try (final PreparedStatement insertStatement = connection.prepareStatement("INSERT INTO alpacas_manager(member_id, hunger, thirst, energy, currency, inventory) VALUES(?, ?, ?, ?, ?, ?)")) {
 
                 insertStatement.setString(1, String.valueOf(memberID));
                 insertStatement.setString(2, String.valueOf(100));
                 insertStatement.setString(3, String.valueOf(100));
                 insertStatement.setString(4, String.valueOf(100));
                 insertStatement.setString(5, String.valueOf(0));
+                insertStatement.setString(6, String.valueOf(0));
                 insertStatement.execute();
             }
 

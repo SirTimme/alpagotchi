@@ -36,6 +36,7 @@ public class BuyCommand implements ICommand {
             }
 
             IDataBaseManager.INSTANCE.setAlpacaStats(memberID, String.valueOf(10), "currency", "subtract");
+            IDataBaseManager.INSTANCE.setAlpacaStats(memberID, String.valueOf(1), "inventory", "add");
 
             channel.sendMessage("\uD83D\uDCB2 Congratulations, you successfully bought a `" + item.getItemName() + "` for `" + item.getItemValue() + "` fluffies").queue();
         } else {
