@@ -20,9 +20,9 @@ public class MyAlpacaCommand implements ICommand {
         final long memberID = commandContext.getMessage().getAuthor().getIdLong();
 
         embedBuilder.setTitle("" + commandContext.getMember().getEffectiveName() + "'s Alpaca");
-        embedBuilder.addField("Hunger \uD83C\uDF56", IDataBaseManager.INSTANCE.getAlpacaStats(memberID, "hunger") + "/100", true);
-        embedBuilder.addField("Thirst \uD83C\uDF7C", IDataBaseManager.INSTANCE.getAlpacaStats(memberID, "thirst") + "/100", true);
-        embedBuilder.addField("Energy \uD83D\uDD0B", IDataBaseManager.INSTANCE.getAlpacaStats(memberID, "energy") + "/100", true);
+        embedBuilder.addField("Hunger \uD83C\uDF56", IDataBaseManager.INSTANCE.getAlpaca(memberID, "hunger") + "/100", true);
+        embedBuilder.addField("Thirst \uD83C\uDF7C", IDataBaseManager.INSTANCE.getAlpaca(memberID, "thirst") + "/100", true);
+        embedBuilder.addField("Energy \uD83D\uDD0B", IDataBaseManager.INSTANCE.getAlpaca(memberID, "energy") + "/100", true);
         embedBuilder.setThumbnail(commandContext.getMember().getUser().getAvatarUrl());
         embedBuilder.setFooter("Created by " + botCreator.getEffectiveName(), botCreator.getUser().getEffectiveAvatarUrl());
         embedBuilder.setTimestamp(Instant.now());

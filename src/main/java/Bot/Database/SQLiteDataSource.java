@@ -44,9 +44,10 @@ public class SQLiteDataSource implements IDataBaseManager {
                     "member_id VARCHAR(20) PRIMARY KEY NOT NULL, " +
                     "hunger VARCHAR(3) DEFAULT 100, " +
                     "thirst VARCHAR(3) DEFAULT 100, " +
-                    "energy VARCHAR(3) DEFAULT 100, " +
                     "currency VARCHAR(3) DEFAULT 0, " +
-                    "inventory VARCHAR(3) DEFAULT 0 )");
+                    "inventory VARCHAR(3) DEFAULT 0 " +
+                    ")");
+
 
         } catch (SQLException error) {
             error.printStackTrace();
@@ -103,16 +104,16 @@ public class SQLiteDataSource implements IDataBaseManager {
     }
 
     @Override
-    public String getAlpacaStats(long memberID, String keyWord) {
+    public String getAlpaca(long memberID, String column) {
 
         try (Connection connection = dataSource.getConnection();
-             final PreparedStatement preparedStatement = connection.prepareStatement("SELECT " + keyWord + " FROM alpacas_manager WHERE member_id = ?")) {
+             final PreparedStatement preparedStatement = connection.prepareStatement("SELECT " + column + " FROM alpacas_manager WHERE member_id = ?")) {
 
             preparedStatement.setString(1, String.valueOf(memberID));
 
             try (final ResultSet resultSet = preparedStatement.executeQuery()) {
                 if (resultSet.next()) {
-                    return resultSet.getString(keyWord);
+                    return resultSet.getString(column);
                 }
             }
 
@@ -131,22 +132,17 @@ public class SQLiteDataSource implements IDataBaseManager {
             error.printStackTrace();
         }
 
-        return Config.get(keyWord.toUpperCase());
+        return Config.get(column.toUpperCase());
     }
 
     @Override
-    public void setAlpacaStats(long memberID, String newValue, String keyWord, String operator) {
-        String oldValue = IDataBaseManager.INSTANCE.getAlpacaStats(memberID, keyWord);
+    public void setAlpaca(long memberID, String column, String newValue) {
+        String oldValue = IDataBaseManager.INSTANCE.getAlpaca(memberID, column);
 
         try (Connection connection = dataSource.getConnection();
-             final PreparedStatement preparedStatement = connection.prepareStatement("UPDATE alpacas_manager SET " + keyWord + " = ? WHERE member_id = ?")) {
+             final PreparedStatement preparedStatement = connection.prepareStatement("UPDATE alpacas_manager SET " + column + " = ? WHERE member_id = ?")) {
 
-            if (operator.equals("add")) {
-                preparedStatement.setString(1, String.valueOf(Integer.parseInt(oldValue) + Integer.parseInt(newValue)));
-            }
-            else {
-                preparedStatement.setString(1, String.valueOf(Integer.parseInt(oldValue) - Integer.parseInt(newValue)));
-            }
+            preparedStatement.setString(1, String.valueOf(Integer.parseInt(oldValue) + Integer.parseInt(newValue)));
             preparedStatement.setString(2, String.valueOf(memberID));
 
             preparedStatement.executeUpdate();

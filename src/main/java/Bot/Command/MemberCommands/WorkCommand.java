@@ -12,7 +12,7 @@ public class WorkCommand implements ICommand {
         final TextChannel channel = commandContext.getChannel();
 
         String amountOfFluffies = String.valueOf((int)Math.round(Math.random() * (15 - 1) + 1));
-        IDataBaseManager.INSTANCE.setAlpacaStats(memberID, amountOfFluffies, "currency", "add");
+        IDataBaseManager.INSTANCE.setAlpaca(memberID, "currency", amountOfFluffies);
 
         channel.sendMessage("⛏ You went to work and earned **" + amountOfFluffies + "** fluffies").queue();
     }

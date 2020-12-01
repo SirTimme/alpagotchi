@@ -7,7 +7,7 @@ public interface IDataBaseManager {
 
     void setPrefix(long guildID, String newPrefix);
 
-    String getAlpacaStats(long memberID, String keyWord);
+    String getAlpaca(long memberID, String column);
 
-    void setAlpacaStats(long memberID, String newValue, String keyWord, String operator);
+    void setAlpaca(long memberID, String column, String newValue);
 }
