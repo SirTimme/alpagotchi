@@ -30,13 +30,13 @@ public class BuyCommand implements ICommand {
         IShopItem item = shopItemManager.getShopItem(args.get(0));
 
         if (item != null) {
-            if (Integer.parseInt(IDataBaseManager.INSTANCE.getAlpaca(memberID, "currency")) - 10 < 0) {
+            if (Integer.parseInt(IDataBaseManager.INSTANCE.getInventory(memberID, "currency")) - 10 < 0) {
                 channel.sendMessage("<:RedCross:782229279312314368> Insufficient amount of fluffies").queue();
                 return;
             }
 
-            IDataBaseManager.INSTANCE.setAlpaca(memberID, "currency", String.valueOf(-10));
-            IDataBaseManager.INSTANCE.setAlpaca(memberID, "inventory", String.valueOf(1));
+            IDataBaseManager.INSTANCE.setInventory(memberID, "currency", String.valueOf(-10));
+            IDataBaseManager.INSTANCE.setInventory(memberID, item.getItemName(), String.valueOf(1));
 
             channel.sendMessage("\uD83D\uDCB2 Congratulations, you successfully bought a `" + item.getItemName() + "` for `" + item.getItemValue() + "` fluffies").queue();
         } else {

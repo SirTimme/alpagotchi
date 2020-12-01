@@ -1,5 +1,7 @@
 package Bot;
 
+import Bot.Shop.Battery;
+import Bot.Shop.Waterbottle;
 import Bot.Shop.IShopItem;
 import Bot.Shop.Salad;
 
@@ -12,6 +14,8 @@ public class ShopItemManager {
 
     public ShopItemManager() {
         addShopItem(new Salad());
+        addShopItem(new Waterbottle());
+        addShopItem(new Battery());
     }
 
     public List<IShopItem> getShopItems() {

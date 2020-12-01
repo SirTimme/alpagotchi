@@ -43,11 +43,16 @@ public class SQLiteDataSource implements IDataBaseManager {
             statement.execute("CREATE TABLE IF NOT EXISTS alpacas_manager (" +
                     "member_id VARCHAR(20) PRIMARY KEY NOT NULL, " +
                     "hunger VARCHAR(3) DEFAULT 100, " +
-                    "thirst VARCHAR(3) DEFAULT 100, " +
-                    "currency VARCHAR(3) DEFAULT 0, " +
-                    "inventory VARCHAR(3) DEFAULT 0 " +
+                    "thirst VARCHAR(3) DEFAULT 100 " +
                     ")");
 
+            statement.execute("CREATE TABLE IF NOT EXISTS inventory_manager (" +
+                    "member_id VARCHAR(20) PRIMARY KEY NOT NULL, " +
+                    "currency VARCHAR(3) DEFAULT 0, " +
+                    "salad VARCHAR(3) DEFAULT 0, " +
+                    "waterbottle VARCHAR(3) DEFAULT 0, " +
+                    "battery VARCHAR(3) DEFAULT 0 " +
+                    ")");
 
         } catch (SQLException error) {
             error.printStackTrace();
@@ -117,14 +122,12 @@ public class SQLiteDataSource implements IDataBaseManager {
                 }
             }
 
-            try (final PreparedStatement insertStatement = connection.prepareStatement("INSERT INTO alpacas_manager(member_id, hunger, thirst, energy, currency, inventory) VALUES(?, ?, ?, ?, ?, ?)")) {
+            try (final PreparedStatement insertStatement = connection.prepareStatement("INSERT INTO alpacas_manager(member_id, hunger, thirst, energy) VALUES(?, ?, ?, ?)")) {
 
                 insertStatement.setString(1, String.valueOf(memberID));
                 insertStatement.setString(2, String.valueOf(100));
                 insertStatement.setString(3, String.valueOf(100));
                 insertStatement.setString(4, String.valueOf(100));
-                insertStatement.setString(5, String.valueOf(0));
-                insertStatement.setString(6, String.valueOf(0));
                 insertStatement.execute();
             }
 
@@ -141,6 +144,54 @@ public class SQLiteDataSource implements IDataBaseManager {
 
         try (Connection connection = dataSource.getConnection();
              final PreparedStatement preparedStatement = connection.prepareStatement("UPDATE alpacas_manager SET " + column + " = ? WHERE member_id = ?")) {
+
+            preparedStatement.setString(1, String.valueOf(Integer.parseInt(oldValue) + Integer.parseInt(newValue)));
+            preparedStatement.setString(2, String.valueOf(memberID));
+
+            preparedStatement.executeUpdate();
+
+        } catch (SQLException error) {
+            error.printStackTrace();
+        }
+    }
+
+    @Override
+    public String getInventory(long memberID, String column) {
+
+        try (Connection connection = dataSource.getConnection();
+             final PreparedStatement preparedStatement = connection.prepareStatement("SELECT " + column + " FROM inventory_manager WHERE member_id = ?")) {
+
+            preparedStatement.setString(1, String.valueOf(memberID));
+
+            try (final ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    return resultSet.getString(column);
+                }
+            }
+
+            try (final PreparedStatement insertStatement = connection.prepareStatement("INSERT INTO inventory_manager(member_id, currency, salad, waterbottle, battery) VALUES(?, ?, ?, ?, ?)")) {
+
+                insertStatement.setString(1, String.valueOf(memberID));
+                insertStatement.setString(2, String.valueOf(0));
+                insertStatement.setString(3, String.valueOf(0));
+                insertStatement.setString(4, String.valueOf(0));
+                insertStatement.setString(5, String.valueOf(0));
+                insertStatement.execute();
+            }
+
+        } catch (SQLException error) {
+            error.printStackTrace();
+        }
+
+        return Config.get(column.toUpperCase());
+    }
+
+    @Override
+    public void setInventory(long memberID, String column, String newValue) {
+        String oldValue = IDataBaseManager.INSTANCE.getInventory(memberID, column);
+
+        try (Connection connection = dataSource.getConnection();
+             final PreparedStatement preparedStatement = connection.prepareStatement("UPDATE inventory_manager SET " + column + " = ? WHERE member_id = ?")) {
 
             preparedStatement.setString(1, String.valueOf(Integer.parseInt(oldValue) + Integer.parseInt(newValue)));
             preparedStatement.setString(2, String.valueOf(memberID));

@@ -10,4 +10,8 @@ public interface IDataBaseManager {
     String getAlpaca(long memberID, String column);
 
     void setAlpaca(long memberID, String column, String newValue);
+
+    String getInventory(long memberID, String column);
+
+    void setInventory(long memberID, String column, String newValue);
 }

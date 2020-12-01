@@ -11,7 +11,10 @@ public class InventoryCommand implements ICommand {
         final TextChannel channel = commandContext.getChannel();
         final long memberID = commandContext.getGuild().getMember(commandContext.getAuthor()).getIdLong();
 
-        channel.sendMessage("\uD83D\uDCE6 Your inventory contains `" + IDataBaseManager.INSTANCE.getAlpaca(memberID, "inventory") + "` items").queue();
+        channel.sendMessage("\uD83D\uDCE6 Your inventory contains **" +
+                IDataBaseManager.INSTANCE.getInventory(memberID, "salad") + "** salads and **" +
+                IDataBaseManager.INSTANCE.getInventory(memberID, "waterbottle") + "** waterbottles and **" +
+                IDataBaseManager.INSTANCE.getInventory(memberID, "battery") + "** batteries").queue();
     }
 
     @Override
