@@ -42,16 +42,22 @@ public class SQLiteDataSource implements IDataBaseManager {
 
             statement.execute("CREATE TABLE IF NOT EXISTS alpacas_manager (" +
                     "member_id VARCHAR(20) PRIMARY KEY NOT NULL, " +
-                    "hunger VARCHAR(3) DEFAULT 100, " +
-                    "thirst VARCHAR(3) DEFAULT 100 " +
+                    "hunger INTEGER DEFAULT 100, " +
+                    "thirst INTEGER DEFAULT 100, " +
+                    "energy INTEGER DEFAULT 100 " +
                     ")");
 
             statement.execute("CREATE TABLE IF NOT EXISTS inventory_manager (" +
                     "member_id VARCHAR(20) PRIMARY KEY NOT NULL, " +
-                    "currency VARCHAR(3) DEFAULT 0, " +
-                    "salad VARCHAR(3) DEFAULT 0, " +
-                    "waterbottle VARCHAR(3) DEFAULT 0, " +
-                    "battery VARCHAR(3) DEFAULT 0 " +
+                    "currency INTEGER DEFAULT 0, " +
+                    "salad INTEGER DEFAULT 0, " +
+                    "waterbottle INTEGER DEFAULT 0, " +
+                    "battery INTEGER DEFAULT 0 " +
+                    ")");
+
+            statement.execute("CREATE TABLE IF NOT EXISTS cooldown_manager (" +
+                    "member_id VARCHAR(20) PRIMARY KEY NOT NULL, " +
+                    "cooldown_work VARCHAR(50) DEFAULT 0 " +
                     ")");
 
         } catch (SQLException error) {
@@ -194,6 +200,51 @@ public class SQLiteDataSource implements IDataBaseManager {
              final PreparedStatement preparedStatement = connection.prepareStatement("UPDATE inventory_manager SET " + column + " = ? WHERE member_id = ?")) {
 
             preparedStatement.setInt(1, oldValue + newValue);
+            preparedStatement.setString(2, String.valueOf(memberID));
+
+            preparedStatement.executeUpdate();
+
+        } catch (SQLException error) {
+            error.printStackTrace();
+        }
+    }
+
+    @Override
+    public long getCooldown(long memberID, String column) {
+
+        try (Connection connection = dataSource.getConnection();
+             final PreparedStatement preparedStatement = connection.prepareStatement("SELECT " + column + " FROM cooldown_manager WHERE member_id = ?")) {
+
+            preparedStatement.setString(1, String.valueOf(memberID));
+
+            try (final ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    return resultSet.getLong(column);
+                }
+            }
+
+            try (final PreparedStatement insertStatement = connection.prepareStatement("INSERT INTO cooldown_manager(member_id, cooldown_work) VALUES(?, ?)")) {
+
+                insertStatement.setString(1, String.valueOf(memberID));
+                insertStatement.setLong(2, 0);
+                insertStatement.execute();
+            }
+
+        } catch (SQLException error) {
+            error.printStackTrace();
+        }
+
+        return 0;
+    }
+
+    @Override
+    public void setCooldown(long memberID, String column, long newValue) {
+        long oldValue = IDataBaseManager.INSTANCE.getCooldown(memberID, column);
+
+        try (Connection connection = dataSource.getConnection();
+             final PreparedStatement preparedStatement = connection.prepareStatement("UPDATE cooldown_manager SET " + column + " = ? WHERE member_id = ?")) {
+
+            preparedStatement.setLong(1, oldValue + newValue);
             preparedStatement.setString(2, String.valueOf(memberID));
 
             preparedStatement.executeUpdate();

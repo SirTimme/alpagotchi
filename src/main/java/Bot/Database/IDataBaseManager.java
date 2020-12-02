@@ -14,4 +14,8 @@ public interface IDataBaseManager {
     int getInventory(long memberID, String column);
 
     void setInventory(long memberID, String column, int newValue);
+
+    long getCooldown(long memberID, String column);
+
+    void setCooldown(long memberID, String column, long newValue);
 }
