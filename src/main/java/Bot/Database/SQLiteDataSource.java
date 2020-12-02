@@ -109,7 +109,7 @@ public class SQLiteDataSource implements IDataBaseManager {
     }
 
     @Override
-    public String getAlpaca(long memberID, String column) {
+    public int getAlpaca(long memberID, String column) {
 
         try (Connection connection = dataSource.getConnection();
              final PreparedStatement preparedStatement = connection.prepareStatement("SELECT " + column + " FROM alpacas_manager WHERE member_id = ?")) {
@@ -118,16 +118,16 @@ public class SQLiteDataSource implements IDataBaseManager {
 
             try (final ResultSet resultSet = preparedStatement.executeQuery()) {
                 if (resultSet.next()) {
-                    return resultSet.getString(column);
+                    return resultSet.getInt(column);
                 }
             }
 
             try (final PreparedStatement insertStatement = connection.prepareStatement("INSERT INTO alpacas_manager(member_id, hunger, thirst, energy) VALUES(?, ?, ?, ?)")) {
 
                 insertStatement.setString(1, String.valueOf(memberID));
-                insertStatement.setString(2, String.valueOf(100));
-                insertStatement.setString(3, String.valueOf(100));
-                insertStatement.setString(4, String.valueOf(100));
+                insertStatement.setInt(2, 100);
+                insertStatement.setInt(3, 100);
+                insertStatement.setInt(4, 100);
                 insertStatement.execute();
             }
 
@@ -135,17 +135,17 @@ public class SQLiteDataSource implements IDataBaseManager {
             error.printStackTrace();
         }
 
-        return Config.get(column.toUpperCase());
+        return 100;
     }
 
     @Override
-    public void setAlpaca(long memberID, String column, String newValue) {
-        String oldValue = IDataBaseManager.INSTANCE.getAlpaca(memberID, column);
+    public void setAlpaca(long memberID, String column, int newValue) {
+        int oldValue = IDataBaseManager.INSTANCE.getAlpaca(memberID, column);
 
         try (Connection connection = dataSource.getConnection();
              final PreparedStatement preparedStatement = connection.prepareStatement("UPDATE alpacas_manager SET " + column + " = ? WHERE member_id = ?")) {
 
-            preparedStatement.setString(1, String.valueOf(Integer.parseInt(oldValue) + Integer.parseInt(newValue)));
+            preparedStatement.setInt(1, oldValue + newValue);
             preparedStatement.setString(2, String.valueOf(memberID));
 
             preparedStatement.executeUpdate();
@@ -156,7 +156,7 @@ public class SQLiteDataSource implements IDataBaseManager {
     }
 
     @Override
-    public String getInventory(long memberID, String column) {
+    public int getInventory(long memberID, String column) {
 
         try (Connection connection = dataSource.getConnection();
              final PreparedStatement preparedStatement = connection.prepareStatement("SELECT " + column + " FROM inventory_manager WHERE member_id = ?")) {
@@ -165,17 +165,17 @@ public class SQLiteDataSource implements IDataBaseManager {
 
             try (final ResultSet resultSet = preparedStatement.executeQuery()) {
                 if (resultSet.next()) {
-                    return resultSet.getString(column);
+                    return resultSet.getInt(column);
                 }
             }
 
             try (final PreparedStatement insertStatement = connection.prepareStatement("INSERT INTO inventory_manager(member_id, currency, salad, waterbottle, battery) VALUES(?, ?, ?, ?, ?)")) {
 
                 insertStatement.setString(1, String.valueOf(memberID));
-                insertStatement.setString(2, String.valueOf(0));
-                insertStatement.setString(3, String.valueOf(0));
-                insertStatement.setString(4, String.valueOf(0));
-                insertStatement.setString(5, String.valueOf(0));
+                insertStatement.setInt(2, 0);
+                insertStatement.setInt(3, 0);
+                insertStatement.setInt(4, 0);
+                insertStatement.setInt(5, 0);
                 insertStatement.execute();
             }
 
@@ -183,17 +183,17 @@ public class SQLiteDataSource implements IDataBaseManager {
             error.printStackTrace();
         }
 
-        return Config.get(column.toUpperCase());
+        return 0;
     }
 
     @Override
-    public void setInventory(long memberID, String column, String newValue) {
-        String oldValue = IDataBaseManager.INSTANCE.getInventory(memberID, column);
+    public void setInventory(long memberID, String column, int newValue) {
+        int oldValue = IDataBaseManager.INSTANCE.getInventory(memberID, column);
 
         try (Connection connection = dataSource.getConnection();
              final PreparedStatement preparedStatement = connection.prepareStatement("UPDATE inventory_manager SET " + column + " = ? WHERE member_id = ?")) {
 
-            preparedStatement.setString(1, String.valueOf(Integer.parseInt(oldValue) + Integer.parseInt(newValue)));
+            preparedStatement.setInt(1, oldValue + newValue);
             preparedStatement.setString(2, String.valueOf(memberID));
 
             preparedStatement.executeUpdate();

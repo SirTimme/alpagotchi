@@ -7,11 +7,11 @@ public interface IDataBaseManager {
 
     void setPrefix(long guildID, String newPrefix);
 
-    String getAlpaca(long memberID, String column);
+    int getAlpaca(long memberID, String column);
 
-    void setAlpaca(long memberID, String column, String newValue);
+    void setAlpaca(long memberID, String column, int newValue);
 
-    String getInventory(long memberID, String column);
+    int getInventory(long memberID, String column);
 
-    void setInventory(long memberID, String column, String newValue);
+    void setInventory(long memberID, String column, int newValue);
 }
