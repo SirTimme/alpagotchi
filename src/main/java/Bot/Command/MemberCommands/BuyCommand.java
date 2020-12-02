@@ -38,7 +38,7 @@ public class BuyCommand implements ICommand {
             IDataBaseManager.INSTANCE.setInventory(memberID, "currency", String.valueOf(-10));
             IDataBaseManager.INSTANCE.setInventory(memberID, item.getItemName(), String.valueOf(1));
 
-            channel.sendMessage("\uD83D\uDCB2 Congratulations, you successfully bought a `" + item.getItemName() + "` for `" + item.getItemValue() + "` fluffies").queue();
+            channel.sendMessage(":moneybag: Congratulations, you successfully bought a **" + item.getItemName() + "** for **" + item.getItemValue() + "** fluffies").queue();
         } else {
             channel.sendMessage("<:RedCross:782229279312314368> No shop item with this name found").queue();
         }
