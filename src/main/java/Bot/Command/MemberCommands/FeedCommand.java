@@ -39,7 +39,7 @@ public class FeedCommand implements ICommand {
             if (args.get(0).equals("salad")) {
                 channel.sendMessage("\uD83E\uDD57 Your alpaca consumes the green salad in one bite and is happy **Hunger + 10**").queue();
             } else if (args.get(0).equals("waterbottle")) {
-                channel.sendMessage("\uD83E\uDD57 Your alpaca eagerly drinks the water bottle empty **Thirst + 10**").queue();
+                channel.sendMessage("\uD83D\uDCA7 Your alpaca eagerly drinks the waterbottle empty **Thirst + 10**").queue();
             } else {
                 channel.sendMessage("\uD83D\uDD0B Your alpaca feels full of energy **Energy + 10**").queue();
             }
