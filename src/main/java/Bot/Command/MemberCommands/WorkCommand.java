@@ -11,14 +11,14 @@ public class WorkCommand implements ICommand {
     public void handle(CommandContext commandContext) {
         long memberID = commandContext.getGuild().getMember(commandContext.getAuthor()).getIdLong();
         final TextChannel channel = commandContext.getChannel();
-        long cooldown = IDataBaseManager.INSTANCE.getCooldown(memberID, "cooldown_work") - System.currentTimeMillis();
+        long cooldown = IDataBaseManager.INSTANCE.getCooldown(memberID, "work") - System.currentTimeMillis();
 
         if (cooldown < 0) {
             long newCooldown = System.currentTimeMillis() + 60000 * 20;
             int amountOfFluffies = (int) Math.round(Math.random() * (15 - 1) + 1);
 
             IDataBaseManager.INSTANCE.setInventory(memberID, "currency", amountOfFluffies);
-            IDataBaseManager.INSTANCE.setCooldown(memberID, "cooldown_work", newCooldown);
+            IDataBaseManager.INSTANCE.setCooldown(memberID, "work", newCooldown);
 
             channel.sendMessage("⛏ You went to work and earned **" + amountOfFluffies + "** fluffies").queue();
         } else {

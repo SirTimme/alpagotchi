@@ -4,7 +4,7 @@ import Bot.Command.CommandContext;
 import Bot.Command.ICommand;
 import Bot.Database.IDataBaseManager;
 import Bot.Shop.IShopItem;
-import Bot.ShopItemManager;
+import Bot.Shop.ShopItemManager;
 import net.dv8tion.jda.api.entities.TextChannel;
 
 import java.util.List;
@@ -30,11 +30,18 @@ public class FeedCommand implements ICommand {
         IShopItem item = shopItemManager.getShopItem(args.get(0));
 
         if (item != null) {
-            if (IDataBaseManager.INSTANCE.getInventory(memberID, args.get(0)) == 0) {
+            if (IDataBaseManager.INSTANCE.getInventory(memberID, item.getItemName()) == 0) {
                 channel.sendMessage("<:RedCross:782229279312314368> Your inventory doesnt contain this specified item").queue();
                 return;
             }
-            IDataBaseManager.INSTANCE.setInventory(memberID, args.get(0), -1);
+            IDataBaseManager.INSTANCE.setInventory(memberID, item.getItemName(), -1);
+            int oldValue = IDataBaseManager.INSTANCE.getAlpaca(memberID, item.getItemCategory());
+
+            if (oldValue + 10 > 100) {
+                IDataBaseManager.INSTANCE.setAlpaca(memberID, item.getItemCategory(), 100 - oldValue);
+            } else {
+                IDataBaseManager.INSTANCE.setAlpaca(memberID, item.getItemCategory(), 10);
+            }
 
             if (args.get(0).equals("salad")) {
                 channel.sendMessage("\uD83E\uDD57 Your alpaca consumes the green salad in one bite and is happy **Hunger + 10**").queue();

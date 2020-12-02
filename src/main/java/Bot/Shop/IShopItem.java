@@ -2,9 +2,11 @@ package Bot.Shop;
 
 public interface IShopItem {
 
-    String getItemValue();
+    int getItemValue();
 
     String getItemDescription();
 
     String getItemName();
+
+    String getItemCategory();
 }

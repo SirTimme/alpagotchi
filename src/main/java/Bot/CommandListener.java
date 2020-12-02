@@ -26,8 +26,6 @@ public class CommandListener extends ListenerAdapter {
 
             event.getJDA().shutdown();
             BotCommons.shutdown(event.getJDA());
-
-            return;
         }
 
         if (rawMsg.startsWith(prefix)) {

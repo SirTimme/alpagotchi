@@ -1,5 +1,6 @@
-package Bot;
+package Bot.Shop;
 
+import Bot.Bot;
 import Bot.Shop.Battery;
 import Bot.Shop.Waterbottle;
 import Bot.Shop.IShopItem;

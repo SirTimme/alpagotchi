@@ -5,7 +5,7 @@ import Bot.Command.ICommand;
 import Bot.Shop.IShopItem;
 import Bot.Config;
 import Bot.Database.IDataBaseManager;
-import Bot.ShopItemManager;
+import Bot.Shop.ShopItemManager;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Member;
 

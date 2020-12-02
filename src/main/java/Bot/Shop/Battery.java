@@ -2,8 +2,8 @@ package Bot.Shop;
 
 public class Battery implements IShopItem {
     @Override
-    public String getItemValue() {
-        return "10";
+    public int getItemValue() {
+        return 10;
     }
 
     @Override
@@ -14,5 +14,10 @@ public class Battery implements IShopItem {
     @Override
     public String getItemName() {
         return "battery";
+    }
+
+    @Override
+    public String getItemCategory() {
+        return "energy";
     }
 }

@@ -4,6 +4,7 @@ import Bot.Command.AdminCommands.SetPrefixCommand;
 import Bot.Command.CommandContext;
 import Bot.Command.MemberCommands.*;
 import Bot.Command.ICommand;
+import Bot.Shop.ShopItemManager;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 import javax.annotation.Nullable;

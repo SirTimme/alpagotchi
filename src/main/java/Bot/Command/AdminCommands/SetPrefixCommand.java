@@ -18,7 +18,7 @@ public class SetPrefixCommand implements ICommand {
         final Member member = commandContext.getMember();
 
         if (!member.hasPermission(Permission.MANAGE_SERVER)) {
-            channel.sendMessage("<:RedCross:782229279312314368> You are missing the `MANAGE_SERVER` permission!").queue();
+            channel.sendMessage("<:RedCross:782229279312314368> You are missing the `MANAGE_SERVER` permission").queue();
             return;
         }
 

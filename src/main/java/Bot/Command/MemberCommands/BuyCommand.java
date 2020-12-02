@@ -4,7 +4,7 @@ import Bot.Command.CommandContext;
 import Bot.Command.ICommand;
 import Bot.Shop.IShopItem;
 import Bot.Database.IDataBaseManager;
-import Bot.ShopItemManager;
+import Bot.Shop.ShopItemManager;
 import net.dv8tion.jda.api.entities.TextChannel;
 
 import java.util.List;
