@@ -10,7 +10,7 @@ import net.dv8tion.jda.api.entities.Member;
 import java.io.File;
 import java.time.Instant;
 
-public class MyAlpacaCommand implements ICommand {
+public class MyAlpaca implements ICommand {
 
     @Override
     public void handle(CommandContext commandContext) {

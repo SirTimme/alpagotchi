@@ -11,10 +11,10 @@ import net.dv8tion.jda.api.entities.Member;
 
 import java.time.Instant;
 
-public class ShopCommand implements ICommand {
+public class Shop implements ICommand {
     private final ShopItemManager shopItemManager;
 
-    public ShopCommand(ShopItemManager shopItemManager) {
+    public Shop(ShopItemManager shopItemManager) {
         this.shopItemManager = shopItemManager;
     }
 

@@ -1,6 +1,7 @@
 package Bot;
 
-import Bot.Command.AdminCommands.SetPrefixCommand;
+import Bot.Command.AdminCommands.Decrease;
+import Bot.Command.AdminCommands.SetPrefix;
 import Bot.Command.CommandContext;
 import Bot.Command.MemberCommands.*;
 import Bot.Command.ICommand;
@@ -18,15 +19,16 @@ public class CommandManager {
     ShopItemManager shopItemManager = new ShopItemManager();
 
     public CommandManager() {
-        addCommand(new MyAlpacaCommand());
-        addCommand(new HelpCommand(this));
-        addCommand(new SetPrefixCommand());
-        addCommand(new WalletCommand());
-        addCommand(new WorkCommand());
-        addCommand(new ShopCommand(this.shopItemManager));
-        addCommand(new BuyCommand(this.shopItemManager));
-        addCommand(new InventoryCommand());
-        addCommand(new FeedCommand(this.shopItemManager));
+        addCommand(new MyAlpaca());
+        addCommand(new Help(this));
+        addCommand(new SetPrefix());
+        addCommand(new Wallet());
+        addCommand(new Work());
+        addCommand(new Shop(this.shopItemManager));
+        addCommand(new Buy(this.shopItemManager));
+        addCommand(new Inventory());
+        addCommand(new Feed(this.shopItemManager));
+        addCommand(new Decrease());
     }
 
     private void addCommand(ICommand command) {

@@ -5,7 +5,7 @@ import Bot.Command.ICommand;
 import Bot.Database.IDataBaseManager;
 import net.dv8tion.jda.api.entities.TextChannel;
 
-public class InventoryCommand implements ICommand {
+public class Inventory implements ICommand {
     @Override
     public void handle(CommandContext commandContext) {
         final TextChannel channel = commandContext.getChannel();

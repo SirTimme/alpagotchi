@@ -9,7 +9,7 @@ import net.dv8tion.jda.api.entities.TextChannel;
 
 import java.util.List;
 
-public class SetPrefixCommand implements ICommand {
+public class SetPrefix implements ICommand {
 
     @Override
     public void handle(CommandContext commandContext) {

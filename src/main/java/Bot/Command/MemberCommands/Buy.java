@@ -9,10 +9,10 @@ import net.dv8tion.jda.api.entities.TextChannel;
 
 import java.util.List;
 
-public class BuyCommand implements ICommand {
+public class Buy implements ICommand {
     private final ShopItemManager shopItemManager;
 
-    public BuyCommand(ShopItemManager shopItemManager) {
+    public Buy(ShopItemManager shopItemManager) {
         this.shopItemManager = shopItemManager;
     }
 

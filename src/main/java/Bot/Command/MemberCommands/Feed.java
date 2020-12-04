@@ -9,10 +9,10 @@ import net.dv8tion.jda.api.entities.TextChannel;
 
 import java.util.List;
 
-public class FeedCommand implements ICommand {
+public class Feed implements ICommand {
     private final ShopItemManager shopItemManager;
 
-    public FeedCommand(ShopItemManager shopItemManager) {
+    public Feed(ShopItemManager shopItemManager) {
         this.shopItemManager = shopItemManager;
     }
 
