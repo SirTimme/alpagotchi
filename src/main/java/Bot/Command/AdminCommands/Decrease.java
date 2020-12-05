@@ -55,10 +55,6 @@ class SQLTask extends TimerTask {
 
     @Override
     public void run() {
-        for (long memberID : IDataBaseManager.INSTANCE.getMembers()) {
-            IDataBaseManager.INSTANCE.setAlpaca(memberID, "hunger", -1);
-            IDataBaseManager.INSTANCE.setAlpaca(memberID, "thirst", -1);
-            IDataBaseManager.INSTANCE.setAlpaca(memberID, "energy", -1);
-        }
+        IDataBaseManager.INSTANCE.decreaseValues();
     }
 }

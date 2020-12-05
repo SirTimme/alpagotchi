@@ -13,7 +13,7 @@ public interface IDataBaseManager {
 
     long getCooldown(long memberID, String column);
 
-    List<Long> getMembers();
+    void decreaseValues();
 
     void setPrefix(long guildID, String newPrefix);
 

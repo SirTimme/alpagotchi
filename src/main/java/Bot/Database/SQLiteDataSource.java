@@ -7,12 +7,9 @@ import com.zaxxer.hikari.HikariDataSource;
 import java.io.File;
 import java.io.IOException;
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
 
 public class SQLiteDataSource implements IDataBaseManager {
     private final HikariDataSource dataSource;
-    private final List<Long> memberList = new ArrayList<>();
 
     public SQLiteDataSource() {
         try {
@@ -41,7 +38,7 @@ public class SQLiteDataSource implements IDataBaseManager {
             //language=SQLite
             statement.execute("CREATE TABLE IF NOT EXISTS guild_settings (" +
                     "guild_id VARCHAR(20) PRIMARY KEY NOT NULL," +
-                    "prefix VARCHAR(255) NOT NULL DEFAULT '" + defaultPrefix + "'" + ")");
+                    "prefix VARCHAR(255) NOT NULL DEFAULT '" + defaultPrefix + "')");
 
             statement.execute("CREATE TABLE IF NOT EXISTS alpacas_manager (" +
                     "member_id VARCHAR(20) PRIMARY KEY NOT NULL, " +
@@ -60,7 +57,7 @@ public class SQLiteDataSource implements IDataBaseManager {
 
             statement.execute("CREATE TABLE IF NOT EXISTS cooldown_manager (" +
                     "member_id VARCHAR(20) PRIMARY KEY NOT NULL, " +
-                    "cooldown_work VARCHAR(50) DEFAULT 0 " +
+                    "work VARCHAR(50) DEFAULT 0 " +
                     ")");
 
         } catch (SQLException error) {
@@ -161,21 +158,20 @@ public class SQLiteDataSource implements IDataBaseManager {
     }
 
     @Override
-    public List<Long> getMembers() {
-        try (Connection connection = dataSource.getConnection();
-             final PreparedStatement preparedStatement = connection.prepareStatement("SELECT member_id FROM alpacas_manager")) {
+    public void decreaseValues() {
 
-            try (final ResultSet resultSet = preparedStatement.executeQuery()) {
-                while (resultSet.next()) {
-                    this.memberList.add(resultSet.getLong("member_id"));
-                }
-                return this.memberList;
-            }
+        try (Connection connection = dataSource.getConnection();
+             final PreparedStatement preparedStatementHunger = connection.prepareStatement("UPDATE alpacas_manager SET hunger = hunger - 1 WHERE hunger > 0");
+             final PreparedStatement preparedStatementThirst = connection.prepareStatement("UPDATE alpacas_manager SET thirst = thirst - 1 WHERE thirst > 0");
+             final PreparedStatement preparedStatementEnergy = connection.prepareStatement("UPDATE alpacas_manager SET energy = energy - 1 WHERE energy > 0")) {
+
+            preparedStatementHunger.executeUpdate();
+            preparedStatementThirst.executeUpdate();
+            preparedStatementEnergy.executeUpdate();
 
         } catch (SQLException error) {
             error.printStackTrace();
         }
-        return this.memberList;
     }
 
     @Override
