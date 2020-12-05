@@ -7,9 +7,12 @@ import com.zaxxer.hikari.HikariDataSource;
 import java.io.File;
 import java.io.IOException;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class SQLiteDataSource implements IDataBaseManager {
     private final HikariDataSource dataSource;
+    private final List<Long> memberList = new ArrayList<>();
 
     public SQLiteDataSource() {
         try {
@@ -97,24 +100,6 @@ public class SQLiteDataSource implements IDataBaseManager {
     }
 
     @Override
-    public void setPrefix(long guildID, String newPrefix) {
-
-        try (Connection connection = dataSource.getConnection();
-             final PreparedStatement preparedStatement = connection
-                     // language=SQLite
-                     .prepareStatement("UPDATE guild_settings SET prefix = ? WHERE guild_id = ?")) {
-
-            preparedStatement.setString(1, newPrefix);
-            preparedStatement.setString(2, String.valueOf(guildID));
-
-            preparedStatement.executeUpdate();
-
-        } catch (SQLException error) {
-            error.printStackTrace();
-        }
-    }
-
-    @Override
     public int getAlpaca(long memberID, String column) {
 
         try (Connection connection = dataSource.getConnection();
@@ -142,23 +127,6 @@ public class SQLiteDataSource implements IDataBaseManager {
         }
 
         return 100;
-    }
-
-    @Override
-    public void setAlpaca(long memberID, String column, int newValue) {
-        int oldValue = IDataBaseManager.INSTANCE.getAlpaca(memberID, column);
-
-        try (Connection connection = dataSource.getConnection();
-             final PreparedStatement preparedStatement = connection.prepareStatement("UPDATE alpacas_manager SET " + column + " = ? WHERE member_id = ?")) {
-
-            preparedStatement.setInt(1, oldValue + newValue);
-            preparedStatement.setString(2, String.valueOf(memberID));
-
-            preparedStatement.executeUpdate();
-
-        } catch (SQLException error) {
-            error.printStackTrace();
-        }
     }
 
     @Override
@@ -193,20 +161,21 @@ public class SQLiteDataSource implements IDataBaseManager {
     }
 
     @Override
-    public void setInventory(long memberID, String column, int newValue) {
-        int oldValue = IDataBaseManager.INSTANCE.getInventory(memberID, column);
-
+    public List<Long> getMembers() {
         try (Connection connection = dataSource.getConnection();
-             final PreparedStatement preparedStatement = connection.prepareStatement("UPDATE inventory_manager SET " + column + " = ? WHERE member_id = ?")) {
+             final PreparedStatement preparedStatement = connection.prepareStatement("SELECT member_id FROM alpacas_manager")) {
 
-            preparedStatement.setInt(1, oldValue + newValue);
-            preparedStatement.setString(2, String.valueOf(memberID));
-
-            preparedStatement.executeUpdate();
+            try (final ResultSet resultSet = preparedStatement.executeQuery()) {
+                while (resultSet.next()) {
+                    this.memberList.add(resultSet.getLong("member_id"));
+                }
+                return this.memberList;
+            }
 
         } catch (SQLException error) {
             error.printStackTrace();
         }
+        return this.memberList;
     }
 
     @Override
@@ -223,7 +192,7 @@ public class SQLiteDataSource implements IDataBaseManager {
                 }
             }
 
-            try (final PreparedStatement insertStatement = connection.prepareStatement("INSERT INTO cooldown_manager(member_id, cooldown_work) VALUES(?, ?)")) {
+            try (final PreparedStatement insertStatement = connection.prepareStatement("INSERT INTO cooldown_manager(member_id, work) VALUES(?, ?)")) {
 
                 insertStatement.setString(1, String.valueOf(memberID));
                 insertStatement.setLong(2, 0);
@@ -235,6 +204,58 @@ public class SQLiteDataSource implements IDataBaseManager {
         }
 
         return 0;
+    }
+
+    @Override
+    public void setPrefix(long guildID, String newPrefix) {
+
+        try (Connection connection = dataSource.getConnection();
+             final PreparedStatement preparedStatement = connection
+                     // language=SQLite
+                     .prepareStatement("UPDATE guild_settings SET prefix = ? WHERE guild_id = ?")) {
+
+            preparedStatement.setString(1, newPrefix);
+            preparedStatement.setString(2, String.valueOf(guildID));
+
+            preparedStatement.executeUpdate();
+
+        } catch (SQLException error) {
+            error.printStackTrace();
+        }
+    }
+
+    @Override
+    public void setAlpaca(long memberID, String column, int newValue) {
+        int oldValue = IDataBaseManager.INSTANCE.getAlpaca(memberID, column);
+
+        try (Connection connection = dataSource.getConnection();
+             final PreparedStatement preparedStatement = connection.prepareStatement("UPDATE alpacas_manager SET " + column + " = ? WHERE member_id = ?")) {
+
+            preparedStatement.setInt(1, oldValue + newValue);
+            preparedStatement.setString(2, String.valueOf(memberID));
+
+            preparedStatement.executeUpdate();
+
+        } catch (SQLException error) {
+            error.printStackTrace();
+        }
+    }
+
+    @Override
+    public void setInventory(long memberID, String column, int newValue) {
+        int oldValue = IDataBaseManager.INSTANCE.getInventory(memberID, column);
+
+        try (Connection connection = dataSource.getConnection();
+             final PreparedStatement preparedStatement = connection.prepareStatement("UPDATE inventory_manager SET " + column + " = ? WHERE member_id = ?")) {
+
+            preparedStatement.setInt(1, oldValue + newValue);
+            preparedStatement.setString(2, String.valueOf(memberID));
+
+            preparedStatement.executeUpdate();
+
+        } catch (SQLException error) {
+            error.printStackTrace();
+        }
     }
 
     @Override
