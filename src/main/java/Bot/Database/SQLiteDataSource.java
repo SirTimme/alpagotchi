@@ -44,21 +44,18 @@ public class SQLiteDataSource implements IDataBaseManager {
                     "member_id VARCHAR(20) PRIMARY KEY NOT NULL, " +
                     "hunger INTEGER DEFAULT 100, " +
                     "thirst INTEGER DEFAULT 100, " +
-                    "energy INTEGER DEFAULT 100 " +
-                    ")");
+                    "energy INTEGER DEFAULT 100)");
 
             statement.execute("CREATE TABLE IF NOT EXISTS inventory_manager (" +
                     "member_id VARCHAR(20) PRIMARY KEY NOT NULL, " +
                     "currency INTEGER DEFAULT 0, " +
                     "salad INTEGER DEFAULT 0, " +
                     "waterbottle INTEGER DEFAULT 0, " +
-                    "battery INTEGER DEFAULT 0 " +
-                    ")");
+                    "battery INTEGER DEFAULT 0)");
 
             statement.execute("CREATE TABLE IF NOT EXISTS cooldown_manager (" +
                     "member_id VARCHAR(20) PRIMARY KEY NOT NULL, " +
-                    "work VARCHAR(50) DEFAULT 0 " +
-                    ")");
+                    "work VARCHAR(50) DEFAULT 0)");
 
         } catch (SQLException error) {
             error.printStackTrace();
@@ -161,13 +158,11 @@ public class SQLiteDataSource implements IDataBaseManager {
     public void decreaseValues() {
 
         try (Connection connection = dataSource.getConnection();
-             final PreparedStatement preparedStatementHunger = connection.prepareStatement("UPDATE alpacas_manager SET hunger = hunger - 1 WHERE hunger > 0");
-             final PreparedStatement preparedStatementThirst = connection.prepareStatement("UPDATE alpacas_manager SET thirst = thirst - 1 WHERE thirst > 0");
-             final PreparedStatement preparedStatementEnergy = connection.prepareStatement("UPDATE alpacas_manager SET energy = energy - 1 WHERE energy > 0")) {
+             final PreparedStatement preparedStatement = connection.prepareStatement("UPDATE alpacas_manager SET hunger = CASE WHEN (hunger > 0) THEN (hunger - 1) ELSE 0 END, " +
+                     "thirst = CASE WHEN (thirst > 0) THEN (thirst - 1) ELSE 0 END," +
+                     "energy = CASE WHEN (energy > 0) THEN (energy - 1) ELSE 0 END")) {
 
-            preparedStatementHunger.executeUpdate();
-            preparedStatementThirst.executeUpdate();
-            preparedStatementEnergy.executeUpdate();
+            preparedStatement.executeUpdate();
 
         } catch (SQLException error) {
             error.printStackTrace();
