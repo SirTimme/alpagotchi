@@ -251,12 +251,11 @@ public class SQLiteDataSource implements IDataBaseManager {
 
     @Override
     public void setCooldown(long memberID, String column, long newValue) {
-        long oldValue = IDataBaseManager.INSTANCE.getCooldown(memberID, column);
 
         try (Connection connection = dataSource.getConnection();
              final PreparedStatement preparedStatement = connection.prepareStatement("UPDATE cooldown_manager SET " + column + " = ? WHERE member_id = ?")) {
 
-            preparedStatement.setLong(1, oldValue + newValue);
+            preparedStatement.setLong(1, newValue);
             preparedStatement.setString(2, String.valueOf(memberID));
 
             preparedStatement.executeUpdate();

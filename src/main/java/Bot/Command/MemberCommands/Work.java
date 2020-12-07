@@ -14,7 +14,7 @@ public class Work implements ICommand {
         long cooldown = IDataBaseManager.INSTANCE.getCooldown(memberID, "work") - System.currentTimeMillis();
 
         if (cooldown < 0) {
-            long newCooldown = System.currentTimeMillis() + 60000 * 20;
+            long newCooldown = System.currentTimeMillis() + 1200000;
             int amountOfFluffies = (int) Math.round(Math.random() * (15 - 1) + 1);
 
             IDataBaseManager.INSTANCE.setInventory(memberID, "currency", amountOfFluffies);
