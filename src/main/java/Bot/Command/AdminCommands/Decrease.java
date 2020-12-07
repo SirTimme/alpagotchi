@@ -30,7 +30,7 @@ public class Decrease implements ICommand {
         }
 
         if (args.get(0).equalsIgnoreCase("enable")) {
-            this.timer.schedule(this.sqlTask, 0, 10000);
+            this.timer.schedule(this.sqlTask, 0, 7200000);
             channel.sendMessage("<:GreenTick:782229268914372609> Alpacas begin to lose stats over time").queue();
         } else if (args.get(0).equalsIgnoreCase("disable")) {
             this.timer.cancel();

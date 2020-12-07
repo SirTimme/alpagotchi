@@ -14,7 +14,7 @@ public class MyAlpaca implements ICommand {
 
     @Override
     public void handle(CommandContext commandContext) {
-        File alpacaFile = new File("src\\main\\resources\\alpaka.gif");
+        File alpacaFile = new File("src/main/resources/alpaka.gif");
         EmbedBuilder embedBuilder = new EmbedBuilder();
         final Member botCreator = commandContext.getGuild().getMemberById(Config.get("OWNER_ID"));
         final long memberID = commandContext.getMessage().getAuthor().getIdLong();
