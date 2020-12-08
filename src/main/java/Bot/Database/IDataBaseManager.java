@@ -1,7 +1,5 @@
 package Bot.Database;
 
-import java.util.List;
-
 public interface IDataBaseManager {
     IDataBaseManager INSTANCE = new SQLiteDataSource();
 

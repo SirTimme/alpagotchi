@@ -1,11 +1,5 @@
 package Bot.Shop;
 
-import Bot.Bot;
-import Bot.Shop.Battery;
-import Bot.Shop.Waterbottle;
-import Bot.Shop.IShopItem;
-import Bot.Shop.Salad;
-
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
