@@ -31,8 +31,7 @@ public class SQLiteDataSource implements IDataBaseManager {
 
         dataSource = new HikariDataSource(config);
 
-        try {
-            Connection connection = dataSource.getConnection();
+        try (Connection connection = dataSource.getConnection()) {
             final Statement statement = connection.createStatement();
             final String defaultPrefix = Config.get("PREFIX");
 
@@ -65,8 +64,7 @@ public class SQLiteDataSource implements IDataBaseManager {
     @Override
     public String getPrefix(long guildID) {
 
-        try {
-            Connection connection = dataSource.getConnection();
+        try (Connection connection = dataSource.getConnection()){
 
             final PreparedStatement preparedStatement = connection.prepareStatement("SELECT prefix FROM guild_settings WHERE guild_id = ?");
             preparedStatement.setString(1, String.valueOf(guildID));
@@ -89,8 +87,7 @@ public class SQLiteDataSource implements IDataBaseManager {
     @Override
     public int getAlpaca(long memberID, String column) {
 
-        try {
-            Connection connection = dataSource.getConnection();
+        try (Connection connection = dataSource.getConnection()) {
 
             final PreparedStatement preparedStatement = connection.prepareStatement("SELECT " + column + " FROM alpacas_manager WHERE member_id = ?");
             preparedStatement.setString(1, String.valueOf(memberID));
@@ -116,8 +113,7 @@ public class SQLiteDataSource implements IDataBaseManager {
     @Override
     public int getInventory(long memberID, String column) {
 
-        try {
-            Connection connection = dataSource.getConnection();
+        try (Connection connection = dataSource.getConnection()){
 
             final PreparedStatement preparedStatement = connection.prepareStatement("SELECT " + column + " FROM inventory_manager WHERE member_id = ?");
             preparedStatement.setString(1, String.valueOf(memberID));
@@ -144,9 +140,7 @@ public class SQLiteDataSource implements IDataBaseManager {
     @Override
     public void decreaseValues() {
 
-        try {
-            Connection connection = dataSource.getConnection();
-
+        try (Connection connection = dataSource.getConnection()) {
             final PreparedStatement preparedStatement = connection.prepareStatement("UPDATE alpacas_manager SET hunger = CASE WHEN (hunger > 0) THEN (hunger - 1) ELSE 0 END, " +
                     "thirst = CASE WHEN (thirst > 0) THEN (thirst - 1) ELSE 0 END," +
                     "energy = CASE WHEN (energy > 0) THEN (energy - 1) ELSE 0 END");
@@ -160,8 +154,7 @@ public class SQLiteDataSource implements IDataBaseManager {
     @Override
     public long getCooldown(long memberID, String column) {
 
-        try {
-            Connection connection = dataSource.getConnection();
+        try (Connection connection = dataSource.getConnection()){
 
             final PreparedStatement preparedStatement = connection.prepareStatement("SELECT " + column + " FROM cooldown_manager WHERE member_id = ?");
             preparedStatement.setString(1, String.valueOf(memberID));
@@ -185,8 +178,7 @@ public class SQLiteDataSource implements IDataBaseManager {
     @Override
     public void setPrefix(long guildID, String newPrefix) {
 
-        try {
-            Connection connection = dataSource.getConnection();
+        try (Connection connection = dataSource.getConnection()) {
 
             final PreparedStatement preparedStatement = connection.prepareStatement("UPDATE guild_settings SET prefix = ? WHERE guild_id = ?");
             preparedStatement.setString(1, newPrefix);
@@ -202,8 +194,7 @@ public class SQLiteDataSource implements IDataBaseManager {
     public void setAlpaca(long memberID, String column, int newValue) {
         int oldValue = IDataBaseManager.INSTANCE.getAlpaca(memberID, column);
 
-        try {
-            Connection connection = dataSource.getConnection();
+        try (Connection connection = dataSource.getConnection()) {
 
             final PreparedStatement preparedStatement = connection.prepareStatement("UPDATE alpacas_manager SET " + column + " = ? WHERE member_id = ?");
             preparedStatement.setInt(1, oldValue + newValue);
@@ -219,8 +210,7 @@ public class SQLiteDataSource implements IDataBaseManager {
     public void setInventory(long memberID, String column, int newValue) {
         int oldValue = IDataBaseManager.INSTANCE.getInventory(memberID, column);
 
-        try {
-            Connection connection = dataSource.getConnection();
+        try (Connection connection = dataSource.getConnection()) {
 
             final PreparedStatement preparedStatement = connection.prepareStatement("UPDATE inventory_manager SET " + column + " = ? WHERE member_id = ?");
             preparedStatement.setInt(1, oldValue + newValue);
@@ -235,8 +225,7 @@ public class SQLiteDataSource implements IDataBaseManager {
     @Override
     public void setCooldown(long memberID, String column, long newValue) {
 
-        try {
-            Connection connection = dataSource.getConnection();
+        try (Connection connection = dataSource.getConnection()) {
 
             final PreparedStatement preparedStatement = connection.prepareStatement("UPDATE cooldown_manager SET " + column + " = ? WHERE member_id = ?");
             preparedStatement.setLong(1, newValue);
