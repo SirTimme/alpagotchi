@@ -64,7 +64,7 @@ public class SQLiteDataSource implements IDataBaseManager {
     @Override
     public String getPrefix(long guildID) {
 
-        try (Connection connection = dataSource.getConnection()){
+        try (Connection connection = dataSource.getConnection()) {
 
             final PreparedStatement preparedStatement = connection.prepareStatement("SELECT prefix FROM guild_settings WHERE guild_id = ?");
             preparedStatement.setString(1, String.valueOf(guildID));
@@ -113,7 +113,7 @@ public class SQLiteDataSource implements IDataBaseManager {
     @Override
     public int getInventory(long memberID, String column) {
 
-        try (Connection connection = dataSource.getConnection()){
+        try (Connection connection = dataSource.getConnection()) {
 
             final PreparedStatement preparedStatement = connection.prepareStatement("SELECT " + column + " FROM inventory_manager WHERE member_id = ?");
             preparedStatement.setString(1, String.valueOf(memberID));
@@ -154,7 +154,7 @@ public class SQLiteDataSource implements IDataBaseManager {
     @Override
     public long getCooldown(long memberID, String column) {
 
-        try (Connection connection = dataSource.getConnection()){
+        try (Connection connection = dataSource.getConnection()) {
 
             final PreparedStatement preparedStatement = connection.prepareStatement("SELECT " + column + " FROM cooldown_manager WHERE member_id = ?");
             preparedStatement.setString(1, String.valueOf(memberID));
