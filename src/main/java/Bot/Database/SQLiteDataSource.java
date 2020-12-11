@@ -41,10 +41,10 @@ public class SQLiteDataSource implements IDataBaseManager {
 
             statement.execute("CREATE TABLE IF NOT EXISTS alpacas_manager (" +
                     "member_id VARCHAR(20) PRIMARY KEY NOT NULL, " +
-                    "nickname TEXT DEFAULT 'alpaca'," +
                     "hunger INTEGER DEFAULT 100, " +
                     "thirst INTEGER DEFAULT 100, " +
-                    "energy INTEGER DEFAULT 100)");
+                    "energy INTEGER DEFAULT 100," +
+                    "nickname TEXT DEFAULT 'alpaca')");
 
             statement.execute("CREATE TABLE IF NOT EXISTS inventory_manager (" +
                     "member_id VARCHAR(20) PRIMARY KEY NOT NULL, " +
@@ -127,7 +127,7 @@ public class SQLiteDataSource implements IDataBaseManager {
                 return resultSet.getInt(column);
             }
 
-            final PreparedStatement insertStatement = connection.prepareStatement("INSERT INTO alpacas_manager(member_id, hunger, thirst, energy, nickname) VALUES(?, ?, ?, ?, ?)");
+            final PreparedStatement insertStatement = connection.prepareStatement("INSERT INTO alpacas_manager(member_id, hunger, thirst, energy, nickname) VALUES(?, ?, ?, ?, ?, ?)");
             insertStatement.setString(1, String.valueOf(memberID));
             insertStatement.setInt(2, 100);
             insertStatement.setInt(3, 100);
