@@ -56,7 +56,7 @@ public class Feed implements ICommand {
          IDataBaseManager.INSTANCE.setInventory(memberID, item.getName(), 1);
          feedAlpaca(args.get(0), memberID, item, channel);
 
-         message.editMessage("<:GreenTick:782229268914372609> Automatic purchase successful **" + item.getName() + " + 1** | **fluffies - **" + item.getPrice() + "**").queue();
+         message.editMessage("<:GreenTick:782229268914372609> Automatic purchase successful **" + item.getName() + " + 1** | **fluffies - " + item.getPrice() + "**").queue();
       });
    }
 
