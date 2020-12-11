@@ -39,7 +39,7 @@ public class Feed implements ICommand {
          return;
       }
 
-      channel.sendMessage("<:RedCross:786885701786533908> Your inventory is empty, Attempting to automatically purchase a **" + item.getName() + "**...").queue(message -> {
+      channel.sendMessage("<:RedCross:782229279312314368> Your inventory is empty, Attempting to automatically purchase a **" + item.getName() + "**...").queue(message -> {
 
          if (IDataBaseManager.INSTANCE.getInventory(memberID, "currency") - item.getPrice() < 0) {
             message.editMessage("<:RedCross:782229279312314368> Automatic purchase failed, insufficient amount of fluffies").queue();
@@ -56,7 +56,7 @@ public class Feed implements ICommand {
          IDataBaseManager.INSTANCE.setInventory(memberID, item.getName(), 1);
          feedAlpaca(args.get(0), memberID, item, channel);
 
-         message.editMessage("<:GreenTick:786885687370711050> Automatic purchase successful **" + item.getName() + " + 1** | **fluffies - **" + item.getPrice() + "**").queue();
+         message.editMessage("<:GreenTick:782229268914372609> Automatic purchase successful **" + item.getName() + " + 1** | **fluffies - **" + item.getPrice() + "**").queue();
       });
    }
 
@@ -82,13 +82,13 @@ public class Feed implements ICommand {
       }
 
       if (args.equals("salad")) {
-         channel.sendMessage("\uD83E\uDD57 Your alpaca consumes the green salad in one bite and is happy **Hunger + **" + item.getSaturation() + "**").queue();
+         channel.sendMessage("\uD83E\uDD57 Your alpaca consumes the green salad in one bite and is happy **Hunger + " + item.getSaturation() + "**").queue();
 
       } else if (args.equals("waterbottle")) {
-         channel.sendMessage("\uD83D\uDCA7 Your alpaca eagerly drinks the waterbottle empty **Thirst + **" + item.getSaturation() + "**").queue();
+         channel.sendMessage("\uD83D\uDCA7 Your alpaca eagerly drinks the waterbottle empty **Thirst + " + item.getSaturation() + "**").queue();
 
       } else {
-         channel.sendMessage("\uD83D\uDD0B Your alpaca feels full of energy **Energy + **" + item.getSaturation() + "**").queue();
+         channel.sendMessage("\uD83D\uDD0B Your alpaca feels full of energy **Energy + " + item.getSaturation() + "**").queue();
       }
    }
 }
