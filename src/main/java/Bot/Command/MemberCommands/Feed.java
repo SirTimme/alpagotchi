@@ -23,7 +23,7 @@ public class Feed implements ICommand {
       final List<String> args = commandContext.getArgs();
 
       if (args.isEmpty()) {
-         channel.sendMessage("<:RedCross:786885701786533908> Missing Arguments").queue();
+         channel.sendMessage("<:RedCross:782229279312314368> Missing Arguments").queue();
          return;
       }
 
@@ -31,7 +31,7 @@ public class Feed implements ICommand {
 
       if (item != null) {
          if (IDataBaseManager.INSTANCE.getInventory(memberID, item.getItemName()) == 0) {
-            channel.sendMessage("<:RedCross:786885701786533908> Your inventory is empty, Attempting to automatically purchase a **" + item.getItemName() + "**...").queue(message -> {
+            channel.sendMessage("<:RedCross:782229279312314368> Your inventory is empty, Attempting to automatically purchase a **" + item.getItemName() + "**...").queue(message -> {
 
                if (IDataBaseManager.INSTANCE.getInventory(memberID, "currency") - item.getItemValue() >= 0) {
                   try {
@@ -42,11 +42,11 @@ public class Feed implements ICommand {
                   IDataBaseManager.INSTANCE.setInventory(memberID, "currency", -item.getItemValue());
                   IDataBaseManager.INSTANCE.setInventory(memberID, item.getItemName(), 1);
 
-                  message.editMessage("<:GreenTick:786885687370711050> Automatic purchase successful **" + item.getItemName() + " + 1** | **fluffies - 10**").queue();
+                  message.editMessage("<:GreenTick:782229268914372609> Automatic purchase successful **" + item.getItemName() + " + 1** | **fluffies - 10**").queue();
                   feedAlpaca(args.get(0), memberID, item, channel);
 
                } else {
-                  message.editMessage("<:RedCross:786885701786533908> Automatic purchase failed, insufficient amount of fluffies").queue();
+                  message.editMessage("<:RedCross:782229279312314368> Automatic purchase failed, insufficient amount of fluffies").queue();
                }
             });
 
@@ -55,7 +55,7 @@ public class Feed implements ICommand {
          }
 
       } else {
-         channel.sendMessage("<:RedCross:786885701786533908> No item with this name found").queue();
+         channel.sendMessage("<:RedCross:782229279312314368> No item with this name found").queue();
       }
    }
 
