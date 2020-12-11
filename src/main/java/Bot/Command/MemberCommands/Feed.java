@@ -23,14 +23,14 @@ public class Feed implements ICommand {
       final List<String> args = commandContext.getArgs();
 
       if (args.isEmpty()) {
-         channel.sendMessage("<:RedCross:786885701786533908> Missing Arguments").queue();
+         channel.sendMessage("<:RedCross:782229279312314368> Missing Arguments").queue();
          return;
       }
 
       IShopItem item = shopItemManager.getShopItem(args.get(0));
 
       if (item == null) {
-         channel.sendMessage("<:RedCross:786885701786533908> No item with this name found").queue();
+         channel.sendMessage("<:RedCross:782229279312314368> No item with this name found").queue();
          return;
       }
 
@@ -42,7 +42,7 @@ public class Feed implements ICommand {
       channel.sendMessage("<:RedCross:786885701786533908> Your inventory is empty, Attempting to automatically purchase a **" + item.getName() + "**...").queue(message -> {
 
          if (IDataBaseManager.INSTANCE.getInventory(memberID, "currency") - item.getPrice() < 0) {
-            message.editMessage("<:RedCross:786885701786533908> Automatic purchase failed, insufficient amount of fluffies").queue();
+            message.editMessage("<:RedCross:782229279312314368> Automatic purchase failed, insufficient amount of fluffies").queue();
             return;
          }
 

@@ -16,12 +16,12 @@ public class Nick implements ICommand {
       final List<String> args = commandContext.getArgs();
 
       if (args.isEmpty()) {
-         channel.sendMessage("<:RedCross:786885701786533908> Missing Arguments").queue();
+         channel.sendMessage("<:RedCross:782229279312314368> Missing Arguments").queue();
          return;
       }
 
       if (args.get(0).length() > 256) {
-         channel.sendMessage("<:RedCross:786885701786533908> The nickname must not exceed **256** characters").queue();
+         channel.sendMessage("<:RedCross:782229279312314368> The nickname must not exceed **256** characters").queue();
          return;
       }
 
