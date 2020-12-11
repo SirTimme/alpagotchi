@@ -13,20 +13,21 @@ public class Work implements ICommand {
         final TextChannel channel = commandContext.getChannel();
         long cooldown = IDataBaseManager.INSTANCE.getCooldown(memberID, "work") - System.currentTimeMillis();
 
-        if (cooldown < 0) {
-            long newCooldown = System.currentTimeMillis() + 1200000;
-            int amountOfFluffies = (int) Math.round(Math.random() * (15 - 1) + 1);
+        if (cooldown > 0) {
+            channel.sendMessage("<:RedCross:782229279312314368> You've already worked, you have to rest **" + (int) (((cooldown / 1000) / 60) % 60) + "** minutes").queue();
+            return;
+        }
 
-            IDataBaseManager.INSTANCE.setInventory(memberID, "currency", amountOfFluffies);
-            IDataBaseManager.INSTANCE.setCooldown(memberID, "work", newCooldown);
+        long newCooldown = System.currentTimeMillis() + 1200000;
+        int amountOfFluffies = (int) Math.round(Math.random() * (15 - 1) + 1);
 
-            if (amountOfFluffies == 1) {
-                channel.sendMessage("⛏ You went to work and earned **" + amountOfFluffies + "** fluffy").queue();
-            } else {
-                channel.sendMessage("⛏ You went to work and earned **" + amountOfFluffies + "** fluffies").queue();
-            }
+        IDataBaseManager.INSTANCE.setInventory(memberID, "currency", amountOfFluffies);
+        IDataBaseManager.INSTANCE.setCooldown(memberID, "work", newCooldown);
+
+        if (amountOfFluffies == 1) {
+            channel.sendMessage("⛏ You went to work and earned **" + amountOfFluffies + "** fluffy").queue();
         } else {
-            channel.sendMessage("<:RedCross:782229279312314368> You've already worked, you have to rest **" + (int) (((cooldown / 1000) / 60) % 60) + "** minutes until you can use this command again").queue();
+            channel.sendMessage("⛏ You went to work and earned **" + amountOfFluffies + "** fluffies").queue();
         }
     }
 

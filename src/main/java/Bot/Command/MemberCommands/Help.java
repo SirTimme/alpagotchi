@@ -1,7 +1,7 @@
 package Bot.Command.MemberCommands;
 
 import Bot.Command.CommandContext;
-import Bot.CommandManager;
+import Bot.Handler.CommandManager;
 import Bot.Command.ICommand;
 import Bot.Database.IDataBaseManager;
 import net.dv8tion.jda.api.entities.TextChannel;

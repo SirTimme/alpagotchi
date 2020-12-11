@@ -1,23 +1,29 @@
 package Bot.Shop;
 
 public class Salad implements IShopItem {
+
     @Override
-    public int getItemValue() {
+    public int getPrice() {
         return 10;
     }
 
     @Override
-    public String getItemDescription() {
+    public int getSaturation() {
+        return 10;
+    }
+
+    @Override
+    public String getDescription() {
         return "A green salad, nothing special (Hunger + 10)";
     }
 
     @Override
-    public String getItemName() {
+    public String getName() {
         return "salad";
     }
 
     @Override
-    public String getItemCategory() {
+    public String getCategory() {
         return "hunger";
     }
 }

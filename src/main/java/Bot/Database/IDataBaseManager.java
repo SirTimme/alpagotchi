@@ -5,19 +5,23 @@ public interface IDataBaseManager {
 
     String getPrefix(long guildID);
 
-    int getAlpaca(long memberID, String column);
+    void setPrefix(long guildID, String newPrefix);
+
+    String getNickname(long memberID);
+
+    void setNickname(long memberID, String nickname);
+
+    int getStatus(long memberID, String column);
+
+    void setStatus(long memberID, String column, int newValue);
 
     int getInventory(long memberID, String column);
 
-    long getCooldown(long memberID, String column);
-
-    void decreaseValues();
-
-    void setPrefix(long guildID, String newPrefix);
-
-    void setAlpaca(long memberID, String column, int newValue);
-
     void setInventory(long memberID, String column, int newValue);
 
+    long getCooldown(long memberID, String column);
+
     void setCooldown(long memberID, String column, long newValue);
+
+    void decreaseValues();
 }

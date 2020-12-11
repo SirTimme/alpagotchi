@@ -1,23 +1,29 @@
 package Bot.Shop;
 
 public class Battery implements IShopItem {
+
     @Override
-    public int getItemValue() {
+    public int getPrice() {
         return 10;
     }
 
     @Override
-    public String getItemDescription() {
+    public int getSaturation() {
+        return 10;
+    }
+
+    @Override
+    public String getDescription() {
         return "A dense brick of electricity (Energy + 10)";
     }
 
     @Override
-    public String getItemName() {
+    public String getName() {
         return "battery";
     }
 
     @Override
-    public String getItemCategory() {
+    public String getCategory() {
         return "energy";
     }
 }

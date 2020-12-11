@@ -1,33 +1,30 @@
-package Bot;
+package Bot.Handler;
 
 import Bot.Database.IDataBaseManager;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import Bot.Config;
 
-public class CommandListener extends ListenerAdapter {
+public class MessageListener extends ListenerAdapter {
     private final CommandManager manager = new CommandManager();
 
     @Override
     public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
-        User user = event.getAuthor();
+        final User user = event.getAuthor();
+        final long guildID = event.getGuild().getIdLong();
+        final String prefix = IDataBaseManager.INSTANCE.getPrefix(guildID);
+        final String rawMsg = event.getMessage().getContentRaw();
 
-        if (user.isBot() || event.isWebhookMessage()) {
+        if (user.isBot() || event.isWebhookMessage() || !rawMsg.startsWith(prefix)) {
             return;
         }
 
-        final long guildID = event.getGuild().getIdLong();
-        String prefix = IDataBaseManager.INSTANCE.getPrefix(guildID);
-        String rawMsg = event.getMessage().getContentRaw();
-
         if (rawMsg.equalsIgnoreCase(prefix + "shutdown") && user.getId().equals(Config.get("OWNER_ID"))) {
             event.getChannel().sendMessage("Alpagotchi is shutting down...").complete();
-
             System.exit(0);
         }
 
-        if (rawMsg.startsWith(prefix)) {
-            manager.handle(event, prefix);
-        }
+        manager.handle(event, prefix);
     }
 }

@@ -26,7 +26,7 @@ public class Shop implements ICommand {
         embedBuilder.setTitle("Alpaca Shop");
 
         for (IShopItem shopItem : shopItemManager.getShopItems()) {
-            embedBuilder.addField("\uD83E\uDE99 " + shopItem.getItemValue() + " - " + shopItem.getItemName() , shopItem.getItemDescription(), false);
+            embedBuilder.addField("\uD83E\uDE99 " + shopItem.getPrice() + " - " + shopItem.getName() , shopItem.getDescription(), false);
         }
 
         embedBuilder.setFooter("Created by " + botCreator.getEffectiveName(), botCreator.getUser().getEffectiveAvatarUrl());

@@ -27,3 +27,4 @@ public class Inventory implements ICommand {
         return "inventory";
     }
 }
+

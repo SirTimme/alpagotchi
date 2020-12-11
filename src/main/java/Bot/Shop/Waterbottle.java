@@ -1,23 +1,29 @@
 package Bot.Shop;
 
 public class Waterbottle implements IShopItem {
+
     @Override
-    public int getItemValue() {
+    public int getPrice() {
         return 10;
     }
 
     @Override
-    public String getItemDescription() {
+    public int getSaturation() {
+        return 10;
+    }
+
+    @Override
+    public String getDescription() {
         return "A refreshing bottle of water (Thirst + 10)";
     }
 
     @Override
-    public String getItemName() {
+    public String getName() {
         return "waterbottle";
     }
 
     @Override
-    public String getItemCategory() {
+    public String getCategory() {
         return "thirst";
     }
 }

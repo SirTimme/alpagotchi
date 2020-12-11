@@ -1,5 +1,6 @@
 package Bot;
 
+import Bot.Handler.MessageListener;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.requests.GatewayIntent;
@@ -12,7 +13,7 @@ public class Bot {
 
         JDABuilder
                 .create(Config.get("TOKEN"), GatewayIntent.getIntents(GatewayIntent.ALL_INTENTS))
-                .addEventListeners(new CommandListener())
+                .addEventListeners(new MessageListener())
                 .setActivity(Activity.playing("Alpacas <3"))
                 .build();
     }

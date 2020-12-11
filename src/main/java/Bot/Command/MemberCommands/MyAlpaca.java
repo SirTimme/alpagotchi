@@ -14,21 +14,21 @@ public class MyAlpaca implements ICommand {
 
     @Override
     public void handle(CommandContext commandContext) {
-        File alpacaFile = new File("src/main/resources/alpaka.gif");
+        File myAlpacaFile = new File("src/main/resources/myAlpaca.gif");
         EmbedBuilder embedBuilder = new EmbedBuilder();
         final Member botCreator = commandContext.getGuild().getMemberById(Config.get("OWNER_ID"));
         final long memberID = commandContext.getMessage().getAuthor().getIdLong();
 
-        embedBuilder.setTitle("" + commandContext.getMember().getEffectiveName() + "'s Alpaca");
-        embedBuilder.addField("Hunger \uD83C\uDF56", IDataBaseManager.INSTANCE.getAlpaca(memberID, "hunger") + "/100", true);
-        embedBuilder.addField("Thirst \uD83C\uDF7C", IDataBaseManager.INSTANCE.getAlpaca(memberID, "thirst") + "/100", true);
-        embedBuilder.addField("Energy \uD83D\uDD0B", IDataBaseManager.INSTANCE.getAlpaca(memberID, "energy") + "/100", true);
+        embedBuilder.setTitle("" + IDataBaseManager.INSTANCE.getNickname(memberID) + "");
+        embedBuilder.addField("Hunger \uD83C\uDF56", IDataBaseManager.INSTANCE.getStatus(memberID, "hunger") + "/100", true);
+        embedBuilder.addField("Thirst \uD83C\uDF7C", IDataBaseManager.INSTANCE.getStatus(memberID, "thirst") + "/100", true);
+        embedBuilder.addField("Energy \uD83D\uDD0B", IDataBaseManager.INSTANCE.getStatus(memberID, "energy") + "/100", true);
         embedBuilder.setThumbnail(commandContext.getMember().getUser().getAvatarUrl());
         embedBuilder.setFooter("Created by " + botCreator.getEffectiveName(), botCreator.getUser().getEffectiveAvatarUrl());
         embedBuilder.setTimestamp(Instant.now());
-        embedBuilder.setImage("attachment://alpaca.gif");
+        embedBuilder.setImage("attachment://myAlpaca.gif");
 
-        commandContext.getChannel().sendFile(alpacaFile, "alpaca.gif").embed(embedBuilder.build()).queue();
+        commandContext.getChannel().sendFile(myAlpacaFile, "myAlpaca.gif").embed(embedBuilder.build()).queue();
     }
 
     @Override

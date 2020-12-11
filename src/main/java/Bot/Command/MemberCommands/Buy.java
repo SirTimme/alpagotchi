@@ -21,7 +21,7 @@ public class Buy implements ICommand {
         final List<String> args = commandContext.getArgs();
         final long memberID = commandContext.getGuild().getMember(commandContext.getAuthor()).getIdLong();
         final TextChannel channel = commandContext.getChannel();
-        int itemAmount = 0;
+        int itemAmount;
 
         if (args.isEmpty()) {
             channel.sendMessage("<:RedCross:782229279312314368> Missing Arguments").queue();
@@ -30,6 +30,7 @@ public class Buy implements ICommand {
 
         if (args.size() == 1) {
             itemAmount = 1;
+
         } else {
             itemAmount = Integer.parseInt(args.get(1));
         }
@@ -42,15 +43,15 @@ public class Buy implements ICommand {
         IShopItem item = shopItemManager.getShopItem(args.get(0));
 
         if (item != null) {
-            if (IDataBaseManager.INSTANCE.getInventory(memberID, "currency") - (item.getItemValue() * itemAmount) < 0) {
+            if (IDataBaseManager.INSTANCE.getInventory(memberID, "currency") - (item.getPrice() * itemAmount) < 0) {
                 channel.sendMessage("<:RedCross:782229279312314368> Insufficient amount of fluffies").queue();
                 return;
             }
 
-            IDataBaseManager.INSTANCE.setInventory(memberID, "currency", -item.getItemValue());
-            IDataBaseManager.INSTANCE.setInventory(memberID, item.getItemName(), 1);
+            IDataBaseManager.INSTANCE.setInventory(memberID, "currency", -item.getPrice());
+            IDataBaseManager.INSTANCE.setInventory(memberID, item.getName(), itemAmount);
 
-            channel.sendMessage(":moneybag: Congratulations, you successfully bought **" + itemAmount + " " + item.getItemName() + "** for **" + (item.getItemValue() * itemAmount) + "** fluffies").queue();
+            channel.sendMessage(":moneybag: Congratulations, you successfully bought **" + itemAmount + " " + item.getName() + "** for **" + (item.getPrice() * itemAmount) + "** fluffies").queue();
         } else {
             channel.sendMessage("<:RedCross:782229279312314368> No item with this name found").queue();
         }

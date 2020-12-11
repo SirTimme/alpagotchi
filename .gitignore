@@ -5,3 +5,7 @@ target/maven-archiver/
 target/maven-status/
 .idea/
 *.class
+.env
+database.db
+target/AlpakaBot-1.0.jar
+.env

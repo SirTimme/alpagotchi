@@ -1,4 +1,4 @@
-package Bot;
+package Bot.Handler;
 
 import Bot.Command.AdminCommands.Decrease;
 import Bot.Command.AdminCommands.SetPrefix;
@@ -29,6 +29,8 @@ public class CommandManager {
         addCommand(new Inventory());
         addCommand(new Feed(this.shopItemManager));
         addCommand(new Decrease());
+        addCommand(new Nick());
+        addCommand(new Pet());
     }
 
     private void addCommand(ICommand command) {
@@ -64,11 +66,13 @@ public class CommandManager {
         String invoke = split[0].toLowerCase();
         ICommand cmd = this.getCommand(invoke);
 
-        if (cmd != null) {
-            List<String> args = Arrays.asList(split).subList(1, split.length);
-
-            CommandContext commandContext = new CommandContext(event, args);
-            cmd.handle(commandContext);
+        if (cmd == null) {
+            return;
         }
+
+        List<String> args = Arrays.asList(split).subList(1, split.length);
+
+        CommandContext commandContext = new CommandContext(event, args);
+        cmd.handle(commandContext);
     }
 }
