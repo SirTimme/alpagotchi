@@ -14,7 +14,7 @@ public class Work implements ICommand {
         long cooldown = IDataBaseManager.INSTANCE.getCooldown(memberID, "work") - System.currentTimeMillis();
 
         if (cooldown > 0) {
-            channel.sendMessage("<:RedCross:782229279312314368> You've already worked, you have to rest **" + (int) (((cooldown / 1000) / 60) % 60) + "** minutes").queue();
+            channel.sendMessage("<:RedCross:782229279312314368> You've already worked, you have to rest **" + (int) (((cooldown / 1000) / 60) % 60) + "** minutes to work again").queue();
             return;
         }
 

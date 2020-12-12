@@ -14,7 +14,7 @@ public class Salad implements IShopItem {
 
     @Override
     public String getDescription() {
-        return "A green salad, nothing special (Hunger + 10)";
+        return "A green salad, nothing special";
     }
 
     @Override

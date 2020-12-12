@@ -31,6 +31,7 @@ public class CommandManager {
         addCommand(new Decrease());
         addCommand(new Nick());
         addCommand(new Pet());
+        addCommand(new Gift(this.shopItemManager));
     }
 
     private void addCommand(ICommand command) {

@@ -38,7 +38,7 @@ public class Help implements ICommand {
         ICommand command = cmdManager.getCommand(search);
 
         if (command == null) {
-            channel.sendMessage("<:RedCross:782229279312314368> No help found for " + search).queue();
+            channel.sendMessage("<:RedCross:782229279312314368> Incorrect arguments, could not retrieve help for **" + search + "**").queue();
             return;
         }
 

@@ -21,18 +21,20 @@ public class Buy implements ICommand {
         final List<String> args = commandContext.getArgs();
         final long memberID = commandContext.getGuild().getMember(commandContext.getAuthor()).getIdLong();
         final TextChannel channel = commandContext.getChannel();
-        int itemAmount;
+        int itemAmount = 1;
 
         if (args.isEmpty()) {
-            channel.sendMessage("<:RedCross:782229279312314368> Missing Arguments").queue();
+            channel.sendMessage("<:RedCross:782229279312314368> Missing arguments").queue();
             return;
         }
 
-        if (args.size() == 1) {
-            itemAmount = 1;
-
-        } else {
-            itemAmount = Integer.parseInt(args.get(1));
+        if (args.size() > 1) {
+            try {
+                itemAmount = Integer.parseInt(args.get(1));
+            } catch (NumberFormatException error) {
+                channel.sendMessage("<:RedCross:782229279312314368> Incorrect arguments, could not resolve the amount of items").queue();
+                return;
+            }
         }
 
         if (itemAmount > 10) {
@@ -42,19 +44,20 @@ public class Buy implements ICommand {
 
         IShopItem item = shopItemManager.getShopItem(args.get(0));
 
-        if (item != null) {
-            if (IDataBaseManager.INSTANCE.getInventory(memberID, "currency") - (item.getPrice() * itemAmount) < 0) {
-                channel.sendMessage("<:RedCross:782229279312314368> Insufficient amount of fluffies").queue();
-                return;
-            }
-
-            IDataBaseManager.INSTANCE.setInventory(memberID, "currency", -item.getPrice());
-            IDataBaseManager.INSTANCE.setInventory(memberID, item.getName(), itemAmount);
-
-            channel.sendMessage(":moneybag: Congratulations, you successfully bought **" + itemAmount + " " + item.getName() + "** for **" + (item.getPrice() * itemAmount) + "** fluffies").queue();
-        } else {
+        if (item == null) {
             channel.sendMessage("<:RedCross:782229279312314368> No item with this name found").queue();
+            return;
         }
+
+        if (IDataBaseManager.INSTANCE.getInventory(memberID, "currency") - (item.getPrice() * itemAmount) < 0) {
+            channel.sendMessage("<:RedCross:782229279312314368> Insufficient amount of fluffies").queue();
+            return;
+        }
+
+        IDataBaseManager.INSTANCE.setInventory(memberID, "currency", -item.getPrice());
+        IDataBaseManager.INSTANCE.setInventory(memberID, item.getName(), itemAmount);
+
+        channel.sendMessage(":moneybag: Congratulations, you successfully bought **" + itemAmount + " " + item.getName() + "** for **" + (item.getPrice() * itemAmount) + "** fluffies").queue();
     }
 
     @Override

@@ -14,7 +14,7 @@ public class Waterbottle implements IShopItem {
 
     @Override
     public String getDescription() {
-        return "A refreshing bottle of water (Thirst + 10)";
+        return "A refreshing bottle of water";
     }
 
     @Override

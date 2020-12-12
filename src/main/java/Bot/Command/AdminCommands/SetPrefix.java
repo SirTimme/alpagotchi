@@ -23,13 +23,13 @@ public class SetPrefix implements ICommand {
         }
 
         if (args.isEmpty()) {
-            channel.sendMessage("<:RedCross:782229279312314368> Missing Arguments").queue();
+            channel.sendMessage("<:RedCross:782229279312314368> Missing arguments, could not resolve the new prefix").queue();
             return;
         }
 
         String newPrefix = String.join("", args);
         IDataBaseManager.INSTANCE.setPrefix(commandContext.getGuild().getIdLong(), newPrefix);
-        channel.sendMessage("<:GreenTick:782229268914372609> New Prefix has been set to **" + newPrefix + "**").queue();
+        channel.sendMessage("<:GreenTick:782229268914372609> New prefix has been set to **" + newPrefix + "**").queue();
     }
 
     @Override

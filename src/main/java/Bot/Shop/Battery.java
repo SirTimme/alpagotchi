@@ -14,7 +14,7 @@ public class Battery implements IShopItem {
 
     @Override
     public String getDescription() {
-        return "A dense brick of electricity (Energy + 10)";
+        return "A dense brick of electricity";
     }
 
     @Override
