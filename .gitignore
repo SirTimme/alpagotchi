@@ -4,7 +4,5 @@ target/generated-sources/
 target/maven-archiver/
 target/maven-status/
 .idea/
-*.class
-target/AlpakaBot-1.0.jar
 .env
-database.db
+target/AlpakaBot-1.0.jar
