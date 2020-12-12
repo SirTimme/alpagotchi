@@ -6,3 +6,5 @@ target/maven-status/
 .idea/
 *.class
 target/AlpakaBot-1.0.jar
+.env
+database.db
