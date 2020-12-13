@@ -40,4 +40,9 @@ public class Work implements ICommand {
     public String getName() {
         return "work";
     }
+
+    @Override
+    public String getPermissionLevel() {
+        return "member";
+    }
 }

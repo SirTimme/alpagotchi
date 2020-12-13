@@ -69,4 +69,9 @@ public class Buy implements ICommand {
     public String getName() {
         return "buy";
     }
+
+    @Override
+    public String getPermissionLevel() {
+        return "member";
+    }
 }

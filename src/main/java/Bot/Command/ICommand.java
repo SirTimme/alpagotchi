@@ -7,4 +7,6 @@ public interface ICommand {
     String getHelp(CommandContext commandContext);
 
     String getName();
+
+    String getPermissionLevel();
 }

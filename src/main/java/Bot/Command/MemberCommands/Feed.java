@@ -70,6 +70,11 @@ public class Feed implements ICommand {
       return "feed";
    }
 
+   @Override
+   public String getPermissionLevel() {
+      return "member";
+   }
+
    private void feedAlpaca(String args, long memberID, IShopItem item, TextChannel channel) {
       IDataBaseManager.INSTANCE.setInventory(memberID, item.getName(), -1);
       int oldValue = IDataBaseManager.INSTANCE.getStatus(memberID, item.getCategory());

@@ -39,4 +39,9 @@ public class Nick implements ICommand {
    public String getName() {
       return "nick";
    }
+
+   @Override
+   public String getPermissionLevel() {
+      return "member";
+   }
 }

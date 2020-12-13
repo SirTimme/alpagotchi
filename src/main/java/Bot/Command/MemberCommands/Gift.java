@@ -20,7 +20,7 @@ public class Gift implements ICommand {
    public void handle(CommandContext commandContext) {
       final TextChannel channel = commandContext.getChannel();
       final List<String> args = commandContext.getArgs();
-      final long donaterUserID = commandContext.getAuthor().getIdLong();
+      final long donatedUserID = commandContext.getAuthor().getIdLong();
       int giftedItemAmount;
 
       if (args.isEmpty() || args.size() < 3) {
@@ -35,7 +35,7 @@ public class Gift implements ICommand {
 
       final long giftedUserID = commandContext.getMessage().getMentionedUsers().get(0).getIdLong();
 
-      if (giftedUserID == donaterUserID) {
+      if (giftedUserID == donatedUserID) {
          channel.sendMessage("<:RedCross:782229279312314368> Incorrect arguments, you can not gift yourself items").queue();
          return;
       }
@@ -59,15 +59,15 @@ public class Gift implements ICommand {
          return;
       }
 
-      if (IDataBaseManager.INSTANCE.getInventory(donaterUserID, giftedItem.getName()) - giftedItemAmount < 0) {
+      if (IDataBaseManager.INSTANCE.getInventory(donatedUserID, giftedItem.getName()) - giftedItemAmount < 0) {
          channel.sendMessage("<:RedCross:782229279312314368> Incorrect arguments, u dont own that many items to gift").queue();
          return;
       }
 
-      IDataBaseManager.INSTANCE.setInventory(donaterUserID, giftedItem.getName(), -giftedItemAmount);
+      IDataBaseManager.INSTANCE.setInventory(donatedUserID, giftedItem.getName(), -giftedItemAmount);
       IDataBaseManager.INSTANCE.setInventory(giftedUserID, giftedItem.getName(), giftedItemAmount);
 
-      channel.sendMessage("\uD83C\uDF81 You successfully gifted **" + giftedItemAmount + " " +  giftedItem.getName() + "** to **" + commandContext.getJDA().getUserById(giftedUserID).getName() + "**").queue();
+      channel.sendMessage("\uD83C\uDF81 You successfully gifted **" + giftedItemAmount + " " + giftedItem.getName() + "** to **" + commandContext.getJDA().getUserById(giftedUserID).getName() + "**").queue();
    }
 
    @Override
@@ -78,5 +78,10 @@ public class Gift implements ICommand {
    @Override
    public String getName() {
       return "gift";
+   }
+
+   @Override
+   public String getPermissionLevel() {
+      return "member";
    }
 }

@@ -41,4 +41,9 @@ public class SetPrefix implements ICommand {
     public String getName() {
         return "setprefix";
     }
+
+    @Override
+    public String getPermissionLevel() {
+        return "admin";
+    }
 }

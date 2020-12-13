@@ -44,4 +44,9 @@ public class Shop implements ICommand {
    public String getName() {
       return "shop";
    }
+
+   @Override
+   public String getPermissionLevel() {
+      return "member";
+   }
 }

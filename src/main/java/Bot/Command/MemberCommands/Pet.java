@@ -20,4 +20,9 @@ public class Pet implements ICommand {
    public String getName() {
       return "pet";
    }
+
+   @Override
+   public String getPermissionLevel() {
+      return "member";
+   }
 }

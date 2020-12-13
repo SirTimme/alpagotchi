@@ -66,4 +66,9 @@ public class Decrease implements ICommand {
     public String getName() {
         return "decrease";
     }
+
+    @Override
+    public String getPermissionLevel() {
+        return "admin";
+    }
 }

@@ -6,6 +6,7 @@ import Bot.Database.IDataBaseManager;
 import net.dv8tion.jda.api.entities.TextChannel;
 
 public class Wallet implements ICommand {
+
     @Override
     public void handle(CommandContext commandContext) {
         long memberID = commandContext.getGuild().getMember(commandContext.getAuthor()).getIdLong();
@@ -22,5 +23,10 @@ public class Wallet implements ICommand {
     @Override
     public String getName() {
         return "wallet";
+    }
+
+    @Override
+    public String getPermissionLevel() {
+        return "member";
     }
 }

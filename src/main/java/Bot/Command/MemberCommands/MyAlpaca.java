@@ -40,4 +40,9 @@ public class MyAlpaca implements ICommand {
     public String getName() {
         return "myalpaca";
     }
+
+    @Override
+    public String getPermissionLevel() {
+        return "member";
+    }
 }

@@ -26,5 +26,10 @@ public class Inventory implements ICommand {
     public String getName() {
         return "inventory";
     }
+
+    @Override
+    public String getPermissionLevel() {
+        return "member";
+    }
 }
 
