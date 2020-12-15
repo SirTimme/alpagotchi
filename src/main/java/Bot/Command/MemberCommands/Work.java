@@ -14,7 +14,7 @@ public class Work implements ICommand {
         long cooldown = IDataBaseManager.INSTANCE.getCooldown(memberID, "work") - System.currentTimeMillis();
 
         if (cooldown > 0) {
-            channel.sendMessage("<:RedCross:782229279312314368> You've already worked, you have to rest **" + (int) (((cooldown / 1000) / 60) % 60) + "** minutes to work again").queue();
+            channel.sendMessage("<:RedCross:782229279312314368> You've already worked, you have to rest **" + (int)(((cooldown / 1000) / 60) % 60) + "** minutes to work again").queue();
             return;
         }
 
@@ -24,16 +24,14 @@ public class Work implements ICommand {
         IDataBaseManager.INSTANCE.setInventory(memberID, "currency", amountOfFluffies);
         IDataBaseManager.INSTANCE.setCooldown(memberID, "work", newCooldown);
 
-        if (amountOfFluffies == 1) {
-            channel.sendMessage("⛏ You went to work and earned **" + amountOfFluffies + "** fluffy").queue();
-        } else {
-            channel.sendMessage("⛏ You went to work and earned **" + amountOfFluffies + "** fluffies").queue();
-        }
+        channel.sendMessage("⛏ You went to work and earned **" + (amountOfFluffies > 1 ? amountOfFluffies + "** fluffies" : amountOfFluffies + "** fluffy")).queue();
     }
 
     @Override
     public String getHelp(CommandContext commandContext) {
-        return "`Usage: " + IDataBaseManager.INSTANCE.getPrefix(commandContext.getGuild().getIdLong()) + "work`\nWork for a random amount of fluffies";
+        return "`Usage: " + IDataBaseManager.INSTANCE.getPrefix(commandContext.getGuild().getIdLong()) + "work\n" +
+                (this.getAliases().isEmpty() ? "`" : "Aliases: " + this.getAliases() + "`\n") +
+                "Work for a random amount of fluffies";
     }
 
     @Override

@@ -9,6 +9,7 @@ import net.dv8tion.jda.api.entities.Member;
 
 import java.io.File;
 import java.time.Instant;
+import java.util.List;
 
 public class MyAlpaca implements ICommand {
 
@@ -33,7 +34,9 @@ public class MyAlpaca implements ICommand {
 
     @Override
     public String getHelp(CommandContext commandContext) {
-        return "`Usage: " + IDataBaseManager.INSTANCE.getPrefix(commandContext.getGuild().getIdLong()) + "myalpaca`\nShows the stats of your alpaca";
+        return "`Usage: " + IDataBaseManager.INSTANCE.getPrefix(commandContext.getGuild().getIdLong()) + "myalpaca\n" +
+                (this.getAliases().isEmpty() ? "`" : "Aliases: " + this.getAliases() + "`\n") +
+                "Shows the stats of your alpaca";
     }
 
     @Override
@@ -44,5 +47,10 @@ public class MyAlpaca implements ICommand {
     @Override
     public String getPermissionLevel() {
         return "member";
+    }
+
+    @Override
+    public List<String> getAliases() {
+        return List.of("ma", "stats", "alpaca");
     }
 }

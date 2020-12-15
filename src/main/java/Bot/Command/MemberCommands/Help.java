@@ -77,7 +77,9 @@ public class Help implements ICommand {
 
     @Override
     public String getHelp(CommandContext commandContext) {
-        return "`Usage: " + IDataBaseManager.INSTANCE.getPrefix(commandContext.getGuild().getIdLong()) + "help [command]`\nDisplays further information to a specific command";
+        return "`Usage: " + IDataBaseManager.INSTANCE.getPrefix(commandContext.getGuild().getIdLong()) + "help [command]\n" +
+                (this.getAliases().isEmpty() ? "`" : "Aliases: " + this.getAliases() + "`\n") +
+                "Displays further information to a specific command";
     }
 
     @Override
@@ -88,6 +90,11 @@ public class Help implements ICommand {
     @Override
     public String getPermissionLevel() {
         return "member";
+    }
+
+    @Override
+    public List<String> getAliases() {
+        return List.of("commands");
     }
 }
 

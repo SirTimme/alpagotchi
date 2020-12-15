@@ -5,6 +5,8 @@ import Bot.Command.ICommand;
 import Bot.Database.IDataBaseManager;
 import net.dv8tion.jda.api.entities.TextChannel;
 
+import java.util.List;
+
 public class Wallet implements ICommand {
 
     @Override
@@ -17,7 +19,9 @@ public class Wallet implements ICommand {
 
     @Override
     public String getHelp(CommandContext commandContext) {
-        return "`Usage: " + IDataBaseManager.INSTANCE.getPrefix(commandContext.getGuild().getIdLong()) + "wallet`\nShows your current balance of fluffies";
+        return "`Usage: " + IDataBaseManager.INSTANCE.getPrefix(commandContext.getGuild().getIdLong()) + "wallet\n" +
+                (this.getAliases().isEmpty() ? "`" : "Aliases: " + this.getAliases() + "`\n") +
+                "Shows your current balance of fluffies";
     }
 
     @Override
@@ -28,5 +32,10 @@ public class Wallet implements ICommand {
     @Override
     public String getPermissionLevel() {
         return "member";
+    }
+
+    @Override
+    public List<String> getAliases() {
+        return List.of("balance", "money");
     }
 }

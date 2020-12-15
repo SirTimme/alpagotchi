@@ -13,7 +13,9 @@ public class Pet implements ICommand {
 
    @Override
    public String getHelp(CommandContext commandContext) {
-      return "`Usage: " + IDataBaseManager.INSTANCE.getPrefix(commandContext.getGuild().getIdLong()) + "pet`\nShow your alpaca some love and pet him";
+      return "`Usage: " + IDataBaseManager.INSTANCE.getPrefix(commandContext.getGuild().getIdLong()) + "pet\n" +
+              (this.getAliases().isEmpty() ? "`" : "Aliases: " + this.getAliases() + "`\n") +
+              "Show your alpaca some love and pet him";
    }
 
    @Override

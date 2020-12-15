@@ -34,7 +34,9 @@ public class SetPrefix implements ICommand {
 
     @Override
     public String getHelp(CommandContext commandContext) {
-        return "`Usage: " + IDataBaseManager.INSTANCE.getPrefix(commandContext.getGuild().getIdLong()) + "setprefix [prefix]`\nSets the prefix for this server";
+        return "`Usage: " + IDataBaseManager.INSTANCE.getPrefix(commandContext.getGuild().getIdLong()) + "setprefix [prefix]\n" +
+                (this.getAliases().isEmpty() ? "`" : "Aliases: " + this.getAliases() + "`\n") +
+                "Sets the prefix for this server";
     }
 
     @Override

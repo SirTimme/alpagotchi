@@ -37,7 +37,9 @@ public class Shop implements ICommand {
 
    @Override
    public String getHelp(CommandContext commandContext) {
-      return "`Usage: " + IDataBaseManager.INSTANCE.getPrefix(commandContext.getGuild().getIdLong()) + "shop`\nShows the shop to buy things for your alpaca";
+      return "`Usage: " + IDataBaseManager.INSTANCE.getPrefix(commandContext.getGuild().getIdLong()) + "shop\n" +
+              (this.getAliases().isEmpty() ? "`" : "Aliases: " + this.getAliases() + "`\n") +
+              "Shows the shop to buy things for your alpaca";
    }
 
    @Override

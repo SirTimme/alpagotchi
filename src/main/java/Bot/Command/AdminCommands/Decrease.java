@@ -59,7 +59,9 @@ public class Decrease implements ICommand {
 
     @Override
     public String getHelp(CommandContext commandContext) {
-        return "`Usage: " + IDataBaseManager.INSTANCE.getPrefix(commandContext.getGuild().getIdLong()) + "decrease [enable | disable]`\nDetermines if the alpacas lose values over time";
+        return "`Usage: " + IDataBaseManager.INSTANCE.getPrefix(commandContext.getGuild().getIdLong()) + "decrease [enable | disable]\n" +
+                (this.getAliases().isEmpty() ? "`" : "Aliases: " + this.getAliases() + "`\n") +
+                "Determines if the alpacas lose values over time";
     }
 
     @Override

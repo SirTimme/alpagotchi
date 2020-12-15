@@ -62,7 +62,9 @@ public class Feed implements ICommand {
 
    @Override
    public String getHelp(CommandContext commandContext) {
-      return "`Usage: " + IDataBaseManager.INSTANCE.getPrefix(commandContext.getGuild().getIdLong()) + "feed [itemname]`\nFeeds your alpaca with the specified item";
+      return "`Usage: " + IDataBaseManager.INSTANCE.getPrefix(commandContext.getGuild().getIdLong()) + "feed [itemname]\n" +
+              (this.getAliases().isEmpty() ? "`" : "Aliases: " + this.getAliases() + "`\n") +
+              "Feeds your alpaca with the specified item";
    }
 
    @Override

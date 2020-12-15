@@ -54,7 +54,7 @@ public class Buy implements ICommand {
             return;
         }
 
-        IDataBaseManager.INSTANCE.setInventory(memberID, "currency", -item.getPrice());
+        IDataBaseManager.INSTANCE.setInventory(memberID, "currency", -(item.getPrice() * itemAmount));
         IDataBaseManager.INSTANCE.setInventory(memberID, item.getName(), itemAmount);
 
         channel.sendMessage(":moneybag: Congratulations, you successfully bought **" + itemAmount + " " + item.getName() + "** for **" + (item.getPrice() * itemAmount) + "** fluffies").queue();
@@ -62,7 +62,9 @@ public class Buy implements ICommand {
 
     @Override
     public String getHelp(CommandContext commandContext) {
-        return "`Usage: " + IDataBaseManager.INSTANCE.getPrefix(commandContext.getGuild().getIdLong()) + "buy [itemname] [1-10]`\nBuys the specified amount of a item from the shop";
+        return "`Usage: " + IDataBaseManager.INSTANCE.getPrefix(commandContext.getGuild().getIdLong()) + "buy [itemname] [1-10]\n" +
+                (this.getAliases().isEmpty() ? "`" : "Aliases: " + this.getAliases() + "`\n") +
+                "Buys the specified amount of a item from the shop";
     }
 
     @Override

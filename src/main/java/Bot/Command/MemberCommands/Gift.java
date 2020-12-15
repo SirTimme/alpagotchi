@@ -72,7 +72,9 @@ public class Gift implements ICommand {
 
    @Override
    public String getHelp(CommandContext commandContext) {
-      return "`Usage: " + IDataBaseManager.INSTANCE.getPrefix(commandContext.getGuild().getIdLong()) + "gift [@User] [itemname] [1-5]`\nGifts the mentioned user the specified amount of items";
+      return "`Usage: " + IDataBaseManager.INSTANCE.getPrefix(commandContext.getGuild().getIdLong()) + "gift [@User] [itemname] [1-5]\n" +
+              (this.getAliases().isEmpty() ? "`" : "Aliases: " + this.getAliases() + "`\n") +
+              "Gifts the mentioned user the specified amount of items";
    }
 
    @Override
