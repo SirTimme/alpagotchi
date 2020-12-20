@@ -44,25 +44,25 @@ public class SQLiteDataSource implements IDataBaseManager {
             final Statement statement = connection.createStatement();
             final String defaultPrefix = Config.get("PREFIX");
 
-            statement.execute("CREATE TABLE IF NOT EXISTS guild_settings (" +
+            statement.execute("CREATE TABLE IF NOT EXISTS guild_settings(" +
                     "guild_id VARCHAR(20) PRIMARY KEY NOT NULL," +
                     "prefix VARCHAR(5) NOT NULL DEFAULT '" + defaultPrefix + "')");
 
-            statement.execute("CREATE TABLE IF NOT EXISTS alpacas_manager (" +
+            statement.execute("CREATE TABLE IF NOT EXISTS alpacas_manager(" +
                     "member_id VARCHAR(20) PRIMARY KEY NOT NULL, " +
                     "hunger INTEGER DEFAULT 100, " +
                     "thirst INTEGER DEFAULT 100, " +
                     "energy INTEGER DEFAULT 100," +
                     "nickname TEXT DEFAULT 'alpaca')");
 
-            statement.execute("CREATE TABLE IF NOT EXISTS inventory_manager (" +
+            statement.execute("CREATE TABLE IF NOT EXISTS inventory_manager(" +
                     "member_id VARCHAR(20) PRIMARY KEY NOT NULL, " +
-                    "currency VARCHAR(5) DEFAULT 0, " +
-                    "salad VARCHAR(5) DEFAULT 0, " +
-                    "waterbottle VARCHAR(5) DEFAULT 0, " +
-                    "battery VARCHAR(5) DEFAULT 0)");
+                    "currency INTEGER DEFAULT 0, " +
+                    "salad INTEGER DEFAULT 0, " +
+                    "waterbottle INTEGER DEFAULT 0, " +
+                    "battery INTEGER DEFAULT 0)");
 
-            statement.execute("CREATE TABLE IF NOT EXISTS cooldown_manager (" +
+            statement.execute("CREATE TABLE IF NOT EXISTS cooldown_manager(" +
                     "member_id VARCHAR(20) PRIMARY KEY NOT NULL, " +
                     "work VARCHAR(50) DEFAULT 0)");
 
@@ -135,7 +135,7 @@ public class SQLiteDataSource implements IDataBaseManager {
                 return resultSet.getInt(column);
             }
 
-            final PreparedStatement insertStatement = connection.prepareStatement("INSERT INTO alpacas_manager(member_id, hunger, thirst, energy, nickname) VALUES(?, ?, ?, ?, ?, ?)");
+            final PreparedStatement insertStatement = connection.prepareStatement("INSERT INTO alpacas_manager(member_id, hunger, thirst, energy, nickname) VALUES(?, ?, ?, ?, ?)");
             insertStatement.setString(1, String.valueOf(memberID));
             insertStatement.setInt(2, 100);
             insertStatement.setInt(3, 100);
