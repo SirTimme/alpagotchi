@@ -15,7 +15,7 @@ public class Wallet implements ICommand {
         final TextChannel channel = commandContext.getChannel();
         final int balance = IDataBaseManager.INSTANCE.getInventory(memberID, "currency");
 
-        channel.sendMessage("\uD83D\uDCB5 Your current balance is **" + (balance == 1 ? "** fluffy" : "** fluffies")).queue();
+        channel.sendMessage("\uD83D\uDCB5 Your current balance is **" + (balance == 1 ? balance + "** fluffy" : balance + "** fluffies")).queue();
     }
 
     @Override
