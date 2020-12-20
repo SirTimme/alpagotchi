@@ -21,24 +21,11 @@ public class Buy implements ICommand {
         final List<String> args = commandContext.getArgs();
         final long memberID = commandContext.getGuild().getMember(commandContext.getAuthor()).getIdLong();
         final TextChannel channel = commandContext.getChannel();
-        int itemAmount = 1;
+
+        //!buy salad 1
 
         if (args.isEmpty()) {
             channel.sendMessage("<:RedCross:782229279312314368> Missing arguments").queue();
-            return;
-        }
-
-        if (args.size() > 1) {
-            try {
-                itemAmount = Integer.parseInt(args.get(1));
-            } catch (NumberFormatException error) {
-                channel.sendMessage("<:RedCross:782229279312314368> Incorrect arguments, could not resolve the amount of items").queue();
-                return;
-            }
-        }
-
-        if (itemAmount > 10) {
-            channel.sendMessage("<:RedCross:782229279312314368> You can purchase max. 10 items at a time").queue();
             return;
         }
 
@@ -49,22 +36,34 @@ public class Buy implements ICommand {
             return;
         }
 
-        if (IDataBaseManager.INSTANCE.getInventory(memberID, "currency") - (item.getPrice() * itemAmount) < 0) {
-            channel.sendMessage("<:RedCross:782229279312314368> Insufficient amount of fluffies").queue();
-            return;
+        if (args.size() == 2) {
+            try {
+                int itemAmount = Integer.parseInt(args.get(1));
+
+                if (itemAmount > 10) {
+                    channel.sendMessage("<:RedCross:782229279312314368> You can purchase max. 10 items at a time").queue();
+                    return;
+                }
+
+                if (IDataBaseManager.INSTANCE.getInventory(memberID, "currency") - (item.getPrice() * itemAmount) < 0) {
+                    channel.sendMessage("<:RedCross:782229279312314368> Insufficient amount of fluffies").queue();
+                    return;
+                }
+
+                IDataBaseManager.INSTANCE.setInventory(memberID, "currency", -(item.getPrice() * itemAmount));
+                IDataBaseManager.INSTANCE.setInventory(memberID, item.getName(), itemAmount);
+
+                channel.sendMessage(":moneybag: Congratulations, you successfully bought **" + itemAmount + " " + item.getName() + "** for **" + (item.getPrice() * itemAmount) + "** fluffies").queue();
+
+            } catch (NumberFormatException error) {
+                channel.sendMessage("<:RedCross:782229279312314368> Incorrect arguments, could not resolve the amount of items").queue();
+            }
         }
-
-        IDataBaseManager.INSTANCE.setInventory(memberID, "currency", -(item.getPrice() * itemAmount));
-        IDataBaseManager.INSTANCE.setInventory(memberID, item.getName(), itemAmount);
-
-        channel.sendMessage(":moneybag: Congratulations, you successfully bought **" + itemAmount + " " + item.getName() + "** for **" + (item.getPrice() * itemAmount) + "** fluffies").queue();
     }
 
     @Override
-    public String getHelp(CommandContext commandContext) {
-        return "`Usage: " + IDataBaseManager.INSTANCE.getPrefix(commandContext.getGuild().getIdLong()) + "buy [itemname] [1-10]\n" +
-                (this.getAliases().isEmpty() ? "`" : "Aliases: " + this.getAliases() + "`\n") +
-                "Buys the specified amount of a item from the shop";
+    public String getHelp(String prefix) {
+        return "`Usage: " + prefix + "buy [itemname] [1-10]\n" + (this.getAliases().isEmpty() ? "`" : "Aliases: " + this.getAliases() + "`\n") + "Buys the specified amount of a item from the shop";
     }
 
     @Override

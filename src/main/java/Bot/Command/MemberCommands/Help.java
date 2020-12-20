@@ -24,14 +24,13 @@ public class Help implements ICommand {
     public void handle(CommandContext commandContext) {
         final List<String> args = commandContext.getArgs();
         final TextChannel channel = commandContext.getChannel();
+        final String prefix = IDataBaseManager.INSTANCE.getPrefix(commandContext.getGuild().getIdLong());
 
         if (args.isEmpty()) {
             EmbedBuilder embed = new EmbedBuilder();
             StringBuilder stringBuilder = new StringBuilder();
-            String prefix = IDataBaseManager.INSTANCE.getPrefix(commandContext.getGuild().getIdLong());
             final Member botCreator = commandContext.getGuild().getMemberById(Config.get("OWNER_ID"));
             File listIcon = new File("src/main/resources/list.png");
-
 
             embed.setTitle("Overview of all commands");
 
@@ -72,14 +71,12 @@ public class Help implements ICommand {
             return;
         }
 
-        channel.sendMessage(command.getHelp(commandContext)).queue();
+        channel.sendMessage(command.getHelp(prefix)).queue();
     }
 
     @Override
-    public String getHelp(CommandContext commandContext) {
-        return "`Usage: " + IDataBaseManager.INSTANCE.getPrefix(commandContext.getGuild().getIdLong()) + "help [command]\n" +
-                (this.getAliases().isEmpty() ? "`" : "Aliases: " + this.getAliases() + "`\n") +
-                "Displays further information to a specific command";
+    public String getHelp(String prefix) {
+        return "`Usage: " + prefix + "help [command]\n" + (this.getAliases().isEmpty() ? "`" : "Aliases: " + this.getAliases() + "`\n") + "Displays further information to a specific command";
     }
 
     @Override

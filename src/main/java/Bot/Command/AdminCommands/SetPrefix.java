@@ -29,14 +29,13 @@ public class SetPrefix implements ICommand {
 
         String newPrefix = String.join("", args);
         IDataBaseManager.INSTANCE.setPrefix(commandContext.getGuild().getIdLong(), newPrefix);
+
         channel.sendMessage("<:GreenTick:782229268914372609> New prefix has been set to **" + newPrefix + "**").queue();
     }
 
     @Override
-    public String getHelp(CommandContext commandContext) {
-        return "`Usage: " + IDataBaseManager.INSTANCE.getPrefix(commandContext.getGuild().getIdLong()) + "setprefix [prefix]\n" +
-                (this.getAliases().isEmpty() ? "`" : "Aliases: " + this.getAliases() + "`\n") +
-                "Sets the prefix for this server";
+    public String getHelp(String prefix) {
+        return "`Usage: " + prefix + "setprefix [prefix]\n" + (this.getAliases().isEmpty() ? "`" : "Aliases: " + this.getAliases() + "`\n") + "Sets the prefix for this server";
     }
 
     @Override

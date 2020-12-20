@@ -11,17 +11,16 @@ public class Wallet implements ICommand {
 
     @Override
     public void handle(CommandContext commandContext) {
-        long memberID = commandContext.getGuild().getMember(commandContext.getAuthor()).getIdLong();
-        TextChannel channel = commandContext.getChannel();
+        final long memberID = commandContext.getGuild().getMember(commandContext.getAuthor()).getIdLong();
+        final TextChannel channel = commandContext.getChannel();
+        final int balance = IDataBaseManager.INSTANCE.getInventory(memberID, "currency");
 
-        channel.sendMessage("\uD83D\uDCB5 Your current balance is **" + IDataBaseManager.INSTANCE.getInventory(memberID, "currency") + "** fluffies").queue();
+        channel.sendMessage("\uD83D\uDCB5 Your current balance is **" + (balance == 1 ? "** fluffy" : "** fluffies")).queue();
     }
 
     @Override
-    public String getHelp(CommandContext commandContext) {
-        return "`Usage: " + IDataBaseManager.INSTANCE.getPrefix(commandContext.getGuild().getIdLong()) + "wallet\n" +
-                (this.getAliases().isEmpty() ? "`" : "Aliases: " + this.getAliases() + "`\n") +
-                "Shows your current balance of fluffies";
+    public String getHelp(String prefix) {
+        return "`Usage: " + prefix + "wallet\n" + (this.getAliases().isEmpty() ? "`" : "Aliases: " + this.getAliases() + "`\n") + "Shows your current balance of fluffies";
     }
 
     @Override

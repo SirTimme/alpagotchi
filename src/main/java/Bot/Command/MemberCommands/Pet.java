@@ -2,7 +2,6 @@ package Bot.Command.MemberCommands;
 
 import Bot.Command.CommandContext;
 import Bot.Command.ICommand;
-import Bot.Database.IDataBaseManager;
 
 public class Pet implements ICommand {
 
@@ -12,10 +11,8 @@ public class Pet implements ICommand {
    }
 
    @Override
-   public String getHelp(CommandContext commandContext) {
-      return "`Usage: " + IDataBaseManager.INSTANCE.getPrefix(commandContext.getGuild().getIdLong()) + "pet\n" +
-              (this.getAliases().isEmpty() ? "`" : "Aliases: " + this.getAliases() + "`\n") +
-              "Show your alpaca some love and pet him";
+   public String getHelp(String prefix) {
+      return "`Usage: " + prefix + "pet\n" + (this.getAliases().isEmpty() ? "`" : "Aliases: " + this.getAliases() + "`\n") + "Show your alpaca some love and pet him";
    }
 
    @Override

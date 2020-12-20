@@ -18,16 +18,19 @@
         <plugins>
             <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
+                <version>2.2-beta-5</version>
                 <configuration>
-                    <goal>single</goal>
+                    <descriptorRefs>
+                        <descriptorRef>jar-with-dependencies</descriptorRef>
+                    </descriptorRefs>
+                    <appendAssemblyId>false</appendAssemblyId>
+                    <finalName>Alpagotchi</finalName>
                     <archive>
                         <manifest>
                             <mainClass>Bot.Bot</mainClass>
                         </manifest>
                     </archive>
-                    <descriptorRefs>
-                        <descriptorRef>jar-with-dependencies</descriptorRef>
-                    </descriptorRefs>
+                    <outputDirectory>../Alpagotchi</outputDirectory>
                 </configuration>
                 <executions>
                     <execution>

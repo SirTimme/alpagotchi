@@ -31,10 +31,8 @@ public class Nick implements ICommand {
    }
 
    @Override
-   public String getHelp(CommandContext commandContext) {
-      return "`Usage: " + IDataBaseManager.INSTANCE.getPrefix(commandContext.getGuild().getIdLong()) + "nick [nickname]\n" +
-              (this.getAliases().isEmpty() ? "`" : "Aliases: " + this.getAliases() + "`\n") +
-              "Gives your alpaca a nickname";
+   public String getHelp(String prefix) {
+      return "`Usage: " + prefix + "nick [nickname]\n" + (this.getAliases().isEmpty() ? "`" : "Aliases: " + this.getAliases() + "`\n") + "Gives your alpaca a nickname";
    }
 
    @Override

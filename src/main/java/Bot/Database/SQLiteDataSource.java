@@ -3,6 +3,8 @@ package Bot.Database;
 import Bot.Config;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
@@ -10,12 +12,19 @@ import java.sql.*;
 
 public class SQLiteDataSource implements IDataBaseManager {
     private final HikariDataSource dataSource;
+    private static final Logger LOGGER = LoggerFactory.getLogger(SQLiteDataSource.class);
 
     public SQLiteDataSource() {
         try {
             final File dbFile = new File("database.db");
+
             if (!dbFile.exists()) {
-                dbFile.createNewFile();
+                if (dbFile.createNewFile()) {
+                    LOGGER.info("Database file created");
+
+                } else {
+                    LOGGER.error("Database file could not be created");
+                }
             }
 
         } catch (IOException error) {
@@ -57,6 +66,8 @@ public class SQLiteDataSource implements IDataBaseManager {
                     "member_id VARCHAR(20) PRIMARY KEY NOT NULL, " +
                     "work VARCHAR(50) DEFAULT 0)");
 
+            LOGGER.info("Datatables initialized");
+
         } catch (SQLException error) {
             error.printStackTrace();
         }
@@ -64,21 +75,20 @@ public class SQLiteDataSource implements IDataBaseManager {
 
     @Override
     public void decreaseValues() {
-
         try (Connection connection = dataSource.getConnection()) {
-            final PreparedStatement preparedStatement = connection.prepareStatement("UPDATE alpacas_manager SET hunger = CASE WHEN (hunger > 0) THEN (hunger - 1) ELSE 0 END, " +
+            final PreparedStatement preparedStatement = connection.prepareStatement("UPDATE alpacas_manager SET " +
+                    "hunger = CASE WHEN (hunger > 0) THEN (hunger - 1) ELSE 0 END, " +
                     "thirst = CASE WHEN (thirst > 0) THEN (thirst - 1) ELSE 0 END," +
                     "energy = CASE WHEN (energy > 0) THEN (energy - 1) ELSE 0 END");
             preparedStatement.executeUpdate();
 
         } catch (SQLException error) {
-            error.printStackTrace();
+            LOGGER.error(error.getMessage());
         }
     }
 
     @Override
     public String getPrefix(long guildID) {
-
         try (Connection connection = dataSource.getConnection()) {
 
             final PreparedStatement preparedStatement = connection.prepareStatement("SELECT prefix FROM guild_settings WHERE guild_id = ?");
@@ -94,14 +104,13 @@ public class SQLiteDataSource implements IDataBaseManager {
             insertStatement.execute();
 
         } catch (SQLException error) {
-            error.printStackTrace();
+            LOGGER.error(error.getMessage());
         }
         return Config.get("PREFIX");
     }
 
     @Override
     public void setPrefix(long guildID, String newPrefix) {
-
         try (Connection connection = dataSource.getConnection()) {
 
             final PreparedStatement preparedStatement = connection.prepareStatement("UPDATE guild_settings SET prefix = ? WHERE guild_id = ?");
@@ -110,13 +119,12 @@ public class SQLiteDataSource implements IDataBaseManager {
             preparedStatement.executeUpdate();
 
         } catch (SQLException error) {
-            error.printStackTrace();
+            LOGGER.error(error.getMessage());
         }
     }
 
     @Override
     public int getStatus(long memberID, String column) {
-
         try (Connection connection = dataSource.getConnection()) {
 
             final PreparedStatement preparedStatement = connection.prepareStatement("SELECT " + column + " FROM alpacas_manager WHERE member_id = ?");
@@ -136,7 +144,7 @@ public class SQLiteDataSource implements IDataBaseManager {
             insertStatement.execute();
 
         } catch (SQLException error) {
-            error.printStackTrace();
+            LOGGER.error(error.getMessage());
         }
         return 0;
     }
@@ -153,13 +161,12 @@ public class SQLiteDataSource implements IDataBaseManager {
             preparedStatement.executeUpdate();
 
         } catch (SQLException error) {
-            error.printStackTrace();
+            LOGGER.error(error.getMessage());
         }
     }
 
     @Override
     public int getInventory(long memberID, String column) {
-
         try (Connection connection = dataSource.getConnection()) {
 
             final PreparedStatement preparedStatement = connection.prepareStatement("SELECT " + column + " FROM inventory_manager WHERE member_id = ?");
@@ -179,7 +186,7 @@ public class SQLiteDataSource implements IDataBaseManager {
             insertStatement.execute();
 
         } catch (SQLException error) {
-            error.printStackTrace();
+            LOGGER.error(error.getMessage());
         }
         return 0;
     }
@@ -196,13 +203,12 @@ public class SQLiteDataSource implements IDataBaseManager {
             preparedStatement.executeUpdate();
 
         } catch (SQLException error) {
-            error.printStackTrace();
+            LOGGER.error(error.getMessage());
         }
     }
 
     @Override
     public long getCooldown(long memberID, String column) {
-
         try (Connection connection = dataSource.getConnection()) {
 
             final PreparedStatement preparedStatement = connection.prepareStatement("SELECT " + column + " FROM cooldown_manager WHERE member_id = ?");
@@ -219,14 +225,13 @@ public class SQLiteDataSource implements IDataBaseManager {
             insertStatement.execute();
 
         } catch (SQLException error) {
-            error.printStackTrace();
+            LOGGER.error(error.getMessage());
         }
         return 0;
     }
 
     @Override
     public void setCooldown(long memberID, String column, long newValue) {
-
         try (Connection connection = dataSource.getConnection()) {
 
             final PreparedStatement preparedStatement = connection.prepareStatement("UPDATE cooldown_manager SET " + column + " = ? WHERE member_id = ?");
@@ -235,13 +240,12 @@ public class SQLiteDataSource implements IDataBaseManager {
             preparedStatement.executeUpdate();
 
         } catch (SQLException error) {
-            error.printStackTrace();
+            LOGGER.error(error.getMessage());
         }
     }
 
     @Override
     public String getNickname(long memberID) {
-
         try (Connection connection = dataSource.getConnection()) {
 
             final PreparedStatement preparedStatement = connection.prepareStatement("SELECT nickname FROM alpacas_manager WHERE member_id = ?");
@@ -261,14 +265,13 @@ public class SQLiteDataSource implements IDataBaseManager {
             insertStatement.execute();
 
         } catch (SQLException error) {
-            error.printStackTrace();
+            LOGGER.error(error.getMessage());
         }
         return "alpaca";
     }
 
     @Override
     public void setNickname(long memberID, String nickname) {
-
         try (Connection connection = dataSource.getConnection()) {
 
             final PreparedStatement preparedStatement = connection.prepareStatement("UPDATE alpacas_manager SET nickname = ? WHERE member_id = ?");
@@ -277,7 +280,7 @@ public class SQLiteDataSource implements IDataBaseManager {
             preparedStatement.executeUpdate();
 
         } catch (SQLException error) {
-            error.printStackTrace();
+            LOGGER.error(error.getMessage());
         }
     }
 }

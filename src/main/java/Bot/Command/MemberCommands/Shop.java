@@ -4,7 +4,6 @@ import Bot.Command.CommandContext;
 import Bot.Command.ICommand;
 import Bot.Shop.IShopItem;
 import Bot.Config;
-import Bot.Database.IDataBaseManager;
 import Bot.Shop.ShopItemManager;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Member;
@@ -36,10 +35,8 @@ public class Shop implements ICommand {
    }
 
    @Override
-   public String getHelp(CommandContext commandContext) {
-      return "`Usage: " + IDataBaseManager.INSTANCE.getPrefix(commandContext.getGuild().getIdLong()) + "shop\n" +
-              (this.getAliases().isEmpty() ? "`" : "Aliases: " + this.getAliases() + "`\n") +
-              "Shows the shop to buy things for your alpaca";
+   public String getHelp(String prefix) {
+      return "`Usage: " + prefix + "shop\n" + (this.getAliases().isEmpty() ? "`" : "Aliases: " + this.getAliases() + "`\n") + "Shows the shop to buy things for your alpaca";
    }
 
    @Override

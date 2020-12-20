@@ -13,21 +13,19 @@ public class Inventory implements ICommand {
         final TextChannel channel = commandContext.getChannel();
         final long memberID = commandContext.getGuild().getMember(commandContext.getAuthor()).getIdLong();
 
-        int amountofSalad = IDataBaseManager.INSTANCE.getInventory(memberID, "salad");
+        int amountOfSalad = IDataBaseManager.INSTANCE.getInventory(memberID, "salad");
         int amountOfWaterbottle = IDataBaseManager.INSTANCE.getInventory(memberID, "waterbottle");
         int amountOfBattery = IDataBaseManager.INSTANCE.getInventory(memberID, "battery");
 
         channel.sendMessage("\uD83D\uDCE6 Your inventory contains **" +
-                (amountofSalad > 1 ? amountofSalad + "** salads" : amountofSalad + "** salad") + " and **" +
+                (amountOfSalad > 1 ? amountOfSalad + "** salads" : amountOfSalad + "** salad") + " and **" +
                 (amountOfWaterbottle > 1 ? amountOfWaterbottle + "** waterbottles" : amountOfWaterbottle + "** waterbottle") + " and **" +
                 (amountOfBattery > 1 ? amountOfBattery + "** batteries" : amountOfBattery + "** battery") + "").queue();
     }
 
     @Override
-    public String getHelp(CommandContext commandContext) {
-        return "`Usage: " + IDataBaseManager.INSTANCE.getPrefix(commandContext.getGuild().getIdLong()) + "inventory\n" +
-                (this.getAliases().isEmpty() ? "`" : "Aliases: " + this.getAliases() + "`\n") +
-                "Displays your inventory with the bought items from the shop";
+    public String getHelp(String prefix) {
+        return "`Usage: " + prefix + "inventory\n" + (this.getAliases().isEmpty() ? "`" : "Aliases: " + this.getAliases() + "`\n") + "Displays your inventory with the bought items from the shop";
     }
 
     @Override

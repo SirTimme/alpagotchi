@@ -6,7 +6,7 @@ public interface ICommand {
 
     void handle(CommandContext commandContext);
 
-    String getHelp(CommandContext commandContext);
+    String getHelp(String prefix);
 
     String getName();
 
