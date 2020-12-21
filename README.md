@@ -2,7 +2,7 @@
 
 # Alpagotchi | Alpaca + Tamagotchi
 
-Alpagotchi allows any user to create and take care of an individual alpaca.  \
+Alpagotchi allows any user to create and take care of their own alpaca.  \
 Items can be bought to satisfy hunger and thirst and work can be done to earn money for the items.
 
 ## Commands
