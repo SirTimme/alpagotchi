@@ -1,4 +1,4 @@
-![AlpagotchiIMG]("src/main/resources/Alpagotchi.png=150x150")
+![AlpagotchiIMG](src/main/resources/Alpagotchi.png)
 
 # Alpagotchi
 
