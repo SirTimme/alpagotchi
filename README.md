@@ -14,22 +14,53 @@
 <h3>
   Developer Commands
 </h3>
-<p>
-  a!decrease [enable | disable] Determines if the alpaca loses stats or not<br>  
-  a!shutdown Shutdowns the bot
-</p>
+<table style="width:100%">
+  <tr>
+    <th>Usage</th>
+    <th>Task</th>
+  </tr>
+  <tr>
+    <td>a!decrease [enable | disable]</td>
+    <td>Determines if the alpaca loses stats or not</td>
+  </tr>
+  <tr>
+    <td>a!shutdown</td>
+    <td>Shutdowns the bot</td>
+  </tr>
+</table>
 <h3>
   Admin Commands
 </h3>
-<p>
-  a!setprefix [prefix] Sets the prefix of the guild
-</p>
+<table style="width:100%">
+  <tr>
+    <th>Usage</th>
+    <th>Task</th>
+  </tr>
+  <tr>
+    <td>a!setprefix [prefix]</td>
+    <td>Sets the prefix of the guild<br></td>
+  </tr>
+</table>
 <h3>
   Member Commands
 </h3>
+<table style="width:100%">
+  <tr>
+    <th>Usage</th>
+    <th>Task</th>
+  </tr>
+  <tr>
+    <td><b>a!buy [itemname] [1-10]</b></td>
+    <td> Buys the amount of items from the shop<br></td>
+  </tr>
+  <tr>
+    <td><b>a!feed [itenname]</b></b></td>
+    <td>Feeds the alpaca with the item<br></td>
+  </tr>
+</table>
 <p>
-  <b>a!buy [itemname] [1-10]</b> Buys the amount of items from the shop<br>
-  <b>a!feed [itenname]</b> Feeds the alpaca with the item<br>
+  
+  
   <b>a!gift [@User] [itemname] [1-5]</b> Gifts the amount of items to the mentioned user<br>
   <b>a!help</b> Displays all avaiable commands<br>
   <b>a!inventory</b> Shows the bought items from the shop<br>
