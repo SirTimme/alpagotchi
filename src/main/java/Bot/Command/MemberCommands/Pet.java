@@ -2,6 +2,7 @@ package Bot.Command.MemberCommands;
 
 import Bot.Command.CommandContext;
 import Bot.Command.ICommand;
+import Bot.Command.PermissionLevel;
 
 public class Pet implements ICommand {
 
@@ -21,7 +22,7 @@ public class Pet implements ICommand {
    }
 
    @Override
-   public String getPermissionLevel() {
-      return "member";
+   public Enum<PermissionLevel> getPermissionLevel() {
+      return PermissionLevel.MEMBER;
    }
 }

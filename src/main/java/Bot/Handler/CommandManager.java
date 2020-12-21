@@ -1,8 +1,9 @@
 package Bot.Handler;
 
-import Bot.Command.AdminCommands.Decrease;
+import Bot.Command.DeveloperCommands.Decrease;
 import Bot.Command.AdminCommands.SetPrefix;
 import Bot.Command.CommandContext;
+import Bot.Command.DeveloperCommands.Shutdown;
 import Bot.Command.MemberCommands.*;
 import Bot.Command.ICommand;
 import Bot.Shop.ShopItemManager;
@@ -32,6 +33,7 @@ public class CommandManager {
         addCommand(new Nick());
         addCommand(new Pet());
         addCommand(new Gift(this.shopItemManager));
+        addCommand(new Shutdown());
     }
 
     private void addCommand(ICommand command) {
@@ -60,7 +62,8 @@ public class CommandManager {
     }
 
     void handle(GuildMessageReceivedEvent event, String prefix) {
-        String[] split = event.getMessage().getContentRaw()
+        String[] split = event.getMessage()
+                .getContentRaw()
                 .replaceFirst("(?i)" + Pattern.quote(prefix), "")
                 .split("\\s+");
 

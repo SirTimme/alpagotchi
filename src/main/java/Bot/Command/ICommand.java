@@ -10,7 +10,7 @@ public interface ICommand {
 
     String getName();
 
-    String getPermissionLevel();
+    Enum<PermissionLevel> getPermissionLevel();
 
     default List<String> getAliases() {
         return List.of();

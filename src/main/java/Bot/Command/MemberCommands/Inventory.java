@@ -2,6 +2,7 @@ package Bot.Command.MemberCommands;
 
 import Bot.Command.CommandContext;
 import Bot.Command.ICommand;
+import Bot.Command.PermissionLevel;
 import Bot.Database.IDataBaseManager;
 import net.dv8tion.jda.api.entities.TextChannel;
 
@@ -34,8 +35,8 @@ public class Inventory implements ICommand {
     }
 
     @Override
-    public String getPermissionLevel() {
-        return "member";
+    public Enum<PermissionLevel> getPermissionLevel() {
+        return PermissionLevel.MEMBER;
     }
 
     @Override

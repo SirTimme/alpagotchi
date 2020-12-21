@@ -2,6 +2,7 @@ package Bot.Command.MemberCommands;
 
 import Bot.Command.CommandContext;
 import Bot.Command.ICommand;
+import Bot.Command.PermissionLevel;
 import Bot.Database.IDataBaseManager;
 import Bot.Shop.IShopItem;
 import Bot.Shop.ShopItemManager;
@@ -75,8 +76,8 @@ public class Feed implements ICommand {
    }
 
    @Override
-   public String getPermissionLevel() {
-      return "member";
+   public Enum<PermissionLevel> getPermissionLevel() {
+      return PermissionLevel.MEMBER;
    }
 
    private void feedAlpaca(long memberID, IShopItem item, TextChannel channel) {

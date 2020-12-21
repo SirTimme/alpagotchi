@@ -2,6 +2,7 @@ package Bot.Command.MemberCommands;
 
 import Bot.Command.CommandContext;
 import Bot.Command.ICommand;
+import Bot.Command.PermissionLevel;
 import Bot.Shop.IShopItem;
 import Bot.Config;
 import Bot.Shop.ShopItemManager;
@@ -45,7 +46,7 @@ public class Shop implements ICommand {
    }
 
    @Override
-   public String getPermissionLevel() {
-      return "member";
+   public Enum<PermissionLevel> getPermissionLevel() {
+      return PermissionLevel.MEMBER;
    }
 }

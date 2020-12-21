@@ -2,9 +2,8 @@ package Bot.Command.AdminCommands;
 
 import Bot.Command.CommandContext;
 import Bot.Command.ICommand;
+import Bot.Command.PermissionLevel;
 import Bot.Database.IDataBaseManager;
-import net.dv8tion.jda.api.Permission;
-import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
 
 import java.util.List;
@@ -15,15 +14,14 @@ public class SetPrefix implements ICommand {
     public void handle(CommandContext commandContext) {
         final TextChannel channel = commandContext.getChannel();
         final List<String> args = commandContext.getArgs();
-        final Member member = commandContext.getMember();
 
-        if (!member.hasPermission(Permission.MANAGE_SERVER)) {
-            channel.sendMessage("<:RedCross:782229279312314368> You are missing the `MANAGE_SERVER` permission").queue();
+        if (!PermissionLevel.ADMIN.hasPerms(commandContext.getMember())) {
+            channel.sendMessage("<:RedCross:782229279312314368> This is a admin-only command").queue();
             return;
         }
 
         if (args.isEmpty()) {
-            channel.sendMessage("<:RedCross:782229279312314368> Missing arguments, could not resolve the new prefix").queue();
+            channel.sendMessage("<:RedCross:782229279312314368> Missing arguments").queue();
             return;
         }
 
@@ -44,7 +42,7 @@ public class SetPrefix implements ICommand {
     }
 
     @Override
-    public String getPermissionLevel() {
-        return "admin";
+    public PermissionLevel getPermissionLevel() {
+        return PermissionLevel.ADMIN;
     }
 }

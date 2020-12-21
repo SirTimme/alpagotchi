@@ -2,6 +2,7 @@ package Bot.Command.MemberCommands;
 
 import Bot.Command.CommandContext;
 import Bot.Command.ICommand;
+import Bot.Command.PermissionLevel;
 import Bot.Database.IDataBaseManager;
 import Bot.Shop.IShopItem;
 import Bot.Shop.ShopItemManager;
@@ -60,7 +61,7 @@ public class Gift implements ICommand {
       }
 
       if (IDataBaseManager.INSTANCE.getInventory(donatedUserID, giftedItem.getName()) - giftedItemAmount < 0) {
-         channel.sendMessage("<:RedCross:782229279312314368> Incorrect arguments, u dont own that many items to gift").queue();
+         channel.sendMessage("<:RedCross:782229279312314368> Incorrect arguments, u do not own that many items to gift").queue();
          return;
       }
 
@@ -81,7 +82,7 @@ public class Gift implements ICommand {
    }
 
    @Override
-   public String getPermissionLevel() {
-      return "member";
+   public Enum<PermissionLevel> getPermissionLevel() {
+      return PermissionLevel.MEMBER;
    }
 }
