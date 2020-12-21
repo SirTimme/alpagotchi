@@ -1,54 +1,74 @@
 <p align="right">  
   <img src="src/main/resources/Alpagotchi.png" width="147" height="145" title="Avatar" alt="Alpagotchi">
 </p>
+
 <h1>
   Alpagotchi
 </h1>
+
 <p>
   Alpagotchi (Alpaca + Tamagotchi) allows any user to create and take care of an individual alpaca. 
   Items can be bought to satisfy hunger and thirst and work can be done to earn money for the items.
 </p>
+
 <h2>
   Commands
 </h2>
+
 <h3>
   Developer Commands
 </h3>
-<table style="width:100%">
-  <tr>
-    <th>Usage</th>
-    <th>Task</th>
-  </tr>
-  <tr>
-    <td>a!decrease [enable | disable]</td>
-    <td>Determines if the alpaca loses stats or not</td>
-  </tr>
-  <tr>
-    <td>a!shutdown</td>
-    <td>Shutdowns the bot</td>
-  </tr>
+
+<table>
+  <thead>
+    <tr>
+      <th>Usage</th>
+      <th>Task</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>a!decrease [enable | disable]</td>
+      <td>Determines if the alpaca loses stats or not</td>
+    </tr>
+    <tr>
+      <td>a!shutdown</td>
+      <td>Shutdowns the bot</td>
+    </tr>
+  </tbody>  
 </table>
+
 <h3>
   Admin Commands
 </h3>
-<table style="width:100%px">
-  <tr>
-    <th>Usage</th>
-    <th>Task</th>
+
+<table>
+  <thead>
+    <tr>
+      <th>Usage</th>
+      <th>Task</th>
   </tr>
-  <tr>
-    <td>a!setprefix [prefix]</td>
-    <td>Sets the prefix of the guild</td>
-  </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>a!setprefix [prefix]</td>
+      <td>Sets the prefix of the guild</td>
+    </tr>
+  </tbody> 
 </table>
+
 <h3>
   Member Commands
 </h3>
-<table style="width:100%">
-  <tr>
-    <th>Usage</th>
-    <th>Task</th>
-  </tr>
+
+<table>
+  <thead>
+     <tr>
+        <th>Usage</th>
+        <th>Task</th>
+     </tr>
+  </thead>
+  <tbody>
   <tr>
     <td><b>a!buy [itemname] [1-10]</b></td>
     <td> Buys the amount of items from the shop<br></td>
@@ -62,8 +82,8 @@
     <td>Gifts the amount of items to the mentioned user</td>
   </tr>
   <tr>
-    <td><b>a!help</b></td>
-    <td>Displays all avaiable commands</td>
+    <td><b>a!help [command]</b></td>
+    <td>Displays further information to the specified command</td>
   </tr>
   <tr>
     <td><b>a!inventory</b></td>
@@ -93,4 +113,5 @@
     <td><b>a!work</b></td>
     <td>Work to earn a random amount of fluffies</td>
   </tr>
+  </tbody>
 </table>
