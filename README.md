@@ -1,4 +1,4 @@
-<img align="right" src="src/main/resources/Alpagotchi.png" width=160 height=160/>
+<img align="right" src="src/main/resources/Alpagotchi160.png"/>
 
 # Alpagotchi | Alpaca + Tamagotchi
 
