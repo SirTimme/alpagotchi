@@ -1,5 +1,5 @@
 <p align="right">  
-  <img src="src/main/resources/Alpagotchi.png" width="150" height="150" title="Avatar">
+  <img src="src/main/resources/Alpagotchi.png" width="147" height="145" title="Avatar" alt="Alpagotchi">
 </p>
 <h1>
   Alpagotchi
@@ -38,7 +38,7 @@
   </tr>
   <tr>
     <td>a!setprefix [prefix]</td>
-    <td>Sets the prefix of the guild<br></td>
+    <td>Sets the prefix of the guild</td>
   </tr>
 </table>
 <h3>
@@ -54,20 +54,35 @@
     <td> Buys the amount of items from the shop<br></td>
   </tr>
   <tr>
-    <td><b>a!feed [itenname]</b></b></td>
-    <td>Feeds the alpaca with the item<br></td>
+    <td><b>a!feed [itemname]</b></td>
+    <td>Feeds the alpaca with the item</td>
+  </tr>
+  <tr>
+    <td><b>a!gift [@User] [itemname] [1-5]</b></td>
+    <td>Gifts the amount of items to the mentioned user</td>
+  </tr>
+  <tr>
+    <td><b>a!help</b></td>
+    <td>Displays all avaiable commands</td>
+  </tr>
+    <tr>
+    <td><b>a!help</b></td>
+    <td>Displays all avaiable commands</td>
+  </tr>
+    <tr>
+    <td><b>a!help</b></td>
+    <td>Displays all avaiable commands</td>
   </tr>
 </table>
 <p>
-  
-  
-  <b>a!gift [@User] [itemname] [1-5]</b> Gifts the amount of items to the mentioned user<br>
-  <b>a!help</b> Displays all avaiable commands<br>
-  <b>a!inventory</b> Shows the bought items from the shop<br>
-  <b>a!myalpaca</b> Shows your alpaca and his stats<br>
-  <b>a!nick [nickname]</b> Gives your alpaca a nickname<br>
-  <b>a!pet</b> Sends a GIF and pets your alpaca<br>
-  <b>a!shop</b> Displays all items, which can be bought<br>
-  <b>a!wallet</b> Shows your bhalance of fluffies<br>
-  <b>a!work</b> Work to earn a random amount of fluffies<br>
+
+<br>
+ <br>
+<b>a!inventory</b> Shows the bought items from the shop<br>
+<b>a!myalpaca</b> Shows your alpaca and his stats<br>
+<b>a!nick [nickname]</b> Gives your alpaca a nickname<br>
+<b>a!pet</b> Sends a GIF and pets your alpaca<br>
+<b>a!shop</b> Displays all items, which can be bought<br>
+<b>a!wallet</b> Shows your bhalance of fluffies<br>
+<b>a!work</b> Work to earn a random amount of fluffies<br>
 </p>
