@@ -1,4 +1,5 @@
 # Alpagotchi
+![Alpagotchi](Alpagotchi.png)
 Tamagotchi Bot with Alpacas in the programming language Java
 ## Purpose
 Alpagotchi (Alpaca + Tamagotchi) allows any user to create and take care of an individual alpaca.  \
@@ -19,5 +20,5 @@ Items can be bought to satisfy hunger and thirst and work can be done to earn mo
 **a!nick [nickname]** Gives your alpaca a nickname  \
 **a!pet** Sends a GIF and pets your alpaca  \
 **a!shop** Displays all items, which can be bought  \
-**!wallet** Shows your bhalance of fluffies  \
+**a!wallet** Shows your bhalance of fluffies  \
 **a!work** Work to earn a random amount of fluffies  \
