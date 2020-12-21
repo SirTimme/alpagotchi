@@ -1,4 +1,4 @@
-<img align="right" src="src/main/resources/Alpagotchi160.png"/>
+<img align="right" src="src/main/resources/avatar.png" alt="Avatar"/>
 
 # Alpagotchi | Alpaca + Tamagotchi
 
@@ -24,9 +24,9 @@ Items can be bought to satisfy hunger and thirst and work can be done to earn mo
 
 | Usage        | Task           | 
 | -------------| ---------------|  
-| a!buy [itemname] [1-10] | Buys the amount of items from the shop |
-| a!feed [itemname] | Feeds the alpaca with the item |
-| a!gift [@User] [itemname] [1-5] | Gifts the amount of items to the mentioned user |
+| a!buy [itemName] [1-10] | Buys the amount of items from the shop |
+| a!feed [itemName] | Feeds the alpaca with the item |
+| a!gift [@User] [itemName] [1-5] | Gifts the amount of items to the mentioned user |
 | a!help [command] | Displays further information to the specified command |
 | a!inventory | Shows the bought items from the shop |
 | a!myalpaca | Shows your alpaca and his stats |

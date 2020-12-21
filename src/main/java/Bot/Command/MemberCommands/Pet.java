@@ -8,7 +8,7 @@ public class Pet implements ICommand {
 
    @Override
    public void handle(CommandContext commandContext) {
-      commandContext.getChannel().sendMessage("https://cdn.discordapp.com/attachments/786319189413330957/786982440471887893/alpacaPet.gif").queue();
+      commandContext.getChannel().sendMessage("https://tenor.com/view/alpaca-small-alpaca-pet-cute-combing-gif-15237621").queue();
    }
 
    @Override
