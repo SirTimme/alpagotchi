@@ -31,7 +31,7 @@
 <h3>
   Admin Commands
 </h3>
-<table style="width:100%">
+<table style="width:100%px">
   <tr>
     <th>Usage</th>
     <th>Task</th>
@@ -65,24 +65,32 @@
     <td><b>a!help</b></td>
     <td>Displays all avaiable commands</td>
   </tr>
-    <tr>
-    <td><b>a!help</b></td>
-    <td>Displays all avaiable commands</td>
+  <tr>
+    <td><b>a!inventory</b></td>
+    <td>Shows the bought items from the shop</td>
   </tr>
-    <tr>
-    <td><b>a!help</b></td>
-    <td>Displays all avaiable commands</td>
+  <tr>
+    <td><b>a!myalpaca</b></td>
+    <td>Shows your alpaca and his stats</td>
+  </tr>
+  <tr>
+    <td><b>a!nick [nickname]</b></td>
+    <td>Gives your alpaca a nickname</td>
+  </tr>
+  <tr>
+    <td><b>a!pet</b></td>
+    <td>Sends a GIF and pets your alpaca</td>
+  </tr>
+  <tr>
+    <td><b>a!shop</b></td>
+    <td>Displays all items which can be bought</td>
+  </tr>
+  <tr>
+    <td><b>a!wallet</b></td>
+    <td>Shows your balance of fluffies</td>
+  </tr>
+  <tr>
+    <td><b>a!work</b></td>
+    <td>Work to earn a random amount of fluffies</td>
   </tr>
 </table>
-<p>
-
-<br>
- <br>
-<b>a!inventory</b> Shows the bought items from the shop<br>
-<b>a!myalpaca</b> Shows your alpaca and his stats<br>
-<b>a!nick [nickname]</b> Gives your alpaca a nickname<br>
-<b>a!pet</b> Sends a GIF and pets your alpaca<br>
-<b>a!shop</b> Displays all items, which can be bought<br>
-<b>a!wallet</b> Shows your bhalance of fluffies<br>
-<b>a!work</b> Work to earn a random amount of fluffies<br>
-</p>
