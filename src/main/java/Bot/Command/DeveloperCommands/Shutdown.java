@@ -18,7 +18,7 @@ public class Shutdown implements ICommand {
          return;
       }
 
-      channel.sendMessage("<:GreenTick:782229268914372609> " + commandContext.getJDA().getSelfUser().getName() + " is shutting down...").queue();
+      channel.sendMessage("<:GreenTick:782229268914372609> " + commandContext.getJDA().getSelfUser().getName() + " is shutting down...").complete();
       System.exit(0);
    }
 
