@@ -1,4 +1,4 @@
-![AlpagotchiIMG](src/main/resources/Alpagotchi.png)
+<img align="right" src="src/main/resources/Alpagotchi.png" width=160 height=160/>
 
 # Alpagotchi | Alpaca + Tamagotchi
 
