@@ -24,7 +24,7 @@ public class Buy implements ICommand {
       final TextChannel channel = commandContext.getChannel();
       int itemAmount;
 
-      if (args.isEmpty()) {
+      if (args.isEmpty() || args.size() < 2) {
          channel.sendMessage("<:RedCross:782229279312314368> Missing arguments").queue();
          return;
       }
@@ -39,7 +39,7 @@ public class Buy implements ICommand {
       try {
          itemAmount = Integer.parseInt(args.get(1));
 
-      } catch (NumberFormatException | IndexOutOfBoundsException error) {
+      } catch (NumberFormatException error) {
          channel.sendMessage("<:RedCross:782229279312314368> Incorrect arguments, could not resolve the amount of items").queue();
          return;
       }
@@ -62,7 +62,7 @@ public class Buy implements ICommand {
 
    @Override
    public String getHelp(String prefix) {
-      return "`Usage: " + prefix + "buy [itemname] [1-10]\n" + (this.getAliases().isEmpty() ? "`" : "Aliases: " + this.getAliases() + "`\n") + "Buys the specified amount of a item from the shop";
+      return "`Usage: " + prefix + "buy [itemName] [1-10]\n" + (this.getAliases().isEmpty() ? "`" : "Aliases: " + this.getAliases() + "`\n") + "Buys the specified amount of a item from the shop";
    }
 
    @Override
