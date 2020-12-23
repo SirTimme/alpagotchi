@@ -49,16 +49,16 @@ public class MyAlpaca implements ICommand {
         Graphics alpakaGraphics = alpacaIMG.getGraphics();
 
         alpakaGraphics.setColor(getColorOfValues(hunger));
-        alpakaGraphics.fillRect(31, 31, (int)(hunger * 1.49), 12);
+        alpakaGraphics.fillRect(31, 31, (int)(hunger * 1.73), 12);
 
         alpakaGraphics.setColor(getColorOfValues(thirst));
-        alpakaGraphics.fillRect(31, 73, (int)(thirst * 1.49), 12);
+        alpakaGraphics.fillRect(31, 73, (int)(thirst * 1.73), 12);
 
         alpakaGraphics.setColor(getColorOfValues(energy));
-        alpakaGraphics.fillRect(424, 31, (int)(energy * 1.49), 12);
+        alpakaGraphics.fillRect(424, 31, (int)(energy * 1.73), 12);
 
         alpakaGraphics.setColor(Color.GREEN);
-        alpakaGraphics.fillRect(424, 73, (int)(87 * 1.49), 12);
+        alpakaGraphics.fillRect(424, 73, (int)(87 * 1.73), 12);
 
         File newAlpacaFile = new File("src/main/resources/editedAlpacaStats.jpg");
 
