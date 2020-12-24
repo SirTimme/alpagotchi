@@ -53,25 +53,25 @@ public class MyAlpaca implements ICommand {
         alpakaGraphics.fillRect(31, 31, (int)(hunger * 1.73), 12);
 
         alpakaGraphics.setColor(Color.BLACK);
-        alpakaGraphics.drawString(hunger + "/100", 140, 24);
+        alpakaGraphics.drawString(hunger + "/100", getXStartFront(hunger), 24);
 
         alpakaGraphics.setColor(getColorOfValues(thirst));
         alpakaGraphics.fillRect(31, 73, (int)(thirst * 1.73), 12);
 
         alpakaGraphics.setColor(Color.BLACK);
-        alpakaGraphics.drawString(thirst + "/100", 140, 66);
+        alpakaGraphics.drawString(thirst + "/100", getXStartFront(thirst), 66);
 
         alpakaGraphics.setColor(getColorOfValues(energy));
         alpakaGraphics.fillRect(424, 31, (int)(energy * 1.73), 12);
 
         alpakaGraphics.setColor(Color.BLACK);
-        alpakaGraphics.drawString(energy + "/100", 531, 24);
+        alpakaGraphics.drawString(energy + "/100", getXStartBack(energy), 24);
 
         alpakaGraphics.setColor(Color.GREEN);
         alpakaGraphics.fillRect(424, 73, (int)(87 * 1.73), 12);
 
         alpakaGraphics.setColor(Color.BLACK);
-        alpakaGraphics.drawString("87/100", 531, 66);
+        alpakaGraphics.drawString("87/100", getXStartBack(87), 66);
 
         File newAlpacaFile = new File("src/main/resources/editedAlpacaStats.jpg");
 
@@ -127,5 +127,29 @@ public class MyAlpaca implements ICommand {
 
         } else
             return Color.BLACK;
+    }
+
+    private int getXStartFront(int value) {
+        if (value == 100) {
+            return 144;
+
+        } else if (value >= 10) {
+            return 154;
+
+        } else {
+            return 164;
+        }
+    }
+
+    private int getXStartBack(int value) {
+        if (value == 100) {
+            return 536;
+
+        } else if (value >= 10) {
+            return 546;
+
+        } else {
+            return 556;
+        }
     }
 }
