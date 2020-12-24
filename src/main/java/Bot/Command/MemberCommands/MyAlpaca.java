@@ -53,25 +53,25 @@ public class MyAlpaca implements ICommand {
         alpakaGraphics.fillRect(31, 31, (int)(hunger * 1.73), 12);
 
         alpakaGraphics.setColor(Color.BLACK);
-        alpakaGraphics.drawString(hunger + "/100", 160, 24);
+        alpakaGraphics.drawString(hunger + "/100", 140, 24);
 
         alpakaGraphics.setColor(getColorOfValues(thirst));
         alpakaGraphics.fillRect(31, 73, (int)(thirst * 1.73), 12);
 
         alpakaGraphics.setColor(Color.BLACK);
-        alpakaGraphics.drawString(thirst + "/100", 160, 66);
+        alpakaGraphics.drawString(thirst + "/100", 140, 66);
 
         alpakaGraphics.setColor(getColorOfValues(energy));
         alpakaGraphics.fillRect(424, 31, (int)(energy * 1.73), 12);
 
         alpakaGraphics.setColor(Color.BLACK);
-        alpakaGraphics.drawString(energy + "/100", 551, 24);
+        alpakaGraphics.drawString(energy + "/100", 531, 24);
 
         alpakaGraphics.setColor(Color.GREEN);
         alpakaGraphics.fillRect(424, 73, (int)(87 * 1.73), 12);
 
         alpakaGraphics.setColor(Color.BLACK);
-        alpakaGraphics.drawString("87/100", 551, 66);
+        alpakaGraphics.drawString("87/100", 531, 66);
 
         File newAlpacaFile = new File("src/main/resources/editedAlpacaStats.jpg");
 
