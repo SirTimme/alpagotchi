@@ -47,18 +47,31 @@ public class MyAlpaca implements ICommand {
         }
 
         Graphics alpakaGraphics = alpacaIMG.getGraphics();
+        alpakaGraphics.setFont(new Font("SansSerif", Font.BOLD, 15));
 
         alpakaGraphics.setColor(getColorOfValues(hunger));
         alpakaGraphics.fillRect(31, 31, (int)(hunger * 1.73), 12);
 
+        alpakaGraphics.setColor(Color.BLACK);
+        alpakaGraphics.drawString(hunger + "/100", 160, 24);
+
         alpakaGraphics.setColor(getColorOfValues(thirst));
         alpakaGraphics.fillRect(31, 73, (int)(thirst * 1.73), 12);
+
+        alpakaGraphics.setColor(Color.BLACK);
+        alpakaGraphics.drawString(thirst + "/100", 160, 66);
 
         alpakaGraphics.setColor(getColorOfValues(energy));
         alpakaGraphics.fillRect(424, 31, (int)(energy * 1.73), 12);
 
+        alpakaGraphics.setColor(Color.BLACK);
+        alpakaGraphics.drawString(energy + "/100", 551, 24);
+
         alpakaGraphics.setColor(Color.GREEN);
         alpakaGraphics.fillRect(424, 73, (int)(87 * 1.73), 12);
+
+        alpakaGraphics.setColor(Color.BLACK);
+        alpakaGraphics.drawString("87/100", 551, 66);
 
         File newAlpacaFile = new File("src/main/resources/editedAlpacaStats.jpg");
 
@@ -70,7 +83,7 @@ public class MyAlpaca implements ICommand {
         }
 
         embedBuilder.setTitle("" + IDataBaseManager.INSTANCE.getNickname(memberID) + "");
-        embedBuilder.setDescription("_Hava a llamazing day!_");
+        embedBuilder.setDescription("_Have a llamazing day!_");
         embedBuilder.setThumbnail(commandContext.getMember().getUser().getAvatarUrl());
         embedBuilder.setFooter("Created by " + botCreator.getEffectiveName(), botCreator.getUser().getEffectiveAvatarUrl());
         embedBuilder.setTimestamp(Instant.now());

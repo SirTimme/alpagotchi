@@ -10,7 +10,6 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
 
-import java.io.File;
 import java.time.Instant;
 import java.util.List;
 
@@ -30,21 +29,21 @@ public class Help implements ICommand {
       if (args.isEmpty()) {
          EmbedBuilder embed = new EmbedBuilder();
          final Member botCreator = commandContext.getGuild().getMemberById(Config.get("OWNER_ID"));
-         File listIcon = new File("src/main/resources/list.png");
 
          embed.setTitle("Overview of all commands");
 
-         embed.addField("\uD83D\uDD27 Developer commands", getCommandsByPerms(prefix, PermissionLevel.DEVELOPER), false);
+         embed.setDescription("Further information to any command:\n**```fix\n" + prefix + "help [command]\n```**");
 
-         embed.addField("\uD83D\uDC6E Admin commands", getCommandsByPerms(prefix, PermissionLevel.ADMIN), false);
+         embed.addField("\uD83D\uDD27 Developer commands", getCommandsByPerms(prefix, PermissionLevel.DEVELOPER), true);
 
-         embed.addField("\uD83D\uDD13 Member commands", getCommandsByPerms(prefix, PermissionLevel.MEMBER), false);
+         embed.addField("\uD83D\uDC6E Admin commands", getCommandsByPerms(prefix, PermissionLevel.ADMIN), true);
 
-         embed.setThumbnail("attachment://list.png");
+         embed.addField("\uD83D\uDD13 Member commands", getCommandsByPerms(prefix, PermissionLevel.MEMBER), true);
+
          embed.setFooter("Created by " + botCreator.getEffectiveName(), botCreator.getUser().getEffectiveAvatarUrl());
          embed.setTimestamp(Instant.now());
 
-         channel.sendFile(listIcon, "list.png").embed(embed.build()).queue();
+         channel.sendMessage(embed.build()).queue();
          return;
       }
 
