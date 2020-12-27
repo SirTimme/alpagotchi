@@ -30,38 +30,38 @@ public class Gift implements ICommand {
       }
 
       if (commandContext.getMessage().getMentionedUsers().isEmpty()) {
-         channel.sendMessage("<:RedCross:782229279312314368> Incorrect arguments, could not resolve the mentioned user").queue();
+         channel.sendMessage("<:RedCross:782229279312314368> Could not resolve the mentioned user").queue();
          return;
       }
 
       final long giftedUserID = commandContext.getMessage().getMentionedUsers().get(0).getIdLong();
 
       if (giftedUserID == donatedUserID) {
-         channel.sendMessage("<:RedCross:782229279312314368> Incorrect arguments, you can not gift yourself items").queue();
+         channel.sendMessage("<:RedCross:782229279312314368> You can not gift yourself items").queue();
          return;
       }
 
       IShopItem giftedItem = shopItemManager.getShopItem(args.get(1));
 
       if (giftedItem == null) {
-         channel.sendMessage("<:RedCross:782229279312314368> Incorrect arguments, could not resolve the specified item").queue();
+         channel.sendMessage("<:RedCross:782229279312314368> Could not resolve the specified item").queue();
          return;
       }
 
       try {
          giftedItemAmount = Integer.parseInt(args.get(2));
       } catch (NumberFormatException error) {
-         channel.sendMessage("<:RedCross:782229279312314368> Incorrect arguments, could not resolve the amount of items").queue();
+         channel.sendMessage("<:RedCross:782229279312314368> Could not resolve the amount of items").queue();
          return;
       }
 
       if (giftedItemAmount > 5) {
-         channel.sendMessage("<:RedCross:782229279312314368> Incorrect arguments, you can gift max. 5 items at a time").queue();
+         channel.sendMessage("<:RedCross:782229279312314368> You can gift max. 5 items at a time").queue();
          return;
       }
 
       if (IDataBaseManager.INSTANCE.getInventory(donatedUserID, giftedItem.getName()) - giftedItemAmount < 0) {
-         channel.sendMessage("<:RedCross:782229279312314368> Incorrect arguments, u do not own that many items to gift").queue();
+         channel.sendMessage("<:RedCross:782229279312314368> You do not own that many items to gift").queue();
          return;
       }
 
@@ -73,7 +73,7 @@ public class Gift implements ICommand {
 
    @Override
    public String getHelp(String prefix) {
-      return "`Usage: " + prefix + "gift [@User] [itemName] [1-5]\n" + (this.getAliases().isEmpty() ? "`" : "Aliases: " + this.getAliases() + "`\n") + "Gifts the mentioned user the specified amount of items";
+      return "`Usage: " + prefix + "gift [@User] [itemname] [1-5]\n" + (this.getAliases().isEmpty() ? "`" : "Aliases: " + this.getAliases() + "`\n") + "Gifts the mentioned user the specified amount of items";
    }
 
    @Override

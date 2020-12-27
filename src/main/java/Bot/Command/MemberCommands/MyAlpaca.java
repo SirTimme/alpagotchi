@@ -7,6 +7,7 @@ import Bot.Config;
 import Bot.Database.IDataBaseManager;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.TextChannel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,10 +28,12 @@ public class MyAlpaca implements ICommand {
         final EmbedBuilder embedBuilder = new EmbedBuilder();
         final Member botCreator = commandContext.getGuild().getMemberById(Config.get("OWNER_ID"));
         final long memberID = commandContext.getMessage().getAuthor().getIdLong();
+        final TextChannel channel = commandContext.getChannel();
 
-        final int hunger = IDataBaseManager.INSTANCE.getStatus(memberID, "hunger");
-        final int thirst = IDataBaseManager.INSTANCE.getStatus(memberID, "thirst");
-        final int energy = IDataBaseManager.INSTANCE.getStatus(memberID, "energy");
+        final int hunger = IDataBaseManager.INSTANCE.getAlpacaValues(memberID, "hunger");
+        final int thirst = IDataBaseManager.INSTANCE.getAlpacaValues(memberID, "thirst");
+        final int energy = IDataBaseManager.INSTANCE.getAlpacaValues(memberID, "energy");
+        final int joy = IDataBaseManager.INSTANCE.getAlpacaValues(memberID, "joy");
 
         BufferedImage alpacaIMG = null;
 
@@ -50,28 +53,28 @@ public class MyAlpaca implements ICommand {
         alpakaGraphics.setFont(new Font("SansSerif", Font.BOLD, 15));
 
         alpakaGraphics.setColor(getColorOfValues(hunger));
-        alpakaGraphics.fillRect(31, 31, (int)(hunger * 1.73), 12);
+        alpakaGraphics.fillRect(31, 31, (int)(hunger * 1.75), 12);
 
         alpakaGraphics.setColor(Color.BLACK);
-        alpakaGraphics.drawString(hunger + "/100", getXStartFront(hunger), 24);
+        alpakaGraphics.drawString(hunger + "/100", getPosition(hunger, "front"), 24);
 
         alpakaGraphics.setColor(getColorOfValues(thirst));
-        alpakaGraphics.fillRect(31, 73, (int)(thirst * 1.73), 12);
+        alpakaGraphics.fillRect(31, 73, (int)(thirst * 1.75), 12);
 
         alpakaGraphics.setColor(Color.BLACK);
-        alpakaGraphics.drawString(thirst + "/100", getXStartFront(thirst), 66);
+        alpakaGraphics.drawString(thirst + "/100", getPosition(thirst, "front"), 66);
 
         alpakaGraphics.setColor(getColorOfValues(energy));
-        alpakaGraphics.fillRect(424, 31, (int)(energy * 1.73), 12);
+        alpakaGraphics.fillRect(420, 31, (int)(energy * 1.75), 12);
 
         alpakaGraphics.setColor(Color.BLACK);
-        alpakaGraphics.drawString(energy + "/100", getXStartBack(energy), 24);
+        alpakaGraphics.drawString(energy + "/100", getPosition(energy, "back"), 24);
 
-        alpakaGraphics.setColor(Color.GREEN);
-        alpakaGraphics.fillRect(424, 73, (int)(87 * 1.73), 12);
+        alpakaGraphics.setColor(getColorOfValues(joy));
+        alpakaGraphics.fillRect(420, 73, (int)(joy * 1.75), 12);
 
         alpakaGraphics.setColor(Color.BLACK);
-        alpakaGraphics.drawString("87/100", getXStartBack(87), 66);
+        alpakaGraphics.drawString(joy + "/100", getPosition(joy, "back"), 66);
 
         File newAlpacaFile = new File("src/main/resources/editedAlpacaStats.jpg");
 
@@ -89,7 +92,7 @@ public class MyAlpaca implements ICommand {
         embedBuilder.setTimestamp(Instant.now());
         embedBuilder.setImage("attachment://editedAlpacaStats.jpg");
 
-        commandContext.getChannel().sendFile(newAlpacaFile, "editedAlpacaStats.jpg").embed(embedBuilder.build()).queue();
+        channel.sendFile(newAlpacaFile, "editedAlpacaStats.jpg").embed(embedBuilder.build()).queue();
     }
 
     @Override
@@ -129,27 +132,15 @@ public class MyAlpaca implements ICommand {
             return Color.BLACK;
     }
 
-    private int getXStartFront(int value) {
+    private int getPosition(int value, String position) {
         if (value == 100) {
-            return 144;
+            return position.equalsIgnoreCase("front") ? 145 : 534;
 
         } else if (value >= 10) {
-            return 154;
+            return position.equalsIgnoreCase("front") ? 155 : 544;
 
         } else {
-            return 164;
-        }
-    }
-
-    private int getXStartBack(int value) {
-        if (value == 100) {
-            return 536;
-
-        } else if (value >= 10) {
-            return 546;
-
-        } else {
-            return 556;
+            return position.equalsIgnoreCase("front") ? 165 : 554;
         }
     }
 }

@@ -40,7 +40,7 @@ public class Buy implements ICommand {
          itemAmount = Integer.parseInt(args.get(1));
 
       } catch (NumberFormatException error) {
-         channel.sendMessage("<:RedCross:782229279312314368> Incorrect arguments, could not resolve the amount of items").queue();
+         channel.sendMessage("<:RedCross:782229279312314368> Could not resolve the amount of items").queue();
          return;
       }
 

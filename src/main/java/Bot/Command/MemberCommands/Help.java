@@ -34,12 +34,14 @@ public class Help implements ICommand {
 
          embed.setDescription("Further information to any command:\n**```fix\n" + prefix + "help [command]\n```**");
 
+
          embed.addField("\uD83D\uDD27 Developer commands", getCommandsByPerms(prefix, PermissionLevel.DEVELOPER), true);
 
          embed.addField("\uD83D\uDC6E Admin commands", getCommandsByPerms(prefix, PermissionLevel.ADMIN), true);
 
          embed.addField("\uD83D\uDD13 Member commands", getCommandsByPerms(prefix, PermissionLevel.MEMBER), true);
 
+         embed.setThumbnail("attachment://list.png");
          embed.setFooter("Created by " + botCreator.getEffectiveName(), botCreator.getUser().getEffectiveAvatarUrl());
          embed.setTimestamp(Instant.now());
 
@@ -50,7 +52,7 @@ public class Help implements ICommand {
       ICommand command = cmdManager.getCommand(args.get(0));
 
       if (command == null) {
-         channel.sendMessage("<:RedCross:782229279312314368> No help found").queue();
+         channel.sendMessage("<:RedCross:782229279312314368> Could not retrieve help for that command").queue();
          return;
       }
 

@@ -12,10 +12,18 @@ public class Work implements ICommand {
     public void handle(CommandContext commandContext) {
         long memberID = commandContext.getGuild().getMember(commandContext.getAuthor()).getIdLong();
         final TextChannel channel = commandContext.getChannel();
-        long cooldown = IDataBaseManager.INSTANCE.getCooldown(memberID, "work") - System.currentTimeMillis();
+        long workCooldown = IDataBaseManager.INSTANCE.getCooldown(memberID, "work") - System.currentTimeMillis();
+        long sleepCooldown = IDataBaseManager.INSTANCE.getCooldown(memberID, "sleep") - System.currentTimeMillis();
 
-        if (cooldown > 0) {
-            channel.sendMessage("<:RedCross:782229279312314368> You've already worked, you have to rest **" + (int)(((cooldown / 1000) / 60) % 60) + "** minutes to work again").queue();
+        if (sleepCooldown > 0) {
+            channel.sendMessage("<:RedCross:782229279312314368> Your alpaca sleeps, it will wake up in **" + (int)(((sleepCooldown / 1000) / 60) % 60) + "** minutes").queue();
+            return;
+        }
+
+        IDataBaseManager.INSTANCE.setCooldown(memberID, "sleep", 0);
+
+        if (workCooldown > 0) {
+            channel.sendMessage("<:RedCross:782229279312314368> Your alpaca already worked, it has to rest **" + (int)(((workCooldown / 1000) / 60) % 60) + "** minutes to work again").queue();
             return;
         }
 

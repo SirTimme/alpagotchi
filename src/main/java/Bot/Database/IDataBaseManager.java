@@ -1,7 +1,7 @@
 package Bot.Database;
 
 public interface IDataBaseManager {
-    IDataBaseManager INSTANCE = new SQLiteDataSource();
+    IDataBaseManager INSTANCE = new MongoDBDataSource();
 
     String getPrefix(long guildID);
 
@@ -11,9 +11,9 @@ public interface IDataBaseManager {
 
     void setNickname(long memberID, String nickname);
 
-    int getStatus(long memberID, String column);
+    int getAlpacaValues(long memberID, String column);
 
-    void setStatus(long memberID, String column, int newValue);
+    void setAlpacaValues(long memberID, String column, int newValue);
 
     int getInventory(long memberID, String column);
 

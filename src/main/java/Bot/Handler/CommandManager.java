@@ -34,6 +34,7 @@ public class CommandManager {
         addCommand(new Pet());
         addCommand(new Gift(this.shopItemManager));
         addCommand(new Shutdown());
+        addCommand(new Sleep());
     }
 
     private void addCommand(ICommand command) {

@@ -22,7 +22,7 @@ public class Nick implements ICommand {
       }
 
       if (args.get(0).length() > 256) {
-         channel.sendMessage("<:RedCross:782229279312314368> Incorrect arguments, the nickname must not exceed **256** characters").queue();
+         channel.sendMessage("<:RedCross:782229279312314368> The nickname must not exceed **256** characters").queue();
          return;
       }
 

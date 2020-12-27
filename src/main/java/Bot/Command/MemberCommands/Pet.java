@@ -3,12 +3,26 @@ package Bot.Command.MemberCommands;
 import Bot.Command.CommandContext;
 import Bot.Command.ICommand;
 import Bot.Command.PermissionLevel;
+import Bot.Database.IDataBaseManager;
+import net.dv8tion.jda.api.entities.TextChannel;
 
 public class Pet implements ICommand {
 
    @Override
    public void handle(CommandContext commandContext) {
-      commandContext.getChannel().sendMessage("https://tenor.com/view/alpaca-small-alpaca-pet-cute-combing-gif-15237621").queue();
+      final TextChannel channel = commandContext.getChannel();
+      final long memberID = commandContext.getMember().getIdLong();
+      final int joy = IDataBaseManager.INSTANCE.getAlpacaValues(memberID, "joy");
+      int amountOfJoy = (int)(Math.random() * 10 + 1);
+
+      if (amountOfJoy + joy > 100) {
+         IDataBaseManager.INSTANCE.setAlpacaValues(memberID, "joy", joy - amountOfJoy);
+
+      } else {
+         IDataBaseManager.INSTANCE.setAlpacaValues(memberID, "joy", amountOfJoy);
+      }
+
+      channel.sendMessage("\uD83E\uDD99 Your alpaca loves to spend time with you **Joy + " + amountOfJoy + "**").queue();
    }
 
    @Override

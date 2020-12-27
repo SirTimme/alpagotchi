@@ -10,7 +10,6 @@ public class ShopItemManager {
     public ShopItemManager() {
         addShopItem(new Salad());
         addShopItem(new Waterbottle());
-        addShopItem(new Battery());
     }
 
     public List<IShopItem> getShopItems() {
