@@ -27,7 +27,7 @@ public class Pet implements ICommand {
 
    @Override
    public String getHelp(String prefix) {
-      return "`Usage: " + prefix + "pet\n" + (this.getAliases().isEmpty() ? "`" : "Aliases: " + this.getAliases() + "`\n") + "Show your alpaca some love and pet him";
+      return "`Usage: " + prefix + "pet\n" + (this.getAliases().isEmpty() ? "`" : "Aliases: " + this.getAliases() + "`\n") + "Pet your alpaca and increases his joy";
    }
 
    @Override

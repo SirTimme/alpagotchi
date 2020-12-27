@@ -59,7 +59,7 @@ public class Sleep implements ICommand {
 
    @Override
    public String getHelp(String prefix) {
-      return "`Usage: " + prefix + "sleep [durationInMinutes]\n" + (this.getAliases().isEmpty() ? "`" : "Aliases: " + this.getAliases() + "`\n") + "Your alpaca sleeps for the specified time and each 2 minutes equals 1 energy";
+      return "`Usage: " + prefix + "sleep [minutes]\n" + (this.getAliases().isEmpty() ? "`" : "Aliases: " + this.getAliases() + "`\n") + "Your alpaca sleeps for the specified time and each 2 minutes equals 1 energy";
    }
 
    @Override
