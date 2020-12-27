@@ -31,7 +31,8 @@ Items can be bought to satisfy hunger and thirst and work can be done to earn mo
 | a!inventory | inv | Shows the bought items from the shop |
 | a!myalpaca | ma, stats, alpaca | Shows your alpaca and his stats |
 | a!nick [nickname] | - | Gives your alpaca a nickname |
-| a!pet | - | Sends a GIF and pets your alpaca |
+| a!pet | - | Increases joy of your alpaca |
 | a!shop | - | Displays all items which can be bought |
 | a!wallet | balance, money | Shows your balance of fluffies |
 | a!work | - | Work to earn a random amount of fluffies |
+| a!sleep [minutes] | - | Let your alpaca sleeps  and regenerates energy |
