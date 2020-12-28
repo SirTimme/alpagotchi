@@ -13,14 +13,14 @@ public class Pet implements ICommand {
       final TextChannel channel = commandContext.getChannel();
       final long memberID = commandContext.getMember().getIdLong();
       final int joy = IDataBaseManager.INSTANCE.getAlpacaValues(memberID, "joy");
-      int amountOfJoy = (int)(Math.random() * 10 + 1);
+      int amountOfJoy = (int) (Math.random() * 10 + 1);
 
       if (amountOfJoy + joy > 100) {
-         IDataBaseManager.INSTANCE.setAlpacaValues(memberID, "joy", joy - amountOfJoy);
-
-      } else {
-         IDataBaseManager.INSTANCE.setAlpacaValues(memberID, "joy", amountOfJoy);
+         channel.sendMessage("<:RedCross:782229279312314368> The joy of your alpaca is already at the maximum").queue();
+         return;
       }
+
+      IDataBaseManager.INSTANCE.setAlpacaValues(memberID, "joy", amountOfJoy);
 
       channel.sendMessage("\uD83E\uDD99 Your alpaca loves to spend time with you **Joy + " + amountOfJoy + "**").queue();
    }
