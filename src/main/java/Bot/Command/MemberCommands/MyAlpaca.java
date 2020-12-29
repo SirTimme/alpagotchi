@@ -49,32 +49,32 @@ public class MyAlpaca implements ICommand {
             return;
         }
 
-        Graphics alpakaGraphics = alpacaIMG.getGraphics();
-        alpakaGraphics.setFont(new Font("SansSerif", Font.BOLD, 15));
+        Graphics alpacaGraphics = alpacaIMG.getGraphics();
+        alpacaGraphics.setFont(new Font("SansSerif", Font.BOLD, 15));
 
-        alpakaGraphics.setColor(getColorOfValues(hunger));
-        alpakaGraphics.fillRect(31, 31, (int)(hunger * 1.75), 12);
+        alpacaGraphics.setColor(getColorOfValues(hunger));
+        alpacaGraphics.fillRect(31, 31, (int) (hunger * 1.75), 12);
 
-        alpakaGraphics.setColor(Color.BLACK);
-        alpakaGraphics.drawString(hunger + "/100", getPosition(hunger, "front"), 24);
+        alpacaGraphics.setColor(Color.BLACK);
+        alpacaGraphics.drawString(hunger + "/100", getPosition(hunger, "front"), 24);
 
-        alpakaGraphics.setColor(getColorOfValues(thirst));
-        alpakaGraphics.fillRect(31, 73, (int)(thirst * 1.75), 12);
+        alpacaGraphics.setColor(getColorOfValues(thirst));
+        alpacaGraphics.fillRect(31, 73, (int) (thirst * 1.75), 12);
 
-        alpakaGraphics.setColor(Color.BLACK);
-        alpakaGraphics.drawString(thirst + "/100", getPosition(thirst, "front"), 66);
+        alpacaGraphics.setColor(Color.BLACK);
+        alpacaGraphics.drawString(thirst + "/100", getPosition(thirst, "front"), 66);
 
-        alpakaGraphics.setColor(getColorOfValues(energy));
-        alpakaGraphics.fillRect(420, 31, (int)(energy * 1.75), 12);
+        alpacaGraphics.setColor(getColorOfValues(energy));
+        alpacaGraphics.fillRect(420, 31, (int) (energy * 1.75), 12);
 
-        alpakaGraphics.setColor(Color.BLACK);
-        alpakaGraphics.drawString(energy + "/100", getPosition(energy, "back"), 24);
+        alpacaGraphics.setColor(Color.BLACK);
+        alpacaGraphics.drawString(energy + "/100", getPosition(energy, "back"), 24);
 
-        alpakaGraphics.setColor(getColorOfValues(joy));
-        alpakaGraphics.fillRect(420, 73, (int)(joy * 1.75), 12);
+        alpacaGraphics.setColor(getColorOfValues(joy));
+        alpacaGraphics.fillRect(420, 73, (int) (joy * 1.75), 12);
 
-        alpakaGraphics.setColor(Color.BLACK);
-        alpakaGraphics.drawString(joy + "/100", getPosition(joy, "back"), 66);
+        alpacaGraphics.setColor(Color.BLACK);
+        alpacaGraphics.drawString(joy + "/100", getPosition(joy, "back"), 66);
 
         File newAlpacaFile = new File("src/main/resources/editedAlpacaStats.jpg");
 
