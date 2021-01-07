@@ -27,7 +27,7 @@ public class Pet implements ICommand {
       } else {
          IDataBaseManager.INSTANCE.setAlpacaValues(memberID, "joy", amountOfJoy);
       }
-      channel.sendMessage("\uD83E\uDD99 Your alpaca loves to spend time with you **Joy + " + amountOfJoy + "**").queue();
+      channel.sendMessage("\uD83E\uDD99 Your alpaca loves to spend time with you **Joy + " + (amountOfJoy + joy > 100 ? (100 - joy) : amountOfJoy) + "**").queue();
    }
 
    @Override

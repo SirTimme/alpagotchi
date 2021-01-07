@@ -34,14 +34,10 @@ public class Help implements ICommand {
 
          embed.setDescription("Further information to any command:\n**```fix\n" + prefix + "help [command]\n```**");
 
-
-         embed.addField("\uD83D\uDD27 Developer commands", getCommandsByPerms(prefix, PermissionLevel.DEVELOPER), true);
-
          embed.addField("\uD83D\uDC6E Admin commands", getCommandsByPerms(prefix, PermissionLevel.ADMIN), true);
 
          embed.addField("\uD83D\uDD13 Member commands", getCommandsByPerms(prefix, PermissionLevel.MEMBER), true);
 
-         embed.setThumbnail("attachment://list.png");
          embed.setFooter("Created by " + botCreator.getEffectiveName(), botCreator.getUser().getEffectiveAvatarUrl());
          embed.setTimestamp(Instant.now());
 
