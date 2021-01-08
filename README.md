@@ -20,7 +20,7 @@ Items can be bought to satisfy hunger and thirst and work can be done to earn mo
 | -------------| ---------------| ---------------| 
 | a!buy [itemName] [1-10] | - | Buys the amount of items from the shop |
 | a!feed [itemName] [1-5] | - | Feeds the alpaca with the item |
-| a!gift [@User] [itemName] [1-5] | - | Gifts the amount of items to the mentioned user |
+| a!gift [@user] [itemName] [1-5] | - | Gifts the amount of items to the mentioned user |
 | a!help [command] | commands | Displays further information to the specified command |
 | a!inventory | inv | Shows the bought items from the shop |
 | a!myalpaca | ma, stats, alpaca | Shows your alpaca and his stats |
