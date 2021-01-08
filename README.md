@@ -7,18 +7,12 @@ Items can be bought to satisfy hunger and thirst and work can be done to earn mo
 
 ## Commands
 
-### Developer Commands
-
-| Usage        | Aliases        | Task           | 
-| -------------| ---------------| ---------------|  
-| a!decrease [enable \| disable]| - | Determines if the alpaca loses stats or not |
-| a!shutdown | - | Shutdowns the bot |
-
 ### Admin Commands
 
 | Usage        | Aliases        | Task           | 
 | -------------| ---------------| ---------------| 
 | a!setprefix [prefix] | - | Sets the prefix of the guild |
+| a!setbalance [@user] [balance] | - | Sets the balance of the mentioned user |
 
 ### Member Commands
 
