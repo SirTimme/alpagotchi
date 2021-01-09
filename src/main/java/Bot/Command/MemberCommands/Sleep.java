@@ -47,24 +47,27 @@ public class Sleep implements ICommand {
       }
 
       int sleepValue = sleepDuration / 2;
-      int energyValue = IDataBaseManager.INSTANCE.getAlpacaValues(commandContext.getAuthorID(), "energy");
+      int energy = IDataBaseManager.INSTANCE.getAlpacaValues(commandContext.getAuthorID(), "energy");
 
-      if (energyValue + sleepValue > 100) {
-         commandContext.getChannel().sendMessage("<:RedCross:782229279312314368> Your alpaca is well rested and dont need sleep").queue();
-         return;
+      if (energy + sleepValue > 100) {
+         IDataBaseManager.INSTANCE.setAlpacaValues(commandContext.getAuthorID(), "energy", 100 - energy);
+         sleepCooldown = System.currentTimeMillis() + (1000L * 60 * (100 - energy) * 2);
+
+      } else {
+         IDataBaseManager.INSTANCE.setAlpacaValues(commandContext.getAuthorID(), "energy", sleepValue);
+         sleepCooldown = System.currentTimeMillis() + (1000L * 60 * sleepDuration);
       }
 
-      sleepCooldown = System.currentTimeMillis() + (1000L * 60 * sleepDuration);
-
-      IDataBaseManager.INSTANCE.setAlpacaValues(commandContext.getAuthorID(), "energy", sleepValue);
       IDataBaseManager.INSTANCE.setCooldown(commandContext.getAuthorID(), "sleep", sleepCooldown);
 
-      commandContext.getChannel().sendMessage("\uD83D\uDCA4 Your alpaca goes to bed for **" + sleepDuration + "** minutes and rests well **Energy + " + sleepValue + "**").queue();
+      commandContext.getChannel().sendMessage("\uD83D\uDCA4 Your alpaca goes to bed for **" + (energy + sleepValue > 100 ? (100 - energy) * 2 : sleepDuration)
+            + "** minutes and rests well **Energy + " + (energy + sleepValue > 100 ? (100 - energy) : sleepValue) + "**").queue();
    }
 
    @Override
    public String getHelp(String prefix) {
-      return "`Usage: " + prefix + "sleep [minutes]\n" + (this.getAliases().isEmpty() ? "`" : "Aliases: " + this.getAliases() + "`\n") + "Your alpaca sleeps for the specified time and each 2 minutes equals 1 energy";
+      return "`Usage: " + prefix + "sleep [minutes]\n" + (this.getAliases().isEmpty() ? "`" : "Aliases: " + this.getAliases() + "`\n")
+            + "Your alpaca sleeps for the specified time and each 2 minutes equals 1 energy";
    }
 
    @Override

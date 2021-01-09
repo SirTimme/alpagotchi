@@ -25,9 +25,10 @@ public class Feed implements ICommand {
       }
 
       long sleepCooldown = IDataBaseManager.INSTANCE.getCooldown(commandContext.getAuthorID(), "sleep") - System.currentTimeMillis();
+      int remainingMinutes = (int) (sleepCooldown / 60000 % 60);
 
       if (sleepCooldown > 0) {
-         commandContext.getChannel().sendMessage("<:RedCross:782229279312314368> Your alpaca sleeps, it will wake up in **" + (int) (((sleepCooldown / 1000) / 60) % 60) + "** minutes").queue();
+         commandContext.getChannel().sendMessage("<:RedCross:782229279312314368> Your alpaca sleeps, it will wake up in **" + (remainingMinutes == 1 ? remainingMinutes + "** minute" : remainingMinutes + "** minutes")).queue();
          return;
       }
 
