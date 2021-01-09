@@ -4,7 +4,7 @@ import java.util.List;
 
 public interface ICommand {
 
-    void handle(CommandContext commandContext);
+    void execute(CommandContext commandContext);
 
     String getHelp(String prefix);
 

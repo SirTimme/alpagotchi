@@ -5,7 +5,7 @@ import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
 
 public enum PermissionLevel {
-   DEVELOPER, ADMIN, MODERATOR, MEMBER;
+   DEVELOPER, ADMIN, MEMBER;
 
    public boolean hasPerms(Member member) {
       if (this == DEVELOPER) {
@@ -14,9 +14,6 @@ public enum PermissionLevel {
 
       } else if (this == ADMIN) {
          return member.hasPermission(Permission.MANAGE_SERVER);
-
-      } else if (this == MODERATOR) {
-         return member.hasPermission(Permission.MESSAGE_MANAGE);
 
       } else {
          return member.hasPermission(Permission.MESSAGE_WRITE);

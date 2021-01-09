@@ -19,7 +19,7 @@ public class Shop implements ICommand {
    }
 
    @Override
-   public void handle(CommandContext commandContext) {
+   public void execute(CommandContext commandContext) {
       EmbedBuilder embedBuilder = new EmbedBuilder();
       final Member botCreator = commandContext.getGuild().getMemberById(Config.get("OWNER_ID"));
 

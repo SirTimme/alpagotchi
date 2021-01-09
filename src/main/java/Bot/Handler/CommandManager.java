@@ -1,5 +1,6 @@
 package Bot.Handler;
 
+import Bot.Command.AdminCommands.SetBalance;
 import Bot.Command.DeveloperCommands.Decrease;
 import Bot.Command.AdminCommands.SetPrefix;
 import Bot.Command.CommandContext;
@@ -23,7 +24,7 @@ public class CommandManager {
         addCommand(new MyAlpaca());
         addCommand(new Help(this));
         addCommand(new SetPrefix());
-        addCommand(new Wallet());
+        addCommand(new Balance());
         addCommand(new Work());
         addCommand(new Shop(this.shopItemManager));
         addCommand(new Buy(this.shopItemManager));
@@ -35,6 +36,8 @@ public class CommandManager {
         addCommand(new Gift(this.shopItemManager));
         addCommand(new Shutdown());
         addCommand(new Sleep());
+        addCommand(new SetBalance());
+        addCommand(new Init());
     }
 
     private void addCommand(ICommand command) {
@@ -68,16 +71,15 @@ public class CommandManager {
                 .replaceFirst("(?i)" + Pattern.quote(prefix), "")
                 .split("\\s+");
 
-        String invoke = split[0].toLowerCase();
-        ICommand cmd = this.getCommand(invoke);
+        ICommand command = getCommand(split[0].toLowerCase());
 
-        if (cmd == null) {
+        if (command == null) {
             return;
         }
 
         List<String> args = Arrays.asList(split).subList(1, split.length);
+        long authorID = event.getMember().getIdLong();
 
-        CommandContext commandContext = new CommandContext(event, args);
-        cmd.handle(commandContext);
+        command.execute(new CommandContext(event, args, authorID, prefix));
     }
 }

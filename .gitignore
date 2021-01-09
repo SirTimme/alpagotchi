@@ -1,5 +1,2 @@
-target/
-.idea/
+.idea
 .env
-AlpakaBot.iml
-src/main/resources/editedAlpacaStats.jpg

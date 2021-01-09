@@ -4,50 +4,52 @@ import Bot.Command.CommandContext;
 import Bot.Command.ICommand;
 import Bot.Command.PermissionLevel;
 import Bot.Database.IDataBaseManager;
-import net.dv8tion.jda.api.entities.TextChannel;
 
 public class Work implements ICommand {
 
-    @Override
-    public void handle(CommandContext commandContext) {
-        long memberID = commandContext.getGuild().getMember(commandContext.getAuthor()).getIdLong();
-        final TextChannel channel = commandContext.getChannel();
-        long workCooldown = IDataBaseManager.INSTANCE.getCooldown(memberID, "work") - System.currentTimeMillis();
-        long sleepCooldown = IDataBaseManager.INSTANCE.getCooldown(memberID, "sleep") - System.currentTimeMillis();
+   @Override
+   public void execute(CommandContext commandContext) {
 
-        if (sleepCooldown > 0) {
-            channel.sendMessage("<:RedCross:782229279312314368> Your alpaca sleeps, it will wake up in **" + (int)(((sleepCooldown / 1000) / 60) % 60) + "** minutes").queue();
-            return;
-        }
+      if (!IDataBaseManager.INSTANCE.isUserInDB(commandContext.getAuthorID())) {
+         commandContext.getChannel().sendMessage("<:RedCross:782229279312314368> You do not own a alpaca, use **" + commandContext.getPrefix() + "init** first").queue();
+         return;
+      }
 
-        IDataBaseManager.INSTANCE.setCooldown(memberID, "sleep", 0);
+      long sleepCooldown = IDataBaseManager.INSTANCE.getCooldown(commandContext.getAuthorID(), "sleep") - System.currentTimeMillis();
 
-        if (workCooldown > 0) {
-            channel.sendMessage("<:RedCross:782229279312314368> Your alpaca already worked, it has to rest **" + (int)(((workCooldown / 1000) / 60) % 60) + "** minutes to work again").queue();
-            return;
-        }
+      if (sleepCooldown > 0) {
+         commandContext.getChannel().sendMessage("<:RedCross:782229279312314368> Your alpaca sleeps, it will wake up in **" + (int) (((sleepCooldown / 1000) / 60) % 60) + "** minutes").queue();
+         return;
+      }
 
-        long newCooldown = System.currentTimeMillis() + 1200000;
-        int amountOfFluffies = (int)(Math.random() * 15 + 1);
+      long workCooldown = IDataBaseManager.INSTANCE.getCooldown(commandContext.getAuthorID(), "work") - System.currentTimeMillis();
 
-        IDataBaseManager.INSTANCE.setInventory(memberID, "currency", amountOfFluffies);
-        IDataBaseManager.INSTANCE.setCooldown(memberID, "work", newCooldown);
+      if (workCooldown > 0) {
+         commandContext.getChannel().sendMessage("<:RedCross:782229279312314368> Your alpaca already worked, it has to rest **" + (int) (((workCooldown / 1000) / 60) % 60) + "** minutes to work again").queue();
+         return;
+      }
 
-        channel.sendMessage("⛏ You went to work and earned **" + (amountOfFluffies > 1 ? amountOfFluffies + "** fluffies" : amountOfFluffies + "** fluffy")).queue();
-    }
+      long newCooldown = System.currentTimeMillis() + 1200000;
+      int amountOfFluffies = (int) (Math.random() * 15 + 1);
 
-    @Override
-    public String getHelp(String prefix) {
-        return "`Usage: " + prefix + "work\n" + (this.getAliases().isEmpty() ? "`" : "Aliases: " + this.getAliases() + "`\n") + "Work for a random amount of fluffies";
-    }
+      IDataBaseManager.INSTANCE.setInventory(commandContext.getAuthorID(), "currency", amountOfFluffies);
+      IDataBaseManager.INSTANCE.setCooldown(commandContext.getAuthorID(), "work", newCooldown);
 
-    @Override
-    public String getName() {
-        return "work";
-    }
+      commandContext.getChannel().sendMessage("⛏ You went to work and earned **" + (amountOfFluffies > 1 ? amountOfFluffies + "** fluffies" : amountOfFluffies + "** fluffy")).queue();
+   }
 
-    @Override
-    public Enum<PermissionLevel> getPermissionLevel() {
-        return PermissionLevel.MEMBER;
-    }
+   @Override
+   public String getHelp(String prefix) {
+      return "`Usage: " + prefix + "work\n" + (this.getAliases().isEmpty() ? "`" : "Aliases: " + this.getAliases() + "`\n") + "Work for a random amount of fluffies";
+   }
+
+   @Override
+   public String getName() {
+      return "work";
+   }
+
+   @Override
+   public Enum<PermissionLevel> getPermissionLevel() {
+      return PermissionLevel.MEMBER;
+   }
 }

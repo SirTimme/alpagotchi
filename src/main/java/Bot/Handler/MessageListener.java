@@ -1,28 +1,24 @@
 package Bot.Handler;
 
 import Bot.Database.IDataBaseManager;
-import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 public class MessageListener extends ListenerAdapter {
-    private final CommandManager manager;
+    private final CommandManager cmdManager;
 
     public MessageListener() {
-        this.manager = new CommandManager();
+        this.cmdManager = new CommandManager();
     }
 
     @Override
     public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
-        final User user = event.getAuthor();
-        final long guildID = event.getGuild().getIdLong();
-        final String prefix = IDataBaseManager.INSTANCE.getPrefix(guildID);
-        final String rawMsg = event.getMessage().getContentRaw();
+        final String prefix = IDataBaseManager.INSTANCE.getPrefix(event.getGuild().getIdLong());
 
-        if (user.isBot() || event.isWebhookMessage() || !rawMsg.startsWith(prefix)) {
+        if (event.getAuthor().isBot() || event.isWebhookMessage() || !event.getMessage().getContentRaw().startsWith(prefix)) {
             return;
         }
 
-        manager.handle(event, prefix);
+        cmdManager.handle(event, prefix);
     }
 }

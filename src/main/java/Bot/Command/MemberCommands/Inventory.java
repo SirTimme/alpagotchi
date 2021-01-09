@@ -4,23 +4,25 @@ import Bot.Command.CommandContext;
 import Bot.Command.ICommand;
 import Bot.Command.PermissionLevel;
 import Bot.Database.IDataBaseManager;
-import net.dv8tion.jda.api.entities.TextChannel;
 
 import java.util.List;
 
 public class Inventory implements ICommand {
 
    @Override
-   public void handle(CommandContext commandContext) {
-      final TextChannel channel = commandContext.getChannel();
-      final long memberID = commandContext.getGuild().getMember(commandContext.getAuthor()).getIdLong();
+   public void execute(CommandContext commandContext) {
 
-      int amountOfSalad = IDataBaseManager.INSTANCE.getInventory(memberID, "salad");
-      int amountOfWaterbottle = IDataBaseManager.INSTANCE.getInventory(memberID, "waterbottle");
+      if (!IDataBaseManager.INSTANCE.isUserInDB(commandContext.getAuthorID())) {
+         commandContext.getChannel().sendMessage("<:RedCross:782229279312314368> You do not own a alpaca, use **" + commandContext.getPrefix() + "init** first").queue();
+         return;
+      }
 
-      channel.sendMessage("\uD83D\uDCE6 Your inventory contains **" +
-              (amountOfSalad > 1 ? amountOfSalad + "** salads" : amountOfSalad + "** salad") + " and **" +
-              (amountOfWaterbottle > 1 ? amountOfWaterbottle + "** waterbottles" : amountOfWaterbottle + "** waterbottle")).queue();
+      int amountOfSalad = IDataBaseManager.INSTANCE.getInventory(commandContext.getAuthorID(), "salad");
+      int amountOfWaterbottle = IDataBaseManager.INSTANCE.getInventory(commandContext.getAuthorID(), "waterbottle");
+
+      commandContext.getChannel().sendMessage("\uD83D\uDCE6 Your inventory contains **" +
+            (amountOfSalad > 1 ? amountOfSalad + "** salads" : amountOfSalad + "** salad") + " and **" +
+            (amountOfWaterbottle > 1 ? amountOfWaterbottle + "** waterbottles" : amountOfWaterbottle + "** waterbottle")).queue();
    }
 
    @Override

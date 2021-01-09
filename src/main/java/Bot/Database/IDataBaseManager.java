@@ -11,17 +11,21 @@ public interface IDataBaseManager {
 
     void setNickname(long memberID, String nickname);
 
-    int getAlpacaValues(long memberID, String column);
+    Integer getAlpacaValues(long memberID, String column);
 
     void setAlpacaValues(long memberID, String column, int newValue);
 
-    int getInventory(long memberID, String column);
+    Integer getInventory(long memberID, String column);
 
     void setInventory(long memberID, String column, int newValue);
 
-    long getCooldown(long memberID, String column);
+    Long getCooldown(long memberID, String column);
 
     void setCooldown(long memberID, String column, long newValue);
 
     void decreaseValues();
+
+    void createDBEntry(long memberID);
+
+    boolean isUserInDB(long memberID);
 }

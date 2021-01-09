@@ -4,31 +4,34 @@ import Bot.Command.CommandContext;
 import Bot.Command.ICommand;
 import Bot.Command.PermissionLevel;
 import Bot.Database.IDataBaseManager;
-import net.dv8tion.jda.api.entities.TextChannel;
 
 import java.util.List;
 
 public class Nick implements ICommand {
 
    @Override
-   public void handle(CommandContext commandContext) {
-      final TextChannel channel = commandContext.getChannel();
-      final long memberID = commandContext.getGuild().getMember(commandContext.getAuthor()).getIdLong();
+   public void execute(CommandContext commandContext) {
+
+      if (!IDataBaseManager.INSTANCE.isUserInDB(commandContext.getAuthorID())) {
+         commandContext.getChannel().sendMessage("<:RedCross:782229279312314368> You do not own a alpaca, use **" + commandContext.getPrefix() + "init** first").queue();
+         return;
+      }
+
       final List<String> args = commandContext.getArgs();
 
       if (args.isEmpty()) {
-         channel.sendMessage("<:RedCross:782229279312314368> Missing arguments").queue();
+         commandContext.getChannel().sendMessage("<:RedCross:782229279312314368> Missing arguments").queue();
          return;
       }
 
       if (args.get(0).length() > 256) {
-         channel.sendMessage("<:RedCross:782229279312314368> The nickname must not exceed **256** characters").queue();
+         commandContext.getChannel().sendMessage("<:RedCross:782229279312314368> The nickname must not exceed **256** characters").queue();
          return;
       }
 
       String nickname = args.get(0);
-      IDataBaseManager.INSTANCE.setNickname(memberID, nickname);
-      channel.sendMessage("\uD83D\uDD8A The nickname of your alpaca has been set to **" + nickname + "**").queue();
+      IDataBaseManager.INSTANCE.setNickname(commandContext.getAuthorID(), nickname);
+      commandContext.getChannel().sendMessage("\uD83D\uDD8A The nickname of your alpaca has been set to **" + nickname + "**").queue();
    }
 
    @Override

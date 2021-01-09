@@ -4,31 +4,30 @@ import Bot.Command.CommandContext;
 import Bot.Command.ICommand;
 import Bot.Command.PermissionLevel;
 import Bot.Database.IDataBaseManager;
-import net.dv8tion.jda.api.entities.TextChannel;
 
 import java.util.List;
 
 public class SetPrefix implements ICommand {
 
     @Override
-    public void handle(CommandContext commandContext) {
-        final TextChannel channel = commandContext.getChannel();
-        final List<String> args = commandContext.getArgs();
+    public void execute(CommandContext commandContext) {
 
         if (!PermissionLevel.ADMIN.hasPerms(commandContext.getMember())) {
-            channel.sendMessage("<:RedCross:782229279312314368> This is a admin-only command").queue();
+            commandContext.getChannel().sendMessage("<:RedCross:782229279312314368> This is a admin-only command").queue();
             return;
         }
 
+        final List<String> args = commandContext.getArgs();
+
         if (args.isEmpty()) {
-            channel.sendMessage("<:RedCross:782229279312314368> Missing arguments").queue();
+            commandContext.getChannel().sendMessage("<:RedCross:782229279312314368> Missing arguments").queue();
             return;
         }
 
         String newPrefix = String.join("", args);
         IDataBaseManager.INSTANCE.setPrefix(commandContext.getGuild().getIdLong(), newPrefix);
 
-        channel.sendMessage("<:GreenTick:782229268914372609> New prefix has been set to **" + newPrefix + "**").queue();
+        commandContext.getChannel().sendMessage("<:GreenTick:782229268914372609> The prefix of **" + commandContext.getGuild().getName() + "** has been set to **" + newPrefix + "**").queue();
     }
 
     @Override

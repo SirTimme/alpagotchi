@@ -23,19 +23,15 @@ public class MyAlpaca implements ICommand {
     private static final Logger LOGGER = LoggerFactory.getLogger(MyAlpaca.class);
 
     @Override
-    public void handle(CommandContext commandContext) {
-        final File alpacaStats = new File("src/main/resources/alpacaStats.jpg");
-        final EmbedBuilder embedBuilder = new EmbedBuilder();
-        final Member botCreator = commandContext.getGuild().getMemberById(Config.get("OWNER_ID"));
-        final long memberID = commandContext.getMessage().getAuthor().getIdLong();
-        final TextChannel channel = commandContext.getChannel();
+    public void execute(CommandContext commandContext) {
 
-        final int hunger = IDataBaseManager.INSTANCE.getAlpacaValues(memberID, "hunger");
-        final int thirst = IDataBaseManager.INSTANCE.getAlpacaValues(memberID, "thirst");
-        final int energy = IDataBaseManager.INSTANCE.getAlpacaValues(memberID, "energy");
-        final int joy = IDataBaseManager.INSTANCE.getAlpacaValues(memberID, "joy");
+        if (!IDataBaseManager.INSTANCE.isUserInDB(commandContext.getAuthorID())) {
+            commandContext.getChannel().sendMessage("<:RedCross:782229279312314368> You do not own a alpaca, use **" + commandContext.getPrefix() + "init** first").queue();
+            return;
+        }
 
         BufferedImage alpacaIMG = null;
+        final File alpacaStats = new File("src/main/resources/alpacaStats.jpg");
 
         try {
             alpacaIMG = ImageIO.read(alpacaStats);
@@ -49,32 +45,31 @@ public class MyAlpaca implements ICommand {
             return;
         }
 
+        final int hunger = IDataBaseManager.INSTANCE.getAlpacaValues(commandContext.getAuthorID(), "hunger");
+        final int thirst = IDataBaseManager.INSTANCE.getAlpacaValues(commandContext.getAuthorID(), "thirst");
+        final int energy = IDataBaseManager.INSTANCE.getAlpacaValues(commandContext.getAuthorID(), "energy");
+        final int joy = IDataBaseManager.INSTANCE.getAlpacaValues(commandContext.getAuthorID(), "joy");
+
         Graphics alpacaGraphics = alpacaIMG.getGraphics();
         alpacaGraphics.setFont(new Font("SansSerif", Font.BOLD, 15));
+        alpacaGraphics.setColor(Color.BLACK);
+
+        alpacaGraphics.drawString(hunger + "/100", getPosition(hunger, "front"), 24);
+        alpacaGraphics.drawString(thirst + "/100", getPosition(thirst, "front"), 66);
+        alpacaGraphics.drawString(energy + "/100", getPosition(energy, "back"), 24);
+        alpacaGraphics.drawString(joy + "/100", getPosition(joy, "back"), 66);
 
         alpacaGraphics.setColor(getColorOfValues(hunger));
         alpacaGraphics.fillRect(31, 31, (int) (hunger * 1.75), 12);
 
-        alpacaGraphics.setColor(Color.BLACK);
-        alpacaGraphics.drawString(hunger + "/100", getPosition(hunger, "front"), 24);
-
         alpacaGraphics.setColor(getColorOfValues(thirst));
         alpacaGraphics.fillRect(31, 73, (int) (thirst * 1.75), 12);
-
-        alpacaGraphics.setColor(Color.BLACK);
-        alpacaGraphics.drawString(thirst + "/100", getPosition(thirst, "front"), 66);
 
         alpacaGraphics.setColor(getColorOfValues(energy));
         alpacaGraphics.fillRect(420, 31, (int) (energy * 1.75), 12);
 
-        alpacaGraphics.setColor(Color.BLACK);
-        alpacaGraphics.drawString(energy + "/100", getPosition(energy, "back"), 24);
-
         alpacaGraphics.setColor(getColorOfValues(joy));
         alpacaGraphics.fillRect(420, 73, (int) (joy * 1.75), 12);
-
-        alpacaGraphics.setColor(Color.BLACK);
-        alpacaGraphics.drawString(joy + "/100", getPosition(joy, "back"), 66);
 
         File newAlpacaFile = new File("src/main/resources/editedAlpacaStats.jpg");
 
@@ -85,14 +80,17 @@ public class MyAlpaca implements ICommand {
             LOGGER.error(error.getMessage());
         }
 
-        embedBuilder.setTitle("" + IDataBaseManager.INSTANCE.getNickname(memberID) + "");
+        final EmbedBuilder embedBuilder = new EmbedBuilder();
+        final Member botCreator = commandContext.getGuild().getMemberById(Config.get("OWNER_ID"));
+
+        embedBuilder.setTitle("" + IDataBaseManager.INSTANCE.getNickname(commandContext.getAuthorID()) + "");
         embedBuilder.setDescription("_Have a llamazing day!_");
         embedBuilder.setThumbnail(commandContext.getMember().getUser().getAvatarUrl());
         embedBuilder.setFooter("Created by " + botCreator.getEffectiveName(), botCreator.getUser().getEffectiveAvatarUrl());
         embedBuilder.setTimestamp(Instant.now());
         embedBuilder.setImage("attachment://editedAlpacaStats.jpg");
 
-        channel.sendFile(newAlpacaFile, "editedAlpacaStats.jpg").embed(embedBuilder.build()).queue();
+        commandContext.getChannel().sendFile(newAlpacaFile, "editedAlpacaStats.jpg").embed(embedBuilder.build()).queue();
     }
 
     @Override

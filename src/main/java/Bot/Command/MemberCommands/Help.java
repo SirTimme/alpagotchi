@@ -8,7 +8,6 @@ import Bot.Command.ICommand;
 import Bot.Database.IDataBaseManager;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.entities.TextChannel;
 
 import java.time.Instant;
 import java.util.List;
@@ -21,9 +20,8 @@ public class Help implements ICommand {
    }
 
    @Override
-   public void handle(CommandContext commandContext) {
+   public void execute(CommandContext commandContext) {
       final List<String> args = commandContext.getArgs();
-      final TextChannel channel = commandContext.getChannel();
       final String prefix = IDataBaseManager.INSTANCE.getPrefix(commandContext.getGuild().getIdLong());
 
       if (args.isEmpty()) {
@@ -41,18 +39,18 @@ public class Help implements ICommand {
          embed.setFooter("Created by " + botCreator.getEffectiveName(), botCreator.getUser().getEffectiveAvatarUrl());
          embed.setTimestamp(Instant.now());
 
-         channel.sendMessage(embed.build()).queue();
+         commandContext.getChannel().sendMessage(embed.build()).queue();
          return;
       }
 
       ICommand command = cmdManager.getCommand(args.get(0));
 
       if (command == null) {
-         channel.sendMessage("<:RedCross:782229279312314368> Could not retrieve help for that command").queue();
+         commandContext.getChannel().sendMessage("<:RedCross:782229279312314368> Could not retrieve help for that command").queue();
          return;
       }
 
-      channel.sendMessage(command.getHelp(prefix)).queue();
+      commandContext.getChannel().sendMessage(command.getHelp(prefix)).queue();
    }
 
    @Override
