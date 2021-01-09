@@ -49,6 +49,11 @@ public class Sleep implements ICommand {
       int sleepValue = sleepDuration / 2;
       int energy = IDataBaseManager.INSTANCE.getAlpacaValues(commandContext.getAuthorID(), "energy");
 
+      if (energy == 100) {
+         commandContext.getChannel().sendMessage("<:RedCross:782229279312314368> The energy of your alpaca is already at the maximum").queue();
+         return;
+      }
+
       if (energy + sleepValue > 100) {
          IDataBaseManager.INSTANCE.setAlpacaValues(commandContext.getAuthorID(), "energy", 100 - energy);
          sleepCooldown = System.currentTimeMillis() + (1000L * 60 * (100 - energy) * 2);
