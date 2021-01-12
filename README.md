@@ -30,3 +30,4 @@ Items can be bought to satisfy hunger and thirst and work can be done to earn mo
 | a!wallet | balance, money | Shows your balance of fluffies |
 | a!work | - | Work to earn a random amount of fluffies |
 | a!sleep [minutes] | - | Let your alpaca sleeps  and regenerates energy |
+| a!outfit [outfit] | - | Change the appearance of your alpaca |
