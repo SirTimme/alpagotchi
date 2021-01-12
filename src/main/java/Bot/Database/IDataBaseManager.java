@@ -9,7 +9,11 @@ public interface IDataBaseManager {
 
     String getNickname(long memberID);
 
-    void setNickname(long memberID, String nickname);
+    void setNickname(long memberID, String newNickname);
+
+    String getOutfit(long memberID);
+
+    void setOutfit(long memberID, String newOutfit);
 
     Integer getAlpacaValues(long memberID, String column);
 

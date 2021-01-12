@@ -29,11 +29,6 @@ public class ShopItemManager {
     }
 
     private void addShopItem(IShopItem item) {
-        boolean nameFound = this.shopItems.stream().anyMatch(shopItem -> shopItem.getName().equalsIgnoreCase(item.getName()));
-
-        if (nameFound) {
-            throw new IllegalArgumentException("A shop item with this name already exists!");
-        }
         shopItems.add(item);
     }
 }

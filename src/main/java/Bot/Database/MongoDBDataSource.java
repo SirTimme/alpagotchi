@@ -56,18 +56,40 @@ public class MongoDBDataSource implements IDataBaseManager {
 
       if (resultDoc != null) {
          return resultDoc.get("alpaca", Document.class).getString("nickname");
-
       }
 
       return null;
    }
 
    @Override
-   public void setNickname(long memberID, String nickname) {
+   public void setNickname(long memberID, String newNickname) {
       Document resultDoc = alpacaCollection.find(Filters.eq("_id", memberID)).first();
 
       if (resultDoc != null) {
-         alpacaCollection.updateOne(resultDoc, Updates.set("alpaca.nickname", nickname));
+         alpacaCollection.updateOne(resultDoc, Updates.set("alpaca.nickname", newNickname));
+         return;
+      }
+
+      LOGGER.error("Could not found the member " + memberID + " in the database");
+   }
+
+   @Override
+   public String getOutfit(long memberID) {
+      Document resultDoc = alpacaCollection.find(Filters.eq("_id", memberID)).first();
+
+      if (resultDoc != null) {
+         return resultDoc.get("alpaca", Document.class).getString("outfit");
+      }
+
+      return null;
+   }
+
+   @Override
+   public void setOutfit(long memberID, String newOutfit) {
+      Document resultDoc = alpacaCollection.find(Filters.eq("_id", memberID)).first();
+
+      if (resultDoc != null) {
+         alpacaCollection.updateOne(resultDoc, Updates.set("alpaca.outfit", newOutfit));
          return;
       }
 
@@ -175,6 +197,7 @@ public class MongoDBDataSource implements IDataBaseManager {
                   .append("thirst", 100)
                   .append("energy", 100)
                   .append("joy", 100))
+                  .append("outfit", "default")
             .append("inventory", new Document()
                   .append("currency", 0)
                   .append("salad", 0)
