@@ -5,6 +5,8 @@ import Bot.Command.ICommand;
 import Bot.Command.PermissionLevel;
 import Bot.Database.IDataBaseManager;
 
+import java.util.concurrent.TimeUnit;
+
 public class Work implements ICommand {
 
    @Override
@@ -16,7 +18,7 @@ public class Work implements ICommand {
       }
 
       long sleepCooldown = IDataBaseManager.INSTANCE.getCooldown(commandContext.getAuthorID(), "sleep") - System.currentTimeMillis();
-      int remainingSleep = (int) (sleepCooldown / 60000 % 60);
+      int remainingSleep = (int) TimeUnit.MILLISECONDS.toMinutes(sleepCooldown);
 
       if (sleepCooldown > 0) {
          commandContext.getChannel().sendMessage("<:RedCross:782229279312314368> Your alpaca sleeps, it will wake up in **" + (remainingSleep == 1 ? remainingSleep + "** minute" : remainingSleep + "** minutes")).queue();
@@ -24,7 +26,7 @@ public class Work implements ICommand {
       }
 
       long workCooldown = IDataBaseManager.INSTANCE.getCooldown(commandContext.getAuthorID(), "work") - System.currentTimeMillis();
-      int remainingWork = (int) (workCooldown / 60000 % 60);
+      int remainingWork = (int) TimeUnit.MILLISECONDS.toMinutes(workCooldown);
 
       if (workCooldown > 0) {
          commandContext.getChannel().sendMessage("<:RedCross:782229279312314368> Your alpaca already worked, it has to rest **" + (remainingWork == 1 ? remainingWork + "** minute" : remainingWork + "** minutes") + " to work again").queue();

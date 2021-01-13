@@ -8,6 +8,7 @@ import Bot.Shop.IShopItem;
 import Bot.Shop.ShopItemManager;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class Feed implements ICommand {
    private final ShopItemManager shopItemManager;
@@ -25,7 +26,7 @@ public class Feed implements ICommand {
       }
 
       long sleepCooldown = IDataBaseManager.INSTANCE.getCooldown(commandContext.getAuthorID(), "sleep") - System.currentTimeMillis();
-      int remainingMinutes = (int) (sleepCooldown / 60000 % 60);
+      int remainingMinutes = (int) TimeUnit.MILLISECONDS.toMinutes(sleepCooldown);
 
       if (sleepCooldown > 0) {
          commandContext.getChannel().sendMessage("<:RedCross:782229279312314368> Your alpaca sleeps, it will wake up in **" + (remainingMinutes == 1 ? remainingMinutes + "** minute" : remainingMinutes + "** minutes")).queue();
