@@ -26,7 +26,6 @@ public class Pet implements ICommand {
 
       if (amountOfJoy + joy > 100) {
          IDataBaseManager.INSTANCE.setAlpacaValues(commandContext.getAuthorID(), "joy", 100 - joy);
-
       } else {
          IDataBaseManager.INSTANCE.setAlpacaValues(commandContext.getAuthorID(), "joy", amountOfJoy);
       }

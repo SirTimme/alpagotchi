@@ -20,7 +20,7 @@ public class Nick implements ICommand {
       final List<String> args = commandContext.getArgs();
 
       if (args.isEmpty()) {
-         commandContext.getChannel().sendMessage("<:RedCross:782229279312314368> Missing arguments").queue();
+         commandContext.getChannel().sendMessage("<:RedCross:782229279312314368> Could not resolve the specified nickname").queue();
          return;
       }
 

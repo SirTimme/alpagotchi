@@ -24,6 +24,13 @@ public class Sleep implements ICommand {
          return;
       }
 
+      int energyValue = IDataBaseManager.INSTANCE.getAlpacaValues(commandContext.getAuthorID(), "energy");
+
+      if (energyValue == 100) {
+         commandContext.getChannel().sendMessage("<:RedCross:782229279312314368> The energy of your alpaca is already at the maximum").queue();
+         return;
+      }
+
       final List<String> args = commandContext.getArgs();
 
       if (args.isEmpty()) {
@@ -35,7 +42,6 @@ public class Sleep implements ICommand {
 
       try {
          sleepDuration = Integer.parseInt(args.get(0));
-
       } catch (NumberFormatException error) {
          commandContext.getChannel().sendMessage("<:RedCross:782229279312314368> Could not resolve the sleep duration").queue();
          return;
@@ -47,19 +53,19 @@ public class Sleep implements ICommand {
       }
 
       int sleepValue = sleepDuration / 2;
-      int energyValue = IDataBaseManager.INSTANCE.getAlpacaValues(commandContext.getAuthorID(), "energy");
 
       if (energyValue + sleepValue > 100) {
-         commandContext.getChannel().sendMessage("<:RedCross:782229279312314368> Your alpaca is well rested and dont need sleep").queue();
-         return;
+         sleepCooldown = System.currentTimeMillis() + (1000L * 60 * (100 - energyValue) * 2);
+         IDataBaseManager.INSTANCE.setAlpacaValues(commandContext.getAuthorID(), "energy", 100 - energyValue);
+      } else {
+         sleepCooldown = System.currentTimeMillis() + (1000L * 60 * sleepDuration);
+         IDataBaseManager.INSTANCE.setAlpacaValues(commandContext.getAuthorID(), "energy", sleepValue);
       }
 
-      sleepCooldown = System.currentTimeMillis() + (1000L * 60 * sleepDuration);
-
-      IDataBaseManager.INSTANCE.setAlpacaValues(commandContext.getAuthorID(), "energy", sleepValue);
       IDataBaseManager.INSTANCE.setCooldown(commandContext.getAuthorID(), "sleep", sleepCooldown);
 
-      commandContext.getChannel().sendMessage("\uD83D\uDCA4 Your alpaca goes to bed for **" + sleepDuration + "** minutes and rests well **Energy + " + sleepValue + "**").queue();
+      commandContext.getChannel().sendMessage("\uD83D\uDCA4 Your alpaca goes to bed for **" + (energyValue + sleepValue > 100 ? (100 - energyValue) * 2 + "** " : sleepDuration + "** ")
+            + "minutes and rests well **Energy + " + (energyValue + sleepValue > 100 ? 100 - energyValue + "** " : sleepValue + "** ") + "").queue();
    }
 
    @Override

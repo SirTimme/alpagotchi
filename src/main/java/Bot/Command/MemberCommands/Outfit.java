@@ -37,7 +37,7 @@ public class Outfit implements ICommand {
 			embedBuilder.setTitle("Available outfits");
 
 			for (IOutfit outfit : outfitManager.getOutfits()) {
-				embedBuilder.addField(outfit.getEmoji() + " " + outfit.getOutfitName(), outfit.getDescription(), false);
+				embedBuilder.addField(outfit.getEmoji() + " " + outfit.getName(), outfit.getDescription(), false);
 			}
 
 			embedBuilder.setFooter("Created by " + botCreator.getEffectiveName(), botCreator.getUser().getEffectiveAvatarUrl());
@@ -54,14 +54,14 @@ public class Outfit implements ICommand {
 			return;
 		}
 
-		IDataBaseManager.INSTANCE.setOutfit(commandContext.getAuthorID(), chosenOutfit.getOutfitName());
+		IDataBaseManager.INSTANCE.setOutfit(commandContext.getAuthorID(), chosenOutfit.getName());
 
-		commandContext.getChannel().sendMessage("\uD83D\uDC54 The outfit of your alpaca has been set to **" + chosenOutfit.getOutfitName() + "**").queue();
+		commandContext.getChannel().sendMessage("\uD83D\uDC54 The outfit of your alpaca has been set to **" + chosenOutfit.getName() + "**").queue();
 	}
 
 	@Override
 	public String getHelp(String prefix) {
-		return "`Usage: " + prefix + "outfit <outfit>\n" + (this.getAliases().isEmpty() ? "`" : "Aliases: " + this.getAliases() + "`\n") + "Change the appearance of your alpaca, pass no outfit to see all available outfits";
+		return "`Usage: " + prefix + "outfit [outfit]\n" + (this.getAliases().isEmpty() ? "`" : "Aliases: " + this.getAliases() + "`\n") + "Change the appearance of your alpaca, pass no outfit to see all available outfits";
 	}
 
 	@Override

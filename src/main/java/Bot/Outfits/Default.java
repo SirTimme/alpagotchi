@@ -3,12 +3,12 @@ package Bot.Outfits;
 public class Default implements IOutfit {
 
 	@Override
-	public String getOutfitName() {
+	public String getName() {
 		return "default";
 	}
 
 	@Override
-	public String getOutfitURl() {
+	public String getImgUrl() {
 		return null;
 	}
 

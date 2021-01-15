@@ -40,11 +40,10 @@ public class MyAlpaca implements ICommand {
 		BufferedImage alpaca;
 
 		try {
-			alpaca = ImageIO.read(new File("src/main/resources/alpaca.jpg"));
+			alpaca = ImageIO.read(new File("src/main/resources/assets/alpaca.jpg"));
 
 		} catch (IOException error) {
 			LOGGER.error(error.getMessage());
-			commandContext.getChannel().sendMessage("<:RedCross:782229279312314368> An error occurred, please message this incident to **SirTimme#6969**").queue();
 			return;
 		}
 
@@ -75,12 +74,11 @@ public class MyAlpaca implements ICommand {
 		alpacaGraphics.setColor(getColorOfValues(joy));
 		alpacaGraphics.fillRect(420, 73, (int) (joy * 1.75), 12);
 
-		if (!currentOutfit.getOutfitName().equals("default")) {
+		if (!currentOutfit.getName().equals("default")) {
 			BufferedImage outfit;
 
 			try {
-				outfit = ImageIO.read(new File(outfitManager.getOutfit(IDataBaseManager.INSTANCE.getOutfit(commandContext.getAuthorID())).getOutfitURl()));
-
+				outfit = ImageIO.read(new File(outfitManager.getOutfit(IDataBaseManager.INSTANCE.getOutfit(commandContext.getAuthorID())).getImgUrl()));
 			} catch (IOException error) {
 				LOGGER.error(error.getMessage());
 				return;
@@ -93,11 +91,8 @@ public class MyAlpaca implements ICommand {
 
 		try {
 			ImageIO.write(alpaca, "jpg", newAlpacaFile);
-
 		} catch (IOException error) {
 			LOGGER.error(error.getMessage());
-			commandContext.getChannel().sendMessage("<:RedCross:782229279312314368> An error occurred, please message this incident to **SirTimme#6969**").queue();
-			return;
 		}
 
 		final EmbedBuilder embedBuilder = new EmbedBuilder();

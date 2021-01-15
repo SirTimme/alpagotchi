@@ -42,7 +42,6 @@ public class Buy implements ICommand {
 
       try {
          itemAmount = Integer.parseInt(args.get(1));
-
       } catch (NumberFormatException error) {
          commandContext.getChannel().sendMessage("<:RedCross:782229279312314368> Could not resolve the amount of items").queue();
          return;

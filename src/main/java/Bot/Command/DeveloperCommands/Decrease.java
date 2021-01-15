@@ -48,7 +48,6 @@ public class Decrease implements ICommand {
             }
          }, 0, 1000 * 7200);
          commandContext.getChannel().sendMessage("<:GreenTick:782229268914372609> Alpacas begin to lose stats over time").queue();
-
       } else {
          this.sqlTask.cancel();
          isTimerRunning = false;

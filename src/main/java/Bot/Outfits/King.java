@@ -3,12 +3,12 @@ package Bot.Outfits;
 public class King implements IOutfit {
 
 	@Override
-	public String getOutfitName() {
+	public String getName() {
 		return "king";
 	}
 
 	@Override
-	public String getOutfitURl() {
+	public String getImgUrl() {
 		return "src/main/resources/outfits/king.png";
 	}
 

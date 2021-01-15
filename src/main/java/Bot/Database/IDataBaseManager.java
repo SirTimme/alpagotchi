@@ -15,15 +15,15 @@ public interface IDataBaseManager {
 
     void setOutfit(long memberID, String newOutfit);
 
-    Integer getAlpacaValues(long memberID, String column);
+    int getAlpacaValues(long memberID, String column);
 
     void setAlpacaValues(long memberID, String column, int newValue);
 
-    Integer getInventory(long memberID, String column);
+    int getInventory(long memberID, String column);
 
     void setInventory(long memberID, String column, int newValue);
 
-    Long getCooldown(long memberID, String column);
+    long getCooldown(long memberID, String column);
 
     void setCooldown(long memberID, String column, long newValue);
 

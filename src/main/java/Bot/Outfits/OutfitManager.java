@@ -23,7 +23,7 @@ public class OutfitManager {
 		String searchLower = search.toLowerCase();
 
 		for (IOutfit outfit : this.outfits) {
-			if (outfit.getOutfitName().equals(searchLower)) {
+			if (outfit.getName().equals(searchLower)) {
 				return outfit;
 			}
 		}

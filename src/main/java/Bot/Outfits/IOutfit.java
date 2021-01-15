@@ -1,13 +1,14 @@
 package Bot.Outfits;
 
 public interface IOutfit {
-	String getOutfitName();
 
-	String getOutfitURl();
+	String getImgUrl();
 
 	int getX();
 
 	int getY();
+
+	String getName();
 
 	String getEmoji();
 
