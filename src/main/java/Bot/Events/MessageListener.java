@@ -31,8 +31,8 @@ public class MessageListener extends ListenerAdapter {
 	}
 
 	private boolean CheckPerms(GuildMessageReceivedEvent event)  {
-		final Role botRole = event.getJDA().getRoleById(795639485932896305L);
-		final Role everyoneRole = event.getJDA().getRoleById(795637300661977129L);
+		final Role botRole = event.getJDA().getRoleById(781068971759501343L);
+		final Role everyoneRole = event.getJDA().getRoleById(769241891975069716L);
 
 		if (botRole == null || everyoneRole == null) {
 			LOGGER.error("Could not find the role");
