@@ -39,8 +39,8 @@ public class MessageListener extends ListenerAdapter {
 			return false;
 		}
 
-		final EnumSet<Permission> channelDeniesBot = event.getChannel().getPermissionOverride(botRole).getDenied();
-		final EnumSet<Permission> channelDeniesEveryone = event.getChannel().getPermissionOverride(everyoneRole).getDenied();
+		final EnumSet<Permission> channelDeniesBot = event.getChannel().getPermissionOverride(botRole) == null ? EnumSet.noneOf(Permission.class) : event.getChannel().getPermissionOverride(botRole).getDenied();
+		final EnumSet<Permission> channelDeniesEveryone = event.getChannel().getPermissionOverride(everyoneRole) == null ? EnumSet.noneOf(Permission.class) : event.getChannel().getPermissionOverride(everyoneRole).getDenied();
 
 		EnumSet<Permission> requiredPerms = EnumSet.of(
 				Permission.MESSAGE_WRITE,
