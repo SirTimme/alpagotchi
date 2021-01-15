@@ -67,7 +67,7 @@
         <dependency>
             <groupId>net.dv8tion</groupId>
             <artifactId>JDA</artifactId>
-            <version>4.2.0_222</version>
+            <version>4.2.0_227</version>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
