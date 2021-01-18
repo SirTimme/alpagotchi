@@ -30,21 +30,23 @@ public class MessageListener extends ListenerAdapter {
 	}
 
 	private boolean checkPermissions(GuildMessageReceivedEvent event) {
-		final Role everyoneRole = event.getGuild().getRoleById(event.getGuild().getIdLong());
 		final Member botClient = event.getGuild().getMemberById(event.getJDA().getSelfUser().getIdLong());
+		final Role everyoneRole = event.getGuild().getRoleById(event.getGuild().getIdLong());
 
 		EnumSet<Permission> deniedPermissions = EnumSet.noneOf(Permission.class);
 		EnumSet<Permission> allowedPermissions = EnumSet.noneOf(Permission.class);
 
 		for (PermissionOverride permissionOverwrite : event.getChannel().getPermissionOverrides()) {
-			if (permissionOverwrite.isRoleOverride() && (botClient.getRoles().contains(permissionOverwrite.getRole()) || permissionOverwrite.getRole() == everyoneRole)) {
-				allowedPermissions.addAll(permissionOverwrite.getAllowed());
+			if (permissionOverwrite.isRoleOverride() && (botClient.getRoles().contains(permissionOverwrite.getRole()) || permissionOverwrite.getRole().equals(everyoneRole))) {
 				deniedPermissions.addAll(permissionOverwrite.getDenied());
+				allowedPermissions.addAll(permissionOverwrite.getAllowed());
 			} else if (permissionOverwrite.isMemberOverride() && permissionOverwrite.getMember().equals(botClient)) {
 				deniedPermissions.addAll(permissionOverwrite.getDenied());
 				allowedPermissions.addAll(permissionOverwrite.getAllowed());
 			}
 		}
+
+		deniedPermissions.removeIf(allowedPermissions::contains);
 
 		EnumSet<Permission> requiredPermissions = EnumSet.of(
 				Permission.MESSAGE_WRITE,
@@ -56,8 +58,6 @@ public class MessageListener extends ListenerAdapter {
 				Permission.MESSAGE_EXT_EMOJI,
 				Permission.MESSAGE_READ
 		);
-
-		deniedPermissions.removeIf(allowedPermissions::contains);
 
 		for (Permission permission : requiredPermissions) {
 			if (deniedPermissions.contains(permission) && permission != Permission.MESSAGE_WRITE) {
