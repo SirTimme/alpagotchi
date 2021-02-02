@@ -86,7 +86,7 @@ public class MyAlpaca implements ICommand {
 			alpacaGraphics.drawImage(outfit, currentOutfit.getX(), currentOutfit.getY(), null);
 		}
 
-		File newAlpacaFile = new File("src/resources/alpacaEdited.jpg");
+		File newAlpacaFile = new File("src/main/resources/alpacaEdited.jpg");
 
 		try {
 			ImageIO.write(alpaca, "jpg", newAlpacaFile);
