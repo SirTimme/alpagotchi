@@ -1,29 +1,29 @@
 package Bot.Outfits;
 
-public class Gentleman implements IOutfit {
+public class King implements IOutfit {
 
 	@Override
 	public String getName() {
-		return "gentleman";
+		return "king";
 	}
 
 	@Override
 	public String getImgUrl() {
-		return "src/resources/outfits/gentleman.png";
+		return "src/main/resources/outfits/king.png";
 	}
 
 	@Override
 	public int getX() {
-		return 229;
+		return 212;
 	}
 
 	@Override
 	public int getY() {
-		return 30;
+		return 55;
 	}
 
 	@Override
 	public String getDescription() {
-		return "show your best manners with this";
+		return "rule over the world with this stylish outfit";
 	}
 }

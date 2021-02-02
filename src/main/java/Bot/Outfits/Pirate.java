@@ -9,7 +9,7 @@ public class Pirate implements IOutfit {
 
 	@Override
 	public String getImgUrl() {
-		return "src/resources/outfits/pirate.png";
+		return "src/main/resources/outfits/pirate.png";
 	}
 
 	@Override
