@@ -51,12 +51,12 @@ public class Sleep implements ICommand {
          return;
       }
 
-      int minutes = energy + duration / 2 > 100 ? (100 - duration / 2) * 2 : duration;
+      int minutes = energy + duration / 2 > 100 ? 100 - energy : duration;
 
-      IDataBaseManager.INSTANCE.setAlpacaValues(commandContext.getAuthorID(), "energy", minutes * 2);
+      IDataBaseManager.INSTANCE.setAlpacaValues(commandContext.getAuthorID(), "energy", minutes / 2);
       IDataBaseManager.INSTANCE.setCooldown(commandContext.getAuthorID(), "sleep", 1000L * 60 * minutes);
 
-      commandContext.getChannel().sendMessage("\uD83D\uDCA4 Your alpaca goes to bed for **" + minutes + "** minutes and rests well **Energy + " + minutes * 2 + "**").queue();
+      commandContext.getChannel().sendMessage("\uD83D\uDCA4 Your alpaca goes to bed for **" + minutes + "** minutes and rests well **Energy + " + minutes / 2 + "**").queue();
    }
 
    @Override
