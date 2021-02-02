@@ -39,7 +39,7 @@ public class MyAlpaca implements ICommand {
 		BufferedImage alpaca;
 
 		try {
-			alpaca = ImageIO.read(new File("src/resources/assets/alpaca.jpg"));
+			alpaca = ImageIO.read(new File("src/main/resources/assets/alpaca.jpg"));
 
 		} catch (IOException error) {
 			LOGGER.error(error.getMessage());
