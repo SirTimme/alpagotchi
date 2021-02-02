@@ -32,11 +32,10 @@ public class Work implements ICommand {
          return;
       }
 
-      long newCooldown = System.currentTimeMillis() + 1200000;
       int amountOfFluffies = (int) (Math.random() * 15 + 1);
 
       IDataBaseManager.INSTANCE.setBalance(commandContext.getAuthorID(), amountOfFluffies);
-      IDataBaseManager.INSTANCE.setCooldown(commandContext.getAuthorID(), "work", newCooldown);
+      IDataBaseManager.INSTANCE.setCooldown(commandContext.getAuthorID(), "work", System.currentTimeMillis() + 1000L * 60 * 20);
 
       commandContext.getChannel().sendMessage("⛏ You went to work and earned **" + (amountOfFluffies > 1 ? amountOfFluffies + "** fluffies" : amountOfFluffies + "** fluffy")).queue();
    }
