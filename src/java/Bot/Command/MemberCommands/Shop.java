@@ -10,6 +10,7 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Member;
 
 import java.time.Instant;
+import java.util.Comparator;
 
 public class Shop implements ICommand {
 	private final ShopItemManager shopItemManager;
@@ -55,14 +56,23 @@ public class Shop implements ICommand {
 
 	private String getItemsAsString(String category, String filter) {
 		StringBuilder stringBuilder = new StringBuilder();
-		String emoji = filter.equals("name") ? ":package:" : filter.equals("price") ? ":coin:" : filter.equals("saturation") && category.equals("hunger") ? ":meat_on_bone:" : ":beer:";
 
 		this.shopItemManager.getShopItems()
 				.stream()
+				.sorted(Comparator.comparingInt(IShopItem::getPrice))
 				.filter((item) -> item.getCategory().equals(category))
-				.map(filter.equals("name") ? IShopItem::getName : filter.equals("price") ? IShopItem::getPrice : IShopItem::getSaturation)
-				.sorted()
-				.forEach((item) -> stringBuilder.append(emoji).append(" ").append(item).append("\n"));
+				.map(IShopItem::getName)
+				.forEach((item) -> {
+					if (filter.equals("name")) {
+						stringBuilder.append(":package: ").append(item).append("\n");
+					} else if (filter.equals("price")) {
+						stringBuilder.append(":coin: ").append(this.shopItemManager.getShopItem(item).getPrice()).append("\n");
+					} else if (filter.equals("saturation") && category.equals("hunger")) {
+						stringBuilder.append(":meat_on_bone: ").append(this.shopItemManager.getShopItem(item).getSaturation()).append("\n");
+					} else {
+						stringBuilder.append(":beer: ").append(this.shopItemManager.getShopItem(item).getSaturation()).append("\n");
+					}
+				});
 
 		return stringBuilder.toString();
 	}
