@@ -18,7 +18,8 @@ public class Bot {
         try {
             JDABuilder.create(
                   Config.get("TOKEN"),
-                  GatewayIntent.GUILD_MESSAGES
+                  GatewayIntent.GUILD_MESSAGES,
+                  GatewayIntent.GUILD_MEMBERS
             )
                   .disableCache(
                         CacheFlag.ACTIVITY,
