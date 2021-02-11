@@ -7,27 +7,29 @@ Items can be bought to satisfy hunger and thirst and work can be done to earn mo
 
 ## Commands
 
+`Default prefix: a!`
+
 ### Admin Commands
 
 | Usage        | Aliases        | Task           | 
 | -------------| ---------------| ---------------| 
-| a!setprefix [prefix] | - | Sets the prefix of the guild |
-| a!setbalance [@user] [balance] | - | Sets the balance of the mentioned user |
+| setprefix [prefix] | - | Sets the prefix of the guild |
+| setbalance [@user] [balance] | - | Sets the balance of the mentioned user |
 
 ### Member Commands
 
 | Usage        | Aliases        | Task           | 
 | -------------| ---------------| ---------------| 
-| a!buy [itemName] [1-10] | - | Buys the amount of items from the shop |
-| a!feed [itemName] [1-5] | - | Feeds the alpaca with the item |
-| a!gift [@user] [itemName] [1-5] | - | Gifts the amount of items to the mentioned user |
-| a!help [command] | commands | Displays further information to the specified command |
-| a!inventory | inv | Shows the bought items from the shop |
-| a!myalpaca | ma, stats, alpaca | Shows your alpaca and his stats |
-| a!nick [nickname] | - | Gives your alpaca a nickname |
-| a!pet | - | Increases joy of your alpaca |
-| a!shop | - | Displays all items which can be bought |
-| a!wallet | balance, money | Shows your balance of fluffies |
-| a!work | - | Work to earn a random amount of fluffies |
-| a!sleep [minutes] | - | Let your alpaca sleeps  and regenerates energy |
-| a!outfit [outfit] | - | Change the appearance of your alpaca |
+| buy [itemName] [1-10] | - | Buys the amount of items from the shop |
+| feed [itemName] [1-5] | - | Feeds the alpaca with the item |
+| gift [@user] [itemName] [1-5] | - | Gifts the amount of items to the mentioned user |
+| help [command] | commands | Displays further information to the specified command |
+| inventory | inv | Shows the bought items from the shop |
+| myalpaca | ma, stats, alpaca | Shows your alpaca and his stats |
+| nick [nickname] | - | Gives your alpaca a nickname |
+| pet | - | Increases joy of your alpaca |
+| shop | - | Displays all items which can be bought |
+| wallet | balance, money | Shows your balance of fluffies |
+| work | - | Work to earn a random amount of fluffies |
+| sleep [minutes] | - | Let your alpaca sleeps  and regenerates energy |
+| outfit [outfit] | - | Change the appearance of your alpaca |
