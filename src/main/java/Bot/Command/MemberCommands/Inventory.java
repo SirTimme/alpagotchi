@@ -22,7 +22,7 @@ public class Inventory implements ICommand {
 
 	@Override
 	public void execute(CommandContext commandContext) {
-		final Member botCreator = commandContext.getGuild().getMemberById(Config.get("OWNER_ID"));
+		final Member botCreator = (Member) commandContext.getJDA().retrieveUserById(Config.get("OWNER_ID"));
 
 		if (!IDataBaseManager.INSTANCE.isUserInDB(commandContext.getAuthorID())) {
 			commandContext.getChannel().sendMessage("<:RedCross:782229279312314368> You do not own a alpaca, use **" + commandContext.getPrefix() + "init** first").queue();

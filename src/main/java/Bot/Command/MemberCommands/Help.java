@@ -25,7 +25,7 @@ public class Help implements ICommand {
 		final String prefix = IDataBaseManager.INSTANCE.getPrefix(commandContext.getGuild().getIdLong());
 
 		if (args.isEmpty()) {
-			final Member botCreator = commandContext.getGuild().getMemberById(Config.get("OWNER_ID"));
+			final Member botCreator = (Member) commandContext.getJDA().retrieveUserById(Config.get("OWNER_ID"));
 
 			EmbedBuilder embed = new EmbedBuilder();
 			embed.setTitle("Overview of all commands")

@@ -21,7 +21,7 @@ public class Shop implements ICommand {
 
 	@Override
 	public void execute(CommandContext commandContext) {
-		final Member botCreator = commandContext.getGuild().getMemberById(Config.get("OWNER_ID"));
+		final Member botCreator = (Member) commandContext.getJDA().retrieveUserById(Config.get("OWNER_ID"));
 
 		EmbedBuilder embedBuilder = new EmbedBuilder();
 

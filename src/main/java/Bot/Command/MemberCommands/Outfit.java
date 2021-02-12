@@ -31,7 +31,7 @@ public class Outfit implements ICommand {
 
 		if (args.isEmpty()) {
 			EmbedBuilder embedBuilder = new EmbedBuilder();
-			final Member botCreator = commandContext.getGuild().getMemberById(Config.get("OWNER_ID"));
+			final Member botCreator = (Member) commandContext.getJDA().retrieveUserById(Config.get("OWNER_ID"));
 
 			embedBuilder.setTitle("Available outfits");
 

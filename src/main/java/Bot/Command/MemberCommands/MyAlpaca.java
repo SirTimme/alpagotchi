@@ -94,7 +94,7 @@ public class MyAlpaca implements ICommand {
 			LOGGER.error(error.getMessage());
 		}
 
-		final Member botCreator = commandContext.getGuild().getMemberById(Config.get("OWNER_ID"));
+		final Member botCreator = (Member) commandContext.getJDA().retrieveUserById(Config.get("OWNER_ID"));
 
 		final EmbedBuilder embedBuilder = new EmbedBuilder();
 		embedBuilder.setTitle("" + IDataBaseManager.INSTANCE.getNickname(commandContext.getAuthorID()) + "")
