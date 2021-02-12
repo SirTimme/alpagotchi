@@ -33,6 +33,7 @@ public class Help implements ICommand {
 					.setDescription("Further information to any command:\n**```fix\n" + prefix + "help [command]\n```**")
 					.addField("\uD83D\uDC6E Admin commands", getCommandsByPerms(prefix, PermissionLevel.ADMIN), true)
 					.addField("\uD83D\uDD13 Member commands", getCommandsByPerms(prefix, PermissionLevel.MEMBER), true)
+					.addField("Need further help or found a bug?", "Then join the [Alpagotchi Support](https://discord.gg/SErfVpSQAV) server!", false)
 					.setFooter("Created by " + botCreator.getName(), botCreator.getEffectiveAvatarUrl())
 					.setTimestamp(Instant.now());
 
