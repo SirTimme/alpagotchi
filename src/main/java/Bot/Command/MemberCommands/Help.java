@@ -8,6 +8,7 @@ import Bot.Command.ICommand;
 import Bot.Database.IDataBaseManager;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.User;
 
 import java.time.Instant;
 import java.util.List;
@@ -25,14 +26,14 @@ public class Help implements ICommand {
 		final String prefix = IDataBaseManager.INSTANCE.getPrefix(commandContext.getGuild().getIdLong());
 
 		if (args.isEmpty()) {
-			final Member botCreator = (Member) commandContext.getJDA().retrieveUserById(Config.get("OWNER_ID"));
+			final User botCreator = commandContext.getJDA().getUserById(Config.get("OWNER_ID"));
 
 			EmbedBuilder embed = new EmbedBuilder();
 			embed.setTitle("Overview of all commands")
 					.setDescription("Further information to any command:\n**```fix\n" + prefix + "help [command]\n```**")
 					.addField("\uD83D\uDC6E Admin commands", getCommandsByPerms(prefix, PermissionLevel.ADMIN), true)
 					.addField("\uD83D\uDD13 Member commands", getCommandsByPerms(prefix, PermissionLevel.MEMBER), true)
-					.setFooter("Created by " + botCreator.getEffectiveName(), botCreator.getUser().getEffectiveAvatarUrl())
+					.setFooter("Created by " + botCreator.getName(), botCreator.getEffectiveAvatarUrl())
 					.setTimestamp(Instant.now());
 
 			commandContext.getChannel().sendMessage(embed.build()).queue();

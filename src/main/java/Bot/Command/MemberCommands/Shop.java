@@ -8,6 +8,7 @@ import Bot.Config;
 import Bot.Shop.ShopItemManager;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.User;
 
 import java.time.Instant;
 import java.util.Comparator;
@@ -21,7 +22,7 @@ public class Shop implements ICommand {
 
 	@Override
 	public void execute(CommandContext commandContext) {
-		final Member botCreator = (Member) commandContext.getJDA().retrieveUserById(Config.get("OWNER_ID"));
+		final User botCreator = commandContext.getJDA().getUserById(Config.get("OWNER_ID"));
 
 		EmbedBuilder embedBuilder = new EmbedBuilder();
 
@@ -33,7 +34,7 @@ public class Shop implements ICommand {
 				.addField("Item", getItemsAsString("thirst", "name"), true)
 				.addField("Price", getItemsAsString("thirst", "price"), true)
 				.addField("Saturation", getItemsAsString("thirst", "saturation"), true)
-				.setFooter("Created by " + botCreator.getEffectiveName(), botCreator.getUser().getEffectiveAvatarUrl())
+				.setFooter("Created by " + botCreator.getName(), botCreator.getEffectiveAvatarUrl())
 				.setTimestamp(Instant.now());
 
 		commandContext.getChannel().sendMessage(embedBuilder.build()).queue();

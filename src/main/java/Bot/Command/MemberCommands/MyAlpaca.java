@@ -9,6 +9,7 @@ import Bot.Outfits.IOutfit;
 import Bot.Outfits.OutfitManager;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -94,13 +95,13 @@ public class MyAlpaca implements ICommand {
 			LOGGER.error(error.getMessage());
 		}
 
-		final Member botCreator = (Member) commandContext.getJDA().retrieveUserById(Config.get("OWNER_ID"));
+		final User botCreator = commandContext.getJDA().getUserById(Config.get("OWNER_ID"));
 
 		final EmbedBuilder embedBuilder = new EmbedBuilder();
 		embedBuilder.setTitle("" + IDataBaseManager.INSTANCE.getNickname(commandContext.getAuthorID()) + "")
 				.setDescription("_Have a llamazing day!_")
 				.setThumbnail(commandContext.getMember().getUser().getAvatarUrl())
-				.setFooter("Created by " + botCreator.getEffectiveName(), botCreator.getUser().getEffectiveAvatarUrl())
+				.setFooter("Created by " + botCreator.getName(), botCreator.getEffectiveAvatarUrl())
 				.setTimestamp(Instant.now())
 				.setImage("attachment://alpacaEdited.jpg");
 

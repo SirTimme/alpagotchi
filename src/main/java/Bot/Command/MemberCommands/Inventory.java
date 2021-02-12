@@ -9,6 +9,7 @@ import Bot.Shop.IShopItem;
 import Bot.Shop.ShopItemManager;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.User;
 
 import java.time.Instant;
 import java.util.List;
@@ -22,7 +23,7 @@ public class Inventory implements ICommand {
 
 	@Override
 	public void execute(CommandContext commandContext) {
-		final Member botCreator = (Member) commandContext.getJDA().retrieveUserById(Config.get("OWNER_ID"));
+		final User botCreator = commandContext.getJDA().getUserById(Config.get("OWNER_ID"));
 
 		if (!IDataBaseManager.INSTANCE.isUserInDB(commandContext.getAuthorID())) {
 			commandContext.getChannel().sendMessage("<:RedCross:782229279312314368> You do not own a alpaca, use **" + commandContext.getPrefix() + "init** first").queue();
@@ -33,7 +34,7 @@ public class Inventory implements ICommand {
 		embed.setTitle("Inventory")
 				.addField("Hunger", getItemsByCategory("hunger", commandContext.getAuthorID()), true)
 				.addField("Thirst", getItemsByCategory("thirst", commandContext.getAuthorID()), true)
-				.setFooter("Created by " + botCreator.getEffectiveName(), botCreator.getUser().getEffectiveAvatarUrl())
+				.setFooter("Created by " + botCreator.getName(), botCreator.getEffectiveAvatarUrl())
 				.setTimestamp(Instant.now());
 
 		commandContext.getChannel().sendMessage(embed.build()).queue();
