@@ -10,7 +10,7 @@ public class Shutdown implements ICommand {
    public void execute(CommandContext commandContext) {
 
       if (!PermissionLevel.DEVELOPER.hasPerms(commandContext.getMember())) {
-         commandContext.getChannel().sendMessage("<:RedCross:782229279312314368> This is a developer-only command").queue();
+         commandContext.getChannel().sendMessage("<:RedCross:782229279312314368> This is a **developer-only** command").queue();
          return;
       }
 

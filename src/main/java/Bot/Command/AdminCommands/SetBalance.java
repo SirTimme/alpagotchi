@@ -4,6 +4,7 @@ import Bot.Command.CommandContext;
 import Bot.Command.ICommand;
 import Bot.Command.PermissionLevel;
 import Bot.Database.IDataBaseManager;
+import net.dv8tion.jda.api.Permission;
 
 import java.util.List;
 
@@ -13,7 +14,7 @@ public class SetBalance implements ICommand {
    public void execute(CommandContext commandContext) {
 
       if (!PermissionLevel.ADMIN.hasPerms(commandContext.getMember())) {
-         commandContext.getChannel().sendMessage("<:RedCross:782229279312314368> This is a admin-only command").queue();
+         commandContext.getChannel().sendMessage("<:RedCross:782229279312314368> This is a **admin-only** command\nYou are missing the **" + Permission.MANAGE_SERVER.getName() + "** permission to perform this command").queue();
          return;
       }
 
