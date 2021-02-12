@@ -14,7 +14,7 @@ public class SetBalance implements ICommand {
    public void execute(CommandContext commandContext) {
 
       if (!PermissionLevel.ADMIN.hasPerms(commandContext.getMember())) {
-         commandContext.getChannel().sendMessage("<:RedCross:782229279312314368> This is a **admin-only** command\nYou are missing the **" + Permission.MANAGE_SERVER.getName() + "** permission to perform this command").queue();
+         commandContext.getChannel().sendMessage("<:RedCross:782229279312314368> This is a **admin-only** command, you are missing the **" + Permission.MANAGE_SERVER.getName() + "** permission to perform this command").queue();
          return;
       }
 
