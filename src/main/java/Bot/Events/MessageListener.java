@@ -51,7 +51,6 @@ public class MessageListener extends ListenerAdapter {
 		EnumSet<Permission> requiredPermissions = EnumSet.of(
 				Permission.MESSAGE_WRITE,
 				Permission.MESSAGE_ATTACH_FILES,
-				Permission.MESSAGE_ADD_REACTION,
 				Permission.VIEW_CHANNEL,
 				Permission.MESSAGE_HISTORY,
 				Permission.MESSAGE_EMBED_LINKS,
