@@ -8,7 +8,7 @@ import Bot.Database.IDataBaseManager;
 import Bot.Outfits.IOutfit;
 import Bot.Outfits.OutfitManager;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.User;
 
 import java.time.Instant;
 import java.util.List;
@@ -31,7 +31,7 @@ public class Outfit implements ICommand {
 
 		if (args.isEmpty()) {
 			EmbedBuilder embedBuilder = new EmbedBuilder();
-			final Member botCreator = (Member) commandContext.getJDA().retrieveUserById(Config.get("OWNER_ID"));
+			final User botCreator = commandContext.getJDA().getUserById(Config.get("OWNER_ID"));
 
 			embedBuilder.setTitle("Available outfits");
 
@@ -39,7 +39,7 @@ public class Outfit implements ICommand {
 				embedBuilder.addField("\uD83D\uDC54 " + outfit.getName(), outfit.getDescription(), false);
 			}
 
-			embedBuilder.setFooter("Created by " + botCreator.getEffectiveName(), botCreator.getUser().getEffectiveAvatarUrl());
+			embedBuilder.setFooter("Created by " + botCreator.getName(), botCreator.getEffectiveAvatarUrl());
 			embedBuilder.setTimestamp(Instant.now());
 
 			commandContext.getChannel().sendMessage(embedBuilder.build()).queue();
