@@ -30,13 +30,13 @@ public class MyAlpaca implements ICommand {
 	}
 
 	@Override
-	public void execute(CommandContext commandContext) {
-		if (!IDataBaseManager.INSTANCE.isUserInDB(commandContext.getAuthorID())) {
-			commandContext.getChannel().sendMessage("<:RedCross:782229279312314368> You do not own a alpaca, use **" + commandContext.getPrefix() + "init** first").queue();
+	public void execute(CommandContext ctx) {
+		if (!IDataBaseManager.INSTANCE.isUserInDB(ctx.getAuthorID())) {
+			ctx.getChannel().sendMessage("<:RedCross:782229279312314368> You do not own a alpaca, use **" + ctx.getPrefix() + "init** first").queue();
 			return;
 		}
 
-		IOutfit currentOutfit = outfitManager.getOutfit(IDataBaseManager.INSTANCE.getOutfit(commandContext.getAuthorID()));
+		IOutfit currentOutfit = outfitManager.getOutfit(IDataBaseManager.INSTANCE.getOutfit(ctx.getAuthorID()));
 		BufferedImage alpaca;
 
 		try {
@@ -47,10 +47,10 @@ public class MyAlpaca implements ICommand {
 			return;
 		}
 
-		final int hunger = IDataBaseManager.INSTANCE.getAlpacaValues(commandContext.getAuthorID(), "hunger");
-		final int thirst = IDataBaseManager.INSTANCE.getAlpacaValues(commandContext.getAuthorID(), "thirst");
-		final int energy = IDataBaseManager.INSTANCE.getAlpacaValues(commandContext.getAuthorID(), "energy");
-		final int joy = IDataBaseManager.INSTANCE.getAlpacaValues(commandContext.getAuthorID(), "joy");
+		final int hunger = IDataBaseManager.INSTANCE.getAlpacaValues(ctx.getAuthorID(), "hunger");
+		final int thirst = IDataBaseManager.INSTANCE.getAlpacaValues(ctx.getAuthorID(), "thirst");
+		final int energy = IDataBaseManager.INSTANCE.getAlpacaValues(ctx.getAuthorID(), "energy");
+		final int joy = IDataBaseManager.INSTANCE.getAlpacaValues(ctx.getAuthorID(), "joy");
 
 		Graphics alpacaGraphics = alpaca.getGraphics();
 
@@ -78,7 +78,7 @@ public class MyAlpaca implements ICommand {
 			BufferedImage outfit;
 
 			try {
-				outfit = ImageIO.read(new File(outfitManager.getOutfit(IDataBaseManager.INSTANCE.getOutfit(commandContext.getAuthorID())).getImgUrl()));
+				outfit = ImageIO.read(new File(outfitManager.getOutfit(IDataBaseManager.INSTANCE.getOutfit(ctx.getAuthorID())).getImgUrl()));
 			} catch (IOException error) {
 				LOGGER.error(error.getMessage());
 				return;
@@ -95,17 +95,17 @@ public class MyAlpaca implements ICommand {
 			LOGGER.error(error.getMessage());
 		}
 
-		final User botCreator = commandContext.getJDA().getUserById(Config.get("OWNER_ID"));
+		final User botCreator = ctx.getJDA().getUserById(Config.get("OWNER_ID"));
 
 		final EmbedBuilder embedBuilder = new EmbedBuilder();
-		embedBuilder.setTitle("" + IDataBaseManager.INSTANCE.getNickname(commandContext.getAuthorID()) + "")
+		embedBuilder.setTitle("" + IDataBaseManager.INSTANCE.getNickname(ctx.getAuthorID()) + "")
 				.setDescription("_Have a llamazing day!_")
-				.setThumbnail(commandContext.getMember().getUser().getAvatarUrl())
+				.setThumbnail(ctx.getMember().getUser().getAvatarUrl())
 				.setFooter("Created by " + botCreator.getName(), botCreator.getEffectiveAvatarUrl())
 				.setTimestamp(Instant.now())
 				.setImage("attachment://alpacaEdited.jpg");
 
-		commandContext.getChannel().sendFile(newAlpacaFile, "alpacaEdited.jpg").embed(embedBuilder.build()).queue();
+		ctx.getChannel().sendFile(newAlpacaFile, "alpacaEdited.jpg").embed(embedBuilder.build()).queue();
 	}
 
 	@Override

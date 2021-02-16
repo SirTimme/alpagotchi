@@ -10,47 +10,53 @@ import java.util.List;
 public class Sleep implements ICommand {
 
    @Override
-   public void execute(CommandContext commandContext) {
-      if (!IDataBaseManager.INSTANCE.isUserInDB(commandContext.getAuthorID())) {
-         commandContext.getChannel().sendMessage("<:RedCross:782229279312314368> You do not own a alpaca, use **" + commandContext.getPrefix() + "init** first").queue();
+   public void execute(CommandContext ctx) {
+      if (!IDataBaseManager.INSTANCE.isUserInDB(ctx.getAuthorID())) {
+         ctx.getChannel().sendMessage("<:RedCross:782229279312314368> You do not own a alpaca, use **" + ctx.getPrefix() + "init** first").queue();
          return;
       }
 
-      long sleepCooldown = IDataBaseManager.INSTANCE.getCooldown(commandContext.getAuthorID(), "sleep") - System.currentTimeMillis();
+      long sleepCooldown = IDataBaseManager.INSTANCE.getCooldown(ctx.getAuthorID(), "sleep") - System.currentTimeMillis();
 
       if (sleepCooldown > 0) {
-         commandContext.getChannel().sendMessage("<:RedCross:782229279312314368> Your alpaca already sleeps").queue();
+         ctx.getChannel().sendMessage("<:RedCross:782229279312314368> Your alpaca already sleeps").queue();
          return;
       }
 
-      int energy = IDataBaseManager.INSTANCE.getAlpacaValues(commandContext.getAuthorID(), "energy");
+      int energy = IDataBaseManager.INSTANCE.getAlpacaValues(ctx.getAuthorID(), "energy");
 
       if (energy == 100) {
-         commandContext.getChannel().sendMessage("<:RedCross:782229279312314368> The energy of your alpaca is already at the maximum").queue();
+         ctx.getChannel().sendMessage("<:RedCross:782229279312314368> The energy of your alpaca is already at the maximum").queue();
          return;
       }
 
-      final List<String> args = commandContext.getArgs();
+      final List<String> args = ctx.getArgs();
+
+      if (args.isEmpty()) {
+         ctx.getChannel().sendMessage("<:RedCross:782229279312314368> Missing arguments").queue();
+         return;
+      }
+
       int duration;
 
       try {
          duration = Integer.parseInt(args.get(0));
-      } catch (NumberFormatException | IndexOutOfBoundsException error) {
-         commandContext.getChannel().sendMessage("<:RedCross:782229279312314368> Could not resolve the sleep duration").queue();
+      } catch (NumberFormatException error) {
+         ctx.getChannel().sendMessage("<:RedCross:782229279312314368> Could not resolve the sleep duration").queue();
          return;
       }
 
       if (duration > 120) {
-         commandContext.getChannel().sendMessage("<:RedCross:782229279312314368> Your alpaca can rest max. 2 hours at once").queue();
+         ctx.getChannel().sendMessage("<:RedCross:782229279312314368> Your alpaca can rest max. 2 hours at once").queue();
          return;
       }
 
       int newEnergy = energy + duration / 2 > 100 ? 100 - energy : duration / 2;
 
-      IDataBaseManager.INSTANCE.setAlpacaValues(commandContext.getAuthorID(), "energy", newEnergy);
-      IDataBaseManager.INSTANCE.setCooldown(commandContext.getAuthorID(), "sleep", System.currentTimeMillis() + 1000L * 60 * 2 * newEnergy);
+      IDataBaseManager.INSTANCE.setAlpacaValues(ctx.getAuthorID(), "energy", newEnergy);
+      IDataBaseManager.INSTANCE.setCooldown(ctx.getAuthorID(), "sleep", System.currentTimeMillis() + 1000L * 60 * 2 * newEnergy);
 
-      commandContext.getChannel().sendMessage("\uD83D\uDCA4 Your alpaca goes to bed for **" + newEnergy * 2 + "** minutes and rests well **Energy + " + newEnergy + "**").queue();
+      ctx.getChannel().sendMessage("\uD83D\uDCA4 Your alpaca goes to bed for **" + newEnergy * 2 + "** minutes and rests well **Energy + " + newEnergy + "**").queue();
    }
 
    @Override

@@ -11,29 +11,29 @@ import java.util.List;
 public class SetBalance implements ICommand {
 
    @Override
-   public void execute(CommandContext commandContext) {
+   public void execute(CommandContext ctx) {
 
-      if (!PermissionLevel.ADMIN.hasPerms(commandContext.getMember())) {
-         commandContext.getChannel().sendMessage("<:RedCross:782229279312314368> This is a **admin-only** command, you are missing the **" + Permission.MANAGE_SERVER.getName() + "** permission").queue();
+      if (!PermissionLevel.ADMIN.hasPerms(ctx.getMember())) {
+         ctx.getChannel().sendMessage("<:RedCross:782229279312314368> This is a **admin-only** command, you are missing the **" + Permission.MANAGE_SERVER.getName() + "** permission").queue();
          return;
       }
 
-      final List<String> args = commandContext.getArgs();
+      final List<String> args = ctx.getArgs();
 
       if (args.isEmpty() || args.size() < 2) {
-         commandContext.getChannel().sendMessage("<:RedCross:782229279312314368> Missing arguments").queue();
+         ctx.getChannel().sendMessage("<:RedCross:782229279312314368> Missing arguments").queue();
          return;
       }
 
-      if (commandContext.getMessage().getMentionedUsers().isEmpty()) {
-         commandContext.getChannel().sendMessage("<:RedCross:782229279312314368> Could not resolve the mentioned user").queue();
+      if (ctx.getMessage().getMentionedUsers().isEmpty()) {
+         ctx.getChannel().sendMessage("<:RedCross:782229279312314368> Could not resolve the mentioned user").queue();
          return;
       }
 
-      final long mentionedUserID = commandContext.getMessage().getMentionedUsers().get(0).getIdLong();
+      final long mentionedUserID = ctx.getMessage().getMentionedUsers().get(0).getIdLong();
 
       if (!IDataBaseManager.INSTANCE.isUserInDB(mentionedUserID)) {
-         commandContext.getChannel().sendMessage("<:RedCross:782229279312314368> The mentioned user does not own a alpaca, he have to use **" + commandContext.getPrefix() + "init** first").queue();
+         ctx.getChannel().sendMessage("<:RedCross:782229279312314368> The mentioned user does not own a alpaca, he have to use **" + ctx.getPrefix() + "init** first").queue();
          return;
       }
 
@@ -44,13 +44,13 @@ public class SetBalance implements ICommand {
          newBalance = Integer.parseInt(args.get(1));
 
       } catch (NumberFormatException error) {
-         commandContext.getChannel().sendMessage("<:RedCross:782229279312314368> Could not resolve the amount of items").queue();
+         ctx.getChannel().sendMessage("<:RedCross:782229279312314368> Could not resolve the amount of items").queue();
          return;
       }
 
       IDataBaseManager.INSTANCE.setBalance(mentionedUserID, newBalance - currentBalance);
 
-      commandContext.getChannel().sendMessage("\uD83D\uDCB3 The balance of **" + commandContext.getJDA().getUserById(mentionedUserID).getName() + "** has been set to **" + newBalance + "**").queue();
+      ctx.getChannel().sendMessage("\uD83D\uDCB3 The balance of **" + ctx.getJDA().getUserById(mentionedUserID).getName() + "** has been set to **" + newBalance + "**").queue();
    }
 
    @Override

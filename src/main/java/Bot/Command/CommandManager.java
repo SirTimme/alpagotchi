@@ -7,6 +7,7 @@ import Bot.Command.DeveloperCommands.Shutdown;
 import Bot.Command.MemberCommands.*;
 import Bot.Outfits.OutfitManager;
 import Bot.Shop.ShopItemManager;
+import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 import javax.annotation.Nullable;
@@ -20,7 +21,7 @@ public class CommandManager {
     ShopItemManager shopItemManager = new ShopItemManager();
     OutfitManager outfitManager = new OutfitManager();
 
-    public CommandManager() {
+    public CommandManager(EventWaiter waiter) {
         addCommand(new MyAlpaca(this.outfitManager));
         addCommand(new Help(this));
         addCommand(new SetPrefix());
@@ -37,8 +38,9 @@ public class CommandManager {
         addCommand(new Shutdown());
         addCommand(new Sleep());
         addCommand(new SetBalance());
-        addCommand(new Init());
+        addCommand(new Init(waiter));
         addCommand(new Outfit(this.outfitManager));
+        addCommand(new Delete(waiter));
     }
 
     private void addCommand(ICommand command) {

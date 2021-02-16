@@ -8,7 +8,7 @@ import Bot.Database.IDataBaseManager;
 import Bot.Outfits.IOutfit;
 import Bot.Outfits.OutfitManager;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.entities.Member;
 
 import java.time.Instant;
 import java.util.List;
@@ -21,17 +21,17 @@ public class Outfit implements ICommand {
 	}
 
 	@Override
-	public void execute(CommandContext commandContext) {
-		if (!IDataBaseManager.INSTANCE.isUserInDB(commandContext.getAuthorID())) {
-			commandContext.getChannel().sendMessage("<:RedCross:782229279312314368> You do not own a alpaca, use **" + commandContext.getPrefix() + "init** first").queue();
+	public void execute(CommandContext ctx) {
+		if (!IDataBaseManager.INSTANCE.isUserInDB(ctx.getAuthorID())) {
+			ctx.getChannel().sendMessage("<:RedCross:782229279312314368> You do not own a alpaca, use **" + ctx.getPrefix() + "init** first").queue();
 			return;
 		}
 
-		List<String> args = commandContext.getArgs();
+		List<String> args = ctx.getArgs();
 
 		if (args.isEmpty()) {
 			EmbedBuilder embedBuilder = new EmbedBuilder();
-			final User botCreator = commandContext.getJDA().getUserById(Config.get("OWNER_ID"));
+			final Member botCreator = (Member) ctx.getJDA().retrieveUserById(Config.get("OWNER_ID"));
 
 			embedBuilder.setTitle("Available outfits");
 
@@ -39,23 +39,23 @@ public class Outfit implements ICommand {
 				embedBuilder.addField("\uD83D\uDC54 " + outfit.getName(), outfit.getDescription(), false);
 			}
 
-			embedBuilder.setFooter("Created by " + botCreator.getName(), botCreator.getEffectiveAvatarUrl());
+			embedBuilder.setFooter("Created by " + botCreator.getEffectiveName(), botCreator.getUser().getEffectiveAvatarUrl());
 			embedBuilder.setTimestamp(Instant.now());
 
-			commandContext.getChannel().sendMessage(embedBuilder.build()).queue();
+			ctx.getChannel().sendMessage(embedBuilder.build()).queue();
 			return;
 		}
 
 		IOutfit chosenOutfit = outfitManager.getOutfit(args.get(0));
 
 		if (chosenOutfit == null) {
-			commandContext.getChannel().sendMessage("<:RedCross:782229279312314368> Could not resolve the specified outfit").queue();
+			ctx.getChannel().sendMessage("<:RedCross:782229279312314368> Could not resolve the specified outfit").queue();
 			return;
 		}
 
-		IDataBaseManager.INSTANCE.setOutfit(commandContext.getAuthorID(), chosenOutfit.getName());
+		IDataBaseManager.INSTANCE.setOutfit(ctx.getAuthorID(), chosenOutfit.getName());
 
-		commandContext.getChannel().sendMessage("\uD83D\uDC54 The outfit of your alpaca has been set to **" + chosenOutfit.getName() + "**").queue();
+		ctx.getChannel().sendMessage("\uD83D\uDC54 The outfit of your alpaca has been set to **" + chosenOutfit.getName() + "**").queue();
 	}
 
 	@Override

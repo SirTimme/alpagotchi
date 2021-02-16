@@ -15,27 +15,27 @@ public class Decrease implements ICommand {
    private TimerTask sqlTask;
 
    @Override
-   public void execute(CommandContext commandContext) {
+   public void execute(CommandContext ctx) {
 
-      if (!PermissionLevel.DEVELOPER.hasPerms(commandContext.getMember())) {
-         commandContext.getChannel().sendMessage("<:RedCross:782229279312314368> This is a **developer-only** command").queue();
+      if (!PermissionLevel.DEVELOPER.hasPerms(ctx.getMember())) {
+         ctx.getChannel().sendMessage("<:RedCross:782229279312314368> This is a **developer-only** command").queue();
          return;
       }
 
-      final List<String> args = commandContext.getArgs();
+      final List<String> args = ctx.getArgs();
 
       if (args.isEmpty()) {
-         commandContext.getChannel().sendMessage("<:RedCross:782229279312314368> Missing arguments").queue();
+         ctx.getChannel().sendMessage("<:RedCross:782229279312314368> Missing arguments").queue();
          return;
       }
 
       if (!(args.get(0).equalsIgnoreCase("enable") || args.get(0).equalsIgnoreCase("disable"))) {
-         commandContext.getChannel().sendMessage("<:RedCross:782229279312314368> Incorrect arguments").queue();
+         ctx.getChannel().sendMessage("<:RedCross:782229279312314368> Incorrect arguments").queue();
          return;
       }
 
       if (isTimerRunning && args.get(0).equalsIgnoreCase("enable")) {
-         commandContext.getChannel().sendMessage("<:RedCross:782229279312314368> Decreasing is already enabled").queue();
+         ctx.getChannel().sendMessage("<:RedCross:782229279312314368> Decreasing is already enabled").queue();
          return;
       }
 
@@ -47,11 +47,11 @@ public class Decrease implements ICommand {
                isTimerRunning = true;
             }
          }, 0, 1000 * 7200);
-         commandContext.getChannel().sendMessage("<:GreenTick:782229268914372609> Alpacas begin to lose stats over time").queue();
+         ctx.getChannel().sendMessage("<:GreenTick:782229268914372609> Alpacas begin to lose stats over time").queue();
       } else {
          this.sqlTask.cancel();
          isTimerRunning = false;
-         commandContext.getChannel().sendMessage("<:RedCross:782229279312314368> Alpacas stop losing stats over time").queue();
+         ctx.getChannel().sendMessage("<:RedCross:782229279312314368> Alpacas stop losing stats over time").queue();
       }
    }
 

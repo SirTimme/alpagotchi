@@ -1,6 +1,7 @@
 package Bot;
 
 import Bot.Events.MessageListener;
+import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.requests.GatewayIntent;
@@ -11,28 +12,30 @@ import org.slf4j.LoggerFactory;
 import javax.security.auth.login.LoginException;
 
 public class Bot {
-    private static final Logger LOGGER = LoggerFactory.getLogger(Bot.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(Bot.class);
 
-    public static void main(String[] args) {
+	public static void main(String[] args) {
+		EventWaiter waiter = new EventWaiter();
 
-        try {
-            JDABuilder.create(
-                  Config.get("TOKEN"),
-                  GatewayIntent.GUILD_MESSAGES,
-                  GatewayIntent.GUILD_MEMBERS
-            )
-                  .disableCache(
-                        CacheFlag.ACTIVITY,
-                        CacheFlag.VOICE_STATE,
-                        CacheFlag.EMOTE,
-                        CacheFlag.CLIENT_STATUS
-                  )
-                    .addEventListeners(new MessageListener())
-                    .setActivity(Activity.playing(Config.get("PREFIX") + "help | Alpacas \uD83D\uDC96 \uD83E\uDD99"))
-                    .build();
+		try {
+			JDABuilder.create(
+					Config.get("TOKEN"),
+					GatewayIntent.GUILD_MESSAGES,
+					GatewayIntent.GUILD_MESSAGE_REACTIONS,
+					GatewayIntent.GUILD_MEMBERS
+			)
+					.disableCache(
+							CacheFlag.ACTIVITY,
+							CacheFlag.VOICE_STATE,
+							CacheFlag.EMOTE,
+							CacheFlag.CLIENT_STATUS
+					)
+					.addEventListeners(new MessageListener(waiter), waiter)
+					.setActivity(Activity.playing(Config.get("PREFIX") + "help | Alpacas \uD83D\uDC96 \uD83E\uDD99"))
+					.build();
 
-        } catch (LoginException error) {
-            LOGGER.error(error.getMessage());
-        }
-    }
+		} catch (LoginException error) {
+			LOGGER.error(error.getMessage());
+		}
+	}
 }

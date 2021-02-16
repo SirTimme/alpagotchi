@@ -10,15 +10,15 @@ import java.util.List;
 public class Balance implements ICommand {
 
     @Override
-    public void execute(CommandContext commandContext) {
-        if (!IDataBaseManager.INSTANCE.isUserInDB(commandContext.getAuthorID())) {
-            commandContext.getChannel().sendMessage("<:RedCross:782229279312314368> You do not own a alpaca, use **" + commandContext.getPrefix() + "init** first").queue();
+    public void execute(CommandContext ctx) {
+        if (!IDataBaseManager.INSTANCE.isUserInDB(ctx.getAuthorID())) {
+            ctx.getChannel().sendMessage("<:RedCross:782229279312314368> You do not own a alpaca, use **" + ctx.getPrefix() + "init** first").queue();
             return;
         }
 
-        final int balance = IDataBaseManager.INSTANCE.getBalance(commandContext.getAuthorID());
+        final int balance = IDataBaseManager.INSTANCE.getBalance(ctx.getAuthorID());
 
-        commandContext.getChannel().sendMessage("\uD83D\uDCB5 Your current balance is **" + (balance == 1 ? balance + "** fluffy" : balance + "** fluffies")).queue();
+        ctx.getChannel().sendMessage("\uD83D\uDCB5 Your current balance is **" + (balance == 1 ? balance + "** fluffy" : balance + "** fluffies")).queue();
     }
 
     @Override

@@ -192,6 +192,11 @@ public class MongoDBDataSource implements IDataBaseManager {
 	}
 
 	@Override
+	public void deleteDBEntry(long memberID) {
+		alpacaCollection.deleteOne(Filters.eq("_id", memberID));
+	}
+
+	@Override
 	public boolean isUserInDB(long memberID) {
 		return alpacaCollection.find(Filters.eq("_id", memberID)).first() != null;
 	}

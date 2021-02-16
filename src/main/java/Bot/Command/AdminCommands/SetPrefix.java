@@ -11,24 +11,24 @@ import java.util.List;
 public class SetPrefix implements ICommand {
 
 	@Override
-	public void execute(CommandContext commandContext) {
+	public void execute(CommandContext ctx) {
 
-		if (!PermissionLevel.ADMIN.hasPerms(commandContext.getMember())) {
-			commandContext.getChannel().sendMessage("<:RedCross:782229279312314368> This is a **admin-only** command, you are missing the **" + Permission.MANAGE_SERVER.getName() + "** permission").queue();
+		if (!PermissionLevel.ADMIN.hasPerms(ctx.getMember())) {
+			ctx.getChannel().sendMessage("<:RedCross:782229279312314368> This is a **admin-only** command, you are missing the **" + Permission.MANAGE_SERVER.getName() + "** permission").queue();
 			return;
 		}
 
-		final List<String> args = commandContext.getArgs();
+		final List<String> args = ctx.getArgs();
 
 		if (args.isEmpty()) {
-			commandContext.getChannel().sendMessage("<:RedCross:782229279312314368> Missing arguments").queue();
+			ctx.getChannel().sendMessage("<:RedCross:782229279312314368> Missing arguments").queue();
 			return;
 		}
 
 		String newPrefix = String.join("", args);
-		IDataBaseManager.INSTANCE.setPrefix(commandContext.getGuild().getIdLong(), newPrefix);
+		IDataBaseManager.INSTANCE.setPrefix(ctx.getGuild().getIdLong(), newPrefix);
 
-		commandContext.getChannel().sendMessage("<:GreenTick:782229268914372609> The prefix of **" + commandContext.getGuild().getName() + "** has been set to **" + newPrefix + "**").queue();
+		ctx.getChannel().sendMessage("<:GreenTick:782229268914372609> The prefix of **" + ctx.getGuild().getName() + "** has been set to **" + newPrefix + "**").queue();
 	}
 
 	@Override

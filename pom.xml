@@ -89,5 +89,11 @@
             <artifactId>mongodb-driver-sync</artifactId>
             <version>4.2.0</version>
         </dependency>
+        <dependency>
+            <groupId>com.jagrosh</groupId>
+            <artifactId>jda-utilities</artifactId>
+            <version>3.0.5</version>
+            <type>pom</type>
+        </dependency>
     </dependencies>
 </project>

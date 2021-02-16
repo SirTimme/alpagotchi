@@ -20,34 +20,34 @@ public class Help implements ICommand {
 	}
 
 	@Override
-	public void execute(CommandContext commandContext) {
-		final List<String> args = commandContext.getArgs();
-		final String prefix = IDataBaseManager.INSTANCE.getPrefix(commandContext.getGuild().getIdLong());
+	public void execute(CommandContext ctx) {
+		final List<String> args = ctx.getArgs();
+		final String prefix = IDataBaseManager.INSTANCE.getPrefix(ctx.getGuild().getIdLong());
 
 		if (args.isEmpty()) {
-			final User botCreator = commandContext.getJDA().getUserById(Config.get("OWNER_ID"));
+			final User botCreator = ctx.getJDA().getUserById(Config.get("OWNER_ID"));
 
 			EmbedBuilder embed = new EmbedBuilder();
 			embed.setTitle("Overview of all commands")
 					.setDescription("Further information to any command:\n**```fix\n" + prefix + "help [command]\n```**")
 					.addField("\uD83D\uDC6E Admin commands", getCommandsByPerms(prefix, PermissionLevel.ADMIN), true)
 					.addField("\uD83D\uDD13 Member commands", getCommandsByPerms(prefix, PermissionLevel.MEMBER), true)
-					.addField("Need further help or found a bug?", "Join the [Alpagotchi Support](https://discord.gg/SErfVpSQAV) server!", false)
+					.addField("Need further help or found a bug?", "Then join the [Alpagotchi Support](https://discord.gg/SErfVpSQAV) server!", false)
 					.setFooter("Created by " + botCreator.getName(), botCreator.getEffectiveAvatarUrl())
 					.setTimestamp(Instant.now());
 
-			commandContext.getChannel().sendMessage(embed.build()).queue();
+			ctx.getChannel().sendMessage(embed.build()).queue();
 			return;
 		}
 
 		ICommand command = cmdManager.getCommand(args.get(0));
 
 		if (command == null) {
-			commandContext.getChannel().sendMessage("<:RedCross:782229279312314368> Could not retrieve help for that command").queue();
+			ctx.getChannel().sendMessage("<:RedCross:782229279312314368> Could not retrieve help for that command").queue();
 			return;
 		}
 
-		commandContext.getChannel().sendMessage(command.getHelp(prefix)).queue();
+		ctx.getChannel().sendMessage(command.getHelp(prefix)).queue();
 	}
 
 	@Override

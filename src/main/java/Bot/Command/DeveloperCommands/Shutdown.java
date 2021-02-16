@@ -7,14 +7,14 @@ import Bot.Command.PermissionLevel;
 public class Shutdown implements ICommand {
 
    @Override
-   public void execute(CommandContext commandContext) {
+   public void execute(CommandContext ctx) {
 
-      if (!PermissionLevel.DEVELOPER.hasPerms(commandContext.getMember())) {
-         commandContext.getChannel().sendMessage("<:RedCross:782229279312314368> This is a **developer-only** command").queue();
+      if (!PermissionLevel.DEVELOPER.hasPerms(ctx.getMember())) {
+         ctx.getChannel().sendMessage("<:RedCross:782229279312314368> This is a **developer-only** command").queue();
          return;
       }
 
-      commandContext.getChannel().sendMessage("<:GreenTick:782229268914372609> " + commandContext.getJDA().getSelfUser().getName() + " is shutting down...").complete();
+      ctx.getChannel().sendMessage("<:GreenTick:782229268914372609> " + ctx.getJDA().getSelfUser().getName() + " is shutting down...").complete();
       System.exit(0);
    }
 

@@ -35,5 +35,7 @@ public interface IDataBaseManager {
 
     void createDBEntry(long memberID);
 
+    void deleteDBEntry(long memberID);
+
     boolean isUserInDB(long memberID);
 }

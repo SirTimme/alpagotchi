@@ -17,23 +17,23 @@ public class Buy implements ICommand {
    }
 
    @Override
-   public void execute(CommandContext commandContext) {
-      if (!IDataBaseManager.INSTANCE.isUserInDB(commandContext.getAuthorID())) {
-         commandContext.getChannel().sendMessage("<:RedCross:782229279312314368> You do not own a alpaca, use **" + commandContext.getPrefix() + "init** first").queue();
+   public void execute(CommandContext ctx) {
+      if (!IDataBaseManager.INSTANCE.isUserInDB(ctx.getAuthorID())) {
+         ctx.getChannel().sendMessage("<:RedCross:782229279312314368> You do not own a alpaca, use **" + ctx.getPrefix() + "init** first").queue();
          return;
       }
 
-      final List<String> args = commandContext.getArgs();
+      final List<String> args = ctx.getArgs();
 
       if (args.isEmpty() || args.size() < 2) {
-         commandContext.getChannel().sendMessage("<:RedCross:782229279312314368> Missing arguments").queue();
+         ctx.getChannel().sendMessage("<:RedCross:782229279312314368> Missing arguments").queue();
          return;
       }
 
       IShopItem item = shopItemManager.getShopItem(args.get(0));
 
       if (item == null) {
-         commandContext.getChannel().sendMessage("<:RedCross:782229279312314368> Could not resolve an item with this name").queue();
+         ctx.getChannel().sendMessage("<:RedCross:782229279312314368> Could not resolve an item with this name").queue();
          return;
       }
 
@@ -42,24 +42,24 @@ public class Buy implements ICommand {
       try {
          itemAmount = Integer.parseInt(args.get(1));
       } catch (NumberFormatException error) {
-         commandContext.getChannel().sendMessage("<:RedCross:782229279312314368> Could not resolve the amount of items").queue();
+         ctx.getChannel().sendMessage("<:RedCross:782229279312314368> Could not resolve the amount of items").queue();
          return;
       }
 
       if (itemAmount > 10) {
-         commandContext.getChannel().sendMessage("<:RedCross:782229279312314368> You can purchase max. 10 items at a time").queue();
+         ctx.getChannel().sendMessage("<:RedCross:782229279312314368> You can purchase max. 10 items at a time").queue();
          return;
       }
 
-      if (IDataBaseManager.INSTANCE.getBalance(commandContext.getAuthorID()) - (item.getPrice() * itemAmount) < 0) {
-         commandContext.getChannel().sendMessage("<:RedCross:782229279312314368> Insufficient amount of fluffies").queue();
+      if (IDataBaseManager.INSTANCE.getBalance(ctx.getAuthorID()) - (item.getPrice() * itemAmount) < 0) {
+         ctx.getChannel().sendMessage("<:RedCross:782229279312314368> Insufficient amount of fluffies").queue();
          return;
       }
 
-      IDataBaseManager.INSTANCE.setBalance(commandContext.getAuthorID(), -item.getPrice() * itemAmount);
-      IDataBaseManager.INSTANCE.setInventory(commandContext.getAuthorID(), item.getCategory() , item.getName(), itemAmount);
+      IDataBaseManager.INSTANCE.setBalance(ctx.getAuthorID(), -item.getPrice() * itemAmount);
+      IDataBaseManager.INSTANCE.setInventory(ctx.getAuthorID(), item.getCategory() , item.getName(), itemAmount);
 
-      commandContext.getChannel().sendMessage(":moneybag: Congratulations, you successfully bought **" + itemAmount + " " + item.getName() + "** for **" + (item.getPrice() * itemAmount) + "** fluffies").queue();
+      ctx.getChannel().sendMessage(":moneybag: Congratulations, you successfully bought **" + itemAmount + " " + item.getName() + "** for **" + (item.getPrice() * itemAmount) + "** fluffies").queue();
    }
 
    @Override
