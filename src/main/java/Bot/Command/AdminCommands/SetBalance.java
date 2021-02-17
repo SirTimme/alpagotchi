@@ -32,7 +32,7 @@ public class SetBalance implements ICommand {
       try {
          newBalance = Integer.parseInt(ctx.getArgs().get(1));
       } catch (NumberFormatException | IndexOutOfBoundsException error) {
-         ctx.getChannel().sendMessage("<:RedCross:782229279312314368> Could not resolve the amount of items").queue();
+         ctx.getChannel().sendMessage("<:RedCross:782229279312314368> Could not resolve the new balance").queue();
          return;
       }
 
