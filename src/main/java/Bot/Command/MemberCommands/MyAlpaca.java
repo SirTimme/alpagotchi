@@ -8,7 +8,6 @@ import Bot.Database.IDataBaseManager;
 import Bot.Outfits.IOutfit;
 import Bot.Outfits.OutfitManager;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -8,7 +8,6 @@ import Bot.Database.IDataBaseManager;
 import java.util.List;
 
 public class Balance implements ICommand {
-
     @Override
     public void execute(CommandContext ctx) {
         if (!IDataBaseManager.INSTANCE.isUserInDB(ctx.getAuthorID())) {

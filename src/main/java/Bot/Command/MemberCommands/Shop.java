@@ -3,11 +3,10 @@ package Bot.Command.MemberCommands;
 import Bot.Command.CommandContext;
 import Bot.Command.ICommand;
 import Bot.Command.PermissionLevel;
-import Bot.Shop.IShopItem;
 import Bot.Config;
+import Bot.Shop.IShopItem;
 import Bot.Shop.ShopItemManager;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.User;
 
 import java.time.Instant;

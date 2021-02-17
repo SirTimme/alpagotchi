@@ -16,7 +16,6 @@ public class Decrease implements ICommand {
 
    @Override
    public void execute(CommandContext ctx) {
-
       if (!PermissionLevel.DEVELOPER.hasPerms(ctx.getMember())) {
          ctx.getChannel().sendMessage("<:RedCross:782229279312314368> This is a **developer-only** command").queue();
          return;

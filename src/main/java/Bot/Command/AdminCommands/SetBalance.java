@@ -6,22 +6,11 @@ import Bot.Command.PermissionLevel;
 import Bot.Database.IDataBaseManager;
 import net.dv8tion.jda.api.Permission;
 
-import java.util.List;
-
 public class SetBalance implements ICommand {
-
    @Override
    public void execute(CommandContext ctx) {
-
       if (!PermissionLevel.ADMIN.hasPerms(ctx.getMember())) {
          ctx.getChannel().sendMessage("<:RedCross:782229279312314368> This is a **admin-only** command, you are missing the **" + Permission.MANAGE_SERVER.getName() + "** permission").queue();
-         return;
-      }
-
-      final List<String> args = ctx.getArgs();
-
-      if (args.isEmpty() || args.size() < 2) {
-         ctx.getChannel().sendMessage("<:RedCross:782229279312314368> Missing arguments").queue();
          return;
       }
 
@@ -41,9 +30,8 @@ public class SetBalance implements ICommand {
       int newBalance;
 
       try {
-         newBalance = Integer.parseInt(args.get(1));
-
-      } catch (NumberFormatException error) {
+         newBalance = Integer.parseInt(ctx.getArgs().get(1));
+      } catch (NumberFormatException | IndexOutOfBoundsException error) {
          ctx.getChannel().sendMessage("<:RedCross:782229279312314368> Could not resolve the amount of items").queue();
          return;
       }

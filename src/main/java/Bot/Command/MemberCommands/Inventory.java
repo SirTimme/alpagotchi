@@ -8,7 +8,6 @@ import Bot.Database.IDataBaseManager;
 import Bot.Shop.IShopItem;
 import Bot.Shop.ShopItemManager;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.User;
 
 import java.time.Instant;

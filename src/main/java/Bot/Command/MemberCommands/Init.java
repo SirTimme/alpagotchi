@@ -14,6 +14,7 @@ import java.time.Instant;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+@SuppressWarnings("ConstantConditions")
 public class Init implements ICommand {
 	private final EventWaiter waiter;
 	private static final String acceptEmote = "✅";
@@ -25,7 +26,6 @@ public class Init implements ICommand {
 
 	@Override
 	public void execute(CommandContext ctx) {
-
 		if (IDataBaseManager.INSTANCE.isUserInDB(ctx.getAuthorID())) {
 			ctx.getChannel().sendMessage("<:RedCross:782229279312314368> Your alpaca has already been set up").queue();
 			return;
@@ -36,12 +36,11 @@ public class Init implements ICommand {
 		EmbedBuilder embed = new EmbedBuilder();
 		embed
 				.setTitle("User information")
-				.setDescription("Im glad, that Alpagotchi interests you and you want to interact with him. Here are two important points before you can start:")
+				.setDescription("Im glad, that Alpagotchi interests you and you want to interact with him.\nHere are two important points before you can start:")
 				.setThumbnail(ctx.getJDA().getSelfUser().getAvatarUrl())
-				.addField("__§1 Personal data storage__", "Alpagotchi stores your personal Discord UserID in order to work\n\n" +
-						"React with the " + acceptEmote + " when you give Alpagotchi the permission to store this information and let's start this journey!\n\n" +
-						"React with the " + declineEmote + " when you think it's too big a risk for Alpagotchi to store this information and our journey ends here", false)
-				.addField("__§2 Deletion of personal data__", "If you change your mind about storing your UserID, use the `" + ctx.getPrefix() + "delete` command to delete your data at any time", false)
+				.addField("__§1 Storage of the UserID__", "Alpagotchi stores your personal Discord UserID in order to work, but this is public information and can be accessed by everyone", false)
+				.addField("__§2 Deletion of the UserID__", "If you change your mind about storing your UserID, use the `" + ctx.getPrefix() + "delete` command to delete your data at any time", false)
+				.setImage("https://cdn.discordapp.com/attachments/795637300661977132/811504330263625778/Reactions.png")
 				.setFooter("Created by " + botCreator.getName(), botCreator.getEffectiveAvatarUrl())
 				.setTimestamp(Instant.now());
 
@@ -62,7 +61,7 @@ public class Init implements ICommand {
 								if (event.getReactionEmote().getEmoji().equals(acceptEmote)) {
 									IDataBaseManager.INSTANCE.createDBEntry(ctx.getAuthorID());
 									message.suppressEmbeds(true).queue();
-									message.editMessage("<:GreenTick:782229268914372609> Your alpaca has been set up").queue();
+									message.editMessage("<:GreenTick:782229268914372609> Your alpaca has been set up, use **" + ctx.getPrefix() + "myalpaca** to see it").queue();
 								} else if (event.getReactionEmote().getEmoji().equals(declineEmote)) {
 									message.suppressEmbeds(true).queue();
 									message.editMessage("<:RedCross:782229279312314368> Initiation process cancelled").queue();

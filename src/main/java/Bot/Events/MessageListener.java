@@ -1,17 +1,17 @@
 package Bot.Events;
 
 import Bot.Command.CommandManager;
+import Bot.Config;
 import Bot.Database.IDataBaseManager;
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.entities.PermissionOverride;
-import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 import java.util.EnumSet;
 
+@SuppressWarnings("ConstantConditions")
 public class MessageListener extends ListenerAdapter {
 	private final CommandManager cmdManager;
 
@@ -27,46 +27,18 @@ public class MessageListener extends ListenerAdapter {
 			return;
 		}
 
-		cmdManager.handle(event, prefix);
+		this.cmdManager.handle(event, prefix);
 	}
 
 	private static boolean checkPermissions(GuildMessageReceivedEvent event) {
 		final Member botClient = event.getGuild().getMemberById(event.getJDA().getSelfUser().getIdLong());
-		final Role botRole = event.getGuild().getRoleByBot(event.getJDA().getSelfUser().getIdLong());
-		final Role everyoneRole = event.getGuild().getRoleById(event.getGuild().getIdLong());
+		EnumSet<Permission> botPermissions = botClient.getPermissions(event.getChannel());
 
-		EnumSet<Permission> deniedPermissions = EnumSet.noneOf(Permission.class);
-		EnumSet<Permission> allowedPermissions = EnumSet.noneOf(Permission.class);
-		EnumSet<Permission> ungrantedPermissions = EnumSet.noneOf(Permission.class);
-
-		for (PermissionOverride permissionOverwrite : event.getChannel().getPermissionOverrides()) {
-			if (permissionOverwrite.isRoleOverride() && (botClient.getRoles().contains(permissionOverwrite.getRole()) || permissionOverwrite.getRole().equals(everyoneRole))) {
-				deniedPermissions.addAll(permissionOverwrite.getDenied());
-				allowedPermissions.addAll(permissionOverwrite.getAllowed());
-			} else if (permissionOverwrite.isMemberOverride() && permissionOverwrite.getMember().equals(botClient)) {
-				deniedPermissions.addAll(permissionOverwrite.getDenied());
-				allowedPermissions.addAll(permissionOverwrite.getAllowed());
-			}
-			ungrantedPermissions.addAll(permissionOverwrite.getInherit());
-		}
-
-		deniedPermissions.removeIf(allowedPermissions::contains);
-		ungrantedPermissions.removeIf(allowedPermissions::contains);
-
-		EnumSet<Permission> requiredPermissions = EnumSet.of(
-				Permission.MESSAGE_WRITE,
-				Permission.MESSAGE_ATTACH_FILES,
-				Permission.VIEW_CHANNEL,
-				Permission.MESSAGE_HISTORY,
-				Permission.MESSAGE_EMBED_LINKS,
-				Permission.MESSAGE_EXT_EMOJI,
-				Permission.MESSAGE_READ,
-				Permission.MESSAGE_MANAGE
-		);
-
-		for (Permission permission : requiredPermissions) {
-			if (deniedPermissions.contains(permission) && permission != Permission.MESSAGE_WRITE || (ungrantedPermissions.contains(permission) && !botRole.hasPermission(permission))) {
-				event.getChannel().sendMessage("⚠ I am missing at least the **" + permission.getName() + "** permission to work properly").queue();
+		for (Permission permission : Config.requiredPermissions()) {
+			if (!botPermissions.contains(permission)) {
+				if (permission != Permission.MESSAGE_WRITE) {
+					event.getChannel().sendMessage("⚠ I am missing at least the **" + permission.getName() + "** permission to work properly").queue();
+				}
 				return false;
 			}
 		}

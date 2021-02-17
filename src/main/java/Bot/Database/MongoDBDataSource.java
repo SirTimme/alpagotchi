@@ -8,6 +8,7 @@ import org.bson.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+@SuppressWarnings("ConstantConditions")
 public class MongoDBDataSource implements IDataBaseManager {
 	private static final Logger LOGGER = LoggerFactory.getLogger(MongoDBDataSource.class);
 	private final MongoCollection<Document> alpacaCollection;
@@ -133,14 +134,9 @@ public class MongoDBDataSource implements IDataBaseManager {
 	@Override
 	public long getCooldown(long memberID, String column) {
 		Document resultDoc = alpacaCollection.find(Filters.eq("_id", memberID)).first();
+		Object result = resultDoc.get("cooldowns", Document.class).get(column);
 
-		Object obj = resultDoc.get("cooldowns", Document.class).get(column);
-
-		if (obj instanceof Integer) {
-			return ((Integer) obj).longValue();
-		} else {
-			return (Long) obj;
-		}
+		return result instanceof Integer ? ((Integer) result).longValue() : (Long) result;
 	}
 
 	@Override

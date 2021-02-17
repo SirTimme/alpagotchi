@@ -6,7 +6,6 @@ import Bot.Command.PermissionLevel;
 import Bot.Database.IDataBaseManager;
 
 public class Pet implements ICommand {
-
 	@Override
 	public void execute(CommandContext ctx) {
 		if (!IDataBaseManager.INSTANCE.isUserInDB(ctx.getAuthorID())) {
