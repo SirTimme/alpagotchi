@@ -13,7 +13,7 @@ public class Nick implements ICommand {
          return;
       }
 
-      String nickname;
+      final String nickname;
 
       try {
          nickname = ctx.getArgs().get(0);

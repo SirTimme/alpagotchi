@@ -7,7 +7,6 @@ import Bot.Database.IDataBaseManager;
 import Bot.Shop.IShopItem;
 import Bot.Shop.ShopItemManager;
 
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class Feed implements ICommand {
@@ -24,7 +23,7 @@ public class Feed implements ICommand {
 			return;
 		}
 
-		long sleepCooldown = IDataBaseManager.INSTANCE.getCooldown(ctx.getAuthorID(), "sleep") - System.currentTimeMillis();
+		final long sleepCooldown = IDataBaseManager.INSTANCE.getCooldown(ctx.getAuthorID(), "sleep") - System.currentTimeMillis();
 
 		if (sleepCooldown > 0) {
 			int remainingMinutes = (int) TimeUnit.MILLISECONDS.toMinutes(sleepCooldown);
@@ -32,23 +31,25 @@ public class Feed implements ICommand {
 			return;
 		}
 
-		if (ctx.getArgs().isEmpty() || ctx.getArgs().size() < 2) {
-			ctx.getChannel().sendMessage("<:RedCross:782229279312314368> Missing arguments").queue();
+		final IShopItem item;
+
+		try {
+			item = shopItemManager.getShopItem(ctx.getArgs().get(0));
+		} catch (IndexOutOfBoundsException error) {
+			ctx.getChannel().sendMessage("<:RedCross:782229279312314368> Could not resolve the specified item").queue();
 			return;
 		}
-
-		IShopItem item = shopItemManager.getShopItem(ctx.getArgs().get(0));
 
 		if (item == null) {
 			ctx.getChannel().sendMessage("<:RedCross:782229279312314368> Could not resolve this item").queue();
 			return;
 		}
 
-		int itemAmount;
+		final int itemAmount;
 
 		try {
 			itemAmount = Integer.parseInt(ctx.getArgs().get(1));
-		} catch (NumberFormatException error) {
+		} catch (NumberFormatException | IndexOutOfBoundsException error) {
 			ctx.getChannel().sendMessage("<:RedCross:782229279312314368> Could not resolve the amount of item").queue();
 			return;
 		}
@@ -63,8 +64,8 @@ public class Feed implements ICommand {
 			return;
 		}
 
-		int oldValue = IDataBaseManager.INSTANCE.getAlpacaValues(ctx.getAuthorID(), item.getCategory());
-		int saturation = item.getSaturation() * itemAmount;
+		final int oldValue = IDataBaseManager.INSTANCE.getAlpacaValues(ctx.getAuthorID(), item.getCategory());
+		final int saturation = item.getSaturation() * itemAmount;
 
 		if (oldValue + saturation > 100) {
 			ctx.getChannel().sendMessage("<:RedCross:782229279312314368> You would overfeed your alpaca").queue();
@@ -74,7 +75,7 @@ public class Feed implements ICommand {
 		IDataBaseManager.INSTANCE.setInventory(ctx.getAuthorID(), item.getCategory(), item.getName(), -itemAmount);
 		IDataBaseManager.INSTANCE.setAlpacaValues(ctx.getAuthorID(), item.getCategory(), saturation);
 
-		String itemMessage = itemAmount == 1 ? itemAmount + "** " + item.getName() : itemAmount + "** " + item.getName() + "s";
+		final String itemMessage = itemAmount == 1 ? itemAmount + "** " + item.getName() : itemAmount + "** " + item.getName() + "s";
 
 		if (item.getCategory().equals("hunger")) {
 			ctx.getChannel().sendMessage(":meat_on_bone: Your alpaca eats the **" + itemMessage + " in one bite and is happy **Hunger + " + saturation + "**").queue();

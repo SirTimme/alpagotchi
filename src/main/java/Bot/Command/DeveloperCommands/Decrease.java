@@ -5,7 +5,6 @@ import Bot.Command.ICommand;
 import Bot.Command.PermissionLevel;
 import Bot.Database.IDataBaseManager;
 
-import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -21,24 +20,22 @@ public class Decrease implements ICommand {
          return;
       }
 
-      final List<String> args = ctx.getArgs();
-
-      if (args.isEmpty()) {
+      if (ctx.getArgs().isEmpty()) {
          ctx.getChannel().sendMessage("<:RedCross:782229279312314368> Missing arguments").queue();
          return;
       }
 
-      if (!(args.get(0).equalsIgnoreCase("enable") || args.get(0).equalsIgnoreCase("disable"))) {
+      if (!(ctx.getArgs().get(0).equalsIgnoreCase("enable") || ctx.getArgs().get(0).equalsIgnoreCase("disable"))) {
          ctx.getChannel().sendMessage("<:RedCross:782229279312314368> Incorrect arguments").queue();
          return;
       }
 
-      if (isTimerRunning && args.get(0).equalsIgnoreCase("enable")) {
+      if (this.isTimerRunning && ctx.getArgs().get(0).equalsIgnoreCase("enable")) {
          ctx.getChannel().sendMessage("<:RedCross:782229279312314368> Decreasing is already enabled").queue();
          return;
       }
 
-      if (args.get(0).equalsIgnoreCase("enable")) {
+      if (ctx.getArgs().get(0).equalsIgnoreCase("enable")) {
          this.timer.schedule(sqlTask = new TimerTask() {
             @Override
             public void run() {

@@ -27,7 +27,7 @@ public class SetBalance implements ICommand {
       }
 
       final int currentBalance = IDataBaseManager.INSTANCE.getBalance(mentionedUserID);
-      int newBalance;
+      final int newBalance;
 
       try {
          newBalance = Integer.parseInt(ctx.getArgs().get(1));

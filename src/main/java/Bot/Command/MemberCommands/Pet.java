@@ -20,8 +20,8 @@ public class Pet implements ICommand {
 			return;
 		}
 
-		int amountOfJoy = (int) (Math.random() * 10 + 1);
-		int newJoy = amountOfJoy + joy > 100 ? 100 - joy : amountOfJoy;
+		final int amountOfJoy = (int) (Math.random() * 10 + 1);
+		final int newJoy = amountOfJoy + joy > 100 ? 100 - joy : amountOfJoy;
 
 		IDataBaseManager.INSTANCE.setAlpacaValues(ctx.getAuthorID(), "joy", newJoy);
 

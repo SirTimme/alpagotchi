@@ -11,8 +11,8 @@ import java.util.concurrent.TimeUnit;
 
 public class Delete implements ICommand {
 	private final EventWaiter waiter;
-	private static final String acceptEmote = "✅";
-	private static final String declineEmote = "❌";
+	private final String acceptEmote = "✅";
+	private final String declineEmote = "❌";
 
 	public Delete(EventWaiter waiter) {
 		this.waiter = waiter;

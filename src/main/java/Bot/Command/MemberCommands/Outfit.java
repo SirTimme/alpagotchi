@@ -28,14 +28,15 @@ public class Outfit implements ICommand {
 
 		if (ctx.getArgs().isEmpty()) {
 			final User botCreator = ctx.getJDA().getUserById(Config.get("OWNER_ID"));
-			EmbedBuilder embed = new EmbedBuilder();
-			embed.setTitle("Available outfits");
+			final EmbedBuilder embed = new EmbedBuilder();
 
 			for (IOutfit outfit : outfitManager.getOutfits()) {
 				embed.addField("\uD83D\uDC54 " + outfit.getName(), outfit.getDescription(), false);
 			}
 
-			embed.setFooter("Created by " + botCreator.getName(), botCreator.getEffectiveAvatarUrl())
+			embed
+					.setTitle("Available outfits")
+					.setFooter("Created by " + botCreator.getName(), botCreator.getEffectiveAvatarUrl())
 					.setTimestamp(Instant.now());
 
 			ctx.getChannel().sendMessage(embed.build()).queue();

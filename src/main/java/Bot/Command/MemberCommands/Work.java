@@ -15,7 +15,7 @@ public class Work implements ICommand {
          return;
       }
 
-      long sleepCooldown = IDataBaseManager.INSTANCE.getCooldown(ctx.getAuthorID(), "sleep") - System.currentTimeMillis();
+      final long sleepCooldown = IDataBaseManager.INSTANCE.getCooldown(ctx.getAuthorID(), "sleep") - System.currentTimeMillis();
 
       if (sleepCooldown > 0) {
          int remainingSleep = (int) TimeUnit.MILLISECONDS.toMinutes(sleepCooldown);
@@ -23,7 +23,7 @@ public class Work implements ICommand {
          return;
       }
 
-      long workCooldown = IDataBaseManager.INSTANCE.getCooldown(ctx.getAuthorID(), "work") - System.currentTimeMillis();
+      final long workCooldown = IDataBaseManager.INSTANCE.getCooldown(ctx.getAuthorID(), "work") - System.currentTimeMillis();
 
       if (workCooldown > 0) {
          int remainingWork = (int) TimeUnit.MILLISECONDS.toMinutes(workCooldown);
@@ -31,7 +31,7 @@ public class Work implements ICommand {
          return;
       }
 
-      int amountOfFluffies = (int) (Math.random() * 15 + 1);
+      final int amountOfFluffies = (int) (Math.random() * 15 + 1);
 
       IDataBaseManager.INSTANCE.setBalance(ctx.getAuthorID(), amountOfFluffies);
       IDataBaseManager.INSTANCE.setCooldown(ctx.getAuthorID(), "work", System.currentTimeMillis() + 1000L * 60 * 20);

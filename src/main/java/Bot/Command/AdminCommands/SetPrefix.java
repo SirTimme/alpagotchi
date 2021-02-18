@@ -19,7 +19,7 @@ public class SetPrefix implements ICommand {
 			return;
 		}
 
-		String newPrefix = String.join("", ctx.getArgs());
+		final String newPrefix = String.join("", ctx.getArgs());
 		IDataBaseManager.INSTANCE.setPrefix(ctx.getGuild().getIdLong(), newPrefix);
 
 		ctx.getChannel().sendMessage("<:GreenTick:782229268914372609> The prefix of **" + ctx.getGuild().getName() + "** has been set to **" + newPrefix + "**").queue();

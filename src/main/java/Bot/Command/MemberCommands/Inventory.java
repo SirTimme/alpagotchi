@@ -28,7 +28,7 @@ public class Inventory implements ICommand {
 		}
 
 		final User botCreator = ctx.getJDA().getUserById(Config.get("OWNER_ID"));
-		EmbedBuilder embed = new EmbedBuilder();
+		final EmbedBuilder embed = new EmbedBuilder();
 		embed
 				.setTitle("Inventory")
 				.addField("Hunger", getItemsByCategory("hunger", ctx.getAuthorID()), true)

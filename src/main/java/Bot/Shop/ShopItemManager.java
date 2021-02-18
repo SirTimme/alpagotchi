@@ -22,10 +22,8 @@ public class ShopItemManager {
 
     @Nullable
     public IShopItem getShopItem(String search) {
-        String searchLower = search.toLowerCase();
-
         for (IShopItem item : this.shopItems) {
-            if (item.getName().equals(searchLower)) {
+            if (item.getName().equals(search.toLowerCase())) {
                 return item;
             }
         }

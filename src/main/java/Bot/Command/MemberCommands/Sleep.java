@@ -5,8 +5,6 @@ import Bot.Command.ICommand;
 import Bot.Command.PermissionLevel;
 import Bot.Database.IDataBaseManager;
 
-import java.util.List;
-
 public class Sleep implements ICommand {
    @Override
    public void execute(CommandContext ctx) {
@@ -15,14 +13,14 @@ public class Sleep implements ICommand {
          return;
       }
 
-      long sleepCooldown = IDataBaseManager.INSTANCE.getCooldown(ctx.getAuthorID(), "sleep") - System.currentTimeMillis();
+      final long sleepCooldown = IDataBaseManager.INSTANCE.getCooldown(ctx.getAuthorID(), "sleep") - System.currentTimeMillis();
 
       if (sleepCooldown > 0) {
          ctx.getChannel().sendMessage("<:RedCross:782229279312314368> Your alpaca already sleeps").queue();
          return;
       }
 
-      int energy = IDataBaseManager.INSTANCE.getAlpacaValues(ctx.getAuthorID(), "energy");
+      final int energy = IDataBaseManager.INSTANCE.getAlpacaValues(ctx.getAuthorID(), "energy");
 
       if (energy == 100) {
          ctx.getChannel().sendMessage("<:RedCross:782229279312314368> The energy of your alpaca is already at the maximum").queue();
@@ -34,7 +32,7 @@ public class Sleep implements ICommand {
          return;
       }
 
-      int duration;
+      final int duration;
 
       try {
          duration = Integer.parseInt(ctx.getArgs().get(0));
@@ -48,7 +46,7 @@ public class Sleep implements ICommand {
          return;
       }
 
-      int newEnergy = energy + duration / 2 > 100 ? 100 - energy : duration / 2;
+      final int newEnergy = energy + duration / 2 > 100 ? 100 - energy : duration / 2;
 
       IDataBaseManager.INSTANCE.setAlpacaValues(ctx.getAuthorID(), "energy", newEnergy);
       IDataBaseManager.INSTANCE.setCooldown(ctx.getAuthorID(), "sleep", System.currentTimeMillis() + 1000L * 60 * 2 * newEnergy);

@@ -17,8 +17,8 @@ import java.util.concurrent.TimeUnit;
 @SuppressWarnings("ConstantConditions")
 public class Init implements ICommand {
 	private final EventWaiter waiter;
-	private static final String acceptEmote = "✅";
-	private static final String declineEmote = "❌";
+	private final String acceptEmote = "✅";
+	private final String declineEmote = "❌";
 
 	public Init(EventWaiter waiter) {
 		this.waiter = waiter;
@@ -32,7 +32,7 @@ public class Init implements ICommand {
 		}
 
 		final User botCreator = ctx.getJDA().getUserById(Config.get("OWNER_ID"));
-		EmbedBuilder embed = new EmbedBuilder();
+		final EmbedBuilder embed = new EmbedBuilder();
 		embed
 				.setTitle("User information")
 				.setDescription("Im glad, that Alpagotchi interests you and you want to interact with him.\nHere are two important points before you can start:")

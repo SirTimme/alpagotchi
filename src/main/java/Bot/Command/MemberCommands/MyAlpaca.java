@@ -35,8 +35,8 @@ public class MyAlpaca implements ICommand {
 			return;
 		}
 
-		IOutfit currentOutfit = outfitManager.getOutfit(IDataBaseManager.INSTANCE.getOutfit(ctx.getAuthorID()));
-		BufferedImage alpaca;
+		final IOutfit currentOutfit = outfitManager.getOutfit(IDataBaseManager.INSTANCE.getOutfit(ctx.getAuthorID()));
+		final BufferedImage alpaca;
 
 		try {
 			alpaca = ImageIO.read(new File("src/main/resources/assets/alpaca.jpg"));
@@ -50,7 +50,7 @@ public class MyAlpaca implements ICommand {
 		final int energy = IDataBaseManager.INSTANCE.getAlpacaValues(ctx.getAuthorID(), "energy");
 		final int joy = IDataBaseManager.INSTANCE.getAlpacaValues(ctx.getAuthorID(), "joy");
 
-		Graphics alpacaGraphics = alpaca.getGraphics();
+		final Graphics alpacaGraphics = alpaca.getGraphics();
 		alpacaGraphics.setFont(new Font("SansSerif", Font.BOLD, 15));
 
 		alpacaGraphics.setColor(Color.BLACK);
@@ -82,7 +82,7 @@ public class MyAlpaca implements ICommand {
 			alpacaGraphics.drawImage(outfit, currentOutfit.getX(), currentOutfit.getY(), null);
 		}
 
-		File newAlpacaFile = new File("src/main/resources/alpacaEdited.jpg");
+		final File newAlpacaFile = new File("src/main/resources/alpacaEdited.jpg");
 
 		try {
 			ImageIO.write(alpaca, "jpg", newAlpacaFile);
@@ -91,16 +91,16 @@ public class MyAlpaca implements ICommand {
 		}
 
 		final User botCreator = ctx.getJDA().getUserById(Config.get("OWNER_ID"));
-
-		final EmbedBuilder embedBuilder = new EmbedBuilder();
-		embedBuilder.setTitle("" + IDataBaseManager.INSTANCE.getNickname(ctx.getAuthorID()) + "")
+		final EmbedBuilder embed = new EmbedBuilder();
+		embed
+				.setTitle("" + IDataBaseManager.INSTANCE.getNickname(ctx.getAuthorID()) + "")
 				.setDescription("_Have a llamazing day!_")
 				.setThumbnail(ctx.getMember().getUser().getAvatarUrl())
 				.setFooter("Created by " + botCreator.getName(), botCreator.getEffectiveAvatarUrl())
 				.setTimestamp(Instant.now())
 				.setImage("attachment://alpacaEdited.jpg");
 
-		ctx.getChannel().sendFile(newAlpacaFile, "alpacaEdited.jpg").embed(embedBuilder.build()).queue();
+		ctx.getChannel().sendFile(newAlpacaFile, "alpacaEdited.jpg").embed(embed.build()).queue();
 	}
 
 	@Override

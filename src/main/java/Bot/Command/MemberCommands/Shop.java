@@ -22,7 +22,7 @@ public class Shop implements ICommand {
 	@Override
 	public void execute(CommandContext ctx) {
 		final User botCreator = ctx.getJDA().getUserById(Config.get("OWNER_ID"));
-		EmbedBuilder embed = new EmbedBuilder();
+		final EmbedBuilder embed = new EmbedBuilder();
 		embed
 				.setTitle("Shop")
 				.addField("Item", getItemsAsString("hunger", "name"), true)

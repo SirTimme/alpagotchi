@@ -25,8 +25,9 @@ public class Help implements ICommand {
 
 		if (ctx.getArgs().isEmpty()) {
 			final User botCreator = ctx.getJDA().getUserById(Config.get("OWNER_ID"));
-			EmbedBuilder embed = new EmbedBuilder();
-			embed.setTitle("Overview of all commands")
+			final EmbedBuilder embed = new EmbedBuilder();
+			embed
+					.setTitle("Overview of all commands")
 					.setDescription("Further information to any command:\n**```fix\n" + prefix + "help [command]\n```**")
 					.addField("\uD83D\uDC6E Admin commands", getCommandsByPerms(prefix, PermissionLevel.ADMIN), true)
 					.addField("\uD83D\uDD13 Member commands", getCommandsByPerms(prefix, PermissionLevel.MEMBER), true)
@@ -38,7 +39,7 @@ public class Help implements ICommand {
 			return;
 		}
 
-		ICommand cmd = cmdManager.getCommand(ctx.getArgs().get(0));
+		final ICommand cmd = cmdManager.getCommand(ctx.getArgs().get(0));
 
 		if (cmd == null) {
 			ctx.getChannel().sendMessage("<:RedCross:782229279312314368> Could not retrieve help for that command").queue();
