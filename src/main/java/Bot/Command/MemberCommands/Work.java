@@ -16,17 +16,17 @@ public class Work implements ICommand {
       }
 
       long sleepCooldown = IDataBaseManager.INSTANCE.getCooldown(ctx.getAuthorID(), "sleep") - System.currentTimeMillis();
-      int remainingSleep = (int) TimeUnit.MILLISECONDS.toMinutes(sleepCooldown);
 
       if (sleepCooldown > 0) {
+         int remainingSleep = (int) TimeUnit.MILLISECONDS.toMinutes(sleepCooldown);
          ctx.getChannel().sendMessage("<:RedCross:782229279312314368> Your alpaca sleeps, it will wake up in **" + (remainingSleep == 1 ? remainingSleep + "** minute" : remainingSleep + "** minutes")).queue();
          return;
       }
 
       long workCooldown = IDataBaseManager.INSTANCE.getCooldown(ctx.getAuthorID(), "work") - System.currentTimeMillis();
-      int remainingWork = (int) TimeUnit.MILLISECONDS.toMinutes(workCooldown);
 
       if (workCooldown > 0) {
+         int remainingWork = (int) TimeUnit.MILLISECONDS.toMinutes(workCooldown);
          ctx.getChannel().sendMessage("<:RedCross:782229279312314368> Your alpaca already worked, it has to rest **" + (remainingWork == 1 ? remainingWork + "** minute" : remainingWork + "** minutes") + " to work again").queue();
          return;
       }

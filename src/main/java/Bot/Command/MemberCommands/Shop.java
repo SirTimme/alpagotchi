@@ -22,10 +22,8 @@ public class Shop implements ICommand {
 	@Override
 	public void execute(CommandContext ctx) {
 		final User botCreator = ctx.getJDA().getUserById(Config.get("OWNER_ID"));
-
-		EmbedBuilder embedBuilder = new EmbedBuilder();
-
-		embedBuilder
+		EmbedBuilder embed = new EmbedBuilder();
+		embed
 				.setTitle("Shop")
 				.addField("Item", getItemsAsString("hunger", "name"), true)
 				.addField("Price", getItemsAsString("hunger", "price"), true)
@@ -36,7 +34,7 @@ public class Shop implements ICommand {
 				.setFooter("Created by " + botCreator.getName(), botCreator.getEffectiveAvatarUrl())
 				.setTimestamp(Instant.now());
 
-		ctx.getChannel().sendMessage(embedBuilder.build()).queue();
+		ctx.getChannel().sendMessage(embed.build()).queue();
 	}
 
 	@Override

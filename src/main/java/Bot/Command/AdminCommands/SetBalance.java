@@ -9,7 +9,7 @@ import net.dv8tion.jda.api.Permission;
 public class SetBalance implements ICommand {
    @Override
    public void execute(CommandContext ctx) {
-      if (!PermissionLevel.ADMIN.hasPerms(ctx.getMember())) {
+      if (!PermissionLevel.ADMIN.hasPermission(ctx.getMember())) {
          ctx.getChannel().sendMessage("<:RedCross:782229279312314368> This is a **admin-only** command, you are missing the **" + Permission.MANAGE_SERVER.getName() + "** permission").queue();
          return;
       }
@@ -35,7 +35,6 @@ public class SetBalance implements ICommand {
          ctx.getChannel().sendMessage("<:RedCross:782229279312314368> Could not resolve the new balance").queue();
          return;
       }
-
       IDataBaseManager.INSTANCE.setBalance(mentionedUserID, newBalance - currentBalance);
 
       ctx.getChannel().sendMessage("\uD83D\uDCB3 The balance of **" + ctx.getJDA().getUserById(mentionedUserID).getName() + "** has been set to **" + newBalance + "**").queue();

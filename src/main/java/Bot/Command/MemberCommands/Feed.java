@@ -25,21 +25,19 @@ public class Feed implements ICommand {
 		}
 
 		long sleepCooldown = IDataBaseManager.INSTANCE.getCooldown(ctx.getAuthorID(), "sleep") - System.currentTimeMillis();
-		int remainingMinutes = (int) TimeUnit.MILLISECONDS.toMinutes(sleepCooldown);
 
 		if (sleepCooldown > 0) {
+			int remainingMinutes = (int) TimeUnit.MILLISECONDS.toMinutes(sleepCooldown);
 			ctx.getChannel().sendMessage("<:RedCross:782229279312314368> Your alpaca sleeps, it will wake up in **" + (remainingMinutes == 1 ? remainingMinutes + "** minute" : remainingMinutes + "** minutes")).queue();
 			return;
 		}
 
-		final List<String> args = ctx.getArgs();
-
-		if (args.isEmpty() || args.size() < 2) {
+		if (ctx.getArgs().isEmpty() || ctx.getArgs().size() < 2) {
 			ctx.getChannel().sendMessage("<:RedCross:782229279312314368> Missing arguments").queue();
 			return;
 		}
 
-		IShopItem item = shopItemManager.getShopItem(args.get(0));
+		IShopItem item = shopItemManager.getShopItem(ctx.getArgs().get(0));
 
 		if (item == null) {
 			ctx.getChannel().sendMessage("<:RedCross:782229279312314368> Could not resolve this item").queue();
@@ -49,8 +47,7 @@ public class Feed implements ICommand {
 		int itemAmount;
 
 		try {
-			itemAmount = Integer.parseInt(args.get(1));
-
+			itemAmount = Integer.parseInt(ctx.getArgs().get(1));
 		} catch (NumberFormatException error) {
 			ctx.getChannel().sendMessage("<:RedCross:782229279312314368> Could not resolve the amount of item").queue();
 			return;
@@ -67,8 +64,7 @@ public class Feed implements ICommand {
 		}
 
 		int oldValue = IDataBaseManager.INSTANCE.getAlpacaValues(ctx.getAuthorID(), item.getCategory());
-
-		int saturation = item.getCategory().equalsIgnoreCase("hunger") ? item.getSaturation() * itemAmount : item.getSaturation() * itemAmount;
+		int saturation = item.getSaturation() * itemAmount;
 
 		if (oldValue + saturation > 100) {
 			ctx.getChannel().sendMessage("<:RedCross:782229279312314368> You would overfeed your alpaca").queue();
@@ -82,7 +78,6 @@ public class Feed implements ICommand {
 
 		if (item.getCategory().equals("hunger")) {
 			ctx.getChannel().sendMessage(":meat_on_bone: Your alpaca eats the **" + itemMessage + " in one bite and is happy **Hunger + " + saturation + "**").queue();
-
 		} else {
 			ctx.getChannel().sendMessage(":beer: Your alpaca drinks the **" + itemMessage + " empty **Thirst + " + saturation + "**").queue();
 		}

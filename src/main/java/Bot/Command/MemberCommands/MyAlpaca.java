@@ -40,7 +40,6 @@ public class MyAlpaca implements ICommand {
 
 		try {
 			alpaca = ImageIO.read(new File("src/main/resources/assets/alpaca.jpg"));
-
 		} catch (IOException error) {
 			LOGGER.error(error.getMessage());
 			return;
@@ -52,10 +51,9 @@ public class MyAlpaca implements ICommand {
 		final int joy = IDataBaseManager.INSTANCE.getAlpacaValues(ctx.getAuthorID(), "joy");
 
 		Graphics alpacaGraphics = alpaca.getGraphics();
-
 		alpacaGraphics.setFont(new Font("SansSerif", Font.BOLD, 15));
-		alpacaGraphics.setColor(Color.BLACK);
 
+		alpacaGraphics.setColor(Color.BLACK);
 		alpacaGraphics.drawString(hunger + "/100", getPosition(hunger, "front"), 24);
 		alpacaGraphics.drawString(thirst + "/100", getPosition(thirst, "front"), 66);
 		alpacaGraphics.drawString(energy + "/100", getPosition(energy, "back"), 24);
@@ -75,14 +73,12 @@ public class MyAlpaca implements ICommand {
 
 		if (!currentOutfit.getName().equals("default")) {
 			BufferedImage outfit;
-
 			try {
 				outfit = ImageIO.read(new File(outfitManager.getOutfit(IDataBaseManager.INSTANCE.getOutfit(ctx.getAuthorID())).getImgUrl()));
 			} catch (IOException error) {
 				LOGGER.error(error.getMessage());
 				return;
 			}
-
 			alpacaGraphics.drawImage(outfit, currentOutfit.getX(), currentOutfit.getY(), null);
 		}
 
@@ -124,33 +120,28 @@ public class MyAlpaca implements ICommand {
 
 	@Override
 	public List<String> getAliases() {
-		return List.of("ma", "stats", "alpaca");
+		return List.of("ma", "stats");
 	}
 
 	private Color getColorOfValues(int value) {
 		if (value >= 80) {
 			return Color.GREEN;
-
 		} else if (value >= 60) {
 			return Color.YELLOW;
-
 		} else if (value >= 40) {
 			return Color.ORANGE;
-
 		} else if (value >= 20) {
 			return Color.RED;
-
-		} else
+		} else {
 			return Color.BLACK;
+		}
 	}
 
 	private int getPosition(int value, String position) {
 		if (value == 100) {
 			return position.equalsIgnoreCase("front") ? 145 : 534;
-
 		} else if (value >= 10) {
 			return position.equalsIgnoreCase("front") ? 155 : 544;
-
 		} else {
 			return position.equalsIgnoreCase("front") ? 165 : 554;
 		}

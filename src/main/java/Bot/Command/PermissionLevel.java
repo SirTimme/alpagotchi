@@ -7,7 +7,7 @@ import net.dv8tion.jda.api.entities.Member;
 public enum PermissionLevel {
 	DEVELOPER, ADMIN, MEMBER;
 
-	public boolean hasPerms(Member member) {
+	public boolean hasPermission(Member member) {
 		switch (this) {
 			case DEVELOPER:
 				return member.getId().equals(Config.get("OWNER_ID"));

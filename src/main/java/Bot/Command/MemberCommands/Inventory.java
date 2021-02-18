@@ -22,15 +22,15 @@ public class Inventory implements ICommand {
 
 	@Override
 	public void execute(CommandContext ctx) {
-		final User botCreator = ctx.getJDA().getUserById(Config.get("OWNER_ID"));
-
 		if (!IDataBaseManager.INSTANCE.isUserInDB(ctx.getAuthorID())) {
 			ctx.getChannel().sendMessage("<:RedCross:782229279312314368> You do not own a alpaca, use **" + ctx.getPrefix() + "init** first").queue();
 			return;
 		}
 
+		final User botCreator = ctx.getJDA().getUserById(Config.get("OWNER_ID"));
 		EmbedBuilder embed = new EmbedBuilder();
-		embed.setTitle("Inventory")
+		embed
+				.setTitle("Inventory")
 				.addField("Hunger", getItemsByCategory("hunger", ctx.getAuthorID()), true)
 				.addField("Thirst", getItemsByCategory("thirst", ctx.getAuthorID()), true)
 				.setFooter("Created by " + botCreator.getName(), botCreator.getEffectiveAvatarUrl())

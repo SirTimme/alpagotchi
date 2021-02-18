@@ -29,9 +29,7 @@ public class Sleep implements ICommand {
          return;
       }
 
-      final List<String> args = ctx.getArgs();
-
-      if (args.isEmpty()) {
+      if (ctx.getArgs().isEmpty()) {
          ctx.getChannel().sendMessage("<:RedCross:782229279312314368> Missing arguments").queue();
          return;
       }
@@ -39,8 +37,8 @@ public class Sleep implements ICommand {
       int duration;
 
       try {
-         duration = Integer.parseInt(args.get(0));
-      } catch (NumberFormatException error) {
+         duration = Integer.parseInt(ctx.getArgs().get(0));
+      } catch (NumberFormatException | IndexOutOfBoundsException error) {
          ctx.getChannel().sendMessage("<:RedCross:782229279312314368> Could not resolve the sleep duration").queue();
          return;
       }

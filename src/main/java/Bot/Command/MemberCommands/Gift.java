@@ -7,8 +7,6 @@ import Bot.Database.IDataBaseManager;
 import Bot.Shop.IShopItem;
 import Bot.Shop.ShopItemManager;
 
-import java.util.List;
-
 public class Gift implements ICommand {
    private final ShopItemManager shopItemManager;
 
@@ -23,9 +21,7 @@ public class Gift implements ICommand {
          return;
       }
 
-      final List<String> args = ctx.getArgs();
-
-      if (args.isEmpty() || args.size() < 3) {
+      if (ctx.getArgs().isEmpty() || ctx.getArgs().size() < 3) {
          ctx.getChannel().sendMessage("<:RedCross:782229279312314368> Missing arguments").queue();
          return;
       }
@@ -38,7 +34,7 @@ public class Gift implements ICommand {
       final long giftedUserID = ctx.getMessage().getMentionedUsers().get(0).getIdLong();
 
       if (giftedUserID == ctx.getAuthorID()) {
-         ctx.getChannel().sendMessage("<:RedCross:782229279312314368> You can not gift yourself items").queue();
+         ctx.getChannel().sendMessage("<:RedCross:782229279312314368> You cannot gift yourself items").queue();
          return;
       }
 
@@ -47,7 +43,7 @@ public class Gift implements ICommand {
          return;
       }
 
-      IShopItem giftedItem = shopItemManager.getShopItem(args.get(1));
+      IShopItem giftedItem = shopItemManager.getShopItem(ctx.getArgs().get(1));
 
       if (giftedItem == null) {
          ctx.getChannel().sendMessage("<:RedCross:782229279312314368> Could not resolve the specified item").queue();
@@ -57,7 +53,7 @@ public class Gift implements ICommand {
       int giftedItemAmount;
 
       try {
-         giftedItemAmount = Integer.parseInt(args.get(2));
+         giftedItemAmount = Integer.parseInt(ctx.getArgs().get(2));
       } catch (NumberFormatException error) {
          ctx.getChannel().sendMessage("<:RedCross:782229279312314368> Could not resolve the amount of items").queue();
          return;

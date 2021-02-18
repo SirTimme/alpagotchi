@@ -40,10 +40,6 @@ public class MongoDBDataSource implements IDataBaseManager {
 	public void setPrefix(long guildID, String newPrefix) {
 		Document resultDoc = guildCollection.find(Filters.eq("_id", guildID)).first();
 
-		if (resultDoc == null) {
-			LOGGER.error("Could not found the guild " + guildID + " in the database");
-			return;
-		}
 		guildCollection.updateOne(resultDoc, Updates.set("prefix", newPrefix));
 	}
 
@@ -51,9 +47,6 @@ public class MongoDBDataSource implements IDataBaseManager {
 	public String getNickname(long memberID) {
 		Document resultDoc = alpacaCollection.find(Filters.eq("_id", memberID)).first();
 
-		if (resultDoc == null) {
-			return "alpaca";
-		}
 		return resultDoc.get("alpaca", Document.class).getString("nickname");
 	}
 
@@ -61,10 +54,6 @@ public class MongoDBDataSource implements IDataBaseManager {
 	public void setNickname(long memberID, String newNickname) {
 		Document resultDoc = alpacaCollection.find(Filters.eq("_id", memberID)).first();
 
-		if (resultDoc == null) {
-			LOGGER.error("Could not found the member " + memberID + " in the database");
-			return;
-		}
 		alpacaCollection.updateOne(resultDoc, Updates.set("alpaca.nickname", newNickname));
 	}
 
@@ -72,9 +61,6 @@ public class MongoDBDataSource implements IDataBaseManager {
 	public String getOutfit(long memberID) {
 		Document resultDoc = alpacaCollection.find(Filters.eq("_id", memberID)).first();
 
-		if (resultDoc == null) {
-			return "default";
-		}
 		return resultDoc.get("alpaca", Document.class).getString("outfit");
 	}
 
@@ -82,10 +68,6 @@ public class MongoDBDataSource implements IDataBaseManager {
 	public void setOutfit(long memberID, String newOutfit) {
 		Document resultDoc = alpacaCollection.find(Filters.eq("_id", memberID)).first();
 
-		if (resultDoc == null) {
-			LOGGER.error("Could not found the member " + memberID + " in the database");
-			return;
-		}
 		alpacaCollection.updateOne(resultDoc, Updates.set("alpaca.outfit", newOutfit));
 	}
 
@@ -173,11 +155,13 @@ public class MongoDBDataSource implements IDataBaseManager {
 						.append("hunger", new Document()
 								.append("salad", 0)
 								.append("taco", 0)
-								.append("steak", 0))
+								.append("steak", 0)
+						)
 						.append("thirst", new Document()
 								.append("water", 0)
 								.append("lemonade", 0)
-								.append("cacao", 0))
+								.append("cacao", 0)
+						)
 				)
 				.append("cooldowns", new Document()
 						.append("work", 0)

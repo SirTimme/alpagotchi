@@ -30,7 +30,7 @@ public class MessageListener extends ListenerAdapter {
 		this.cmdManager.handle(event, prefix);
 	}
 
-	private static boolean checkPermissions(GuildMessageReceivedEvent event) {
+	private boolean checkPermissions(GuildMessageReceivedEvent event) {
 		final Member botClient = event.getGuild().getMemberById(event.getJDA().getSelfUser().getIdLong());
 		EnumSet<Permission> botPermissions = botClient.getPermissions(event.getChannel());
 

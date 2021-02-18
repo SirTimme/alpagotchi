@@ -25,7 +25,7 @@ Items can be bought to satisfy hunger and thirst and work can be done to earn mo
 | gift [@user] [itemName] [1-5] | - | Gifts the amount of items to the mentioned user |
 | help [command] | commands | Displays further information to the specified command |
 | inventory | inv | Shows the bought items from the shop |
-| myalpaca | ma, stats, alpaca | Shows your alpaca and his stats |
+| myalpaca | ma, stats | Shows your alpaca and his stats |
 | nick [nickname] | - | Gives your alpaca a nickname |
 | pet | - | Increases joy of your alpaca |
 | shop | - | Displays all items which can be bought |
@@ -33,3 +33,5 @@ Items can be bought to satisfy hunger and thirst and work can be done to earn mo
 | work | - | Work to earn a random amount of fluffies |
 | sleep [minutes] | - | Let your alpaca sleeps  and regenerates energy |
 | outfit [outfit] | - | Change the appearance of your alpaca |
+| delete | - | Deletes all of your stored data |
+| init | setup | Initialize your alpaca in the database |

@@ -11,12 +11,12 @@ import java.util.TimerTask;
 
 public class Decrease implements ICommand {
    private final Timer timer = new Timer();
-   boolean isTimerRunning = false;
+   private boolean isTimerRunning = false;
    private TimerTask sqlTask;
 
    @Override
    public void execute(CommandContext ctx) {
-      if (!PermissionLevel.DEVELOPER.hasPerms(ctx.getMember())) {
+      if (!PermissionLevel.DEVELOPER.hasPermission(ctx.getMember())) {
          ctx.getChannel().sendMessage("<:RedCross:782229279312314368> This is a **developer-only** command").queue();
          return;
       }
@@ -45,7 +45,7 @@ public class Decrease implements ICommand {
                IDataBaseManager.INSTANCE.decreaseValues();
                isTimerRunning = true;
             }
-         }, 0, 1000 * 7200);
+         }, 1000 * 7200, 1000 * 7200);
          ctx.getChannel().sendMessage("<:GreenTick:782229268914372609> Alpacas begin to lose stats over time").queue();
       } else {
          this.sqlTask.cancel();

@@ -21,12 +21,10 @@ public class Help implements ICommand {
 
 	@Override
 	public void execute(CommandContext ctx) {
-		final List<String> args = ctx.getArgs();
 		final String prefix = IDataBaseManager.INSTANCE.getPrefix(ctx.getGuild().getIdLong());
 
-		if (args.isEmpty()) {
+		if (ctx.getArgs().isEmpty()) {
 			final User botCreator = ctx.getJDA().getUserById(Config.get("OWNER_ID"));
-
 			EmbedBuilder embed = new EmbedBuilder();
 			embed.setTitle("Overview of all commands")
 					.setDescription("Further information to any command:\n**```fix\n" + prefix + "help [command]\n```**")
@@ -40,14 +38,14 @@ public class Help implements ICommand {
 			return;
 		}
 
-		ICommand command = cmdManager.getCommand(args.get(0));
+		ICommand cmd = cmdManager.getCommand(ctx.getArgs().get(0));
 
-		if (command == null) {
+		if (cmd == null) {
 			ctx.getChannel().sendMessage("<:RedCross:782229279312314368> Could not retrieve help for that command").queue();
 			return;
 		}
 
-		ctx.getChannel().sendMessage(command.getHelp(prefix)).queue();
+		ctx.getChannel().sendMessage(cmd.getHelp(prefix)).queue();
 	}
 
 	@Override

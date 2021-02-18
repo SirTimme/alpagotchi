@@ -32,7 +32,6 @@ public class Init implements ICommand {
 		}
 
 		final User botCreator = ctx.getJDA().getUserById(Config.get("OWNER_ID"));
-
 		EmbedBuilder embed = new EmbedBuilder();
 		embed
 				.setTitle("User information")
@@ -44,38 +43,37 @@ public class Init implements ICommand {
 				.setFooter("Created by " + botCreator.getName(), botCreator.getEffectiveAvatarUrl())
 				.setTimestamp(Instant.now());
 
-		ctx.getChannel().sendMessage(embed.build())
-				.queue((message) -> {
-					message.addReaction(acceptEmote).queue();
-					message.addReaction(declineEmote).queue();
+		ctx.getChannel().sendMessage(embed.build()).queue((message) -> {
+			message.addReaction(acceptEmote).queue();
+			message.addReaction(declineEmote).queue();
 
-					this.waiter.waitForEvent(
-							GuildMessageReactionAddEvent.class,
-							(event) -> event.getMessageIdLong() == message.getIdLong() && !event.getUser().isBot() && event.getMember().equals(ctx.getMember()),
-							(event) -> {
-								if (event.getReactionEmote().isEmote() || !(event.getReactionEmote().getEmoji().equals(acceptEmote) || event.getReactionEmote().getEmoji().equals(declineEmote))) {
-									message.clearReactions().queue();
-									message.editMessage("<:RedCross:782229279312314368> Invalid reaction").queue();
-									return;
-								}
-								if (event.getReactionEmote().getEmoji().equals(acceptEmote)) {
-									IDataBaseManager.INSTANCE.createDBEntry(ctx.getAuthorID());
-									message.suppressEmbeds(true).queue();
-									message.editMessage("<:GreenTick:782229268914372609> Your alpaca has been set up, use **" + ctx.getPrefix() + "myalpaca** to see it").queue();
-								} else if (event.getReactionEmote().getEmoji().equals(declineEmote)) {
-									message.suppressEmbeds(true).queue();
-									message.editMessage("<:RedCross:782229279312314368> Initiation process cancelled").queue();
-								}
-								message.clearReactions().queue();
-							},
-							1L, TimeUnit.MINUTES,
-							() -> {
-								message.suppressEmbeds(true).queue();
-								message.editMessage("<:RedCross:782229279312314368> Answer timed out").queue();
-								message.clearReactions().queue();
-							}
-					);
-				});
+			this.waiter.waitForEvent(
+					GuildMessageReactionAddEvent.class,
+					(event) -> event.getMessageIdLong() == message.getIdLong() && !event.getUser().isBot() && event.getMember().equals(ctx.getMember()),
+					(event) -> {
+						if (event.getReactionEmote().isEmote() || !(event.getReactionEmote().getEmoji().equals(acceptEmote) || event.getReactionEmote().getEmoji().equals(declineEmote))) {
+							message.clearReactions().queue();
+							message.editMessage("<:RedCross:782229279312314368> Invalid reaction").queue();
+							return;
+						}
+						if (event.getReactionEmote().getEmoji().equals(acceptEmote)) {
+							IDataBaseManager.INSTANCE.createDBEntry(ctx.getAuthorID());
+							message.suppressEmbeds(true).queue();
+							message.editMessage("<:GreenTick:782229268914372609> Your alpaca has been set up, use **" + ctx.getPrefix() + "myalpaca** to see it").queue();
+						} else if (event.getReactionEmote().getEmoji().equals(declineEmote)) {
+							message.suppressEmbeds(true).queue();
+							message.editMessage("<:RedCross:782229279312314368> Initiation process cancelled").queue();
+						}
+						message.clearReactions().queue();
+					},
+					90L, TimeUnit.SECONDS,
+					() -> {
+						message.suppressEmbeds(true).queue();
+						message.editMessage("<:RedCross:782229279312314368> Answer timed out").queue();
+						message.clearReactions().queue();
+					}
+			);
+		});
 	}
 
 	@Override

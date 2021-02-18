@@ -47,7 +47,7 @@ public class Delete implements ICommand {
 								}
 								message.clearReactions().queue();
 							},
-							1L, TimeUnit.MINUTES,
+							90L, TimeUnit.SECONDS,
 							() -> {
 								message.clearReactions().queue();
 								message.editMessage("<:RedCross:782229279312314368> Answer timed out").queue();

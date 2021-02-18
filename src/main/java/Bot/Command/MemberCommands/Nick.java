@@ -5,8 +5,6 @@ import Bot.Command.ICommand;
 import Bot.Command.PermissionLevel;
 import Bot.Database.IDataBaseManager;
 
-import java.util.List;
-
 public class Nick implements ICommand {
    @Override
    public void execute(CommandContext ctx) {
@@ -15,19 +13,14 @@ public class Nick implements ICommand {
          return;
       }
 
-      final List<String> args = ctx.getArgs();
+      String nickname;
 
-      if (args.isEmpty()) {
+      try {
+         nickname = ctx.getArgs().get(0);
+      } catch (IndexOutOfBoundsException error) {
          ctx.getChannel().sendMessage("<:RedCross:782229279312314368> Could not resolve the specified nickname").queue();
          return;
       }
-
-      if (args.get(0).length() > 256) {
-         ctx.getChannel().sendMessage("<:RedCross:782229279312314368> The nickname must not exceed **256** characters").queue();
-         return;
-      }
-
-      String nickname = args.get(0);
       IDataBaseManager.INSTANCE.setNickname(ctx.getAuthorID(), nickname);
 
       ctx.getChannel().sendMessage("\uD83D\uDD8A The nickname of your alpaca has been set to **" + nickname + "**").queue();
