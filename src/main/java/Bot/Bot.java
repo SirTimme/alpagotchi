@@ -31,9 +31,8 @@ public class Bot {
 							CacheFlag.CLIENT_STATUS
 					)
 					.addEventListeners(new MessageListener(waiter), waiter)
-					.setActivity(Activity.playing(Config.get("PREFIX") + "help | Alpacas \uD83D\uDC96 \uD83E\uDD99"))
+					.setActivity(Activity.playing(Config.get("PREFIX") + "help | \uD83E\uDD99 Alpacas"))
 					.build();
-
 		} catch (LoginException error) {
 			LOGGER.error(error.getMessage());
 		}
