@@ -14,13 +14,13 @@ public class Nick implements ICommand {
       }
 
       final String nickname;
-
       try {
          nickname = ctx.getArgs().get(0);
       } catch (IndexOutOfBoundsException error) {
          ctx.getChannel().sendMessage("<:RedCross:782229279312314368> Could not resolve the specified nickname").queue();
          return;
       }
+
       IDataBaseManager.INSTANCE.setNickname(ctx.getAuthorID(), nickname);
 
       ctx.getChannel().sendMessage("\uD83D\uDD8A The nickname of your alpaca has been set to **" + nickname + "**").queue();

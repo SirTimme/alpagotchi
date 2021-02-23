@@ -3,7 +3,6 @@ package Bot.Command;
 import java.util.List;
 
 public interface ICommand {
-
     void execute(CommandContext ctx);
 
     String getHelp(String prefix);

@@ -35,9 +35,7 @@ public class MyAlpaca implements ICommand {
 			return;
 		}
 
-		final IOutfit currentOutfit = outfitManager.getOutfit(IDataBaseManager.INSTANCE.getOutfit(ctx.getAuthorID()));
 		final BufferedImage alpaca;
-
 		try {
 			alpaca = ImageIO.read(new File("src/main/resources/assets/alpaca.jpg"));
 		} catch (IOException error) {
@@ -45,13 +43,13 @@ public class MyAlpaca implements ICommand {
 			return;
 		}
 
+		final Graphics alpacaGraphics = alpaca.getGraphics();
+		alpacaGraphics.setFont(new Font("SansSerif", Font.BOLD, 15));
+
 		final int hunger = IDataBaseManager.INSTANCE.getAlpacaValues(ctx.getAuthorID(), "hunger");
 		final int thirst = IDataBaseManager.INSTANCE.getAlpacaValues(ctx.getAuthorID(), "thirst");
 		final int energy = IDataBaseManager.INSTANCE.getAlpacaValues(ctx.getAuthorID(), "energy");
 		final int joy = IDataBaseManager.INSTANCE.getAlpacaValues(ctx.getAuthorID(), "joy");
-
-		final Graphics alpacaGraphics = alpaca.getGraphics();
-		alpacaGraphics.setFont(new Font("SansSerif", Font.BOLD, 15));
 
 		alpacaGraphics.setColor(Color.BLACK);
 		alpacaGraphics.drawString(hunger + "/100", getPosition(hunger, "front"), 24);
@@ -71,6 +69,7 @@ public class MyAlpaca implements ICommand {
 		alpacaGraphics.setColor(getColorOfValues(joy));
 		alpacaGraphics.fillRect(420, 73, (int) (joy * 1.75), 12);
 
+		final IOutfit currentOutfit = outfitManager.getOutfit(IDataBaseManager.INSTANCE.getOutfit(ctx.getAuthorID()));
 		if (!currentOutfit.getName().equals("default")) {
 			BufferedImage outfit;
 			try {
@@ -83,7 +82,6 @@ public class MyAlpaca implements ICommand {
 		}
 
 		final File newAlpacaFile = new File("src/main/resources/alpacaEdited.jpg");
-
 		try {
 			ImageIO.write(alpaca, "jpg", newAlpacaFile);
 		} catch (IOException error) {

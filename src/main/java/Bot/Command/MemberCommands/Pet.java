@@ -14,7 +14,6 @@ public class Pet implements ICommand {
 		}
 
 		final int joy = IDataBaseManager.INSTANCE.getAlpacaValues(ctx.getAuthorID(), "joy");
-
 		if (joy == 100) {
 			ctx.getChannel().sendMessage("<:RedCross:782229279312314368> The joy of your alpaca is already at the maximum").queue();
 			return;
@@ -22,7 +21,6 @@ public class Pet implements ICommand {
 
 		final int amountOfJoy = (int) (Math.random() * 10 + 1);
 		final int newJoy = amountOfJoy + joy > 100 ? 100 - joy : amountOfJoy;
-
 		IDataBaseManager.INSTANCE.setAlpacaValues(ctx.getAuthorID(), "joy", newJoy);
 
 		ctx.getChannel().sendMessage("\uD83E\uDD99 Your alpaca loves to spend time with you **Joy + " + newJoy + "**").queue();

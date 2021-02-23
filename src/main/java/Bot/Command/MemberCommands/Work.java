@@ -15,8 +15,13 @@ public class Work implements ICommand {
          return;
       }
 
-      final long sleepCooldown = IDataBaseManager.INSTANCE.getCooldown(ctx.getAuthorID(), "sleep") - System.currentTimeMillis();
+      final int energy = IDataBaseManager.INSTANCE.getAlpacaValues(ctx.getAuthorID(), "energy");
+      if (energy < 10) {
+         ctx.getChannel().sendMessage("\uD83E\uDD71 Your alpaca is too tired to work, let it rest first with **" + ctx.getPrefix() + "sleep**").queue();
+         return;
+      }
 
+      final long sleepCooldown = IDataBaseManager.INSTANCE.getCooldown(ctx.getAuthorID(), "sleep") - System.currentTimeMillis();
       if (sleepCooldown > 0) {
          int remainingSleep = (int) TimeUnit.MILLISECONDS.toMinutes(sleepCooldown);
          ctx.getChannel().sendMessage("<:RedCross:782229279312314368> Your alpaca sleeps, it will wake up in **" + (remainingSleep == 1 ? remainingSleep + "** minute" : remainingSleep + "** minutes")).queue();
@@ -24,7 +29,6 @@ public class Work implements ICommand {
       }
 
       final long workCooldown = IDataBaseManager.INSTANCE.getCooldown(ctx.getAuthorID(), "work") - System.currentTimeMillis();
-
       if (workCooldown > 0) {
          int remainingWork = (int) TimeUnit.MILLISECONDS.toMinutes(workCooldown);
          ctx.getChannel().sendMessage("<:RedCross:782229279312314368> Your alpaca already worked, it has to rest **" + (remainingWork == 1 ? remainingWork + "** minute" : remainingWork + "** minutes") + " to work again").queue();
@@ -32,7 +36,6 @@ public class Work implements ICommand {
       }
 
       final int amountOfFluffies = (int) (Math.random() * 15 + 1);
-
       IDataBaseManager.INSTANCE.setBalance(ctx.getAuthorID(), amountOfFluffies);
       IDataBaseManager.INSTANCE.setCooldown(ctx.getAuthorID(), "work", System.currentTimeMillis() + 1000L * 60 * 20);
 

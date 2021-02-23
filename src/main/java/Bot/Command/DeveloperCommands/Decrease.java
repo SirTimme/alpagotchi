@@ -25,11 +25,6 @@ public class Decrease implements ICommand {
          return;
       }
 
-      if (!(ctx.getArgs().get(0).equalsIgnoreCase("enable") || ctx.getArgs().get(0).equalsIgnoreCase("disable"))) {
-         ctx.getChannel().sendMessage("<:RedCross:782229279312314368> Incorrect arguments").queue();
-         return;
-      }
-
       if (this.isTimerRunning && ctx.getArgs().get(0).equalsIgnoreCase("enable")) {
          ctx.getChannel().sendMessage("<:RedCross:782229279312314368> Decreasing is already enabled").queue();
          return;

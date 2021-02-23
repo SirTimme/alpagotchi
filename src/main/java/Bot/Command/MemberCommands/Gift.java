@@ -27,7 +27,6 @@ public class Gift implements ICommand {
 		}
 
 		final long giftedUserID = ctx.getMessage().getMentionedUsers().get(0).getIdLong();
-
 		if (giftedUserID == ctx.getAuthorID()) {
 			ctx.getChannel().sendMessage("<:RedCross:782229279312314368> You cannot gift yourself items").queue();
 			return;
@@ -39,7 +38,6 @@ public class Gift implements ICommand {
 		}
 
 		IShopItem giftedItem;
-
 		try {
 			giftedItem = shopItemManager.getShopItem(ctx.getArgs().get(1));
 		} catch (IndexOutOfBoundsException error) {
@@ -53,7 +51,6 @@ public class Gift implements ICommand {
 		}
 
 		int giftedItemAmount;
-
 		try {
 			giftedItemAmount = Integer.parseInt(ctx.getArgs().get(2));
 		} catch (NumberFormatException | IndexOutOfBoundsException error) {

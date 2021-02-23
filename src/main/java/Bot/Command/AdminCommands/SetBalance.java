@@ -20,21 +20,20 @@ public class SetBalance implements ICommand {
       }
 
       final long mentionedUserID = ctx.getMessage().getMentionedUsers().get(0).getIdLong();
-
       if (!IDataBaseManager.INSTANCE.isUserInDB(mentionedUserID)) {
          ctx.getChannel().sendMessage("<:RedCross:782229279312314368> The mentioned user does not own a alpaca, he have to use **" + ctx.getPrefix() + "init** first").queue();
          return;
       }
 
-      final int currentBalance = IDataBaseManager.INSTANCE.getBalance(mentionedUserID);
       final int newBalance;
-
       try {
          newBalance = Integer.parseInt(ctx.getArgs().get(1));
       } catch (NumberFormatException | IndexOutOfBoundsException error) {
          ctx.getChannel().sendMessage("<:RedCross:782229279312314368> Could not resolve the new balance").queue();
          return;
       }
+
+      final int currentBalance = IDataBaseManager.INSTANCE.getBalance(mentionedUserID);
       IDataBaseManager.INSTANCE.setBalance(mentionedUserID, newBalance - currentBalance);
 
       ctx.getChannel().sendMessage("\uD83D\uDCB3 The balance of **" + ctx.getJDA().getUserById(mentionedUserID).getName() + "** has been set to **" + newBalance + "**").queue();

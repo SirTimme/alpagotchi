@@ -14,26 +14,18 @@ public class Sleep implements ICommand {
       }
 
       final long sleepCooldown = IDataBaseManager.INSTANCE.getCooldown(ctx.getAuthorID(), "sleep") - System.currentTimeMillis();
-
       if (sleepCooldown > 0) {
          ctx.getChannel().sendMessage("<:RedCross:782229279312314368> Your alpaca already sleeps").queue();
          return;
       }
 
       final int energy = IDataBaseManager.INSTANCE.getAlpacaValues(ctx.getAuthorID(), "energy");
-
       if (energy == 100) {
          ctx.getChannel().sendMessage("<:RedCross:782229279312314368> The energy of your alpaca is already at the maximum").queue();
          return;
       }
 
-      if (ctx.getArgs().isEmpty()) {
-         ctx.getChannel().sendMessage("<:RedCross:782229279312314368> Missing arguments").queue();
-         return;
-      }
-
       final int duration;
-
       try {
          duration = Integer.parseInt(ctx.getArgs().get(0));
       } catch (NumberFormatException | IndexOutOfBoundsException error) {
@@ -47,7 +39,6 @@ public class Sleep implements ICommand {
       }
 
       final int newEnergy = energy + duration / 2 > 100 ? 100 - energy : duration / 2;
-
       IDataBaseManager.INSTANCE.setAlpacaValues(ctx.getAuthorID(), "energy", newEnergy);
       IDataBaseManager.INSTANCE.setCooldown(ctx.getAuthorID(), "sleep", System.currentTimeMillis() + 1000L * 60 * 2 * newEnergy);
 

@@ -23,7 +23,7 @@ public class MessageListener extends ListenerAdapter {
 	public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
 		final String prefix = IDataBaseManager.INSTANCE.getPrefix(event.getGuild().getIdLong());
 
-		if (event.getAuthor().isBot() || event.isWebhookMessage() || !event.getMessage().getContentRaw().startsWith(prefix) || !checkPermissions(event)) {
+		if (!event.getMessage().getContentRaw().startsWith(prefix) || event.getAuthor().isBot() || !checkPermissions(event) || event.isWebhookMessage()) {
 			return;
 		}
 

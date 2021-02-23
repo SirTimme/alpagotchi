@@ -20,10 +20,8 @@ public class OutfitManager {
 
 	@Nullable
 	public IOutfit getOutfit(String search) {
-		String searchLower = search.toLowerCase();
-
 		for (IOutfit outfit : this.outfits) {
-			if (outfit.getName().equals(searchLower)) {
+			if (outfit.getName().equals(search)) {
 				return outfit;
 			}
 		}

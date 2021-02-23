@@ -43,12 +43,12 @@ public class Outfit implements ICommand {
 			return;
 		}
 
-		IOutfit chosenOutfit = outfitManager.getOutfit(ctx.getArgs().get(0));
-
+		IOutfit chosenOutfit = outfitManager.getOutfit(ctx.getArgs().get(0).toLowerCase());
 		if (chosenOutfit == null) {
 			ctx.getChannel().sendMessage("<:RedCross:782229279312314368> Could not resolve the specified outfit").queue();
 			return;
 		}
+
 		IDataBaseManager.INSTANCE.setOutfit(ctx.getAuthorID(), chosenOutfit.getName());
 
 		ctx.getChannel().sendMessage("\uD83D\uDC54 The outfit of your alpaca has been set to **" + chosenOutfit.getName() + "**").queue();

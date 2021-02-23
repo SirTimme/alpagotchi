@@ -22,7 +22,6 @@ public class Buy implements ICommand {
 		}
 
 		final IShopItem item;
-
 		try {
 			item = shopItemManager.getShopItem(ctx.getArgs().get(0));
 		} catch (IndexOutOfBoundsException error) {
@@ -36,7 +35,6 @@ public class Buy implements ICommand {
 		}
 
 		final int itemAmount;
-
 		try {
 			itemAmount = Integer.parseInt(ctx.getArgs().get(1));
 		} catch (NumberFormatException | IndexOutOfBoundsException error) {
@@ -54,7 +52,8 @@ public class Buy implements ICommand {
 			return;
 		}
 
-		IDataBaseManager.INSTANCE.setBalance(ctx.getAuthorID(), -item.getPrice() * itemAmount);
+		final int price = item.getPrice() * itemAmount;
+		IDataBaseManager.INSTANCE.setBalance(ctx.getAuthorID(), -price);
 		IDataBaseManager.INSTANCE.setInventory(ctx.getAuthorID(), item.getCategory(), item.getName(), itemAmount);
 
 		ctx.getChannel().sendMessage(":moneybag: Congratulations, you successfully bought **" + itemAmount + " " + item.getName() + "** for **" + (item.getPrice() * itemAmount) + "** fluffies").queue();

@@ -11,14 +11,14 @@ import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
 
 import java.time.Instant;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 @SuppressWarnings("ConstantConditions")
 public class Init implements ICommand {
 	private final EventWaiter waiter;
-	private final String acceptEmote = "✅";
-	private final String declineEmote = "❌";
+	private final String[] acceptedEmotes = {"✅", "❌"};
 
 	public Init(EventWaiter waiter) {
 		this.waiter = waiter;
@@ -44,24 +44,21 @@ public class Init implements ICommand {
 				.setTimestamp(Instant.now());
 
 		ctx.getChannel().sendMessage(embed.build()).queue((message) -> {
-			message.addReaction(acceptEmote).queue();
-			message.addReaction(declineEmote).queue();
+			message.addReaction(acceptedEmotes[0]).queue();
+			message.addReaction(acceptedEmotes[1]).queue();
 
 			this.waiter.waitForEvent(
 					GuildMessageReactionAddEvent.class,
-					(event) -> event.getMessageIdLong() == message.getIdLong() && !event.getUser().isBot() && event.getMember().equals(ctx.getMember()),
+					(event) -> event.getMessageIdLong() == message.getIdLong()
+							&& event.getMember().equals(ctx.getMember())
+							&& !event.getReactionEmote().isEmote()
+							&& Arrays.asList(acceptedEmotes).contains(event.getReactionEmote().getEmoji()),
 					(event) -> {
-						if (event.getReactionEmote().isEmote() || !(event.getReactionEmote().getEmoji().equals(acceptEmote) || event.getReactionEmote().getEmoji().equals(declineEmote))) {
-							message.clearReactions().queue();
-							message.editMessage("<:RedCross:782229279312314368> Invalid reaction").queue();
-							return;
-						}
-						if (event.getReactionEmote().getEmoji().equals(acceptEmote)) {
+						message.suppressEmbeds(true).queue();
+						if (event.getReactionEmote().getEmoji().equals(acceptedEmotes[0])) {
 							IDataBaseManager.INSTANCE.createDBEntry(ctx.getAuthorID());
-							message.suppressEmbeds(true).queue();
 							message.editMessage("<:GreenTick:782229268914372609> Your alpaca has been set up, use **" + ctx.getPrefix() + "myalpaca** to see it").queue();
-						} else if (event.getReactionEmote().getEmoji().equals(declineEmote)) {
-							message.suppressEmbeds(true).queue();
+						} else if (event.getReactionEmote().getEmoji().equals(acceptedEmotes[1])) {
 							message.editMessage("<:RedCross:782229279312314368> Initiation process cancelled").queue();
 						}
 						message.clearReactions().queue();
