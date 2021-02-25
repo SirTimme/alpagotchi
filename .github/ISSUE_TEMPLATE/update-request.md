@@ -1,13 +1,13 @@
 ---
-name: Feature request
-about: 'Suggest a new command idea '
-title: "[FEATURE]"
-labels: ''
+name: Update request
+about: How should be an existing command reworked or extended?
+title: "[UPDATE] "
+labels: Update
 assignees: ''
 
 ---
 
-**Is your feature request related to a problem? Please describe.**
+**Is your update request related to a problem? Please describe.**
 A clear and concise description of what the problem is. Ex. I'm always frustrated when [...]
 
 **Describe the solution you'd like**
