@@ -26,7 +26,7 @@ public class ImagePreloader {
 		}
 	}
 
-	public static BufferedImage getAlpacaImage(String key) {
-		return alpacaImages.get(key);
+	public static BufferedImage getAlpacaImage(String outfit) {
+		return alpacaImages.get(outfit);
 	}
 }

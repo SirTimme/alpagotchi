@@ -22,7 +22,7 @@ public class CommandManager {
     OutfitManager outfitManager = new OutfitManager();
 
     public CommandManager(EventWaiter waiter) {
-        addCommand(new MyAlpaca(this.outfitManager));
+        addCommand(new MyAlpaca());
         addCommand(new Help(this));
         addCommand(new SetPrefix());
         addCommand(new Balance());

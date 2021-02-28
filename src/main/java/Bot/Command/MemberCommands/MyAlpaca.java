@@ -5,8 +5,6 @@ import Bot.Command.ICommand;
 import Bot.Command.PermissionLevel;
 import Bot.Config;
 import Bot.Database.IDataBaseManager;
-import Bot.Outfits.IOutfit;
-import Bot.Outfits.OutfitManager;
 import Bot.Utils.ImagePreloader;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.User;
@@ -23,11 +21,6 @@ import java.util.List;
 
 public class MyAlpaca implements ICommand {
 	private static final Logger LOGGER = LoggerFactory.getLogger(MyAlpaca.class);
-	private final OutfitManager outfitManager;
-
-	public MyAlpaca(OutfitManager outfitManager) {
-		this.outfitManager = outfitManager;
-	}
 
 	@Override
 	public void execute(CommandContext ctx) {
@@ -36,16 +29,19 @@ public class MyAlpaca implements ICommand {
 			return;
 		}
 
-		final IOutfit outfit = outfitManager.getOutfit(IDataBaseManager.INSTANCE.getOutfit(ctx.getAuthorID()));
-		final BufferedImage alpaca = ImagePreloader.getAlpacaImage(outfit.getName());
-
-		final Graphics graphics = alpaca.getGraphics();
-		graphics.setFont(new Font("SansSerif", Font.BOLD, 15));
-
 		final int hunger = IDataBaseManager.INSTANCE.getAlpacaValues(ctx.getAuthorID(), "hunger");
 		final int thirst = IDataBaseManager.INSTANCE.getAlpacaValues(ctx.getAuthorID(), "thirst");
 		final int energy = IDataBaseManager.INSTANCE.getAlpacaValues(ctx.getAuthorID(), "energy");
 		final int joy = IDataBaseManager.INSTANCE.getAlpacaValues(ctx.getAuthorID(), "joy");
+		final String outfit = IDataBaseManager.INSTANCE.getOutfit(ctx.getAuthorID());
+
+		final BufferedImage background = ImagePreloader.getAlpacaImage(outfit);
+		final BufferedImage alpaca = new BufferedImage(background.getWidth(), background.getHeight(), BufferedImage.TYPE_INT_RGB);
+
+		final Graphics graphics = alpaca.createGraphics();
+		graphics.setFont(new Font("SansSerif", Font.BOLD, 15));
+
+		graphics.drawImage(background, 0, 0, null);
 
 		graphics.setColor(Color.BLACK);
 		graphics.drawString(hunger + "/100", getPosition(hunger, "front"), 24);
