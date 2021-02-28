@@ -5,18 +5,15 @@ import com.mongodb.client.*;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Updates;
 import org.bson.Document;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 @SuppressWarnings("ConstantConditions")
 public class MongoDBDataSource implements IDataBaseManager {
-	private static final Logger LOGGER = LoggerFactory.getLogger(MongoDBDataSource.class);
 	private final MongoCollection<Document> alpacaCollection;
 	private final MongoCollection<Document> guildCollection;
 
 	public MongoDBDataSource() {
-		MongoClient mongoClient = MongoClients.create("mongodb+srv://alpacaAdmin:" + Config.get("MONGODB") + "@alpacacluster.izknd.mongodb.net/testDB?retryWrites=true&w=majority");
-		MongoDatabase database = mongoClient.getDatabase("testDB");
+		MongoClient mongoClient = MongoClients.create(Config.get("MONGODB_URI"));
+		MongoDatabase database = mongoClient.getDatabase("alpagotchiDB");
 
 		alpacaCollection = database.getCollection("alpacas_manager");
 		guildCollection = database.getCollection("guild_settings");
