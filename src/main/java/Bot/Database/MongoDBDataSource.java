@@ -12,7 +12,7 @@ public class MongoDBDataSource implements IDataBaseManager {
 	private final MongoCollection<Document> guildCollection;
 
 	public MongoDBDataSource() {
-		MongoClient mongoClient = MongoClients.create(Config.get("MONGODB_URI"));
+		MongoClient mongoClient = MongoClients.create("mongodb+srv://alpacaAdmin:" + Config.get("DB_PASSWORD") + "@alpacacluster.izknd.mongodb.net/alpagotchiDB?retryWrites=true&w=majority");
 		MongoDatabase database = mongoClient.getDatabase("alpagotchiDB");
 
 		alpacaCollection = database.getCollection("alpacas_manager");
@@ -107,7 +107,12 @@ public class MongoDBDataSource implements IDataBaseManager {
 	public void setInventory(long memberID, String category, String item, int newAmount) {
 		Document resultDoc = alpacaCollection.find(Filters.eq("_id", memberID)).first();
 
-		alpacaCollection.updateOne(resultDoc, Updates.set("inventory." + category + "." + item, resultDoc.get("inventory", Document.class).get(category, Document.class).getInteger(item) + newAmount));
+		alpacaCollection.updateOne(resultDoc,
+				Updates.set(
+						"inventory." + category + "." + item,
+						resultDoc.get("inventory", Document.class).get(category, Document.class).getInteger(item) + newAmount
+				)
+		);
 	}
 
 	@Override
