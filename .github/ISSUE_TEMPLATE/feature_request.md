@@ -2,7 +2,7 @@
 name: Feature request
 about: 'Suggest a new command idea '
 title: "[FEATURE]"
-labels: ''
+labels: Feature
 assignees: ''
 
 ---
