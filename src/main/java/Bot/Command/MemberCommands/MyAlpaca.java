@@ -7,6 +7,7 @@ import Bot.Config;
 import Bot.Database.IDataBaseManager;
 import Bot.Outfits.IOutfit;
 import Bot.Outfits.OutfitManager;
+import Bot.Utils.ImagePreloader;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.User;
 import org.slf4j.Logger;
@@ -35,51 +36,34 @@ public class MyAlpaca implements ICommand {
 			return;
 		}
 
-		final BufferedImage alpaca;
-		try {
-			alpaca = ImageIO.read(new File("src/main/resources/assets/alpaca.jpg"));
-		} catch (IOException error) {
-			LOGGER.error(error.getMessage());
-			return;
-		}
+		final IOutfit outfit = outfitManager.getOutfit(IDataBaseManager.INSTANCE.getOutfit(ctx.getAuthorID()));
+		final BufferedImage alpaca = ImagePreloader.getAlpacaImage(outfit.getName());
 
-		final Graphics alpacaGraphics = alpaca.getGraphics();
-		alpacaGraphics.setFont(new Font("SansSerif", Font.BOLD, 15));
+		final Graphics graphics = alpaca.getGraphics();
+		graphics.setFont(new Font("SansSerif", Font.BOLD, 15));
 
 		final int hunger = IDataBaseManager.INSTANCE.getAlpacaValues(ctx.getAuthorID(), "hunger");
 		final int thirst = IDataBaseManager.INSTANCE.getAlpacaValues(ctx.getAuthorID(), "thirst");
 		final int energy = IDataBaseManager.INSTANCE.getAlpacaValues(ctx.getAuthorID(), "energy");
 		final int joy = IDataBaseManager.INSTANCE.getAlpacaValues(ctx.getAuthorID(), "joy");
 
-		alpacaGraphics.setColor(Color.BLACK);
-		alpacaGraphics.drawString(hunger + "/100", getPosition(hunger, "front"), 24);
-		alpacaGraphics.drawString(thirst + "/100", getPosition(thirst, "front"), 66);
-		alpacaGraphics.drawString(energy + "/100", getPosition(energy, "back"), 24);
-		alpacaGraphics.drawString(joy + "/100", getPosition(joy, "back"), 66);
+		graphics.setColor(Color.BLACK);
+		graphics.drawString(hunger + "/100", getPosition(hunger, "front"), 24);
+		graphics.drawString(thirst + "/100", getPosition(thirst, "front"), 66);
+		graphics.drawString(energy + "/100", getPosition(energy, "back"), 24);
+		graphics.drawString(joy + "/100", getPosition(joy, "back"), 66);
 
-		alpacaGraphics.setColor(getColorOfValues(hunger));
-		alpacaGraphics.fillRect(31, 31, (int) (hunger * 1.75), 12);
+		graphics.setColor(getColorOfValues(hunger));
+		graphics.fillRect(31, 31, (int) (hunger * 1.75), 12);
 
-		alpacaGraphics.setColor(getColorOfValues(thirst));
-		alpacaGraphics.fillRect(31, 73, (int) (thirst * 1.75), 12);
+		graphics.setColor(getColorOfValues(thirst));
+		graphics.fillRect(31, 73, (int) (thirst * 1.75), 12);
 
-		alpacaGraphics.setColor(getColorOfValues(energy));
-		alpacaGraphics.fillRect(420, 31, (int) (energy * 1.75), 12);
+		graphics.setColor(getColorOfValues(energy));
+		graphics.fillRect(420, 31, (int) (energy * 1.75), 12);
 
-		alpacaGraphics.setColor(getColorOfValues(joy));
-		alpacaGraphics.fillRect(420, 73, (int) (joy * 1.75), 12);
-
-		final IOutfit currentOutfit = outfitManager.getOutfit(IDataBaseManager.INSTANCE.getOutfit(ctx.getAuthorID()));
-		if (!currentOutfit.getName().equals("default")) {
-			BufferedImage outfit;
-			try {
-				outfit = ImageIO.read(new File(outfitManager.getOutfit(IDataBaseManager.INSTANCE.getOutfit(ctx.getAuthorID())).getImgUrl()));
-			} catch (IOException error) {
-				LOGGER.error(error.getMessage());
-				return;
-			}
-			alpacaGraphics.drawImage(outfit, currentOutfit.getX(), currentOutfit.getY(), null);
-		}
+		graphics.setColor(getColorOfValues(joy));
+		graphics.fillRect(420, 73, (int) (joy * 1.75), 12);
 
 		final File newAlpacaFile = new File("src/main/resources/alpacaEdited.jpg");
 		try {

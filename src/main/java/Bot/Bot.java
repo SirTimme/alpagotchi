@@ -1,6 +1,7 @@
 package Bot;
 
 import Bot.Events.MessageListener;
+import Bot.Utils.ImagePreloader;
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
@@ -16,6 +17,7 @@ public class Bot {
 
 	public static void main(String[] args) {
 		EventWaiter waiter = new EventWaiter();
+		ImagePreloader.loadAllImages();
 
 		try {
 			JDABuilder.create(

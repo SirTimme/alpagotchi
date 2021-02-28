@@ -9,55 +9,55 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class Decrease implements ICommand {
-   private final Timer timer = new Timer();
-   private boolean isTimerRunning = false;
-   private TimerTask sqlTask;
+	private final Timer timer = new Timer();
+	private boolean isTimerRunning = false;
+	private TimerTask sqlTask;
 
-   @Override
-   public void execute(CommandContext ctx) {
-      if (!PermissionLevel.DEVELOPER.hasPermission(ctx.getMember())) {
-         ctx.getChannel().sendMessage("<:RedCross:782229279312314368> This is a **developer-only** command").queue();
-         return;
-      }
+	@Override
+	public void execute(CommandContext ctx) {
+		if (!PermissionLevel.DEVELOPER.hasPermission(ctx.getMember())) {
+			ctx.getChannel().sendMessage("<:RedCross:782229279312314368> This is a **developer-only** command").queue();
+			return;
+		}
 
-      if (ctx.getArgs().isEmpty()) {
-         ctx.getChannel().sendMessage("<:RedCross:782229279312314368> Missing arguments").queue();
-         return;
-      }
+		if (ctx.getArgs().isEmpty()) {
+			ctx.getChannel().sendMessage("<:RedCross:782229279312314368> Missing arguments").queue();
+			return;
+		}
 
-      if (this.isTimerRunning && ctx.getArgs().get(0).equalsIgnoreCase("enable")) {
-         ctx.getChannel().sendMessage("<:RedCross:782229279312314368> Decreasing is already enabled").queue();
-         return;
-      }
+		if (this.isTimerRunning && ctx.getArgs().get(0).equalsIgnoreCase("enable")) {
+			ctx.getChannel().sendMessage("<:RedCross:782229279312314368> Decreasing is already enabled").queue();
+			return;
+		}
 
-      if (ctx.getArgs().get(0).equalsIgnoreCase("enable")) {
-         this.timer.schedule(sqlTask = new TimerTask() {
-            @Override
-            public void run() {
-               IDataBaseManager.INSTANCE.decreaseValues();
-               isTimerRunning = true;
-            }
-         }, 1000 * 7200, 1000 * 7200);
-         ctx.getChannel().sendMessage("<:GreenTick:782229268914372609> Alpacas begin to lose stats over time").queue();
-      } else {
-         this.sqlTask.cancel();
-         isTimerRunning = false;
-         ctx.getChannel().sendMessage("<:RedCross:782229279312314368> Alpacas stop losing stats over time").queue();
-      }
-   }
+		if (ctx.getArgs().get(0).equalsIgnoreCase("enable")) {
+			this.timer.schedule(sqlTask = new TimerTask() {
+				@Override
+				public void run() {
+					IDataBaseManager.INSTANCE.decreaseValues();
+					isTimerRunning = true;
+				}
+			}, 1000 * 7200, 1000 * 7200);
+			ctx.getChannel().sendMessage("<:GreenTick:782229268914372609> Alpacas begin to lose stats over time").queue();
+		} else {
+			this.sqlTask.cancel();
+			isTimerRunning = false;
+			ctx.getChannel().sendMessage("<:RedCross:782229279312314368> Alpacas stop losing stats over time").queue();
+		}
+	}
 
-   @Override
-   public String getHelp(String prefix) {
-      return "`Usage: " + prefix + "decrease [enable | disable]\n" + (this.getAliases().isEmpty() ? "`" : "Aliases: " + this.getAliases() + "`\n") + "Determines if the alpacas lose values over time";
-   }
+	@Override
+	public String getHelp(String prefix) {
+		return "`Usage: " + prefix + "decrease [enable | disable]\n" + (this.getAliases().isEmpty() ? "`" : "Aliases: " + this.getAliases() + "`\n") + "Determines if the alpacas lose values over time";
+	}
 
-   @Override
-   public String getName() {
-      return "decrease";
-   }
+	@Override
+	public String getName() {
+		return "decrease";
+	}
 
-   @Override
-   public Enum<PermissionLevel> getPermissionLevel() {
-      return PermissionLevel.DEVELOPER;
-   }
+	@Override
+	public Enum<PermissionLevel> getPermissionLevel() {
+		return PermissionLevel.DEVELOPER;
+	}
 }

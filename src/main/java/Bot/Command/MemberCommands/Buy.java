@@ -56,7 +56,7 @@ public class Buy implements ICommand {
 		IDataBaseManager.INSTANCE.setBalance(ctx.getAuthorID(), -price);
 		IDataBaseManager.INSTANCE.setInventory(ctx.getAuthorID(), item.getCategory(), item.getName(), itemAmount);
 
-		ctx.getChannel().sendMessage(":moneybag: Congratulations, you successfully bought **" + itemAmount + " " + item.getName() + "** for **" + (item.getPrice() * itemAmount) + "** fluffies").queue();
+		ctx.getChannel().sendMessage(":moneybag: Congratulations, you successfully bought **" + itemAmount + " " + item.getName() + "** for **" + price + "** fluffies").queue();
 	}
 
 	@Override

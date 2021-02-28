@@ -15,8 +15,8 @@ public class MongoDBDataSource implements IDataBaseManager {
 	private final MongoCollection<Document> guildCollection;
 
 	public MongoDBDataSource() {
-		MongoClient mongoClient = MongoClients.create("mongodb+srv://alpacaAdmin:" + Config.get("MONGODB") + "@alpacacluster.izknd.mongodb.net/alpagotchiDB?retryWrites=true&w=majority");
-		MongoDatabase database = mongoClient.getDatabase("alpagotchiDB");
+		MongoClient mongoClient = MongoClients.create("mongodb+srv://alpacaAdmin:" + Config.get("MONGODB") + "@alpacacluster.izknd.mongodb.net/testDB?retryWrites=true&w=majority");
+		MongoDatabase database = mongoClient.getDatabase("testDB");
 
 		alpacaCollection = database.getCollection("alpacas_manager");
 		guildCollection = database.getCollection("guild_settings");
