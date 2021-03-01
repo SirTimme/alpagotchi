@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.time.Instant;
 import java.util.List;
@@ -33,12 +33,12 @@ public class MyAlpaca implements ICommand {
 		final int thirst = IDataBaseManager.INSTANCE.getAlpacaValues(ctx.getAuthorID(), "thirst");
 		final int energy = IDataBaseManager.INSTANCE.getAlpacaValues(ctx.getAuthorID(), "energy");
 		final int joy = IDataBaseManager.INSTANCE.getAlpacaValues(ctx.getAuthorID(), "joy");
-		final String outfit = IDataBaseManager.INSTANCE.getOutfit(ctx.getAuthorID());
 
-		final BufferedImage background = ImagePreloader.getAlpacaImage(outfit);
-		final BufferedImage alpaca = new BufferedImage(background.getWidth(), background.getHeight(), BufferedImage.TYPE_INT_RGB);
+		final String outfitName = IDataBaseManager.INSTANCE.getOutfit(ctx.getAuthorID());
+		final BufferedImage background = ImagePreloader.getAlpacaImage(outfitName);
+		final BufferedImage img = new BufferedImage(background.getWidth(), background.getHeight(), BufferedImage.TYPE_INT_RGB);
 
-		final Graphics graphics = alpaca.createGraphics();
+		final Graphics graphics = img.createGraphics();
 		graphics.setFont(new Font("SansSerif", Font.BOLD, 15));
 
 		graphics.drawImage(background, 0, 0, null);
@@ -61,24 +61,24 @@ public class MyAlpaca implements ICommand {
 		graphics.setColor(getColorOfValues(joy));
 		graphics.fillRect(420, 73, (int) (joy * 1.75), 12);
 
-		final File newAlpacaFile = new File("src/main/resources/alpacaEdited.jpg");
 		try {
-			ImageIO.write(alpaca, "jpg", newAlpacaFile);
+			ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
+			ImageIO.write(img, "jpg", byteStream);
+
+			final User botCreator = ctx.getJDA().getUserById(Config.get("OWNER_ID"));
+			final EmbedBuilder embed = new EmbedBuilder();
+			embed
+					.setTitle("" + IDataBaseManager.INSTANCE.getNickname(ctx.getAuthorID()) + "")
+					.setDescription("_Have a llamazing day!_")
+					.setThumbnail(ctx.getMember().getUser().getAvatarUrl())
+					.setFooter("Created by " + botCreator.getName(), botCreator.getEffectiveAvatarUrl())
+					.setTimestamp(Instant.now())
+					.setImage("attachment://alpagotchi.jpg");
+
+			ctx.getChannel().sendFile(byteStream.toByteArray(), "alpagotchi.jpg").embed(embed.build()).queue();
 		} catch (IOException error) {
 			LOGGER.error(error.getMessage());
 		}
-
-		final User botCreator = ctx.getJDA().getUserById(Config.get("OWNER_ID"));
-		final EmbedBuilder embed = new EmbedBuilder();
-		embed
-				.setTitle("" + IDataBaseManager.INSTANCE.getNickname(ctx.getAuthorID()) + "")
-				.setDescription("_Have a llamazing day!_")
-				.setThumbnail(ctx.getMember().getUser().getAvatarUrl())
-				.setFooter("Created by " + botCreator.getName(), botCreator.getEffectiveAvatarUrl())
-				.setTimestamp(Instant.now())
-				.setImage("attachment://alpacaEdited.jpg");
-
-		ctx.getChannel().sendFile(newAlpacaFile, "alpacaEdited.jpg").embed(embed.build()).queue();
 	}
 
 	@Override
