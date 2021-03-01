@@ -18,6 +18,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.time.Instant;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class MyAlpaca implements ICommand {
 	private static final Logger LOGGER = LoggerFactory.getLogger(MyAlpaca.class);
@@ -65,11 +66,19 @@ public class MyAlpaca implements ICommand {
 			ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
 			ImageIO.write(img, "jpg", byteStream);
 
+			long sleepCooldown = IDataBaseManager.INSTANCE.getCooldown(ctx.getAuthorID(), "sleep") - System.currentTimeMillis();
+			String sleepMsg = sleepCooldown > 0 ? "<:RedCross:782229279312314368> " + (int) TimeUnit.MILLISECONDS.toMinutes(sleepCooldown) + " minutes" : "<:GreenTick:782229268914372609> ready";
+
+			long workCooldown = IDataBaseManager.INSTANCE.getCooldown(ctx.getAuthorID(), "work") - System.currentTimeMillis();
+			String workMsg = workCooldown > 0 ? "<:RedCross:782229279312314368> " + (int) TimeUnit.MILLISECONDS.toMinutes(workCooldown) + " minutes" : "<:GreenTick:782229268914372609> ready";
+
 			final User botCreator = ctx.getJDA().getUserById(Config.get("OWNER_ID"));
 			final EmbedBuilder embed = new EmbedBuilder();
 			embed
 					.setTitle("" + IDataBaseManager.INSTANCE.getNickname(ctx.getAuthorID()) + "")
 					.setDescription("_Have a llamazing day!_")
+					.addField("Work", workMsg, true)
+					.addField("Sleep", sleepMsg, true)
 					.setThumbnail(ctx.getMember().getUser().getAvatarUrl())
 					.setFooter("Created by " + botCreator.getName(), botCreator.getEffectiveAvatarUrl())
 					.setTimestamp(Instant.now())
