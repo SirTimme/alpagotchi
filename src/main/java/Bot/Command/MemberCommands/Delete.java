@@ -15,7 +15,7 @@ import java.util.concurrent.TimeUnit;
 
 public class Delete implements ICommand {
 	private final EventWaiter waiter;
-	private final String[] acceptedEmotes = {"<:GreenTick:782229268914372609>", "<:RedCross:782229279312314368>"};
+	private final String[] acceptedEmotes = {"GreenTick:782229268914372609", "RedCross:782229279312314368"};
 	private final EnumSet<Permission> permissions = EnumSet.of(Permission.MESSAGE_MANAGE, Permission.MESSAGE_ADD_REACTION, Permission.MESSAGE_HISTORY);
 
 	public Delete(EventWaiter waiter) {
