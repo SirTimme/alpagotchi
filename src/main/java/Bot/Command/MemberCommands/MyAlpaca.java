@@ -73,10 +73,10 @@ public class MyAlpaca implements ICommand {
 			ImageIO.write(img, "jpg", byteStream);
 
 			long sleepCooldown = IDataBaseManager.INSTANCE.getCooldown(ctx.getAuthorID(), "sleep") - System.currentTimeMillis();
-			String sleepMsg = sleepCooldown > 0 ? ":x: " + (int) TimeUnit.MILLISECONDS.toMinutes(sleepCooldown) + " minutes" : ":white_check_mark: ready";
+			String sleepMsg = sleepCooldown > 0 ? "<:RedCross:782229279312314368> " + (int) TimeUnit.MILLISECONDS.toMinutes(sleepCooldown) + " minutes" : "<:GreenTick:782229268914372609> ready";
 
 			long workCooldown = IDataBaseManager.INSTANCE.getCooldown(ctx.getAuthorID(), "work") - System.currentTimeMillis();
-			String workMsg = workCooldown > 0 ? ":x: " + (int) TimeUnit.MILLISECONDS.toMinutes(workCooldown) + " minutes" : ":white_check_mark: ready";
+			String workMsg = workCooldown > 0 ? "<:RedCross:782229279312314368> " + (int) TimeUnit.MILLISECONDS.toMinutes(workCooldown) + " minutes" : "<:GreenTick:782229268914372609> ready";
 
 			final User botCreator = ctx.getJDA().getUserById(Config.get("OWNER_ID"));
 			final EmbedBuilder embed = new EmbedBuilder();
