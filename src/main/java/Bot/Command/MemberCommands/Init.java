@@ -36,7 +36,7 @@ public class Init implements ICommand {
 		}
 
 		permissions.forEach(permission -> {
-			if (!ctx.getGuild().getSelfMember().hasPermission(permission)) {
+			if (!ctx.getGuild().getSelfMember().hasPermission(ctx.getChannel(), permission)) {
 				throw new PermissionException("Cannot perform action due to a lack of Permission. Missing permission: " + permission);
 			}
 		});
