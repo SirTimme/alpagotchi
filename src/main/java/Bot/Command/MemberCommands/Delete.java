@@ -15,7 +15,7 @@ import java.util.concurrent.TimeUnit;
 
 public class Delete implements ICommand {
 	private final EventWaiter waiter;
-	private final String[] acceptedEmotes = {"GreenTick:782229268914372609", "RedCross:782229279312314368"};
+	private final String[] emoteIDs = {"782229268914372609", "782229279312314368"};
 	private final EnumSet<Permission> permissions = EnumSet.of(Permission.MESSAGE_MANAGE, Permission.MESSAGE_ADD_REACTION, Permission.MESSAGE_HISTORY);
 
 	public Delete(EventWaiter waiter) {
@@ -36,20 +36,20 @@ public class Delete implements ICommand {
 		});
 
 		ctx.getChannel().sendMessage("⚠ Are you sure you want to delete your data? You **permanently** lose all progress").queue((message) -> {
-			message.addReaction(acceptedEmotes[0]).queue();
-			message.addReaction(acceptedEmotes[1]).queue();
+			message.addReaction("GreenTick:" + emoteIDs[0]).queue();
+			message.addReaction("RedCross:" + emoteIDs[1]).queue();
 
 			this.waiter.waitForEvent(
 					GuildMessageReactionAddEvent.class,
 					(event) -> event.getMessageIdLong() == message.getIdLong()
 							&& event.getMember().equals(ctx.getMember())
-							&& !event.getReactionEmote().isEmote()
-							&& Arrays.asList(acceptedEmotes).contains(event.getReactionEmote().getEmoji()),
+							&& event.getReactionEmote().isEmote()
+							&& Arrays.asList(emoteIDs).contains(event.getReactionEmote().getEmote().getId()),
 					(event) -> {
-						if (event.getReactionEmote().getEmoji().equals(acceptedEmotes[0])) {
+						if (event.getReactionEmote().getEmote().getIdLong() == 782229268914372609L) {
 							IDataBaseManager.INSTANCE.deleteDBEntry(ctx.getAuthorID());
 							message.editMessage("<:GreenTick:782229268914372609> Personal data successfully deleted").queue();
-						} else if (event.getReactionEmote().getEmoji().equals(acceptedEmotes[1])) {
+						} else if (event.getReactionEmote().getEmote().getIdLong() == 782229279312314368L) {
 							message.editMessage("<:RedCross:782229279312314368> Delete process cancelled").queue();
 						}
 						message.clearReactions().queue();
