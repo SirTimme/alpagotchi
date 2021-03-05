@@ -30,8 +30,7 @@ public class Inventory implements ICommand {
 
 		final User botCreator = ctx.getJDA().getUserById(Config.get("OWNER_ID"));
 		final EmbedBuilder embed = new EmbedBuilder();
-		embed
-				.setTitle("Inventory")
+		embed.setTitle("Inventory")
 				.addField("Hunger", getItemsByCategory("hunger", ctx.getAuthorID()), true)
 				.addField("Thirst", getItemsByCategory("thirst", ctx.getAuthorID()), true)
 				.setFooter("Created by " + botCreator.getName(), botCreator.getEffectiveAvatarUrl())
@@ -69,7 +68,7 @@ public class Inventory implements ICommand {
 				.filter((item) -> item.getCategory().equals(category))
 				.map(IShopItem::getName)
 				.sorted()
-				.forEach((item) -> stringBuilder.append(emoji).append(" **").append(IDataBaseManager.INSTANCE.getInventory(memberID, category, item)).append("** ").append(item).append("\n"));
+				.forEach((item) -> stringBuilder.append(emoji).append(" **").append(IDataBaseManager.INSTANCE.getInventory(memberID,	category, item)).append("** ").append(item).append("\n"));
 
 		return stringBuilder.toString();
 	}

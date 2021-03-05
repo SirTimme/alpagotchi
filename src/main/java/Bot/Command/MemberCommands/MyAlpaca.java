@@ -32,8 +32,8 @@ public class MyAlpaca implements ICommand {
 			return;
 		}
 
-		if (!ctx.getGuild().getSelfMember().hasPermission(Permission.MESSAGE_EMBED_LINKS)) {
-			throw new PermissionException("Cannot perform action due to a lack of Permission. Missing permission: " + Permission.MESSAGE_EMBED_LINKS);
+		if (!ctx.getGuild().getSelfMember().hasPermission(ctx.getChannel(), Permission.MESSAGE_EMBED_LINKS)) {
+			throw new PermissionException(Permission.MESSAGE_EMBED_LINKS.getName());
 		}
 
 		final int hunger = IDataBaseManager.INSTANCE.getAlpacaValues(ctx.getAuthorID(), "hunger");

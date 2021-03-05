@@ -35,8 +35,7 @@ public class Outfit implements ICommand {
 				embed.addField("\uD83D\uDC54 " + outfit.getName(), outfit.getDescription(), false);
 			}
 
-			embed
-					.setTitle("Available outfits")
+			embed.setTitle("Available outfits")
 					.setFooter("Created by " + botCreator.getName(), botCreator.getEffectiveAvatarUrl())
 					.setTimestamp(Instant.now());
 

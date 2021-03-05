@@ -1,6 +1,5 @@
 package Bot;
 
-import Bot.Utils.PermissionManager;
 import Bot.Events.MessageListener;
 import Bot.Utils.ImagePreloader;
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
@@ -19,7 +18,6 @@ public class Bot {
 	public static void main(String[] args) {
 		EventWaiter waiter = new EventWaiter();
 		ImagePreloader.loadAllImages();
-		PermissionManager.setPermissions();
 
 		try {
 			JDABuilder.create(

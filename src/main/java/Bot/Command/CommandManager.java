@@ -7,7 +7,6 @@ import Bot.Command.DeveloperCommands.Shutdown;
 import Bot.Command.MemberCommands.*;
 import Bot.Outfits.OutfitManager;
 import Bot.Shop.ShopItemManager;
-import Bot.Utils.PermissionManager;
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
@@ -81,11 +80,9 @@ public class CommandManager {
 		try {
 			command.execute(new CommandContext(event, args, authorID, prefix));
 		} catch (PermissionException error) {
-			String permission = error.getMessage().split(":")[1].trim();
-			Permission missingPermission = error.getPermission() == Permission.UNKNOWN ? PermissionManager.getPermission(permission) : error.getPermission();
-
-			if (missingPermission != Permission.MESSAGE_WRITE) {
-				event.getChannel().sendMessage("⚠ I am missing at least the **" + missingPermission.getName() + "** permission to execute this command").queue();
+			String missingPermission = error.getPermission() == Permission.UNKNOWN ? error.getMessage() : error.getPermission().getName();
+			if (!missingPermission.equals("Send Messages")) {
+				event.getChannel().sendMessage("⚠ I am missing at least the **" + missingPermission + "** permission to execute this command").queue();
 			}
 		}
 	}

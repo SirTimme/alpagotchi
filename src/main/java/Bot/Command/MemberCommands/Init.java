@@ -21,7 +21,7 @@ import java.util.concurrent.TimeUnit;
 @SuppressWarnings("ConstantConditions")
 public class Init implements ICommand {
 	private final EventWaiter waiter;
-	private final String[] acceptedEmotes = {"✅", "❌"};
+	private final String[] acceptedEmotes = {"<:GreenTick:782229268914372609>", "<:RedCross:782229279312314368>"};
 	private final EnumSet<Permission> permissions = EnumSet.of(Permission.MESSAGE_MANAGE, Permission.MESSAGE_ADD_REACTION, Permission.MESSAGE_HISTORY);
 
 	public Init(EventWaiter waiter) {
@@ -37,7 +37,7 @@ public class Init implements ICommand {
 
 		permissions.forEach(permission -> {
 			if (!ctx.getGuild().getSelfMember().hasPermission(ctx.getChannel(), permission)) {
-				throw new PermissionException("Cannot perform action due to a lack of Permission. Missing permission: " + permission);
+				throw new PermissionException(permission.getName());
 			}
 		});
 
