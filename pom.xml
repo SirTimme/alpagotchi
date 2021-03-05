@@ -28,7 +28,7 @@
                             <mainClass>Bot.Bot</mainClass>
                         </manifest>
                     </archive>
-                    <outputDirectory>../Alpagotchi</outputDirectory>
+                    <outputDirectory>./</outputDirectory>
                 </configuration>
                 <executions>
                     <execution>
