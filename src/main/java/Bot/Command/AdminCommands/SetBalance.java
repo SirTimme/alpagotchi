@@ -2,13 +2,14 @@ package Bot.Command.AdminCommands;
 
 import Bot.Command.CommandContext;
 import Bot.Command.ICommand;
-import Bot.Command.PermissionLevel;
+import Bot.Utils.PermissionLevel;
 import Bot.Database.IDataBaseManager;
 import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.exceptions.PermissionException;
 
 public class SetBalance implements ICommand {
 	@Override
-	public void execute(CommandContext ctx) {
+	public void execute(CommandContext ctx) throws PermissionException {
 		if (!PermissionLevel.ADMIN.hasPermission(ctx.getMember())) {
 			ctx.getChannel().sendMessage("<:RedCross:782229279312314368> This is a **admin-only** command, you are missing the **" + Permission.MANAGE_SERVER.getName() + "** permission").queue();
 			return;

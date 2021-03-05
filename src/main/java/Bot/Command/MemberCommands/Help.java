@@ -1,13 +1,14 @@
 package Bot.Command.MemberCommands;
 
 import Bot.Command.CommandContext;
-import Bot.Command.PermissionLevel;
+import Bot.Utils.PermissionLevel;
 import Bot.Config;
 import Bot.Command.CommandManager;
 import Bot.Command.ICommand;
 import Bot.Database.IDataBaseManager;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.exceptions.PermissionException;
 
 import java.time.Instant;
 import java.util.List;
@@ -20,7 +21,7 @@ public class Help implements ICommand {
 	}
 
 	@Override
-	public void execute(CommandContext ctx) {
+	public void execute(CommandContext ctx) throws PermissionException {
 		final String prefix = IDataBaseManager.INSTANCE.getPrefix(ctx.getGuild().getIdLong());
 
 		if (ctx.getArgs().isEmpty()) {

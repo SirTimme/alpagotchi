@@ -107,12 +107,7 @@ public class MongoDBDataSource implements IDataBaseManager {
 	public void setInventory(long memberID, String category, String item, int newAmount) {
 		Document resultDoc = alpacaCollection.find(Filters.eq("_id", memberID)).first();
 
-		alpacaCollection.updateOne(resultDoc,
-				Updates.set(
-						"inventory." + category + "." + item,
-						resultDoc.get("inventory", Document.class).get(category, Document.class).getInteger(item) + newAmount
-				)
-		);
+		alpacaCollection.updateOne(resultDoc, Updates.set("inventory." + category + "." + item, resultDoc.get("inventory", Document.class).get(category, Document.class).getInteger(item) + newAmount));
 	}
 
 	@Override

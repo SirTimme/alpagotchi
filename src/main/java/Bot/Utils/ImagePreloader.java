@@ -16,17 +16,17 @@ public class ImagePreloader {
 
 	public static void loadAllImages() {
 		try {
-			final File alpacaFolder = new File("src/main/resources/outfits");
-			for (File alpacaFile : alpacaFolder.listFiles()) {
-				alpacaImages.put(alpacaFile.getName().split("\\.")[0], ImageIO.read(alpacaFile));
+			final File folder = new File("src/main/resources/outfits");
+			for (File file : folder.listFiles()) {
+				alpacaImages.put(file.getName().split("\\.")[0], ImageIO.read(file));
 			}
-			LOGGER.info(alpacaFolder.listFiles().length + " files successfully preloaded");
+			LOGGER.info(folder.listFiles().length + " files successfully preloaded");
 		} catch (IOException error) {
 			LOGGER.error(error.getMessage());
 		}
 	}
 
-	public static BufferedImage getAlpacaImage(String outfit) {
-		return alpacaImages.get(outfit);
+	public static BufferedImage getAlpacaImage(String image) {
+		return alpacaImages.get(image);
 	}
 }

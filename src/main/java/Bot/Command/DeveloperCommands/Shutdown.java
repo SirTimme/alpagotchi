@@ -2,11 +2,12 @@ package Bot.Command.DeveloperCommands;
 
 import Bot.Command.CommandContext;
 import Bot.Command.ICommand;
-import Bot.Command.PermissionLevel;
+import Bot.Utils.PermissionLevel;
+import net.dv8tion.jda.api.exceptions.PermissionException;
 
 public class Shutdown implements ICommand {
 	@Override
-	public void execute(CommandContext ctx) {
+	public void execute(CommandContext ctx) throws PermissionException {
 		if (!PermissionLevel.DEVELOPER.hasPermission(ctx.getMember())) {
 			ctx.getChannel().sendMessage("<:RedCross:782229279312314368> This is a **developer-only** command").queue();
 			return;

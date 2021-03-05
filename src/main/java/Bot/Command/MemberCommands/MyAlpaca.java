@@ -2,12 +2,14 @@ package Bot.Command.MemberCommands;
 
 import Bot.Command.CommandContext;
 import Bot.Command.ICommand;
-import Bot.Command.PermissionLevel;
+import Bot.Utils.PermissionLevel;
 import Bot.Config;
 import Bot.Database.IDataBaseManager;
 import Bot.Utils.ImagePreloader;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.exceptions.PermissionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,10 +26,14 @@ public class MyAlpaca implements ICommand {
 	private static final Logger LOGGER = LoggerFactory.getLogger(MyAlpaca.class);
 
 	@Override
-	public void execute(CommandContext ctx) {
+	public void execute(CommandContext ctx) throws PermissionException {
 		if (!IDataBaseManager.INSTANCE.isUserInDB(ctx.getAuthorID())) {
 			ctx.getChannel().sendMessage("<:RedCross:782229279312314368> You do not own a alpaca, use **" + ctx.getPrefix() + "init** first").queue();
 			return;
+		}
+
+		if (!ctx.getGuild().getSelfMember().hasPermission(Permission.MESSAGE_EMBED_LINKS)) {
+			throw new PermissionException("Cannot perform action due to a lack of Permission. Missing permission: " + Permission.MESSAGE_EMBED_LINKS);
 		}
 
 		final int hunger = IDataBaseManager.INSTANCE.getAlpacaValues(ctx.getAuthorID(), "hunger");
@@ -67,10 +73,10 @@ public class MyAlpaca implements ICommand {
 			ImageIO.write(img, "jpg", byteStream);
 
 			long sleepCooldown = IDataBaseManager.INSTANCE.getCooldown(ctx.getAuthorID(), "sleep") - System.currentTimeMillis();
-			String sleepMsg = sleepCooldown > 0 ? "<:RedCross:782229279312314368> " + (int) TimeUnit.MILLISECONDS.toMinutes(sleepCooldown) + " minutes" : "<:GreenTick:782229268914372609> ready";
+			String sleepMsg = sleepCooldown > 0 ? ":x: " + (int) TimeUnit.MILLISECONDS.toMinutes(sleepCooldown) + " minutes" : ":white_check_mark: ready";
 
 			long workCooldown = IDataBaseManager.INSTANCE.getCooldown(ctx.getAuthorID(), "work") - System.currentTimeMillis();
-			String workMsg = workCooldown > 0 ? "<:RedCross:782229279312314368> " + (int) TimeUnit.MILLISECONDS.toMinutes(workCooldown) + " minutes" : "<:GreenTick:782229268914372609> ready";
+			String workMsg = workCooldown > 0 ? ":x: " + (int) TimeUnit.MILLISECONDS.toMinutes(workCooldown) + " minutes" : ":white_check_mark: ready";
 
 			final User botCreator = ctx.getJDA().getUserById(Config.get("OWNER_ID"));
 			final EmbedBuilder embed = new EmbedBuilder();

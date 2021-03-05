@@ -2,16 +2,19 @@ package Bot.Command.MemberCommands;
 
 import Bot.Command.CommandContext;
 import Bot.Command.ICommand;
-import Bot.Command.PermissionLevel;
+import Bot.Utils.PermissionLevel;
 import Bot.Config;
 import Bot.Database.IDataBaseManager;
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
+import net.dv8tion.jda.api.exceptions.PermissionException;
 
 import java.time.Instant;
 import java.util.Arrays;
+import java.util.EnumSet;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -19,17 +22,24 @@ import java.util.concurrent.TimeUnit;
 public class Init implements ICommand {
 	private final EventWaiter waiter;
 	private final String[] acceptedEmotes = {"✅", "❌"};
+	private final EnumSet<Permission> permissions = EnumSet.of(Permission.MESSAGE_MANAGE, Permission.MESSAGE_ADD_REACTION, Permission.MESSAGE_HISTORY);
 
 	public Init(EventWaiter waiter) {
 		this.waiter = waiter;
 	}
 
 	@Override
-	public void execute(CommandContext ctx) {
+	public void execute(CommandContext ctx) throws PermissionException {
 		if (IDataBaseManager.INSTANCE.isUserInDB(ctx.getAuthorID())) {
 			ctx.getChannel().sendMessage("<:RedCross:782229279312314368> Your alpaca has already been set up").queue();
 			return;
 		}
+
+		permissions.forEach(permission -> {
+			if (!ctx.getGuild().getSelfMember().hasPermission(permission)) {
+				throw new PermissionException("Cannot perform action due to a lack of Permission. Missing permission: " + permission);
+			}
+		});
 
 		final User botCreator = ctx.getJDA().getUserById(Config.get("OWNER_ID"));
 		final EmbedBuilder embed = new EmbedBuilder();
@@ -37,8 +47,16 @@ public class Init implements ICommand {
 				.setTitle("User information")
 				.setDescription("Im glad, that Alpagotchi interests you and you want to interact with him.\nHere are two important points before you can start:")
 				.setThumbnail(ctx.getJDA().getSelfUser().getAvatarUrl())
-				.addField("__§1 Storage of the UserID__", "Alpagotchi stores your personal Discord UserID in order to work, but this is public information and can be accessed by everyone", false)
-				.addField("__§2 Deletion of the UserID__", "If you change your mind about storing your UserID, use the `" + ctx.getPrefix() + "delete` command to delete your data at any time", false)
+				.addField(
+						"__§1 Storage of the UserID__",
+						"Alpagotchi stores your personal Discord UserID in order to work, but this is public information and can be accessed by everyone",
+						false
+				)
+				.addField(
+						"__§2 Deletion of the UserID__",
+						"If you change your mind about storing your UserID, use the `" + ctx.getPrefix() + "delete` command to delete your data at any time",
+						false
+				)
 				.setImage("https://cdn.discordapp.com/attachments/795637300661977132/811504330263625778/Reactions.png")
 				.setFooter("Created by " + botCreator.getName(), botCreator.getEffectiveAvatarUrl())
 				.setTimestamp(Instant.now());

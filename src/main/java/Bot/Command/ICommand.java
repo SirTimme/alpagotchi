@@ -1,5 +1,7 @@
 package Bot.Command;
 
+import Bot.Utils.PermissionLevel;
+
 import java.util.List;
 
 public interface ICommand {

@@ -1,6 +1,5 @@
 package Bot.Outfits;
 
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,7 +17,6 @@ public class OutfitManager {
 		return this.outfits;
 	}
 
-	@Nullable
 	public IOutfit getOutfit(String search) {
 		for (IOutfit outfit : this.outfits) {
 			if (outfit.getName().equals(search)) {

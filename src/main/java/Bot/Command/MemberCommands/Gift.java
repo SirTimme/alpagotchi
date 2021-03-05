@@ -2,10 +2,11 @@ package Bot.Command.MemberCommands;
 
 import Bot.Command.CommandContext;
 import Bot.Command.ICommand;
-import Bot.Command.PermissionLevel;
+import Bot.Utils.PermissionLevel;
 import Bot.Database.IDataBaseManager;
 import Bot.Shop.IShopItem;
 import Bot.Shop.ShopItemManager;
+import net.dv8tion.jda.api.exceptions.PermissionException;
 
 public class Gift implements ICommand {
 	private final ShopItemManager shopItemManager;
@@ -15,7 +16,7 @@ public class Gift implements ICommand {
 	}
 
 	@Override
-	public void execute(CommandContext ctx) {
+	public void execute(CommandContext ctx) throws PermissionException {
 		if (!IDataBaseManager.INSTANCE.isUserInDB(ctx.getAuthorID())) {
 			ctx.getChannel().sendMessage("<:RedCross:782229279312314368> You do not own a alpaca, use **" + ctx.getPrefix() + "init** first").queue();
 			return;

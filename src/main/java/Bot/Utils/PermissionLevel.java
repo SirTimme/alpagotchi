@@ -1,4 +1,4 @@
-package Bot.Command;
+package Bot.Utils;
 
 import Bot.Config;
 import net.dv8tion.jda.api.Permission;

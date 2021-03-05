@@ -2,13 +2,14 @@ package Bot.Command.MemberCommands;
 
 import Bot.Command.CommandContext;
 import Bot.Command.ICommand;
-import Bot.Command.PermissionLevel;
+import Bot.Utils.PermissionLevel;
 import Bot.Config;
 import Bot.Database.IDataBaseManager;
 import Bot.Outfits.IOutfit;
 import Bot.Outfits.OutfitManager;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.exceptions.PermissionException;
 
 import java.time.Instant;
 
@@ -20,7 +21,7 @@ public class Outfit implements ICommand {
 	}
 
 	@Override
-	public void execute(CommandContext ctx) {
+	public void execute(CommandContext ctx) throws PermissionException {
 		if (!IDataBaseManager.INSTANCE.isUserInDB(ctx.getAuthorID())) {
 			ctx.getChannel().sendMessage("<:RedCross:782229279312314368> You do not own a alpaca, use **" + ctx.getPrefix() + "init** first").queue();
 			return;

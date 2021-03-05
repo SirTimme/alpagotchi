@@ -2,12 +2,13 @@ package Bot.Command.MemberCommands;
 
 import Bot.Command.CommandContext;
 import Bot.Command.ICommand;
-import Bot.Command.PermissionLevel;
+import Bot.Utils.PermissionLevel;
 import Bot.Config;
 import Bot.Shop.IShopItem;
 import Bot.Shop.ShopItemManager;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.exceptions.PermissionException;
 
 import java.time.Instant;
 import java.util.Comparator;
@@ -20,7 +21,7 @@ public class Shop implements ICommand {
 	}
 
 	@Override
-	public void execute(CommandContext ctx) {
+	public void execute(CommandContext ctx) throws PermissionException {
 		final User botCreator = ctx.getJDA().getUserById(Config.get("OWNER_ID"));
 		final EmbedBuilder embed = new EmbedBuilder();
 		embed

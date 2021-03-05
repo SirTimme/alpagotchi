@@ -2,19 +2,20 @@ package Bot.Command.DeveloperCommands;
 
 import Bot.Command.CommandContext;
 import Bot.Command.ICommand;
-import Bot.Command.PermissionLevel;
+import Bot.Utils.PermissionLevel;
 import Bot.Database.IDataBaseManager;
+import net.dv8tion.jda.api.exceptions.PermissionException;
 
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class Decrease implements ICommand {
+public class Decrease implements ICommand  {
 	private final Timer timer = new Timer();
 	private boolean isTimerRunning = false;
 	private TimerTask sqlTask;
 
 	@Override
-	public void execute(CommandContext ctx) {
+	public void execute(CommandContext ctx) throws PermissionException {
 		if (!PermissionLevel.DEVELOPER.hasPermission(ctx.getMember())) {
 			ctx.getChannel().sendMessage("<:RedCross:782229279312314368> This is a **developer-only** command").queue();
 			return;
