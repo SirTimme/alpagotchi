@@ -2,47 +2,61 @@ package Bot.Command.AdminCommands;
 
 import Bot.Command.CommandContext;
 import Bot.Command.ICommand;
+import Bot.Config;
 import Bot.Utils.PermissionLevel;
-import Bot.Database.IDataBaseManager;
+import Bot.Database.IDatabase;
 import net.dv8tion.jda.api.Permission;
-import net.dv8tion.jda.api.exceptions.PermissionException;
+import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.User;
+
+import java.util.EnumSet;
+import java.util.List;
 
 public class SetBalance implements ICommand {
 	@Override
-	public void execute(CommandContext ctx) throws PermissionException {
+	public void execute(CommandContext ctx) {
+		final TextChannel channel = ctx.getChannel();
+		final List<String> args = ctx.getArgs();
+
 		if (!PermissionLevel.ADMIN.hasPermission(ctx.getMember())) {
-			ctx.getChannel().sendMessage("<:RedCross:782229279312314368> This is a **admin-only** command, you are missing the **" + Permission.MANAGE_SERVER.getName() + "** permission").queue();
+			channel.sendMessage("<:RedCross:782229279312314368> This is an **admin-only** command, you're missing the **" + Permission.MANAGE_SERVER.getName() + "** permission").queue();
 			return;
 		}
 
-		if (ctx.getMessage().getMentionedUsers().isEmpty()) {
-			ctx.getChannel().sendMessage("<:RedCross:782229279312314368> Could not resolve the mentioned user").queue();
+		if (args.isEmpty() || args.size() < 2) {
+			channel.sendMessage("<:RedCross:782229279312314368> Missing arguments").queue();
 			return;
 		}
 
-		final long mentionedUserID = ctx.getMessage().getMentionedUsers().get(0).getIdLong();
-		if (!IDataBaseManager.INSTANCE.isUserInDB(mentionedUserID)) {
-			ctx.getChannel().sendMessage("<:RedCross:782229279312314368> The mentioned user does not own a alpaca, he have to use **" + ctx.getPrefix() + "init** first").queue();
+		final List<User> mentionedUser = ctx.getMessage().getMentionedUsers();
+		if (mentionedUser.isEmpty()) {
+			channel.sendMessage("<:RedCross:782229279312314368> Couldn't resolve the mentioned user").queue();
 			return;
 		}
 
-		final int newBalance;
+		final User user = mentionedUser.get(0);
+		final long userID = user.getIdLong();
+
+		if (!IDatabase.INSTANCE.isUserInDB(userID)) {
+			channel.sendMessage("<:RedCross:782229279312314368> The mentioned user doesn't own an alpaca, he has to use **" + ctx.getPrefix() + "init** first").queue();
+			return;
+		}
+
 		try {
-			newBalance = Integer.parseInt(ctx.getArgs().get(1));
-		} catch (NumberFormatException | IndexOutOfBoundsException error) {
-			ctx.getChannel().sendMessage("<:RedCross:782229279312314368> Could not resolve the new balance").queue();
-			return;
+			final int newBalance = Integer.parseInt(args.get(1));
+			final int currentBalance = IDatabase.INSTANCE.getBalance(userID);
+
+			IDatabase.INSTANCE.setBalance(userID, newBalance - currentBalance);
+
+			channel.sendMessage("\uD83D\uDCB3 The balance of **" + user.getName() + "** has been set to **" + newBalance + "**").queue();
+		} catch (NumberFormatException error) {
+			channel.sendMessage("<:RedCross:782229279312314368> Couldn't resolve the new balance").queue();
 		}
-
-		final int currentBalance = IDataBaseManager.INSTANCE.getBalance(mentionedUserID);
-		IDataBaseManager.INSTANCE.setBalance(mentionedUserID, newBalance - currentBalance);
-
-		ctx.getChannel().sendMessage("\uD83D\uDCB3 The balance of **" + ctx.getJDA().getUserById(mentionedUserID).getName() + "** has been set to **" + newBalance + "**").queue();
 	}
 
 	@Override
 	public String getHelp(String prefix) {
-		return "`Usage: " + prefix + "setbalance [@user] [balance]\n" + (this.getAliases().isEmpty() ? "`" : "Aliases: " + this.getAliases() + "`\n") + "Sets the balance for the specified user";
+		return "**Usage:** " + prefix + "setbalance [@user] [balance]\n**Aliases**: " + getAliases() + "\n**Example:** " + prefix + "setbalance <@" + Config.get("BOT_ID") + "> 150";
 	}
 
 	@Override
@@ -53,5 +67,10 @@ public class SetBalance implements ICommand {
 	@Override
 	public Enum<PermissionLevel> getPermissionLevel() {
 		return PermissionLevel.ADMIN;
+	}
+
+	@Override
+	public EnumSet<Permission> getRequiredPermissions() {
+		return EnumSet.of(Permission.MESSAGE_WRITE);
 	}
 }

@@ -10,7 +10,7 @@ public enum PermissionLevel {
 	public boolean hasPermission(Member member) {
 		switch (this) {
 			case DEVELOPER:
-				return member.getId().equals(Config.get("OWNER_ID"));
+				return member.getId().equals(Config.get("DEV_ID"));
 			case ADMIN:
 				return member.hasPermission(Permission.MANAGE_SERVER);
 			default:

@@ -9,17 +9,23 @@ import Bot.Outfits.OutfitManager;
 import Bot.Shop.ShopItemManager;
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
-import net.dv8tion.jda.api.exceptions.PermissionException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.EnumSet;
 import java.util.List;
 import java.util.regex.Pattern;
 
+@SuppressWarnings("ConstantConditions")
 public class CommandManager {
 	private final List<ICommand> commands = new ArrayList<>();
+	private final static Logger LOGGER = LoggerFactory.getLogger(CommandManager.class);
 	ShopItemManager shopItemManager = new ShopItemManager();
 	OutfitManager outfitManager = new OutfitManager();
 
@@ -43,6 +49,7 @@ public class CommandManager {
 		addCommand(new Init(waiter));
 		addCommand(new Outfit(this.outfitManager));
 		addCommand(new Delete(waiter));
+		addCommand(new Ping());
 	}
 
 	private void addCommand(ICommand command) {
@@ -64,26 +71,39 @@ public class CommandManager {
 	}
 
 	public void handle(GuildMessageReceivedEvent event, String prefix) {
-		String[] split = event.getMessage()
-				.getContentRaw()
-				.replaceFirst("(?i)" + Pattern.quote(prefix), "")
-				.split("\\s+");
+		String[] cmdArgs = event.getMessage()
+								.getContentRaw()
+								.replaceFirst("(?i)" + Pattern.quote(prefix), "")
+								.split("\\s+");
 
-		ICommand command = getCommand(split[0].toLowerCase());
-		if (command == null) {
+		ICommand command = getCommand(cmdArgs[0].toLowerCase());
+
+		if (command == null || !checkPermissions(command, event)) {
 			return;
 		}
 
-		List<String> args = Arrays.asList(split).subList(1, split.length);
+		List<String> args = Arrays.asList(cmdArgs).subList(1, cmdArgs.length);
 		long authorID = event.getMember().getIdLong();
 
-		try {
-			command.execute(new CommandContext(event, args, authorID, prefix));
-		} catch (PermissionException error) {
-			String missingPermission = error.getPermission() == Permission.UNKNOWN ? error.getMessage() : error.getPermission().getName();
-			if (!missingPermission.equals("Send Messages")) {
-				event.getChannel().sendMessage("⚠ I am missing at least the **" + missingPermission + "** permission to execute this command").queue();
+		command.execute(new CommandContext(event, args, authorID, prefix));
+	}
+
+	private boolean checkPermissions(ICommand command, GuildMessageReceivedEvent event) {
+		Member botClient = event.getGuild().getSelfMember();
+		TextChannel channel = event.getChannel();
+
+		EnumSet<Permission> requiredPermissions = command.getRequiredPermissions();
+		EnumSet<Permission> actualPermissions = botClient.getPermissions(channel);
+
+		requiredPermissions.removeAll(actualPermissions);
+
+		if (requiredPermissions.size() > 0) {
+			Permission permission = requiredPermissions.iterator().next();
+			if (permission != Permission.MESSAGE_WRITE) {
+				channel.sendMessage(":warning: Im missing at least the **" + permission.getName() + "** permission to execute this command").queue();
 			}
+			return false;
 		}
+		return true;
 	}
 }

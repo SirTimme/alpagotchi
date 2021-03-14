@@ -3,27 +3,32 @@ package Bot.Command.MemberCommands;
 import Bot.Command.CommandContext;
 import Bot.Command.ICommand;
 import Bot.Utils.PermissionLevel;
-import Bot.Database.IDataBaseManager;
-import net.dv8tion.jda.api.exceptions.PermissionException;
+import Bot.Database.IDatabase;
+import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.TextChannel;
 
+import java.util.EnumSet;
 import java.util.List;
 
 public class Balance implements ICommand {
 	@Override
-	public void execute(CommandContext ctx) throws PermissionException {
-		if (!IDataBaseManager.INSTANCE.isUserInDB(ctx.getAuthorID())) {
-			ctx.getChannel().sendMessage("<:RedCross:782229279312314368> You do not own a alpaca, use **" + ctx.getPrefix() + "init** first").queue();
+	public void execute(CommandContext ctx) {
+		final long authorID = ctx.getAuthorID();
+		final TextChannel channel = ctx.getChannel();
+
+		if (!IDatabase.INSTANCE.isUserInDB(authorID)) {
+			channel.sendMessage("<:RedCross:782229279312314368> You don't own an alpaca, use **" + ctx.getPrefix() + "init** first").queue();
 			return;
 		}
 
-		final int balance = IDataBaseManager.INSTANCE.getBalance(ctx.getAuthorID());
+		final int balance = IDatabase.INSTANCE.getBalance(authorID);
 
-		ctx.getChannel().sendMessage("\uD83D\uDCB5 Your current balance is **" + (balance == 1 ? balance + "** fluffy" : balance + "** fluffies")).queue();
+		channel.sendMessage("\uD83D\uDCB5 Your current balance is **" + balance + (balance == 1 ? "** fluffy" : "** fluffies")).queue();
 	}
 
 	@Override
 	public String getHelp(String prefix) {
-		return "`Usage: " + prefix + "balance\n" + (this.getAliases().isEmpty() ? "`" : "Aliases: " + this.getAliases() + "`\n") + "Shows your current balance of fluffies";
+		return "**Usage:** " + prefix + "balance\n**Aliases:** " + getAliases() + "\n**Example:** " + prefix + "wallet";
 	}
 
 	@Override
@@ -39,5 +44,10 @@ public class Balance implements ICommand {
 	@Override
 	public List<String> getAliases() {
 		return List.of("wallet", "money");
+	}
+
+	@Override
+	public EnumSet<Permission> getRequiredPermissions() {
+		return EnumSet.of(Permission.MESSAGE_WRITE);
 	}
 }

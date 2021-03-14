@@ -4,12 +4,12 @@ import Bot.Command.CommandContext;
 import Bot.Command.ICommand;
 import Bot.Utils.PermissionLevel;
 import Bot.Config;
-import Bot.Database.IDataBaseManager;
-import Bot.Utils.ImagePreloader;
+import Bot.Database.IDatabase;
+import Bot.Utils.ResourcesManager;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
-import net.dv8tion.jda.api.exceptions.PermissionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,6 +19,7 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.time.Instant;
+import java.util.EnumSet;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -26,23 +27,22 @@ public class MyAlpaca implements ICommand {
 	private static final Logger LOGGER = LoggerFactory.getLogger(MyAlpaca.class);
 
 	@Override
-	public void execute(CommandContext ctx) throws PermissionException {
-		if (!IDataBaseManager.INSTANCE.isUserInDB(ctx.getAuthorID())) {
-			ctx.getChannel().sendMessage("<:RedCross:782229279312314368> You do not own a alpaca, use **" + ctx.getPrefix() + "init** first").queue();
+	public void execute(CommandContext ctx) {
+		final long authorID = ctx.getAuthorID();
+		final TextChannel channel = ctx.getChannel();
+
+		if (!IDatabase.INSTANCE.isUserInDB(authorID)) {
+			channel.sendMessage("<:RedCross:782229279312314368> You don't own an alpaca, use **" + ctx.getPrefix() + "init** first").queue();
 			return;
 		}
 
-		if (!ctx.getGuild().getSelfMember().hasPermission(ctx.getChannel(), Permission.MESSAGE_EMBED_LINKS)) {
-			throw new PermissionException(Permission.MESSAGE_EMBED_LINKS.getName());
-		}
+		final int hunger = IDatabase.INSTANCE.getAlpacaValues(authorID, "hunger");
+		final int thirst = IDatabase.INSTANCE.getAlpacaValues(authorID, "thirst");
+		final int energy = IDatabase.INSTANCE.getAlpacaValues(authorID, "energy");
+		final int joy = IDatabase.INSTANCE.getAlpacaValues(authorID, "joy");
+		final String outfit = IDatabase.INSTANCE.getOutfit(authorID);
 
-		final int hunger = IDataBaseManager.INSTANCE.getAlpacaValues(ctx.getAuthorID(), "hunger");
-		final int thirst = IDataBaseManager.INSTANCE.getAlpacaValues(ctx.getAuthorID(), "thirst");
-		final int energy = IDataBaseManager.INSTANCE.getAlpacaValues(ctx.getAuthorID(), "energy");
-		final int joy = IDataBaseManager.INSTANCE.getAlpacaValues(ctx.getAuthorID(), "joy");
-
-		final String outfitName = IDataBaseManager.INSTANCE.getOutfit(ctx.getAuthorID());
-		final BufferedImage background = ImagePreloader.getAlpacaImage(outfitName);
+		final BufferedImage background = ResourcesManager.getAlpacaImage(outfit);
 		final BufferedImage img = new BufferedImage(background.getWidth(), background.getHeight(), BufferedImage.TYPE_INT_RGB);
 
 		final Graphics graphics = img.createGraphics();
@@ -56,41 +56,43 @@ public class MyAlpaca implements ICommand {
 		graphics.drawString(energy + "/100", getPosition(energy, "back"), 24);
 		graphics.drawString(joy + "/100", getPosition(joy, "back"), 66);
 
-		graphics.setColor(getColorOfValues(hunger));
+		graphics.setColor(getValueColor(hunger));
 		graphics.fillRect(31, 31, (int) (hunger * 1.75), 12);
 
-		graphics.setColor(getColorOfValues(thirst));
+		graphics.setColor(getValueColor(thirst));
 		graphics.fillRect(31, 73, (int) (thirst * 1.75), 12);
 
-		graphics.setColor(getColorOfValues(energy));
+		graphics.setColor(getValueColor(energy));
 		graphics.fillRect(420, 31, (int) (energy * 1.75), 12);
 
-		graphics.setColor(getColorOfValues(joy));
+		graphics.setColor(getValueColor(joy));
 		graphics.fillRect(420, 73, (int) (joy * 1.75), 12);
 
 		try {
-			ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
+			final ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
 			ImageIO.write(img, "jpg", byteStream);
 
-			long sleepCooldown = IDataBaseManager.INSTANCE.getCooldown(ctx.getAuthorID(), "sleep") - System.currentTimeMillis();
-			String sleepMsg = sleepCooldown > 0 ? "<:RedCross:782229279312314368> " + (int) TimeUnit.MILLISECONDS.toMinutes(sleepCooldown) + " minutes" : "<:GreenTick:782229268914372609> ready";
+			final long sleepCooldown = IDatabase.INSTANCE.getCooldown(authorID, "sleep") - System.currentTimeMillis();
+			final int sleepMinutes = (int) TimeUnit.MILLISECONDS.toMinutes(sleepCooldown);
+			final String sleepMsg = sleepCooldown > 0 ? "<:RedCross:782229279312314368> " + sleepMinutes + " minutes" : "<:GreenTick:782229268914372609> ready";
 
-			long workCooldown = IDataBaseManager.INSTANCE.getCooldown(ctx.getAuthorID(), "work") - System.currentTimeMillis();
-			String workMsg = workCooldown > 0 ? "<:RedCross:782229279312314368> " + (int) TimeUnit.MILLISECONDS.toMinutes(workCooldown) + " minutes" : "<:GreenTick:782229268914372609> ready";
+			final long workCooldown = IDatabase.INSTANCE.getCooldown(authorID, "work") - System.currentTimeMillis();
+			final int workMinutes = (int) TimeUnit.MILLISECONDS.toMinutes(workCooldown);
+			final String workMsg = workCooldown > 0 ? "<:RedCross:782229279312314368> " + workMinutes + " minutes" : "<:GreenTick:782229268914372609> ready";
 
-			final User botCreator = ctx.getJDA().getUserById(Config.get("OWNER_ID"));
+			final User botCreator = ctx.getJDA().getUserById(Config.get("DEV_ID"));
 			final EmbedBuilder embed = new EmbedBuilder();
-			embed
-					.setTitle("" + IDataBaseManager.INSTANCE.getNickname(ctx.getAuthorID()) + "")
-					.setDescription("_Have a llamazing day!_")
-					.addField("Work", workMsg, true)
-					.addField("Sleep", sleepMsg, true)
-					.setThumbnail(ctx.getMember().getUser().getAvatarUrl())
-					.setFooter("Created by " + botCreator.getName(), botCreator.getEffectiveAvatarUrl())
-					.setTimestamp(Instant.now())
-					.setImage("attachment://alpagotchi.jpg");
 
-			ctx.getChannel().sendFile(byteStream.toByteArray(), "alpagotchi.jpg").embed(embed.build()).queue();
+			embed.setTitle(IDatabase.INSTANCE.getNickname(authorID))
+				 .setDescription("_Have a llamazing day!_")
+				 .addField("Work", workMsg, true)
+				 .addField("Sleep", sleepMsg, true)
+				 .setThumbnail(ctx.getMember().getUser().getAvatarUrl())
+				 .setFooter("Created by " + botCreator.getName(), botCreator.getEffectiveAvatarUrl())
+				 .setTimestamp(Instant.now())
+				 .setImage("attachment://alpagotchi.jpg");
+
+			channel.sendFile(byteStream.toByteArray(), "alpagotchi.jpg").embed(embed.build()).queue();
 		} catch (IOException error) {
 			LOGGER.error(error.getMessage());
 		}
@@ -98,7 +100,7 @@ public class MyAlpaca implements ICommand {
 
 	@Override
 	public String getHelp(String prefix) {
-		return "`Usage: " + prefix + "myalpaca\n" + (this.getAliases().isEmpty() ? "`" : "Aliases: " + this.getAliases() + "`\n") + "Shows the stats of your alpaca";
+		return "**Usage:** " + prefix + "myalpaca\n**Aliases:** " + getAliases() + "\n**Example**: " + prefix + "myalpaca";
 	}
 
 	@Override
@@ -116,7 +118,12 @@ public class MyAlpaca implements ICommand {
 		return List.of("ma", "stats");
 	}
 
-	private Color getColorOfValues(int value) {
+	@Override
+	public EnumSet<Permission> getRequiredPermissions() {
+		return EnumSet.of(Permission.MESSAGE_WRITE, Permission.MESSAGE_EMBED_LINKS, Permission.MESSAGE_ATTACH_FILES);
+	}
+
+	private Color getValueColor(int value) {
 		if (value >= 80) {
 			return Color.GREEN;
 		} else if (value >= 60) {

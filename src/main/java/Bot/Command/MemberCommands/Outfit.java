@@ -4,14 +4,17 @@ import Bot.Command.CommandContext;
 import Bot.Command.ICommand;
 import Bot.Utils.PermissionLevel;
 import Bot.Config;
-import Bot.Database.IDataBaseManager;
+import Bot.Database.IDatabase;
 import Bot.Outfits.IOutfit;
 import Bot.Outfits.OutfitManager;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
-import net.dv8tion.jda.api.exceptions.PermissionException;
 
 import java.time.Instant;
+import java.util.EnumSet;
+import java.util.List;
 
 public class Outfit implements ICommand {
 	private final OutfitManager outfitManager;
@@ -21,14 +24,18 @@ public class Outfit implements ICommand {
 	}
 
 	@Override
-	public void execute(CommandContext ctx) throws PermissionException {
-		if (!IDataBaseManager.INSTANCE.isUserInDB(ctx.getAuthorID())) {
-			ctx.getChannel().sendMessage("<:RedCross:782229279312314368> You do not own a alpaca, use **" + ctx.getPrefix() + "init** first").queue();
+	public void execute(CommandContext ctx) {
+		final long authorID = ctx.getAuthorID();
+		final TextChannel channel = ctx.getChannel();
+		final List<String> args = ctx.getArgs();
+
+		if (!IDatabase.INSTANCE.isUserInDB(authorID)) {
+			channel.sendMessage("<:RedCross:782229279312314368> You don't own an alpaca, use **" + ctx.getPrefix() + "init** first").queue();
 			return;
 		}
 
-		if (ctx.getArgs().isEmpty()) {
-			final User botCreator = ctx.getJDA().getUserById(Config.get("OWNER_ID"));
+		if (args.isEmpty()) {
+			final User botCreator = ctx.getJDA().getUserById(Config.get("DEV_ID"));
 			final EmbedBuilder embed = new EmbedBuilder();
 
 			for (IOutfit outfit : outfitManager.getOutfits()) {
@@ -36,27 +43,28 @@ public class Outfit implements ICommand {
 			}
 
 			embed.setTitle("Available outfits")
-					.setFooter("Created by " + botCreator.getName(), botCreator.getEffectiveAvatarUrl())
-					.setTimestamp(Instant.now());
+				 .setFooter("Created by " + botCreator.getName(), botCreator.getEffectiveAvatarUrl())
+				 .setTimestamp(Instant.now());
 
-			ctx.getChannel().sendMessage(embed.build()).queue();
+			channel.sendMessage(embed.build()).queue();
 			return;
 		}
 
-		IOutfit chosenOutfit = outfitManager.getOutfit(ctx.getArgs().get(0).toLowerCase());
-		if (chosenOutfit == null) {
-			ctx.getChannel().sendMessage("<:RedCross:782229279312314368> Could not resolve the specified outfit").queue();
+		IOutfit outfit = outfitManager.getOutfit(args.get(0).toLowerCase());
+		if (outfit == null) {
+			channel.sendMessage("<:RedCross:782229279312314368> Couldn't resolve the outfit").queue();
 			return;
 		}
 
-		IDataBaseManager.INSTANCE.setOutfit(ctx.getAuthorID(), chosenOutfit.getName());
+		final String name = outfit.getName();
+		IDatabase.INSTANCE.setOutfit(authorID, name);
 
-		ctx.getChannel().sendMessage("\uD83D\uDC54 The outfit of your alpaca has been set to **" + chosenOutfit.getName() + "**").queue();
+		channel.sendMessage("\uD83D\uDC54 The outfit of your alpaca has been set to **" + name + "**").queue();
 	}
 
 	@Override
 	public String getHelp(String prefix) {
-		return "`Usage: " + prefix + "outfit [outfit]\n" + (this.getAliases().isEmpty() ? "`" : "Aliases: " + this.getAliases() + "`\n") + "Change the appearance of your alpaca, pass no outfit to see all available outfits";
+		return "**Usage:** " + prefix + "outfit (outfit)\n**Aliases:** " + getAliases() + "\n**Example:** " + prefix + "outfit pirate";
 	}
 
 	@Override
@@ -67,5 +75,10 @@ public class Outfit implements ICommand {
 	@Override
 	public Enum<PermissionLevel> getPermissionLevel() {
 		return PermissionLevel.MEMBER;
+	}
+
+	@Override
+	public EnumSet<Permission> getRequiredPermissions() {
+		return EnumSet.of(Permission.MESSAGE_WRITE, Permission.MESSAGE_EMBED_LINKS);
 	}
 }
