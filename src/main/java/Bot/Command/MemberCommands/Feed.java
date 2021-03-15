@@ -38,7 +38,7 @@ public class Feed implements ICommand {
 			return;
 		}
 
-		if (args.isEmpty() || args.size() < 3) {
+		if (args.isEmpty() || args.size() < 2) {
 			channel.sendMessage("<:RedCross:782229279312314368> Missing arguments").queue();
 			return;
 		}
@@ -89,7 +89,7 @@ public class Feed implements ICommand {
 
 	@Override
 	public String getHelp(String prefix) {
-		return "**Usage:** " + prefix + "feed [itemName] [1-5]\n**Aliases:** " + getAliases() + "**Example:** " + prefix + "feed water 2";
+		return "**Usage:** " + prefix + "feed [itemName] [1-5]\n**Aliases:** " + getAliases() + "\n**Example:** " + prefix + "feed water 2";
 	}
 
 	@Override
