@@ -36,7 +36,11 @@ public class Help implements ICommand {
 				 .setDescription("Further information to any command:\n**```fix\n" + prefix + "help [command]\n```**")
 				 .addField("Admin commands", getCommandsByPerms(prefix, PermissionLevel.ADMIN), true)
 				 .addField("Member commands", getCommandsByPerms(prefix, PermissionLevel.MEMBER), true)
-				 .addField("Need further help or found a bug?", "Then join the [Alpagotchi Support](https://discord.gg/SErfVpSQAV) server!", false)
+				 .addField(
+					 "Need further help or found a bug?",
+					 "Then join the [Alpagotchi Support](https://discord.gg/SErfVpSQAV) server!",
+					 false
+				 )
 				 .setFooter("Created by " + botCreator.getName(), botCreator.getEffectiveAvatarUrl())
 				 .setTimestamp(Instant.now());
 
@@ -55,7 +59,9 @@ public class Help implements ICommand {
 
 	@Override
 	public String getHelp(String prefix) {
-		return "**Usage:** " + prefix + "help (command)\n**Aliases:** " + getAliases() + "\n**Example**: " + prefix + "help gift";
+		return "**Usage:** " + prefix + "help (command)\n" +
+			"**Aliases:** " + getAliases() + "\n" +
+			"**Example**: " + prefix + "help gift";
 	}
 
 	@Override
@@ -79,16 +85,16 @@ public class Help implements ICommand {
 	}
 
 	private String getCommandsByPerms(String prefix, Enum<PermissionLevel> permLevel) {
-		StringBuilder stringBuilder = new StringBuilder();
+		StringBuilder builder = new StringBuilder();
 
 		this.cmdManager.getCommands()
 					   .stream()
 					   .filter((cmd) -> cmd.getPermissionLevel() == permLevel)
 					   .map(ICommand::getName)
 					   .sorted()
-					   .forEach((cmd) -> stringBuilder.append("`").append(prefix).append(cmd).append("`\n"));
+					   .forEach((cmd) -> builder.append("`").append(prefix).append(cmd).append("`\n"));
 
-		return stringBuilder.toString();
+		return builder.toString();
 	}
 }
 

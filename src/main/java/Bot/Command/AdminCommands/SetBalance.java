@@ -19,7 +19,9 @@ public class SetBalance implements ICommand {
 		final List<String> args = ctx.getArgs();
 
 		if (!PermissionLevel.ADMIN.hasPermission(ctx.getMember())) {
-			channel.sendMessage("<:RedCross:782229279312314368> This is an **admin-only** command, you're missing the **" + Permission.MANAGE_SERVER.getName() + "** permission").queue();
+			channel.sendMessage("<:RedCross:782229279312314368> This is an **admin-only** command, " +
+				"you're missing the **" + Permission.MANAGE_SERVER.getName() + "** permission")
+				   .queue();
 			return;
 		}
 
@@ -38,7 +40,9 @@ public class SetBalance implements ICommand {
 		final long userID = user.getIdLong();
 
 		if (!IDatabase.INSTANCE.isUserInDB(userID)) {
-			channel.sendMessage("<:RedCross:782229279312314368> The mentioned user doesn't own an alpaca, he has to use **" + ctx.getPrefix() + "init** first").queue();
+			channel.sendMessage("<:RedCross:782229279312314368> The mentioned user doesn't own an alpaca, " +
+				"he has to use **" + ctx.getPrefix() + "init** first")
+				   .queue();
 			return;
 		}
 
@@ -48,15 +52,20 @@ public class SetBalance implements ICommand {
 
 			IDatabase.INSTANCE.setBalance(userID, newBalance - currentBalance);
 
-			channel.sendMessage("\uD83D\uDCB3 The balance of **" + user.getName() + "** has been set to **" + newBalance + "**").queue();
-		} catch (NumberFormatException error) {
+			channel.sendMessage("\uD83D\uDCB3 The balance of **" + user.getName() + "** " +
+				"has been set to **" + newBalance + "**")
+				   .queue();
+		}
+		catch (NumberFormatException error) {
 			channel.sendMessage("<:RedCross:782229279312314368> Couldn't resolve the new balance").queue();
 		}
 	}
 
 	@Override
 	public String getHelp(String prefix) {
-		return "**Usage:** " + prefix + "setbalance [@user] [balance]\n**Aliases**: " + getAliases() + "\n**Example:** " + prefix + "setbalance <@" + Config.get("BOT_ID") + "> 150";
+		return "**Usage:** " + prefix + "setbalance [@user] [balance]\n" +
+			"**Aliases**: " + getAliases() + "\n" +
+			"**Example:** " + prefix + "setbalance <@" + Config.get("BOT_ID") + "> 150";
 	}
 
 	@Override

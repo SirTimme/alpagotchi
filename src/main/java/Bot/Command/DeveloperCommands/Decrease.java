@@ -42,7 +42,8 @@ public class Decrease implements ICommand {
 			timerActive = true;
 
 			channel.sendMessage("<:GreenTick:782229268914372609> Alpacas begin to lose stats").queue();
-		} else {
+		}
+		else {
 			this.decreaseTask.cancel();
 			timerActive = false;
 
@@ -52,7 +53,9 @@ public class Decrease implements ICommand {
 
 	@Override
 	public String getHelp(String prefix) {
-		return "**" + prefix + "decrease [enable | disable]**\n**Aliases:**" + getAliases() + "\n**Example:**" + prefix + "decrease disable";
+		return "**" + prefix + "decrease [enable | disable]**\n" +
+			"**Aliases:**" + getAliases() + "\n" +
+			"**Example:**" + prefix + "decrease disable";
 	}
 
 	@Override

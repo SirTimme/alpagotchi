@@ -21,7 +21,9 @@ public class EventHandler extends ListenerAdapter {
 	@Override
 	public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
 		final String prefix = IDatabase.INSTANCE.getPrefix(event.getGuild().getIdLong());
-		if (!event.getMessage().getContentRaw().startsWith(prefix) || event.getAuthor().isBot() || event.isWebhookMessage()) {
+		final String msg = event.getMessage().getContentRaw();
+
+		if (!msg.startsWith(prefix) || event.getAuthor().isBot() || event.isWebhookMessage()) {
 			return;
 		}
 

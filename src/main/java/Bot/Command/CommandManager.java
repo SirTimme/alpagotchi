@@ -100,7 +100,9 @@ public class CommandManager {
 		if (requiredPermissions.size() > 0) {
 			Permission permission = requiredPermissions.iterator().next();
 			if (permission != Permission.MESSAGE_WRITE) {
-				channel.sendMessage(":warning: Im missing at least the **" + permission.getName() + "** permission to execute this command").queue();
+				channel.sendMessage(":warning: Im missing at least the **" + permission.getName() + "** permission " +
+					"to execute this command")
+					   .queue();
 			}
 			return false;
 		}

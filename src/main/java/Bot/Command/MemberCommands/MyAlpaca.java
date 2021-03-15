@@ -32,7 +32,9 @@ public class MyAlpaca implements ICommand {
 		final TextChannel channel = ctx.getChannel();
 
 		if (!IDatabase.INSTANCE.isUserInDB(authorID)) {
-			channel.sendMessage("<:RedCross:782229279312314368> You don't own an alpaca, use **" + ctx.getPrefix() + "init** first").queue();
+			channel.sendMessage("<:RedCross:782229279312314368> You don't own an alpaca, " +
+				"use **" + ctx.getPrefix() + "init** first")
+				   .queue();
 			return;
 		}
 
@@ -43,7 +45,11 @@ public class MyAlpaca implements ICommand {
 		final String outfit = IDatabase.INSTANCE.getOutfit(authorID);
 
 		final BufferedImage background = ResourcesManager.getAlpacaImage(outfit);
-		final BufferedImage img = new BufferedImage(background.getWidth(), background.getHeight(), BufferedImage.TYPE_INT_RGB);
+		final BufferedImage img = new BufferedImage(
+			background.getWidth(),
+			background.getHeight(),
+			BufferedImage.TYPE_INT_RGB
+		);
 
 		final Graphics graphics = img.createGraphics();
 		graphics.setFont(new Font("SansSerif", Font.BOLD, 15));
@@ -74,11 +80,15 @@ public class MyAlpaca implements ICommand {
 
 			final long sleepCooldown = IDatabase.INSTANCE.getCooldown(authorID, "sleep") - System.currentTimeMillis();
 			final int sleepMinutes = (int) TimeUnit.MILLISECONDS.toMinutes(sleepCooldown);
-			final String sleepMsg = sleepCooldown > 0 ? "<:RedCross:782229279312314368> " + sleepMinutes + " minutes" : "<:GreenTick:782229268914372609> ready";
+			final String sleepMsg = sleepCooldown > 0
+									? "<:RedCross:782229279312314368> " + sleepMinutes + " minutes"
+									: "<:GreenTick:782229268914372609> ready";
 
 			final long workCooldown = IDatabase.INSTANCE.getCooldown(authorID, "work") - System.currentTimeMillis();
 			final int workMinutes = (int) TimeUnit.MILLISECONDS.toMinutes(workCooldown);
-			final String workMsg = workCooldown > 0 ? "<:RedCross:782229279312314368> " + workMinutes + " minutes" : "<:GreenTick:782229268914372609> ready";
+			final String workMsg = workCooldown > 0
+								   ? "<:RedCross:782229279312314368> " + workMinutes + " minutes"
+								   : "<:GreenTick:782229268914372609> ready";
 
 			final User botCreator = ctx.getJDA().getUserById(Config.get("DEV_ID"));
 			final EmbedBuilder embed = new EmbedBuilder();
@@ -93,14 +103,17 @@ public class MyAlpaca implements ICommand {
 				 .setImage("attachment://alpagotchi.jpg");
 
 			channel.sendFile(byteStream.toByteArray(), "alpagotchi.jpg").embed(embed.build()).queue();
-		} catch (IOException error) {
+		}
+		catch (IOException error) {
 			LOGGER.error(error.getMessage());
 		}
 	}
 
 	@Override
 	public String getHelp(String prefix) {
-		return "**Usage:** " + prefix + "myalpaca\n**Aliases:** " + getAliases() + "\n**Example**: " + prefix + "myalpaca";
+		return "**Usage:** " + prefix + "myalpaca\n" +
+			"**Aliases:** " + getAliases() + "\n" +
+			"**Example**: " + prefix + "myalpaca";
 	}
 
 	@Override
@@ -126,13 +139,17 @@ public class MyAlpaca implements ICommand {
 	private Color getValueColor(int value) {
 		if (value >= 80) {
 			return Color.GREEN;
-		} else if (value >= 60) {
+		}
+		else if (value >= 60) {
 			return Color.YELLOW;
-		} else if (value >= 40) {
+		}
+		else if (value >= 40) {
 			return Color.ORANGE;
-		} else if (value >= 20) {
+		}
+		else if (value >= 20) {
 			return Color.RED;
-		} else {
+		}
+		else {
 			return Color.BLACK;
 		}
 	}
@@ -140,9 +157,11 @@ public class MyAlpaca implements ICommand {
 	private int getPosition(int value, String position) {
 		if (value == 100) {
 			return position.equalsIgnoreCase("front") ? 145 : 534;
-		} else if (value >= 10) {
+		}
+		else if (value >= 10) {
 			return position.equalsIgnoreCase("front") ? 155 : 544;
-		} else {
+		}
+		else {
 			return position.equalsIgnoreCase("front") ? 165 : 554;
 		}
 	}

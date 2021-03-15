@@ -30,7 +30,9 @@ public class Outfit implements ICommand {
 		final List<String> args = ctx.getArgs();
 
 		if (!IDatabase.INSTANCE.isUserInDB(authorID)) {
-			channel.sendMessage("<:RedCross:782229279312314368> You don't own an alpaca, use **" + ctx.getPrefix() + "init** first").queue();
+			channel.sendMessage("<:RedCross:782229279312314368> You don't own an alpaca, " +
+				"use **" + ctx.getPrefix() + "init** first")
+				   .queue();
 			return;
 		}
 
@@ -64,7 +66,9 @@ public class Outfit implements ICommand {
 
 	@Override
 	public String getHelp(String prefix) {
-		return "**Usage:** " + prefix + "outfit (outfit)\n**Aliases:** " + getAliases() + "\n**Example:** " + prefix + "outfit pirate";
+		return "**Usage:** " + prefix + "outfit (outfit)\n" +
+			"**Aliases:** " + getAliases() + "\n" +
+			"**Example:** " + prefix + "outfit pirate";
 	}
 
 	@Override

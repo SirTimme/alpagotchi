@@ -27,7 +27,9 @@ public class Buy implements ICommand {
 		final TextChannel channel = ctx.getChannel();
 
 		if (!IDatabase.INSTANCE.isUserInDB(authorID)) {
-			channel.sendMessage("<:RedCross:782229279312314368> You don't own an alpaca, use **" + prefix + "init** first").queue();
+			channel.sendMessage("<:RedCross:782229279312314368> You don't own an alpaca, " +
+				"use **" + prefix + "init** first")
+				   .queue();
 			return;
 		}
 
@@ -60,15 +62,20 @@ public class Buy implements ICommand {
 			IDatabase.INSTANCE.setBalance(authorID, -price);
 			IDatabase.INSTANCE.setInventory(authorID, item.getCategory(), name, amount);
 
-			channel.sendMessage(":moneybag: You successfully bought **" + amount + " " + name + "** for **" + price + "** fluffies").queue();
-		} catch (NumberFormatException error) {
+			channel.sendMessage(":moneybag: You successfully bought **" + amount + " " + name + "** " +
+				"for **" + price + "** fluffies")
+				   .queue();
+		}
+		catch (NumberFormatException error) {
 			channel.sendMessage("<:RedCross:782229279312314368> Couldn't resolve the item amount").queue();
 		}
 	}
 
 	@Override
 	public String getHelp(String prefix) {
-		return "**Usage:** " + prefix + "buy [item] [1-10]\n**Aliases:** " + getAliases() + "\n**Example:** " + prefix + "buy salad 3";
+		return "**Usage:** " + prefix + "buy [item] [1-10]\n" +
+			"**Aliases:** " + getAliases() + "\n" +
+			"**Example:** " + prefix + "buy salad 3";
 	}
 
 	@Override

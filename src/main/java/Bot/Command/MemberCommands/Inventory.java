@@ -17,10 +17,10 @@ import java.util.EnumSet;
 import java.util.List;
 
 public class Inventory implements ICommand {
-	private final ShopItemManager shopItemManager;
+	private final ShopItemManager itemManager;
 
-	public Inventory(ShopItemManager shopItemManager) {
-		this.shopItemManager = shopItemManager;
+	public Inventory(ShopItemManager itemManager) {
+		this.itemManager = itemManager;
 	}
 
 	@Override
@@ -29,7 +29,9 @@ public class Inventory implements ICommand {
 		final long authorID = ctx.getAuthorID();
 
 		if (!IDatabase.INSTANCE.isUserInDB(authorID)) {
-			channel.sendMessage("<:RedCross:782229279312314368> You don't own an alpaca, use **" + ctx.getPrefix() + "init** first").queue();
+			channel.sendMessage("<:RedCross:782229279312314368> You don't own an alpaca, " +
+				"use **" + ctx.getPrefix() + "init** first")
+				   .queue();
 			return;
 		}
 
@@ -71,20 +73,28 @@ public class Inventory implements ICommand {
 	}
 
 	private String getItemsByCategory(String category, long memberID) {
-		StringBuilder stringBuilder = new StringBuilder();
-		String emoji = category.equals("hunger") ? ":meat_on_bone:" : ":beer:";
+		StringBuilder builder = new StringBuilder();
+		String emoji = category.equals("hunger")
+					   ? ":meat_on_bone:"
+					   : ":beer:";
 
-		this.shopItemManager.getShopItems()
-							.stream()
-							.filter((item) -> item.getCategory().equals(category))
-							.map(IShopItem::getName)
-							.sorted()
-							.forEach((item) -> {
-								int itemAmount = IDatabase.INSTANCE.getInventory(memberID, category, item);
-								stringBuilder.append(emoji).append(" **").append(itemAmount).append("** ").append(item).append("\n");
-							});
+		this.itemManager.getShopItems()
+						.stream()
+						.filter((item) -> item.getCategory().equals(category))
+						.map(IShopItem::getName)
+						.sorted()
+						.forEach((item) -> {
+							int itemAmount = IDatabase.INSTANCE.getInventory(memberID, category, item);
 
-		return stringBuilder.toString();
+							builder.append(emoji)
+								   .append(" **")
+								   .append(itemAmount)
+								   .append("** ")
+								   .append(item)
+								   .append("\n");
+						});
+
+		return builder.toString();
 	}
 }
 

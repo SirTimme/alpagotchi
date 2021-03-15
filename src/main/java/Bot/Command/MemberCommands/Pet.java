@@ -16,18 +16,23 @@ public class Pet implements ICommand {
 		final TextChannel channel = ctx.getChannel();
 
 		if (!IDatabase.INSTANCE.isUserInDB(authorID)) {
-			channel.sendMessage("<:RedCross:782229279312314368> You don't own an alpaca, use **" + ctx.getPrefix() + "init** first").queue();
+			channel.sendMessage("<:RedCross:782229279312314368> You don't own an alpaca, " +
+				"use **" + ctx.getPrefix() + "init** first")
+				   .queue();
 			return;
 		}
 
 		final int joy = IDatabase.INSTANCE.getAlpacaValues(authorID, "joy");
 		if (joy == 100) {
-			channel.sendMessage("<:RedCross:782229279312314368> The joy of your alpaca is already at the maximum").queue();
+			channel.sendMessage("<:RedCross:782229279312314368> The joy of your alpaca is already at the maximum")
+				   .queue();
 			return;
 		}
 
 		final int amountOfJoy = (int) (Math.random() * 10 + 1);
-		final int newJoy = amountOfJoy + joy > 100 ? 100 - joy : amountOfJoy;
+		final int newJoy = amountOfJoy + joy > 100
+						   ? 100 - joy
+						   : amountOfJoy;
 
 		IDatabase.INSTANCE.setAlpacaValues(authorID, "joy", newJoy);
 
@@ -36,7 +41,9 @@ public class Pet implements ICommand {
 
 	@Override
 	public String getHelp(String prefix) {
-		return "**Usage:** " + prefix + "pet\n**Aliases:** " + getAliases() + "\n**Example:** " + prefix + "pet";
+		return "**Usage:** " + prefix + "pet\n" +
+			"**Aliases:** " + getAliases() + "\n" +
+			"**Example:** " + prefix + "pet";
 	}
 
 	@Override

@@ -32,7 +32,8 @@ public class ResourcesManager {
 				jsonFiles.put(key, array);
 			}
 			LOGGER.info("JSON Files successfully preloaded");
-		} catch (IOException error) {
+		}
+		catch (IOException error) {
 			LOGGER.error(error.getMessage());
 		}
 	}
@@ -47,7 +48,8 @@ public class ResourcesManager {
 				alpacaImages.put(key, image);
 			}
 			LOGGER.info("Images successfully preloaded");
-		} catch (IOException error) {
+		}
+		catch (IOException error) {
 			LOGGER.error(error.getMessage());
 		}
 	}

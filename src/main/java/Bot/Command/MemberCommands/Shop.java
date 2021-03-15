@@ -16,10 +16,10 @@ import java.util.Comparator;
 import java.util.EnumSet;
 
 public class Shop implements ICommand {
-	private final ShopItemManager shopItemManager;
+	private final ShopItemManager itemManager;
 
-	public Shop(ShopItemManager shopItemManager) {
-		this.shopItemManager = shopItemManager;
+	public Shop(ShopItemManager itemManager) {
+		this.itemManager = itemManager;
 	}
 
 	@Override
@@ -43,7 +43,9 @@ public class Shop implements ICommand {
 
 	@Override
 	public String getHelp(String prefix) {
-		return "**Usage:** " + prefix + "shop\n**Aliases:** " + getAliases() + "\n**Example:** " + prefix + "shop";
+		return "**Usage:** " + prefix + "shop\n" +
+			"**Aliases:** " + getAliases() + "\n" +
+			"**Example:** " + prefix + "shop";
 	}
 
 	@Override
@@ -62,24 +64,26 @@ public class Shop implements ICommand {
 	}
 
 	private String getItemsAsString(String category, String filter) {
-		StringBuilder builder = new StringBuilder();
+		String emoji = category.equals("hunger")
+					   ? ":meat_on_bone: "
+					   : ":beer: ";
 
-		this.shopItemManager.getShopItems()
-							.stream()
-							.sorted(Comparator.comparingInt(IShopItem::getPrice))
-							.filter((item) -> item.getCategory().equals(category))
-							.map(IShopItem::getName)
-							.forEach((item) -> {
-								if (filter.equals("name")) {
-									builder.append(":package: ").append(item).append("\n");
-								} else if (filter.equals("price")) {
-									builder.append(":coin: ").append(this.shopItemManager.getShopItem(item).getPrice()).append("\n");
-								} else if (filter.equals("saturation") && category.equals("hunger")) {
-									builder.append(":meat_on_bone: ").append(this.shopItemManager.getShopItem(item).getSaturation()).append("\n");
-								} else {
-									builder.append(":beer: ").append(this.shopItemManager.getShopItem(item).getSaturation()).append("\n");
-								}
-							});
+		StringBuilder builder = new StringBuilder();
+		itemManager.getShopItems()
+				   .stream()
+				   .sorted(Comparator.comparingInt(IShopItem::getPrice))
+				   .filter((item) -> item.getCategory().equals(category))
+				   .forEach((item) -> {
+					   if (filter.equals("name")) {
+						   builder.append(":package: ").append(item.getName()).append("\n");
+					   }
+					   else if (filter.equals("price")) {
+						   builder.append(":coin: ").append(item.getPrice()).append("\n");
+					   }
+					   else {
+						   builder.append(emoji).append(item.getSaturation()).append("\n");
+					   }
+				   });
 
 		return builder.toString();
 	}

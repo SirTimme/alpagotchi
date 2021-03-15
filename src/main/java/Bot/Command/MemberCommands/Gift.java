@@ -26,9 +26,12 @@ public class Gift implements ICommand {
 		final TextChannel channel = ctx.getChannel();
 		final List<String> args = ctx.getArgs();
 		final long authorID = ctx.getAuthorID();
+		final String prefix = ctx.getPrefix();
 
 		if (!IDatabase.INSTANCE.isUserInDB(authorID)) {
-			channel.sendMessage("<:RedCross:782229279312314368> You don't own an alpaca, use **" + ctx.getPrefix() + "init** first").queue();
+			channel.sendMessage("<:RedCross:782229279312314368> You don't own an alpaca, " +
+				"use **" + prefix + "init** first")
+				   .queue();
 			return;
 		}
 
@@ -37,20 +40,23 @@ public class Gift implements ICommand {
 			return;
 		}
 
-		final List<User> mentionedUsers = ctx.getMessage().getMentionedUsers();
-		if (mentionedUsers.isEmpty()) {
+		final List<User> users = ctx.getMessage().getMentionedUsers();
+		if (users.isEmpty()) {
 			channel.sendMessage("<:RedCross:782229279312314368> Couldn't resolve the mentioned user").queue();
 			return;
 		}
 
-		final long giftedUserID = mentionedUsers.get(0).getIdLong();
-		if (giftedUserID == authorID) {
+		final User user = users.get(0);
+		final long userID = user.getIdLong();
+		if (userID == authorID) {
 			channel.sendMessage("<:RedCross:782229279312314368> You cannot gift yourself items").queue();
 			return;
 		}
 
-		if (!IDatabase.INSTANCE.isUserInDB(giftedUserID)) {
-			channel.sendMessage("<:RedCross:782229279312314368> The mentioned user doesn't own an alpaca, he's to use **" + ctx.getPrefix() + "init** first").queue();
+		if (!IDatabase.INSTANCE.isUserInDB(userID)) {
+			channel.sendMessage("<:RedCross:782229279312314368> The mentioned user doesn't own an alpaca, " +
+				"he's to use **" + prefix + "init** first")
+				   .queue();
 			return;
 		}
 
@@ -76,19 +82,22 @@ public class Gift implements ICommand {
 			}
 
 			IDatabase.INSTANCE.setInventory(authorID, category, name, -amount);
-			IDatabase.INSTANCE.setInventory(giftedUserID, category, name, amount);
+			IDatabase.INSTANCE.setInventory(userID, category, name, amount);
 
-			final String username = mentionedUsers.get(0).getName();
-
-			channel.sendMessage("\uD83C\uDF81 You successfully gifted **" + amount + " " + name + "** to **" + username + "**").queue();
-		} catch (NumberFormatException error) {
+			channel.sendMessage("\uD83C\uDF81 You successfully gifted **" + amount + " " + name + "** " +
+				"to **" + user.getName() + "**")
+				   .queue();
+		}
+		catch (NumberFormatException error) {
 			channel.sendMessage("<:RedCross:782229279312314368> Couldn't resolve the amount of items").queue();
 		}
 	}
 
 	@Override
 	public String getHelp(String prefix) {
-		return "**Usage:** " + prefix + "gift [@user] [item] [1-5]\n**Aliases:** " + getAliases() + "\n**Example:** " + prefix + "gift <@" + Config.get("BOT_ID") + "> taco 3";
+		return "**Usage:** " + prefix + "gift [@user] [item] [1-5]\n" +
+			"**Aliases:** " + getAliases() + "\n" +
+			"**Example:** " + prefix + "gift <@" + Config.get("BOT_ID") + "> taco 3";
 	}
 
 	@Override

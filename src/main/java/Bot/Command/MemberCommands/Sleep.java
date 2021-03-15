@@ -18,7 +18,9 @@ public class Sleep implements ICommand {
 		final List<String> args = ctx.getArgs();
 
 		if (!IDatabase.INSTANCE.isUserInDB(authorID)) {
-			channel.sendMessage("<:RedCross:782229279312314368> You don't own an alpaca, use **" + ctx.getPrefix() + "init** first").queue();
+			channel.sendMessage("<:RedCross:782229279312314368> You don't own an alpaca, " +
+				"use **" + ctx.getPrefix() + "init** first")
+				   .queue();
 			return;
 		}
 
@@ -35,7 +37,8 @@ public class Sleep implements ICommand {
 
 		final int energy = IDatabase.INSTANCE.getAlpacaValues(authorID, "energy");
 		if (energy == 100) {
-			channel.sendMessage("<:RedCross:782229279312314368> The energy of your alpaca is already at the maximum").queue();
+			channel.sendMessage("<:RedCross:782229279312314368> The energy of your alpaca is already at the maximum")
+				   .queue();
 			return;
 		}
 
@@ -46,21 +49,28 @@ public class Sleep implements ICommand {
 				return;
 			}
 
-			final int newEnergy = energy + duration / 2 > 100 ? 100 - energy : duration / 2;
+			final int newEnergy = energy + duration / 2 > 100
+								  ? 100 - energy
+								  : duration / 2;
 			final long cooldown = System.currentTimeMillis() + 1000L * 60 * 2 * newEnergy;
 
 			IDatabase.INSTANCE.setAlpacaValues(authorID, "energy", newEnergy);
 			IDatabase.INSTANCE.setCooldown(authorID, "sleep", cooldown);
 
-			channel.sendMessage("\uD83D\uDCA4 Your alpaca goes to bed for **" + newEnergy * 2 + "** minutes and rests well **Energy + " + newEnergy + "**").queue();
-		} catch (NumberFormatException error) {
+			channel.sendMessage("\uD83D\uDCA4 Your alpaca goes to bed for **" + newEnergy * 2 + "** minutes " +
+				"and rests well **Energy + " + newEnergy + "**")
+				   .queue();
+		}
+		catch (NumberFormatException error) {
 			channel.sendMessage("<:RedCross:782229279312314368> Couldn't resolve the sleep duration").queue();
 		}
 	}
 
 	@Override
 	public String getHelp(String prefix) {
-		return "**Usage:** " + prefix + "sleep [1-120]\n**Aliases:** " + getAliases() + "\n**Example:** " + prefix + "sleep 56";
+		return "**Usage:** " + prefix + "sleep [1-120]\n" +
+			"**Aliases:** " + getAliases() + "\n" +
+			"**Example:** " + prefix + "sleep 56";
 	}
 
 	@Override

@@ -19,7 +19,9 @@ public class SetPrefix implements ICommand {
 		final Guild guild = ctx.getGuild();
 
 		if (!PermissionLevel.ADMIN.hasPermission(ctx.getMember())) {
-			channel.sendMessage("<:RedCross:782229279312314368> This is an **admin-only** command, you're missing the **" + Permission.MANAGE_SERVER.getName() + "** permission").queue();
+			channel.sendMessage("<:RedCross:782229279312314368> This is an **admin-only** command, " +
+				"you're missing the **" + Permission.MANAGE_SERVER.getName() + "** permission")
+				   .queue();
 			return;
 		}
 
@@ -31,12 +33,16 @@ public class SetPrefix implements ICommand {
 		final String newPrefix = String.join("", args);
 		IDatabase.INSTANCE.setPrefix(guild.getIdLong(), newPrefix);
 
-		ctx.getChannel().sendMessage("<:GreenTick:782229268914372609> The prefix of **" + guild.getName() + "** has been set to **" + newPrefix + "**").queue();
+		channel.sendMessage("<:GreenTick:782229268914372609> The prefix of **" + guild.getName() + "** " +
+			"has been set to **" + newPrefix + "**")
+			   .queue();
 	}
 
 	@Override
 	public String getHelp(String prefix) {
-		return "**" + prefix + "setprefix [prefix]**\n*+Aliases:** " + getAliases() + "\n**Example:** " + prefix + "setprefix ?";
+		return "**" + prefix + "setprefix [prefix]**\n" +
+			"*+Aliases:** " + getAliases() + "\n" +
+			"**Example:** " + prefix + "setprefix ?";
 	}
 
 	@Override

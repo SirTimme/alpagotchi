@@ -8,6 +8,7 @@ import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
+
 import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.concurrent.TimeUnit;
@@ -31,38 +32,44 @@ public class Delete implements ICommand {
 		}
 
 		channel.sendMessage("⚠ Are you sure you want to delete your data? You **permanently** lose all progress").queue((msg) -> {
-			msg.addReaction("GreenTick:" + emoteIDs[0]).queue();
-			msg.addReaction("RedCross:" + emoteIDs[1]).queue();
+		    msg.addReaction("GreenTick:" + emoteIDs[0]).queue();
+		    msg.addReaction("RedCross:" + emoteIDs[1]).queue();
 
-			this.waiter.waitForEvent(
-				GuildMessageReactionAddEvent.class,
-				(event) -> event.getMessageIdLong() == msg.getIdLong()
-					&& event.getMember().equals(ctx.getMember())
-					&& event.getReactionEmote().isEmote()
-					&& Arrays.asList(emoteIDs).contains(event.getReactionEmote().getEmote().getId()),
-				(event) -> {
-					final String emoteID = event.getReactionEmote().getEmote().getId();
-					msg.clearReactions().queue();
+		    this.waiter.waitForEvent(
+		 	   GuildMessageReactionAddEvent.class,
+		 	   (event) -> event.getMessageIdLong() == msg.getIdLong()
+		 		   && event.getMember().equals(ctx.getMember())
+		 		   && event.getReactionEmote().isEmote()
+		 		   && Arrays.asList(emoteIDs).contains(event.getReactionEmote().getEmote().getId()),
+		 	   (event) -> {
+		 		   final String emoteID = event.getReactionEmote().getEmote().getId();
+		 		   msg.clearReactions().queue();
 
-					if (emoteID.equals(emoteIDs[0])) {
-						IDatabase.INSTANCE.deleteUserEntry(authorID);
-						msg.editMessage("<:GreenTick:782229268914372609> Personal data successfully deleted").queue();
-					} else {
-						msg.editMessage("<:RedCross:782229279312314368> Delete process cancelled").queue();
-					}
-				},
-				90L, TimeUnit.SECONDS,
-				() -> {
-					msg.clearReactions().queue();
-					msg.editMessage("<:RedCross:782229279312314368> Answer timed out").queue();
-				}
-			);
-		});
+		 		   if (emoteID.equals(emoteIDs[0])) {
+		 			   IDatabase.INSTANCE.deleteUserEntry(authorID);
+
+		 			   msg.editMessage("<:GreenTick:782229268914372609> Data successfully deleted")
+		 				  .queue();
+		 		   }
+		 		   else {
+		 			   msg.editMessage("<:RedCross:782229279312314368> Delete process cancelled")
+		 				  .queue();
+		 		   }
+		 	   },
+		 	   90L, TimeUnit.SECONDS,
+		 	   () -> {
+		 		   msg.clearReactions().queue();
+		 		   msg.editMessage("<:RedCross:782229279312314368> Answer timed out").queue();
+		 	   }
+		    );
+		 });
 	}
 
 	@Override
 	public String getHelp(String prefix) {
-		return "**Usage:** " + prefix + "delete\n**Aliases:** " + getAliases() + "\n**Example:** " + prefix + "delete";
+		return "**Usage:** " + prefix + "delete\n" +
+			"**Aliases:** " + getAliases() + "" +
+			"**Example:** " + prefix + "delete";
 	}
 
 	@Override
@@ -77,6 +84,11 @@ public class Delete implements ICommand {
 
 	@Override
 	public EnumSet<Permission> getRequiredPermissions() {
-		return EnumSet.of(Permission.MESSAGE_WRITE, Permission.MESSAGE_MANAGE, Permission.MESSAGE_ADD_REACTION, Permission.MESSAGE_HISTORY);
+		return EnumSet.of(
+			Permission.MESSAGE_WRITE,
+			Permission.MESSAGE_MANAGE,
+			Permission.MESSAGE_ADD_REACTION,
+			Permission.MESSAGE_HISTORY
+		);
 	}
 }

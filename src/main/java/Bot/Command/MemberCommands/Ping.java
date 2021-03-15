@@ -25,7 +25,9 @@ public class Ping implements ICommand {
 
 	@Override
 	public String getHelp(String prefix) {
-		return "**Usage:** " + prefix + "ping\n**Aliases:** " + getAliases() + "\n**Example:** " + prefix + "ping";
+		return "**Usage:** " + prefix + "ping\n" +
+			"**Aliases:** " + getAliases() + "\n" +
+			"**Example:** " + prefix + "ping";
 	}
 
 	@Override
