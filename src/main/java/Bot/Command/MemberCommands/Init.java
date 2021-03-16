@@ -72,26 +72,23 @@ public class Init implements ICommand {
 					&& event.getReactionEmote().isEmote()
 					&& Arrays.asList(emoteIDs).contains(event.getReactionEmote().getEmote().getId()),
 				(event) -> {
-					msg.suppressEmbeds(true).queue();
 					final String emoteID = event.getReactionEmote().getEmote().getId();
+					msg.delete().queue();
 
 					if (emoteID.equals(emoteIDs[0])) {
 						IDatabase.INSTANCE.createUserEntry(authorID);
-						msg.editMessage("<:GreenTick:782229268914372609> Your alpaca has been set up, " +
+						channel.sendMessage("<:GreenTick:782229268914372609> Your alpaca has been set up, " +
 							"use **" + prefix + "myalpaca** to see it")
-						   .queue();
+							   .queue();
 					}
 					else {
-						msg.editMessage("<:RedCross:782229279312314368> Init process cancelled").queue();
+						channel.sendMessage("<:RedCross:782229279312314368> Init process cancelled").queue();
 					}
-					msg.clearReactions().queue();
 				},
 				90L, TimeUnit.SECONDS,
 				() -> {
-					msg.suppressEmbeds(true).queue();
-					msg.clearReactions().queue();
-
-					msg.editMessage("<:RedCross:782229279312314368> Answer timed out").queue();
+					msg.delete().queue();
+					channel.sendMessage("<:RedCross:782229279312314368> Answer timed out").queue();
 				}
 			);
 		});
@@ -122,9 +119,7 @@ public class Init implements ICommand {
 	@Override
 	public EnumSet<Permission> getRequiredPermissions() {
 		return EnumSet.of(
-			Permission.MESSAGE_MANAGE,
 			Permission.MESSAGE_ADD_REACTION,
-			Permission.MESSAGE_HISTORY,
 			Permission.MESSAGE_WRITE
 		);
 	}

@@ -43,23 +43,20 @@ public class Delete implements ICommand {
 		 		   && Arrays.asList(emoteIDs).contains(event.getReactionEmote().getEmote().getId()),
 		 	   (event) -> {
 		 		   final String emoteID = event.getReactionEmote().getEmote().getId();
-		 		   msg.clearReactions().queue();
+		 		   msg.delete().queue();
 
 		 		   if (emoteID.equals(emoteIDs[0])) {
 		 			   IDatabase.INSTANCE.deleteUserEntry(authorID);
-
-		 			   msg.editMessage("<:GreenTick:782229268914372609> Data successfully deleted")
-		 				  .queue();
+		 			   channel.sendMessage("<:GreenTick:782229268914372609> Data successfully deleted").queue();
 		 		   }
 		 		   else {
-		 			   msg.editMessage("<:RedCross:782229279312314368> Delete process cancelled")
-		 				  .queue();
+		 			   channel.sendMessage("<:RedCross:782229279312314368> Delete process cancelled").queue();
 		 		   }
 		 	   },
 		 	   90L, TimeUnit.SECONDS,
 		 	   () -> {
-		 		   msg.clearReactions().queue();
-		 		   msg.editMessage("<:RedCross:782229279312314368> Answer timed out").queue();
+		 		   msg.delete().queue();
+		 		   channel.sendMessage("<:RedCross:782229279312314368> Answer timed out").queue();
 		 	   }
 		    );
 		 });
@@ -86,9 +83,7 @@ public class Delete implements ICommand {
 	public EnumSet<Permission> getRequiredPermissions() {
 		return EnumSet.of(
 			Permission.MESSAGE_WRITE,
-			Permission.MESSAGE_MANAGE,
-			Permission.MESSAGE_ADD_REACTION,
-			Permission.MESSAGE_HISTORY
+			Permission.MESSAGE_ADD_REACTION
 		);
 	}
 }
