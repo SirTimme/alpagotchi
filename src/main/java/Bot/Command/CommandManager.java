@@ -12,8 +12,6 @@ import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -25,7 +23,6 @@ import java.util.regex.Pattern;
 @SuppressWarnings("ConstantConditions")
 public class CommandManager {
 	private final List<ICommand> commands = new ArrayList<>();
-	private final static Logger LOGGER = LoggerFactory.getLogger(CommandManager.class);
 	ShopItemManager shopItemManager = new ShopItemManager();
 	OutfitManager outfitManager = new OutfitManager();
 
@@ -71,21 +68,21 @@ public class CommandManager {
 	}
 
 	public void handle(GuildMessageReceivedEvent event, String prefix) {
-		String[] cmdArgs = event.getMessage()
+		final String[] cmdArgs = event.getMessage()
 								.getContentRaw()
 								.replaceFirst("(?i)" + Pattern.quote(prefix), "")
 								.split("\\s+");
 
-		ICommand command = getCommand(cmdArgs[0].toLowerCase());
+		final ICommand cmd = getCommand(cmdArgs[0].toLowerCase());
 
-		if (command == null || !checkPermissions(command, event)) {
+		if (cmd == null || !checkPermissions(cmd, event)) {
 			return;
 		}
 
-		List<String> args = Arrays.asList(cmdArgs).subList(1, cmdArgs.length);
-		long authorID = event.getMember().getIdLong();
+		final List<String> args = Arrays.asList(cmdArgs).subList(1, cmdArgs.length);
+		final long authorID = event.getMember().getIdLong();
 
-		command.execute(new CommandContext(event, args, authorID, prefix));
+		cmd.execute(new CommandContext(event, args, authorID, prefix));
 	}
 
 	private boolean checkPermissions(ICommand command, GuildMessageReceivedEvent event) {
