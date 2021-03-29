@@ -38,7 +38,7 @@ public class Help implements ICommand {
 				 .addField("Member commands", getCommandsByPerms(prefix, PermissionLevel.MEMBER), true)
 				 .addField(
 					 "Need further help or found a bug?",
-					 "Then join the [Alpagotchi Support](https://discord.gg/SErfVpSQAV) server!",
+					 "Then join the [Alpagotchi Support](https://discord.gg/DXtYyzGhXR) server!",
 					 false
 				 )
 				 .setFooter("Created by " + botCreator.getName(), botCreator.getEffectiveAvatarUrl())
