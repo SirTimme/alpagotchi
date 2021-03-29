@@ -25,17 +25,16 @@ public class Shop implements ICommand {
 	@Override
 	public void execute(CommandContext ctx) {
 		final TextChannel channel = ctx.getChannel();
-		final User botCreator = ctx.getJDA().getUserById(Config.get("DEV_ID"));
+		final User dev = ctx.getJDA().getUserById(Config.get("DEV_ID"));
 		final EmbedBuilder embed = new EmbedBuilder();
-
 		embed.setTitle("Shop")
-			 .addField("Item", getItemsAsString("hunger", "name"), true)
-			 .addField("Price", getItemsAsString("hunger", "price"), true)
-			 .addField("Saturation", getItemsAsString("hunger", "saturation"), true)
-			 .addField("Item", getItemsAsString("thirst", "name"), true)
-			 .addField("Price", getItemsAsString("thirst", "price"), true)
-			 .addField("Saturation", getItemsAsString("thirst", "saturation"), true)
-			 .setFooter("Created by " + botCreator.getName(), botCreator.getEffectiveAvatarUrl())
+			 .addField("Item", getItemsByCategory("hunger", "name"), true)
+			 .addField("Price", getItemsByCategory("hunger", "price"), true)
+			 .addField("Saturation", getItemsByCategory("hunger", "saturation"), true)
+			 .addField("Item", getItemsByCategory("thirst", "name"), true)
+			 .addField("Price", getItemsByCategory("thirst", "price"), true)
+			 .addField("Saturation", getItemsByCategory("thirst", "saturation"), true)
+			 .setFooter("Created by " + dev.getName(), dev.getEffectiveAvatarUrl())
 			 .setTimestamp(Instant.now());
 
 		channel.sendMessage(embed.build()).queue();
@@ -43,9 +42,7 @@ public class Shop implements ICommand {
 
 	@Override
 	public String getHelp(String prefix) {
-		return "**Usage:** " + prefix + "shop\n" +
-			"**Aliases:** " + getAliases() + "\n" +
-			"**Example:** " + prefix + "shop";
+		return "**Usage:** " + prefix + "shop\n**Aliases:** " + getAliases() + "\n**Example:** " + prefix + "shop";
 	}
 
 	@Override
@@ -63,10 +60,8 @@ public class Shop implements ICommand {
 		return EnumSet.of(Permission.MESSAGE_WRITE, Permission.MESSAGE_EMBED_LINKS);
 	}
 
-	private String getItemsAsString(String category, String filter) {
-		String emoji = category.equals("hunger")
-					   ? ":meat_on_bone: "
-					   : ":beer: ";
+	private String getItemsByCategory(String category, String filter) {
+		String emoji = category.equals("hunger") ? ":meat_on_bone: " : ":beer: ";
 
 		StringBuilder builder = new StringBuilder();
 		itemManager.getShopItems()

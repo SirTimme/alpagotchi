@@ -64,9 +64,7 @@ public class Delete implements ICommand {
 
 	@Override
 	public String getHelp(String prefix) {
-		return "**Usage:** " + prefix + "delete\n" +
-			"**Aliases:** " + getAliases() + "" +
-			"**Example:** " + prefix + "delete";
+		return "**Usage:** " + prefix + "delete\n**Aliases:** " + getAliases() + "**Example:** " + prefix + "delete";
 	}
 
 	@Override

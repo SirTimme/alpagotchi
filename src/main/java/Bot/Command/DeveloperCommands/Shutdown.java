@@ -18,17 +18,14 @@ public class Shutdown implements ICommand {
 			return;
 		}
 
-		final String botName = ctx.getJDA().getSelfUser().getName();
-		channel.sendMessage("<:GreenTick:782229268914372609> " + botName + " is shutting down...").complete();
+		channel.sendMessage("<:GreenTick:782229268914372609> **Alpagotchi** is shutting down...").complete();
 
 		System.exit(0);
 	}
 
 	@Override
 	public String getHelp(String prefix) {
-		return "**Usage:** " + prefix + "shutdown\n" +
-			"**Aliases:** " + getAliases() + "\n" +
-			"**Example:** " + prefix + "shutdown";
+		return "**Usage:** " + prefix + "shutdown\n**Aliases:** " + getAliases() + "\n**Example:** " + prefix + "shutdown";
 	}
 
 	@Override

@@ -42,19 +42,16 @@ public class Init implements ICommand {
 		final EmbedBuilder embed = new EmbedBuilder();
 
 		embed.setTitle("User information")
-			 .setDescription("Im glad, that Alpagotchi interests you and you want to interact with him.\n" +
-				 "Here are two important points before you can start:")
+			 .setDescription("Im glad, that Alpagotchi interests you and you want to interact with him.\nHere are two important points before you can start:")
 			 .setThumbnail(ctx.getJDA().getSelfUser().getAvatarUrl())
 			 .addField(
 				 "__§1 Storage of the UserID__",
-				 "Alpagotchi stores your personal Discord UserID in order to work, " +
-					 "but this is public information and can be accessed by everyone",
+				 "Alpagotchi stores your personal Discord UserID in order to work, but this is public information and can be accessed by everyone",
 				 false
 			 )
 			 .addField(
 				 "__§2 Deletion of the UserID__",
-				 "If you change your mind about storing your UserID, " +
-					 "use the `" + prefix + "delete` command to delete your data at any time",
+				 "If you change your mind about storing your UserID, use the `" + prefix + "delete` command to delete your data at any time",
 				 false
 			 )
 			 .setImage("https://cdn.discordapp.com/attachments/795637300661977132/811504330263625778/Reactions.png")
@@ -96,9 +93,7 @@ public class Init implements ICommand {
 
 	@Override
 	public String getHelp(String prefix) {
-		return "**Usage:** " + prefix + "init\n" +
-			"**Aliases:** " + getAliases() + "\n" +
-			"**Example:** " + prefix + "init";
+		return "**Usage:** " + prefix + "init\n**Aliases:** " + getAliases() + "\n**Example:** " + prefix + "init";
 	}
 
 	@Override

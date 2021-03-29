@@ -18,30 +18,28 @@ public class ResourcesManager {
 	private static final Map<String, BufferedImage> alpacaImages = new HashMap<>();
 	private static final Map<String, JSONArray> jsonFiles = new HashMap<>();
 
-	public static void preloadJSON() {
-		final File folder = new File("src/main/resources/answers");
+	public static void preloadData() {
+		final File messageFolder = new File("src/main/resources/answers");
 		try {
-			for (File file : folder.listFiles()) {
+			for (File file : messageFolder.listFiles()) {
 				final Path filePath = Path.of(file.getPath());
 
-				final String jsonString = Files.readString(filePath);
-				final JSONArray array = new JSONArray(jsonString);
+				final String fileContent = Files.readString(filePath);
+				final JSONArray messages = new JSONArray(fileContent);
 
 				final String key = file.getName().split("\\.")[0];
 
-				jsonFiles.put(key, array);
+				jsonFiles.put(key, messages);
 			}
 			LOGGER.info("JSON Files successfully preloaded");
 		}
 		catch (IOException error) {
 			LOGGER.error(error.getMessage());
 		}
-	}
 
-	public static void preloadImages() {
-		final File folder = new File("src/main/resources/outfits");
+		final File outfitFolder = new File("src/main/resources/outfits");
 		try {
-			for (File file : folder.listFiles()) {
+			for (File file : outfitFolder.listFiles()) {
 				final BufferedImage image = ImageIO.read(file);
 				final String key = file.getName().split("\\.")[0];
 
@@ -60,8 +58,8 @@ public class ResourcesManager {
 
 	public static String getRandomMessage(String key) {
 		final JSONArray array = jsonFiles.get(key);
-		final int randomIndex = (int) (Math.random() * (array.length() - 1));
+		final int index = (int) (Math.random() * array.length());
 
-		return array.getString(randomIndex);
+		return array.getString(index);
 	}
 }

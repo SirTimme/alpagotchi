@@ -29,19 +29,19 @@ public class Help implements ICommand {
 		final List<String> args = ctx.getArgs();
 
 		if (args.isEmpty()) {
-			final User botCreator = ctx.getJDA().getUserById(Config.get("DEV_ID"));
+			final User dev = ctx.getJDA().getUserById(Config.get("DEV_ID"));
 			final EmbedBuilder embed = new EmbedBuilder();
 
 			embed.setTitle("Overview of all commands")
 				 .setDescription("Further information to any command:\n**```fix\n" + prefix + "help [command]\n```**")
-				 .addField("Admin commands", getCommandsByPerms(prefix, PermissionLevel.ADMIN), true)
-				 .addField("Member commands", getCommandsByPerms(prefix, PermissionLevel.MEMBER), true)
+				 .addField("Admin commands", getCommandsByLevel(prefix, PermissionLevel.ADMIN), true)
+				 .addField("Member commands", getCommandsByLevel(prefix, PermissionLevel.MEMBER), true)
 				 .addField(
 					 "Need further help or found a bug?",
-					 "Then join the [Alpagotchi Support](https://discord.gg/DXtYyzGhXR) server!",
+					 "Join the [Alpagotchi Support](https://discord.gg/DXtYyzGhXR) server!",
 					 false
 				 )
-				 .setFooter("Created by " + botCreator.getName(), botCreator.getEffectiveAvatarUrl())
+				 .setFooter("Created by " + dev.getName(), dev.getEffectiveAvatarUrl())
 				 .setTimestamp(Instant.now());
 
 			channel.sendMessage(embed.build()).queue();
@@ -59,9 +59,7 @@ public class Help implements ICommand {
 
 	@Override
 	public String getHelp(String prefix) {
-		return "**Usage:** " + prefix + "help (command)\n" +
-			"**Aliases:** " + getAliases() + "\n" +
-			"**Example**: " + prefix + "help gift";
+		return "**Usage:** " + prefix + "help (command)\n**Aliases:** " + getAliases() + "\n**Example**: " + prefix + "help gift";
 	}
 
 	@Override
@@ -84,12 +82,12 @@ public class Help implements ICommand {
 		return EnumSet.of(Permission.MESSAGE_WRITE, Permission.MESSAGE_EMBED_LINKS);
 	}
 
-	private String getCommandsByPerms(String prefix, Enum<PermissionLevel> permLevel) {
+	private String getCommandsByLevel(String prefix, Enum<PermissionLevel> level) {
 		StringBuilder builder = new StringBuilder();
 
 		this.cmdManager.getCommands()
 					   .stream()
-					   .filter((cmd) -> cmd.getPermissionLevel() == permLevel)
+					   .filter((cmd) -> cmd.getPermissionLevel() == level)
 					   .map(ICommand::getName)
 					   .sorted()
 					   .forEach((cmd) -> builder.append("`").append(prefix).append(cmd).append("`\n"));

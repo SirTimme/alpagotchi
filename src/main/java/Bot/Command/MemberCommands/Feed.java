@@ -27,22 +27,16 @@ public class Feed implements ICommand {
 		final long authorID = ctx.getAuthorID();
 
 		if (!IDatabase.INSTANCE.isUserInDB(authorID)) {
-			channel.sendMessage("<:RedCross:782229279312314368> You do not own a alpaca, " +
-				"use **" + ctx.getPrefix() + "init** first")
-				   .queue();
+			channel.sendMessage("<:RedCross:782229279312314368> You do not own a alpaca, use **" + ctx.getPrefix() + "init** first").queue();
 			return;
 		}
 
 		final long sleepCooldown = IDatabase.INSTANCE.getCooldown(authorID, "sleep") - System.currentTimeMillis();
 		if (sleepCooldown > 0) {
 			final int remaining = (int) TimeUnit.MILLISECONDS.toMinutes(sleepCooldown);
-			final String msg = remaining == 1
-							   ? "** minute"
-							   : "** minutes";
+			final String msg = remaining == 1 ? "** minute" : "** minutes";
 
-			channel.sendMessage("<:RedCross:782229279312314368> Your alpaca sleeps, " +
-				"it will wake up in **" + remaining + msg)
-				   .queue();
+			channel.sendMessage("<:RedCross:782229279312314368> Your alpaca sleeps, it will wake up in **" + remaining + msg).queue();
 			return;
 		}
 
@@ -83,19 +77,13 @@ public class Feed implements ICommand {
 			IDatabase.INSTANCE.setInventory(authorID, category, name, -amount);
 			IDatabase.INSTANCE.setAlpacaValues(authorID, category, saturation);
 
-			final String msg = amount == 1
-							   ? "** " + name
-							   : "** " + name + "s";
+			final String msg = amount == 1 ? "** " + name : "** " + name + "s";
 
 			if (item.getCategory().equals("hunger")) {
-				channel.sendMessage(":meat_on_bone: Your alpaca eats the **" + amount + msg + " in one bite " +
-					"**Hunger + " + saturation + "**")
-					   .queue();
+				channel.sendMessage(":meat_on_bone: Your alpaca eats the **" + amount + msg + " in one bite **Hunger + " + saturation + "**").queue();
 			}
 			else {
-				channel.sendMessage(":beer: Your alpaca drinks the **" + amount + msg + " empty " +
-					"**Thirst + " + saturation + "**")
-					   .queue();
+				channel.sendMessage(":beer: Your alpaca drinks the **" + amount + msg + " empty **Thirst + " + saturation + "**").queue();
 			}
 		}
 		catch (NumberFormatException error) {
@@ -105,9 +93,7 @@ public class Feed implements ICommand {
 
 	@Override
 	public String getHelp(String prefix) {
-		return "**Usage:** " + prefix + "feed [itemName] [1-5]\n" +
-			"**Aliases:** " + getAliases() + "\n" +
-			"**Example:** " + prefix + "feed water 2";
+		return "**Usage:** " + prefix + "feed [itemName] [1-5]\n**Aliases:** " + getAliases() + "\n**Example:** " + prefix + "feed water 2";
 	}
 
 	@Override

@@ -53,9 +53,7 @@ public class Decrease implements ICommand {
 
 	@Override
 	public String getHelp(String prefix) {
-		return "**" + prefix + "decrease [enable | disable]**\n" +
-			"**Aliases:**" + getAliases() + "\n" +
-			"**Example:**" + prefix + "decrease disable";
+		return "**" + prefix + "decrease [enable | disable]**\n**Aliases:**" + getAliases() + "\n**Example:**" + prefix + "decrease disable";
 	}
 
 	@Override

@@ -9,6 +9,7 @@ import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import javax.security.auth.login.LoginException;
 
 public class Bot {
@@ -17,8 +18,7 @@ public class Bot {
 	public static void main(String[] args) {
 		EventWaiter waiter = new EventWaiter();
 
-		ResourcesManager.preloadJSON();
-		ResourcesManager.preloadImages();
+		ResourcesManager.preloadData();
 
 		try {
 			JDABuilder.create(
@@ -36,7 +36,8 @@ public class Bot {
 					  .addEventListeners(new EventHandler(waiter), waiter)
 					  .setActivity(Activity.playing(Config.get("PREFIX") + "help | \uD83E\uDD99 Alpacas"))
 					  .build();
-		} catch (LoginException error) {
+		}
+		catch (LoginException error) {
 			LOGGER.error(error.getMessage());
 		}
 	}

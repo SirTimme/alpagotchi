@@ -29,19 +29,16 @@ public class Inventory implements ICommand {
 		final long authorID = ctx.getAuthorID();
 
 		if (!IDatabase.INSTANCE.isUserInDB(authorID)) {
-			channel.sendMessage("<:RedCross:782229279312314368> You don't own an alpaca, " +
-				"use **" + ctx.getPrefix() + "init** first")
-				   .queue();
+			channel.sendMessage("<:RedCross:782229279312314368> You don't own an alpaca, use **" + ctx.getPrefix() + "init** first").queue();
 			return;
 		}
 
-		final User botCreator = ctx.getJDA().getUserById(Config.get("DEV_ID"));
+		final User dev = ctx.getJDA().getUserById(Config.get("DEV_ID"));
 		final EmbedBuilder embed = new EmbedBuilder();
-
 		embed.setTitle("Inventory")
 			 .addField("Hunger", getItemsByCategory("hunger", authorID), true)
 			 .addField("Thirst", getItemsByCategory("thirst", authorID), true)
-			 .setFooter("Created by " + botCreator.getName(), botCreator.getEffectiveAvatarUrl())
+			 .setFooter("Created by " + dev.getName(), dev.getEffectiveAvatarUrl())
 			 .setTimestamp(Instant.now());
 
 		channel.sendMessage(embed.build()).queue();
@@ -74,9 +71,7 @@ public class Inventory implements ICommand {
 
 	private String getItemsByCategory(String category, long memberID) {
 		StringBuilder builder = new StringBuilder();
-		String emoji = category.equals("hunger")
-					   ? ":meat_on_bone:"
-					   : ":beer:";
+		String emoji = category.equals("hunger") ? ":meat_on_bone:" : ":beer:";
 
 		this.itemManager.getShopItems()
 						.stream()
@@ -84,14 +79,9 @@ public class Inventory implements ICommand {
 						.map(IShopItem::getName)
 						.sorted()
 						.forEach((item) -> {
-							int itemAmount = IDatabase.INSTANCE.getInventory(memberID, category, item);
+							final int amount = IDatabase.INSTANCE.getInventory(memberID, category, item);
 
-							builder.append(emoji)
-								   .append(" **")
-								   .append(itemAmount)
-								   .append("** ")
-								   .append(item)
-								   .append("\n");
+							builder.append(emoji).append(" **").append(amount).append("** ").append(item).append("\n");
 						});
 
 		return builder.toString();

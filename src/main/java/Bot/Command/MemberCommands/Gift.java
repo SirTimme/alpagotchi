@@ -29,9 +29,7 @@ public class Gift implements ICommand {
 		final String prefix = ctx.getPrefix();
 
 		if (!IDatabase.INSTANCE.isUserInDB(authorID)) {
-			channel.sendMessage("<:RedCross:782229279312314368> You don't own an alpaca, " +
-				"use **" + prefix + "init** first")
-				   .queue();
+			channel.sendMessage("<:RedCross:782229279312314368> You don't own an alpaca, use **" + prefix + "init** first").queue();
 			return;
 		}
 
@@ -54,9 +52,7 @@ public class Gift implements ICommand {
 		}
 
 		if (!IDatabase.INSTANCE.isUserInDB(userID)) {
-			channel.sendMessage("<:RedCross:782229279312314368> The mentioned user doesn't own an alpaca, " +
-				"he's to use **" + prefix + "init** first")
-				   .queue();
+			channel.sendMessage("<:RedCross:782229279312314368> The mentioned user doesn't own an alpaca, he's to use **" + prefix + "init** first").queue();
 			return;
 		}
 
@@ -84,9 +80,7 @@ public class Gift implements ICommand {
 			IDatabase.INSTANCE.setInventory(authorID, category, name, -amount);
 			IDatabase.INSTANCE.setInventory(userID, category, name, amount);
 
-			channel.sendMessage("\uD83C\uDF81 You successfully gifted **" + amount + " " + name + "** " +
-				"to **" + user.getName() + "**")
-				   .queue();
+			channel.sendMessage("\uD83C\uDF81 You successfully gifted **" + amount + " " + name + "** to **" + user.getName() + "**").queue();
 		}
 		catch (NumberFormatException error) {
 			channel.sendMessage("<:RedCross:782229279312314368> Couldn't resolve the amount of items").queue();
@@ -95,9 +89,7 @@ public class Gift implements ICommand {
 
 	@Override
 	public String getHelp(String prefix) {
-		return "**Usage:** " + prefix + "gift [@user] [item] [1-5]\n" +
-			"**Aliases:** " + getAliases() + "\n" +
-			"**Example:** " + prefix + "gift <@" + Config.get("BOT_ID") + "> taco 3";
+		return "**Usage:** " + prefix + "gift [@user] [item] [1-5]\n**Aliases:** " + getAliases() + "\n**Example:** " + prefix + "gift <@" + Config.get("BOT_ID") + "> taco 3";
 	}
 
 	@Override

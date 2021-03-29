@@ -30,14 +30,12 @@ public class Outfit implements ICommand {
 		final List<String> args = ctx.getArgs();
 
 		if (!IDatabase.INSTANCE.isUserInDB(authorID)) {
-			channel.sendMessage("<:RedCross:782229279312314368> You don't own an alpaca, " +
-				"use **" + ctx.getPrefix() + "init** first")
-				   .queue();
+			channel.sendMessage("<:RedCross:782229279312314368> You don't own an alpaca, use **" + ctx.getPrefix() + "init** first").queue();
 			return;
 		}
 
 		if (args.isEmpty()) {
-			final User botCreator = ctx.getJDA().getUserById(Config.get("DEV_ID"));
+			final User dev = ctx.getJDA().getUserById(Config.get("DEV_ID"));
 			final EmbedBuilder embed = new EmbedBuilder();
 
 			for (IOutfit outfit : outfitManager.getOutfits()) {
@@ -45,7 +43,7 @@ public class Outfit implements ICommand {
 			}
 
 			embed.setTitle("Available outfits")
-				 .setFooter("Created by " + botCreator.getName(), botCreator.getEffectiveAvatarUrl())
+				 .setFooter("Created by " + dev.getName(), dev.getEffectiveAvatarUrl())
 				 .setTimestamp(Instant.now());
 
 			channel.sendMessage(embed.build()).queue();
@@ -58,17 +56,15 @@ public class Outfit implements ICommand {
 			return;
 		}
 
-		final String name = outfit.getName();
-		IDatabase.INSTANCE.setOutfit(authorID, name);
+		final String outfitName = outfit.getName();
+		IDatabase.INSTANCE.setOutfit(authorID, outfitName);
 
-		channel.sendMessage("\uD83D\uDC54 The outfit of your alpaca has been set to **" + name + "**").queue();
+		channel.sendMessage("\uD83D\uDC54 The outfit of your alpaca has been set to **" + outfitName + "**").queue();
 	}
 
 	@Override
 	public String getHelp(String prefix) {
-		return "**Usage:** " + prefix + "outfit (outfit)\n" +
-			"**Aliases:** " + getAliases() + "\n" +
-			"**Example:** " + prefix + "outfit pirate";
+		return "**Usage:** " + prefix + "outfit (outfit)\n**Aliases:** " + getAliases() + "\n**Example:** " + prefix + "outfit pirate";
 	}
 
 	@Override
