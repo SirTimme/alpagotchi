@@ -59,8 +59,8 @@ public class Init implements ICommand {
 			 .setTimestamp(Instant.now());
 
 		channel.sendMessage(embed.build()).queue((msg) -> {
-			msg.addReaction(Emote.GREENTICK.toString()).queue();
-			msg.addReaction(Emote.REDCROSS.toString()).queue();
+			msg.addReaction("GreenTick:" + emoteIDs[0]).queue();
+			msg.addReaction("RedCross:" + emoteIDs[1]).queue();
 
 			this.waiter.waitForEvent(
 				GuildMessageReactionAddEvent.class,

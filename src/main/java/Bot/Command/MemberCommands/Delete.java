@@ -33,8 +33,8 @@ public class Delete implements ICommand {
 		}
 
 		channel.sendMessage("⚠ Are you sure you want to delete your data? You **permanently** lose all progress").queue((msg) -> {
-			msg.addReaction(Emote.GREENTICK.toString()).queue();
-			msg.addReaction(Emote.REDCROSS.toString()).queue();
+			msg.addReaction("GreenTick:" + emoteIDs[0]).queue();
+			msg.addReaction("RedCross:" + emoteIDs[1]).queue();
 
 			waiter.waitForEvent(
 				GuildMessageReactionAddEvent.class,
