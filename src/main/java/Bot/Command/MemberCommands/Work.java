@@ -2,14 +2,12 @@ package Bot.Command.MemberCommands;
 
 import Bot.Command.CommandContext;
 import Bot.Command.ICommand;
-import Bot.Utils.PermissionLevel;
+import Bot.Utils.*;
 import Bot.Database.IDatabase;
-import Bot.Utils.ResourcesManager;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.TextChannel;
 
 import java.util.EnumSet;
-import java.util.concurrent.TimeUnit;
 
 public class Work implements ICommand {
 	@Override
@@ -19,7 +17,7 @@ public class Work implements ICommand {
 		final String prefix = ctx.getPrefix();
 
 		if (!IDatabase.INSTANCE.isUserInDB(authorID)) {
-			channel.sendMessage("<:RedCross:782229279312314368> You don't own an alpaca, use **" + prefix + "init** first").queue();
+			channel.sendMessage(Emote.REDCROSS + " You don't own an alpaca, use **" + prefix + "init** first").queue();
 			return;
 		}
 
@@ -35,21 +33,7 @@ public class Work implements ICommand {
 			return;
 		}
 
-		final long sleepCooldown = IDatabase.INSTANCE.getCooldown(authorID, "sleep") - System.currentTimeMillis();
-		if (sleepCooldown > 0) {
-			final long minutes = TimeUnit.MILLISECONDS.toMinutes(sleepCooldown);
-			final String msg = minutes == 1 ? "minute" : "minutes";
-
-			channel.sendMessage("<:RedCross:782229279312314368> Your alpaca sleeps, it will wake up in **" + minutes + "** " + msg).queue();
-			return;
-		}
-
-		final long workCooldown = IDatabase.INSTANCE.getCooldown(authorID, "work") - System.currentTimeMillis();
-		if (workCooldown > 0) {
-			final long minutes = TimeUnit.MILLISECONDS.toMinutes(workCooldown);
-			final String msg = minutes == 1 ? "minute" : "minutes";
-
-			channel.sendMessage("<:RedCross:782229279312314368> Your alpaca has to rest **" + minutes + "** " + msg + " to work again").queue();
+		if (Cooldown.isActive(Activity.WORK, authorID, channel) || Cooldown.isActive(Activity.SLEEP, authorID, channel)) {
 			return;
 		}
 

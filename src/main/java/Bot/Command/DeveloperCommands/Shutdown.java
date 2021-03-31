@@ -2,6 +2,7 @@ package Bot.Command.DeveloperCommands;
 
 import Bot.Command.CommandContext;
 import Bot.Command.ICommand;
+import Bot.Utils.Emote;
 import Bot.Utils.PermissionLevel;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.TextChannel;
@@ -14,11 +15,11 @@ public class Shutdown implements ICommand {
 		final TextChannel channel = ctx.getChannel();
 
 		if (!PermissionLevel.DEVELOPER.hasPermission(ctx.getMember())) {
-			channel.sendMessage("<:RedCross:782229279312314368> This is a **developer-only** command").queue();
+			channel.sendMessage(Emote.REDCROSS + " This is a **developer-only** command").queue();
 			return;
 		}
 
-		channel.sendMessage("<:GreenTick:782229268914372609> **Alpagotchi** is shutting down...").complete();
+		channel.sendMessage(Emote.GREENTICK + " **Alpagotchi** is shutting down...").complete();
 
 		System.exit(0);
 	}

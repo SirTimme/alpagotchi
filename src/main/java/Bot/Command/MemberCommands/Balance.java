@@ -2,6 +2,7 @@ package Bot.Command.MemberCommands;
 
 import Bot.Command.CommandContext;
 import Bot.Command.ICommand;
+import Bot.Utils.Emote;
 import Bot.Utils.PermissionLevel;
 import Bot.Database.IDatabase;
 import net.dv8tion.jda.api.Permission;
@@ -17,14 +18,13 @@ public class Balance implements ICommand {
 		final TextChannel channel = ctx.getChannel();
 
 		if (!IDatabase.INSTANCE.isUserInDB(authorID)) {
-			channel.sendMessage("<:RedCross:782229279312314368> You don't own an alpaca, use **" + ctx.getPrefix() + "init** first").queue();
+			channel.sendMessage(Emote.REDCROSS + " You don't own an alpaca, use **" + ctx.getPrefix() + "init** first").queue();
 			return;
 		}
 
 		final int balance = IDatabase.INSTANCE.getBalance(authorID);
-		final String msg = balance + (balance == 1 ? "** fluffy" : "** fluffies");
 
-		channel.sendMessage("\uD83D\uDCB5 Your current balance is **" + msg).queue();
+		channel.sendMessage("\uD83D\uDCB5 Your current balance is **" + balance + (balance == 1 ? "** fluffy" : "** fluffies")).queue();
 	}
 
 	@Override

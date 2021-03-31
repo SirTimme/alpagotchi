@@ -12,10 +12,10 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;
 
 public class EventHandler extends ListenerAdapter {
-	private final CommandManager cmdManager;
+	private final CommandManager commandManager;
 
 	public EventHandler(EventWaiter waiter) {
-		this.cmdManager = new CommandManager(waiter);
+		this.commandManager = new CommandManager(waiter);
 	}
 
 	@Override
@@ -27,7 +27,7 @@ public class EventHandler extends ListenerAdapter {
 			return;
 		}
 
-		this.cmdManager.handle(event, prefix);
+		commandManager.handle(event, prefix);
 	}
 
 	@Override

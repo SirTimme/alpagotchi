@@ -2,6 +2,7 @@ package Bot.Command.MemberCommands;
 
 import Bot.Command.CommandContext;
 import Bot.Command.ICommand;
+import Bot.Utils.Emote;
 import Bot.Utils.PermissionLevel;
 import Bot.Database.IDatabase;
 import net.dv8tion.jda.api.Permission;
@@ -18,12 +19,12 @@ public class Nick implements ICommand {
 		final List<String> args = ctx.getArgs();
 
 		if (!IDatabase.INSTANCE.isUserInDB(authorID)) {
-			channel.sendMessage("<:RedCross:782229279312314368> You don't own an alpaca, use **" + ctx.getPrefix() + "init** first").queue();
+			channel.sendMessage(Emote.REDCROSS + " You don't own an alpaca, use **" + ctx.getPrefix() + "init** first").queue();
 			return;
 		}
 
 		if (args.isEmpty()) {
-			channel.sendMessage("<:RedCross:782229279312314368> Couldn't resolve the nickname").queue();
+			channel.sendMessage(Emote.REDCROSS + " Please specify the nickname").queue();
 			return;
 		}
 

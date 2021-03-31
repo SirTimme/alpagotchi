@@ -2,6 +2,8 @@ package Bot.Command.MemberCommands;
 
 import Bot.Command.CommandContext;
 import Bot.Command.ICommand;
+import Bot.Utils.Emote;
+import Bot.Utils.Language;
 import Bot.Utils.PermissionLevel;
 import Bot.Database.IDatabase;
 import Bot.Shop.IShopItem;
@@ -27,34 +29,33 @@ public class Feed implements ICommand {
 		final long authorID = ctx.getAuthorID();
 
 		if (!IDatabase.INSTANCE.isUserInDB(authorID)) {
-			channel.sendMessage("<:RedCross:782229279312314368> You do not own a alpaca, use **" + ctx.getPrefix() + "init** first").queue();
+			channel.sendMessage(Emote.REDCROSS + " You do not own a alpaca, use **" + ctx.getPrefix() + "init** first").queue();
 			return;
 		}
 
 		final long sleepCooldown = IDatabase.INSTANCE.getCooldown(authorID, "sleep") - System.currentTimeMillis();
 		if (sleepCooldown > 0) {
-			final int remaining = (int) TimeUnit.MILLISECONDS.toMinutes(sleepCooldown);
-			final String msg = remaining == 1 ? "** minute" : "** minutes";
+			final long minutes = TimeUnit.MILLISECONDS.toMinutes(sleepCooldown);
 
-			channel.sendMessage("<:RedCross:782229279312314368> Your alpaca sleeps, it will wake up in **" + remaining + msg).queue();
+			channel.sendMessage(Emote.REDCROSS + " Your alpaca sleeps, it will wake up in **" + Language.handle(minutes, "minute")).queue();
 			return;
 		}
 
 		if (args.isEmpty() || args.size() < 2) {
-			channel.sendMessage("<:RedCross:782229279312314368> Missing arguments").queue();
+			channel.sendMessage(Emote.REDCROSS + " Missing arguments").queue();
 			return;
 		}
 
 		final IShopItem item = shopItemManager.getShopItem(args.get(0));
 		if (item == null) {
-			channel.sendMessage("<:RedCross:782229279312314368> Couldn't resolve the item").queue();
+			channel.sendMessage(Emote.REDCROSS + "Couldn't resolve the item").queue();
 			return;
 		}
 
 		try {
 			final int amount = Integer.parseInt(args.get(1));
 			if (amount > 5) {
-				channel.sendMessage("<:RedCross:782229279312314368> You can only feed max. 5 items at a time").queue();
+				channel.sendMessage(Emote.REDCROSS + " You can only feed max. 5 items at a time").queue();
 				return;
 			}
 
@@ -62,7 +63,7 @@ public class Feed implements ICommand {
 			final String name = item.getName();
 
 			if (IDatabase.INSTANCE.getInventory(authorID, category, name) - amount < 0) {
-				channel.sendMessage("<:RedCross:782229279312314368> You don't own that many items").queue();
+				channel.sendMessage(Emote.REDCROSS + " You don't own that many items").queue();
 				return;
 			}
 
@@ -70,24 +71,22 @@ public class Feed implements ICommand {
 			final int saturation = item.getSaturation() * amount;
 
 			if (oldValue + saturation > 100) {
-				channel.sendMessage("<:RedCross:782229279312314368> You would overfeed your alpaca").queue();
+				channel.sendMessage(Emote.REDCROSS + " You would overfeed your alpaca").queue();
 				return;
 			}
 
 			IDatabase.INSTANCE.setInventory(authorID, category, name, -amount);
 			IDatabase.INSTANCE.setAlpacaValues(authorID, category, saturation);
 
-			final String msg = amount == 1 ? "** " + name : "** " + name + "s";
-
 			if (item.getCategory().equals("hunger")) {
-				channel.sendMessage(":meat_on_bone: Your alpaca eats the **" + amount + msg + " in one bite **Hunger + " + saturation + "**").queue();
+				channel.sendMessage(":meat_on_bone: Your alpaca eats the **" + Language.handle(amount, name) + " in one bite **Hunger + " + saturation + "**").queue();
 			}
 			else {
-				channel.sendMessage(":beer: Your alpaca drinks the **" + amount + msg + " empty **Thirst + " + saturation + "**").queue();
+				channel.sendMessage(":beer: Your alpaca drinks the **" + Language.handle(amount, name) + " empty **Thirst + " + saturation + "**").queue();
 			}
 		}
 		catch (NumberFormatException error) {
-			channel.sendMessage("<:RedCross:782229279312314368> Couldn't resolve the item amount").queue();
+			channel.sendMessage(Emote.REDCROSS + " Couldn't resolve the item amount").queue();
 		}
 	}
 

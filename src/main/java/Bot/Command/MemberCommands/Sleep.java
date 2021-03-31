@@ -2,6 +2,9 @@ package Bot.Command.MemberCommands;
 
 import Bot.Command.CommandContext;
 import Bot.Command.ICommand;
+import Bot.Utils.Activity;
+import Bot.Utils.Cooldown;
+import Bot.Utils.Emote;
 import Bot.Utils.PermissionLevel;
 import Bot.Database.IDatabase;
 import net.dv8tion.jda.api.Permission;
@@ -18,50 +21,48 @@ public class Sleep implements ICommand {
 		final List<String> args = ctx.getArgs();
 
 		if (!IDatabase.INSTANCE.isUserInDB(authorID)) {
-			channel.sendMessage("<:RedCross:782229279312314368> You don't own an alpaca, use **" + ctx.getPrefix() + "init** first").queue();
+			channel.sendMessage(Emote.REDCROSS + " You don't own an alpaca, use **" + ctx.getPrefix() + "init** first").queue();
 			return;
 		}
 
 		if (args.isEmpty()) {
-			channel.sendMessage("<:RedCross:782229279312314368> Couldn't resolve the sleep duration").queue();
+			channel.sendMessage(Emote.REDCROSS + " Please specify the sleep duration").queue();
 			return;
 		}
 
-		final long sleepCooldown = IDatabase.INSTANCE.getCooldown(authorID, "sleep") - System.currentTimeMillis();
-		if (sleepCooldown > 0) {
-			channel.sendMessage("<:RedCross:782229279312314368> Your alpaca is already sleeping").queue();
+		if (Cooldown.isActive(Activity.SLEEP, authorID, channel)) {
 			return;
 		}
 
 		final int energy = IDatabase.INSTANCE.getAlpacaValues(authorID, "energy");
 		if (energy == 100) {
-			channel.sendMessage("<:RedCross:782229279312314368> The energy of your alpaca is already at the maximum").queue();
+			channel.sendMessage( Emote.REDCROSS + " The energy of your alpaca is already at the maximum").queue();
 			return;
 		}
 
 		try {
 			final int duration = Integer.parseInt(args.get(0));
-			if (duration > 120) {
-				channel.sendMessage("Your alpaca can sleep max. 120 minutes at a time").queue();
+			if (duration < 1 || duration > 100) {
+				channel.sendMessage(Emote.REDCROSS + " Please enter a number between 1 - 120").queue();
 				return;
 			}
 
-			final int newEnergy = energy + duration / 2 > 100 ? 100 - energy : duration / 2;
+			final int newEnergy = energy + duration > 100 ? 100 - energy : duration ;
 			final long newCooldown = System.currentTimeMillis() + 1000L * 60 * 2 * newEnergy;
 
 			IDatabase.INSTANCE.setAlpacaValues(authorID, "energy", newEnergy);
 			IDatabase.INSTANCE.setCooldown(authorID, "sleep", newCooldown);
 
-			channel.sendMessage("\uD83D\uDCA4 Your alpaca goes to bed for **" + newEnergy * 2 + "** minutes and rests well **Energy + " + newEnergy + "**").queue();
+			channel.sendMessage("\uD83D\uDCA4 Your alpaca goes to bed for **" + duration + "** minutes and rests well **Energy + " + newEnergy + "**").queue();
 		}
 		catch (NumberFormatException error) {
-			channel.sendMessage("<:RedCross:782229279312314368> Couldn't resolve the sleep duration").queue();
+			channel.sendMessage(Emote.REDCROSS + " Please enter a number between 1 - 120").queue();
 		}
 	}
 
 	@Override
 	public String getHelp(String prefix) {
-		return "**Usage:** " + prefix + "sleep [1-120]\n**Aliases:** " + getAliases() + "\n**Example:** " + prefix + "sleep 56";
+		return "**Usage:** " + prefix + "sleep [1-100]\n**Aliases:** " + getAliases() + "\n**Example:** " + prefix + "sleep 56";
 	}
 
 	@Override

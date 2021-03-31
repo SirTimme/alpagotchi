@@ -1,6 +1,7 @@
 package Bot.Command.MemberCommands;
 
 import Bot.Command.CommandContext;
+import Bot.Utils.Emote;
 import Bot.Utils.PermissionLevel;
 import Bot.Config;
 import Bot.Command.CommandManager;
@@ -50,7 +51,7 @@ public class Help implements ICommand {
 
 		final ICommand cmd = cmdManager.getCommand(args.get(0).toLowerCase());
 		if (cmd == null) {
-			channel.sendMessage("<:RedCross:782229279312314368> Couldn't retrieve help for that command").queue();
+			channel.sendMessage(Emote.REDCROSS + " Couldn't retrieve help for that command").queue();
 			return;
 		}
 

@@ -2,6 +2,7 @@ package Bot.Command.AdminCommands;
 
 import Bot.Command.CommandContext;
 import Bot.Command.ICommand;
+import Bot.Utils.Emote;
 import Bot.Utils.PermissionLevel;
 import Bot.Database.IDatabase;
 import net.dv8tion.jda.api.Permission;
@@ -19,19 +20,19 @@ public class SetPrefix implements ICommand {
 		final Guild guild = ctx.getGuild();
 
 		if (!PermissionLevel.ADMIN.hasPermission(ctx.getMember())) {
-			channel.sendMessage("<:RedCross:782229279312314368> This is an **admin-only** command, you're missing the **Manage Server** permission").queue();
+			channel.sendMessage(Emote.REDCROSS + " This is an **admin-only** command, you're missing the **Manage Server** permission").queue();
 			return;
 		}
 
 		if (args.isEmpty()) {
-			channel.sendMessage("<:RedCross:782229279312314368> Couldn't resolve the new prefix").queue();
+			channel.sendMessage(Emote.REDCROSS + " Couldn't resolve the new prefix").queue();
 			return;
 		}
 
-		final String newPrefix = String.join("", args);
-		IDatabase.INSTANCE.setPrefix(guild.getIdLong(), newPrefix);
+		final String prefix = String.join("", args);
+		IDatabase.INSTANCE.setPrefix(guild.getIdLong(), prefix);
 
-		channel.sendMessage("<:GreenTick:782229268914372609> The prefix of **" + guild.getName() + "** has been set to **" + newPrefix + "**").queue();
+		channel.sendMessage(Emote.GREENTICK + " The prefix of **" + guild.getName() + "** has been set to **" + prefix + "**").queue();
 	}
 
 	@Override

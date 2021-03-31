@@ -3,6 +3,7 @@ package Bot.Command.AdminCommands;
 import Bot.Command.CommandContext;
 import Bot.Command.ICommand;
 import Bot.Config;
+import Bot.Utils.Emote;
 import Bot.Utils.PermissionLevel;
 import Bot.Database.IDatabase;
 import net.dv8tion.jda.api.Permission;
@@ -19,18 +20,18 @@ public class SetBalance implements ICommand {
 		final List<String> args = ctx.getArgs();
 
 		if (!PermissionLevel.ADMIN.hasPermission(ctx.getMember())) {
-			channel.sendMessage("<:RedCross:782229279312314368> This is an **admin-only** command, you're missing the **Manage Server** permission").queue();
+			channel.sendMessage(Emote.REDCROSS + " This is an **admin-only** command, you're missing the **Manage Server** permission").queue();
 			return;
 		}
 
 		if (args.isEmpty() || args.size() < 2) {
-			channel.sendMessage("<:RedCross:782229279312314368> Missing arguments").queue();
+			channel.sendMessage(Emote.REDCROSS + " Missing arguments").queue();
 			return;
 		}
 
 		final List<User> mentionedUser = ctx.getMessage().getMentionedUsers();
 		if (mentionedUser.isEmpty()) {
-			channel.sendMessage("<:RedCross:782229279312314368> Couldn't resolve the mentioned user").queue();
+			channel.sendMessage(Emote.REDCROSS + " Couldn't resolve the mentioned user").queue();
 			return;
 		}
 
@@ -38,7 +39,7 @@ public class SetBalance implements ICommand {
 		final long userID = user.getIdLong();
 
 		if (!IDatabase.INSTANCE.isUserInDB(userID)) {
-			channel.sendMessage("<:RedCross:782229279312314368> The mentioned user doesn't own an alpaca, he has to use **" + ctx.getPrefix() + "init** first").queue();
+			channel.sendMessage(Emote.REDCROSS + " The mentioned user doesn't own an alpaca, he has to use **" + ctx.getPrefix() + "init** first").queue();
 			return;
 		}
 
@@ -51,7 +52,7 @@ public class SetBalance implements ICommand {
 			channel.sendMessage("\uD83D\uDCB3 The balance of **" + user.getName() + "** has been set to **" + newBalance + "**").queue();
 		}
 		catch (NumberFormatException error) {
-			channel.sendMessage("<:RedCross:782229279312314368> Couldn't resolve the new balance").queue();
+			channel.sendMessage(Emote.REDCROSS + " Couldn't resolve the new balance").queue();
 		}
 	}
 

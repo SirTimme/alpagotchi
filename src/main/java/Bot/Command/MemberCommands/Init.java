@@ -2,6 +2,7 @@ package Bot.Command.MemberCommands;
 
 import Bot.Command.CommandContext;
 import Bot.Command.ICommand;
+import Bot.Utils.Emote;
 import Bot.Utils.PermissionLevel;
 import Bot.Config;
 import Bot.Database.IDatabase;
@@ -34,13 +35,12 @@ public class Init implements ICommand {
 		final String prefix = ctx.getPrefix();
 
 		if (IDatabase.INSTANCE.isUserInDB(authorID)) {
-			channel.sendMessage("<:RedCross:782229279312314368> Your alpaca has already been set up").queue();
+			channel.sendMessage(Emote.REDCROSS + " Your alpaca has already been set up").queue();
 			return;
 		}
 
 		final User botCreator = ctx.getJDA().getUserById(Config.get("DEV_ID"));
 		final EmbedBuilder embed = new EmbedBuilder();
-
 		embed.setTitle("User information")
 			 .setDescription("Im glad, that Alpagotchi interests you and you want to interact with him.\nHere are two important points before you can start:")
 			 .setThumbnail(ctx.getJDA().getSelfUser().getAvatarUrl())
@@ -59,8 +59,8 @@ public class Init implements ICommand {
 			 .setTimestamp(Instant.now());
 
 		channel.sendMessage(embed.build()).queue((msg) -> {
-			msg.addReaction("GreenTick:" + emoteIDs[0]).queue();
-			msg.addReaction("RedCross:" + emoteIDs[1]).queue();
+			msg.addReaction(Emote.GREENTICK.toString()).queue();
+			msg.addReaction(Emote.REDCROSS.toString()).queue();
 
 			this.waiter.waitForEvent(
 				GuildMessageReactionAddEvent.class,
@@ -74,18 +74,16 @@ public class Init implements ICommand {
 
 					if (emoteID.equals(emoteIDs[0])) {
 						IDatabase.INSTANCE.createUserEntry(authorID);
-						channel.sendMessage("<:GreenTick:782229268914372609> Your alpaca has been set up, " +
-							"use **" + prefix + "myalpaca** to see it")
-							   .queue();
+						channel.sendMessage(Emote.GREENTICK + " Your alpaca has been set up, use **" + prefix + "myalpaca** to see it").queue();
 					}
 					else {
-						channel.sendMessage("<:RedCross:782229279312314368> Init process cancelled").queue();
+						channel.sendMessage(Emote.REDCROSS + " Init process cancelled").queue();
 					}
 				},
 				90L, TimeUnit.SECONDS,
 				() -> {
 					msg.delete().queue();
-					channel.sendMessage("<:RedCross:782229279312314368> Answer timed out").queue();
+					channel.sendMessage(Emote.REDCROSS + " Answer timed out").queue();
 				}
 			);
 		});

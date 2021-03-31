@@ -2,6 +2,7 @@ package Bot.Command.MemberCommands;
 
 import Bot.Command.CommandContext;
 import Bot.Command.ICommand;
+import Bot.Utils.Emote;
 import Bot.Utils.PermissionLevel;
 import Bot.Database.IDatabase;
 import net.dv8tion.jda.api.Permission;
@@ -16,13 +17,13 @@ public class Pet implements ICommand {
 		final TextChannel channel = ctx.getChannel();
 
 		if (!IDatabase.INSTANCE.isUserInDB(authorID)) {
-			channel.sendMessage("<:RedCross:782229279312314368> You don't own an alpaca, use **" + ctx.getPrefix() + "init** first").queue();
+			channel.sendMessage(Emote.REDCROSS + " You don't own an alpaca, use **" + ctx.getPrefix() + "init** first").queue();
 			return;
 		}
 
 		final int joy = IDatabase.INSTANCE.getAlpacaValues(authorID, "joy");
 		if (joy == 100) {
-			channel.sendMessage("<:RedCross:782229279312314368> The joy of your alpaca is already at the maximum").queue();
+			channel.sendMessage(Emote.REDCROSS + " The joy of your alpaca is already at the maximum").queue();
 			return;
 		}
 

@@ -3,6 +3,7 @@ package Bot.Command.DeveloperCommands;
 import Bot.Command.CommandContext;
 import Bot.Command.ICommand;
 import Bot.Utils.DecreaseTask;
+import Bot.Utils.Emote;
 import Bot.Utils.PermissionLevel;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.TextChannel;
@@ -14,8 +15,8 @@ import java.util.TimerTask;
 
 public class Decrease implements ICommand {
 	private final Timer timer = new Timer();
-	private boolean timerActive = false;
-	private TimerTask decreaseTask;
+	private boolean running = false;
+	private TimerTask task;
 
 	@Override
 	public void execute(CommandContext ctx) {
@@ -23,31 +24,31 @@ public class Decrease implements ICommand {
 		final List<String> args = ctx.getArgs();
 
 		if (!PermissionLevel.DEVELOPER.hasPermission(ctx.getMember())) {
-			channel.sendMessage("<:RedCross:782229279312314368> This is a **developer-only** command").queue();
+			channel.sendMessage(Emote.REDCROSS + " This is a **developer-only** command").queue();
 			return;
 		}
 
 		if (args.isEmpty()) {
-			channel.sendMessage("<:RedCross:782229279312314368> Missing arguments").queue();
+			channel.sendMessage(Emote.REDCROSS + " Missing arguments").queue();
 			return;
 		}
 
-		if (this.timerActive && args.get(0).equalsIgnoreCase("enable")) {
-			channel.sendMessage("<:RedCross:782229279312314368> Decreasing is already enabled").queue();
+		if (running && args.get(0).equalsIgnoreCase("enable")) {
+			channel.sendMessage(Emote.REDCROSS + " Decreasing is already enabled").queue();
 			return;
 		}
 
 		if (args.get(0).equalsIgnoreCase("enable")) {
-			this.timer.schedule(decreaseTask = new DecreaseTask(), 1000 * 7200, 1000 * 7200);
-			timerActive = true;
+			timer.schedule(task = new DecreaseTask(), 1000 * 7200, 1000 * 7200);
+			running = true;
 
-			channel.sendMessage("<:GreenTick:782229268914372609> Alpacas begin to lose stats").queue();
+			channel.sendMessage( Emote.GREENTICK + " Alpacas begin to lose stats").queue();
 		}
 		else {
-			this.decreaseTask.cancel();
-			timerActive = false;
+			task.cancel();
+			running = false;
 
-			channel.sendMessage("<:RedCross:782229279312314368> Alpacas stop losing stats").queue();
+			channel.sendMessage( Emote.REDCROSS + " Alpacas stop losing stats").queue();
 		}
 	}
 

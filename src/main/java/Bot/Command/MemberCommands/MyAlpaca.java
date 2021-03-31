@@ -2,6 +2,8 @@ package Bot.Command.MemberCommands;
 
 import Bot.Command.CommandContext;
 import Bot.Command.ICommand;
+import Bot.Utils.Emote;
+import Bot.Utils.Language;
 import Bot.Utils.PermissionLevel;
 import Bot.Config;
 import Bot.Database.IDatabase;
@@ -32,7 +34,7 @@ public class MyAlpaca implements ICommand {
 		final TextChannel channel = ctx.getChannel();
 
 		if (!IDatabase.INSTANCE.isUserInDB(authorID)) {
-			channel.sendMessage("<:RedCross:782229279312314368> You don't own an alpaca, use **" + ctx.getPrefix() + "init** first").queue();
+			channel.sendMessage(Emote.REDCROSS + " You don't own an alpaca, use **" + ctx.getPrefix() + "init** first").queue();
 			return;
 		}
 
@@ -73,23 +75,14 @@ public class MyAlpaca implements ICommand {
 			ImageIO.write(img, "jpg", byteStream);
 
 			final long sleepCooldown = IDatabase.INSTANCE.getCooldown(authorID, "sleep") - System.currentTimeMillis();
-			final int sleepMinutes = (int) TimeUnit.MILLISECONDS.toMinutes(sleepCooldown);
-			final String sleepMsg = sleepCooldown > 0
-									? "<:RedCross:782229279312314368> " + sleepMinutes + " minutes"
-									: "<:GreenTick:782229268914372609> ready";
-
 			final long workCooldown = IDatabase.INSTANCE.getCooldown(authorID, "work") - System.currentTimeMillis();
-			final int workMinutes = (int) TimeUnit.MILLISECONDS.toMinutes(workCooldown);
-			final String workMsg = workCooldown > 0
-								   ? "<:RedCross:782229279312314368> " + workMinutes + " minutes"
-								   : "<:GreenTick:782229268914372609> ready";
 
 			final User dev = ctx.getJDA().getUserById(Config.get("DEV_ID"));
 			final EmbedBuilder embed = new EmbedBuilder();
 			embed.setTitle(IDatabase.INSTANCE.getNickname(authorID))
 				 .setDescription("_Have a llamazing day!_")
-				 .addField("Work", workMsg, true)
-				 .addField("Sleep", sleepMsg, true)
+				 .addField("Work", checkCooldown(workCooldown), true)
+				 .addField("Sleep", checkCooldown(sleepCooldown), true)
 				 .setThumbnail(ctx.getMember().getUser().getAvatarUrl())
 				 .setFooter("Created by " + dev.getName(), dev.getEffectiveAvatarUrl())
 				 .setTimestamp(Instant.now())
@@ -155,5 +148,10 @@ public class MyAlpaca implements ICommand {
 		else {
 			return position.equalsIgnoreCase("front") ? 165 : 554;
 		}
+	}
+
+	private String checkCooldown(long cooldown) {
+		final long minutes = TimeUnit.MICROSECONDS.toMinutes(cooldown);
+		return cooldown > 0 ? Emote.REDCROSS + " " + Language.handle(minutes, "minute") : Emote.GREENTICK + " ready";
 	}
 }

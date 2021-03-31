@@ -2,6 +2,8 @@ package Bot.Command.MemberCommands;
 
 import Bot.Command.CommandContext;
 import Bot.Command.ICommand;
+import Bot.Utils.Emote;
+import Bot.Utils.Language;
 import Bot.Utils.PermissionLevel;
 import Bot.Shop.IShopItem;
 import Bot.Database.IDatabase;
@@ -27,32 +29,32 @@ public class Buy implements ICommand {
 		final TextChannel channel = ctx.getChannel();
 
 		if (!IDatabase.INSTANCE.isUserInDB(authorID)) {
-			channel.sendMessage("<:RedCross:782229279312314368> You don't own an alpaca, use **" + prefix + "init** first").queue();
+			channel.sendMessage(Emote.REDCROSS + " You don't own an alpaca, use **" + prefix + "init** first").queue();
 			return;
 		}
 
 		if (args.isEmpty() || args.size() < 2) {
-			channel.sendMessage("<:RedCross:782229279312314368> Missing arguments").queue();
+			channel.sendMessage(Emote.REDCROSS + " Missing arguments").queue();
 			return;
 		}
 
 		final IShopItem item = shopItemManager.getShopItem(args.get(0));
 		if (item == null) {
-			channel.sendMessage("<:RedCross:782229279312314368> Couldn't resolve the shop item").queue();
+			channel.sendMessage(Emote.REDCROSS + " Couldn't resolve the item").queue();
 			return;
 		}
 
 		try {
 			final int amount = Integer.parseInt(args.get(1));
 			if (amount > 10) {
-				channel.sendMessage("<:RedCross:782229279312314368> You can purchase max. 10 items at a time").queue();
+				channel.sendMessage(Emote.REDCROSS + " You can purchase max. 10 items at a time").queue();
 				return;
 			}
 
 			final int price = item.getPrice() * amount;
 			final int balance = IDatabase.INSTANCE.getBalance(authorID);
 			if (balance - price < 0) {
-				channel.sendMessage("<:RedCross:782229279312314368> Insufficient amount of fluffies").queue();
+				channel.sendMessage(Emote.REDCROSS + " Insufficient amount of fluffies").queue();
 				return;
 			}
 
@@ -61,10 +63,10 @@ public class Buy implements ICommand {
 			IDatabase.INSTANCE.setBalance(authorID, -price);
 			IDatabase.INSTANCE.setInventory(authorID, item.getCategory(), name, amount);
 
-			channel.sendMessage(":moneybag: You successfully bought **" + amount + " " + name + "** for **" + price + "** fluffies").queue();
+			channel.sendMessage(":moneybag: You successfully bought **" + Language.handle(amount, name) + "** for **" + price + "** fluffies").queue();
 		}
 		catch (NumberFormatException error) {
-			channel.sendMessage("<:RedCross:782229279312314368> Couldn't resolve the item amount").queue();
+			channel.sendMessage(Emote.REDCROSS + " Couldn't resolve the item amount").queue();
 		}
 	}
 

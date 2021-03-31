@@ -2,6 +2,7 @@ package Bot.Command.MemberCommands;
 
 import Bot.Command.CommandContext;
 import Bot.Command.ICommand;
+import Bot.Utils.Emote;
 import Bot.Utils.PermissionLevel;
 import Bot.Config;
 import Bot.Database.IDatabase;
@@ -30,7 +31,7 @@ public class Outfit implements ICommand {
 		final List<String> args = ctx.getArgs();
 
 		if (!IDatabase.INSTANCE.isUserInDB(authorID)) {
-			channel.sendMessage("<:RedCross:782229279312314368> You don't own an alpaca, use **" + ctx.getPrefix() + "init** first").queue();
+			channel.sendMessage(Emote.REDCROSS + " You don't own an alpaca, use **" + ctx.getPrefix() + "init** first").queue();
 			return;
 		}
 
@@ -52,7 +53,7 @@ public class Outfit implements ICommand {
 
 		IOutfit outfit = outfitManager.getOutfit(args.get(0).toLowerCase());
 		if (outfit == null) {
-			channel.sendMessage("<:RedCross:782229279312314368> Couldn't resolve the outfit").queue();
+			channel.sendMessage(Emote.REDCROSS + " Couldn't resolve the outfit").queue();
 			return;
 		}
 

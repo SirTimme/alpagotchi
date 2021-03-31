@@ -17,7 +17,6 @@ public class Bot {
 
 	public static void main(String[] args) {
 		EventWaiter waiter = new EventWaiter();
-
 		ResourcesManager.preloadData();
 
 		try {
