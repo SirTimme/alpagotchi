@@ -48,7 +48,7 @@ public class Sleep implements ICommand {
 			}
 
 			final int newEnergy = energy + duration > 100 ? 100 - energy : duration ;
-			final long newCooldown = System.currentTimeMillis() + 1000L * 60 * 2 * newEnergy;
+			final long newCooldown = System.currentTimeMillis() + 1000L * 60 * newEnergy;
 
 			IDatabase.INSTANCE.setAlpacaValues(authorID, "energy", newEnergy);
 			IDatabase.INSTANCE.setCooldown(authorID, "sleep", newCooldown);
