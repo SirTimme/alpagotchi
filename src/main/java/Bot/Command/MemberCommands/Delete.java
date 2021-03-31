@@ -51,7 +51,7 @@ public class Delete implements ICommand {
 						channel.sendMessage(Emote.GREENTICK + " Data successfully deleted").queue();
 					}
 					else {
-						channel.sendMessage(Emote.GREENTICK + " Delete process cancelled").queue();
+						channel.sendMessage(Emote.REDCROSS + " Delete process cancelled").queue();
 					}
 				},
 				90L, TimeUnit.SECONDS,

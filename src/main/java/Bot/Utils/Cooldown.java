@@ -10,7 +10,7 @@ public class Cooldown {
 		final long cooldown = IDatabase.INSTANCE.getCooldown(authorID, activity.toString().toLowerCase()) - System.currentTimeMillis();
 
 		if (cooldown > 0) {
-			final long minutes = TimeUnit.MICROSECONDS.toMinutes(cooldown);
+			final long minutes = TimeUnit.MILLISECONDS.toMinutes(cooldown);
 
 			switch (activity) {
 				case WORK:

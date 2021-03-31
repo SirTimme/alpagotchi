@@ -151,7 +151,7 @@ public class MyAlpaca implements ICommand {
 	}
 
 	private String checkCooldown(long cooldown) {
-		final long minutes = TimeUnit.MICROSECONDS.toMinutes(cooldown);
+		final long minutes = TimeUnit.MILLISECONDS.toMinutes(cooldown);
 		return cooldown > 0 ? Emote.REDCROSS + " " + Language.handle(minutes, "minute") : Emote.GREENTICK + " ready";
 	}
 }
