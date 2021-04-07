@@ -2,8 +2,9 @@ package Bot.Command.DeveloperCommands;
 
 import Bot.Command.CommandContext;
 import Bot.Command.ICommand;
-import Bot.Utils.DecreaseTask;
+import Bot.Database.IDatabase;
 import Bot.Utils.Emote;
+import Bot.Utils.Error;
 import Bot.Utils.PermissionLevel;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.TextChannel;
@@ -22,14 +23,15 @@ public class Decrease implements ICommand {
 	public void execute(CommandContext ctx) {
 		final TextChannel channel = ctx.getChannel();
 		final List<String> args = ctx.getArgs();
+		final String prefix = ctx.getPrefix();
 
 		if (!PermissionLevel.DEVELOPER.hasPermission(ctx.getMember())) {
-			channel.sendMessage(Emote.REDCROSS + " This is a **developer-only** command").queue();
+			channel.sendMessage(Error.DEV_ONLY.getMessage(prefix, getName())).queue();
 			return;
 		}
 
 		if (args.isEmpty()) {
-			channel.sendMessage(Emote.REDCROSS + " Missing arguments").queue();
+			channel.sendMessage(Error.MISSING_ARGS.getMessage(prefix, getName())).queue();
 			return;
 		}
 
@@ -39,22 +41,22 @@ public class Decrease implements ICommand {
 		}
 
 		if (args.get(0).equalsIgnoreCase("enable")) {
-			timer.schedule(task = new DecreaseTask(), 1000 * 7200, 1000 * 7200);
+			timer.schedule(task = new TimerTask() {
+				@Override
+				public void run() {
+					IDatabase.INSTANCE.decreaseValues();
+				}
+			}, 1000 * 7200, 1000 * 7200);
 			running = true;
 
-			channel.sendMessage( Emote.GREENTICK + " Alpacas begin to lose stats").queue();
+			channel.sendMessage(Emote.GREENTICK + " Alpacas begin to lose stats").queue();
 		}
 		else {
 			task.cancel();
 			running = false;
 
-			channel.sendMessage( Emote.REDCROSS + " Alpacas stop losing stats").queue();
+			channel.sendMessage(Emote.REDCROSS + " Alpacas stop losing stats").queue();
 		}
-	}
-
-	@Override
-	public String getHelp(String prefix) {
-		return "**" + prefix + "decrease [enable | disable]**\n**Aliases:**" + getAliases() + "\n**Example:**" + prefix + "decrease disable";
 	}
 
 	@Override
@@ -63,13 +65,28 @@ public class Decrease implements ICommand {
 	}
 
 	@Override
-	public Enum<PermissionLevel> getPermissionLevel() {
+	public PermissionLevel getPermissionLevel() {
 		return PermissionLevel.DEVELOPER;
 	}
 
 	@Override
 	public EnumSet<Permission> getRequiredPermissions() {
 		return EnumSet.of(Permission.MESSAGE_WRITE);
+	}
+
+	@Override
+	public String getSyntax() {
+		return "decrease [enable | disable]";
+	}
+
+	@Override
+	public String getExample() {
+		return "decrease disable";
+	}
+
+	@Override
+	public String getDescription() {
+		return "Enables/Disables if the alpacas losing stats";
 	}
 }
 

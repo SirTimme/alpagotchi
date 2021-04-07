@@ -7,7 +7,7 @@ import java.util.concurrent.TimeUnit;
 
 public class Cooldown {
 	public static boolean isActive(Activity activity, long authorID, TextChannel channel) {
-		final long cooldown = IDatabase.INSTANCE.getCooldown(authorID, activity.toString().toLowerCase()) - System.currentTimeMillis();
+		final long cooldown = IDatabase.INSTANCE.getCooldown(authorID, activity) - System.currentTimeMillis();
 
 		if (cooldown > 0) {
 			final long minutes = TimeUnit.MILLISECONDS.toMinutes(cooldown);

@@ -13,6 +13,7 @@ import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
 
+@SuppressWarnings("ConstantConditions")
 public class ResourcesManager {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ResourcesManager.class);
 	private static final Map<String, BufferedImage> alpacaImages = new HashMap<>();

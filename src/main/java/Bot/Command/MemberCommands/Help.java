@@ -51,16 +51,20 @@ public class Help implements ICommand {
 
 		final ICommand cmd = cmdManager.getCommand(args.get(0).toLowerCase());
 		if (cmd == null) {
-			channel.sendMessage(Emote.REDCROSS + " Couldn't retrieve help for that command").queue();
+			channel.sendMessage(Emote.REDCROSS + " That command doesn't exists").queue();
 			return;
 		}
 
-		channel.sendMessage(cmd.getHelp(prefix)).queue();
-	}
+		final EmbedBuilder embed = new EmbedBuilder();
 
-	@Override
-	public String getHelp(String prefix) {
-		return "**Usage:** " + prefix + "help (command)\n**Aliases:** " + getAliases() + "\n**Example**: " + prefix + "help gift";
+		embed.setTitle("Help for " + cmd.getName())
+			 .setDescription("[] = required parameters\n() = optional parameters")
+			 .addField("Description", cmd.getDescription(), false)
+			 .addField("Usage", prefix + cmd.getSyntax(), false)
+			 .addField("Example", prefix + cmd.getExample(), false)
+			 .addField("Aliases", cmd.getAliases().toString(), false);
+
+		channel.sendMessage(embed.build()).queue();
 	}
 
 	@Override
@@ -69,7 +73,7 @@ public class Help implements ICommand {
 	}
 
 	@Override
-	public Enum<PermissionLevel> getPermissionLevel() {
+	public PermissionLevel getPermissionLevel() {
 		return PermissionLevel.MEMBER;
 	}
 
@@ -83,7 +87,22 @@ public class Help implements ICommand {
 		return EnumSet.of(Permission.MESSAGE_WRITE, Permission.MESSAGE_EMBED_LINKS);
 	}
 
-	private String getCommandsByLevel(String prefix, Enum<PermissionLevel> level) {
+	@Override
+	public String getSyntax() {
+		return "help (command)";
+	}
+
+	@Override
+	public String getExample() {
+		return "help gift";
+	}
+
+	@Override
+	public String getDescription() {
+		return "Displays all available commands or help for a specific command";
+	}
+
+	private String getCommandsByLevel(String prefix, PermissionLevel level) {
 		StringBuilder builder = new StringBuilder();
 
 		this.cmdManager.getCommands()

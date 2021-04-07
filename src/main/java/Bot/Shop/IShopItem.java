@@ -1,5 +1,7 @@
 package Bot.Shop;
 
+import Bot.Utils.Stat;
+
 public interface IShopItem {
 
     int getPrice();
@@ -8,5 +10,5 @@ public interface IShopItem {
 
     String getName();
 
-    String getCategory();
+    Stat getStat();
 }

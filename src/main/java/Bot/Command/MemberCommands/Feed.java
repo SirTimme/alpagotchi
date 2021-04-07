@@ -2,18 +2,16 @@ package Bot.Command.MemberCommands;
 
 import Bot.Command.CommandContext;
 import Bot.Command.ICommand;
-import Bot.Utils.Emote;
-import Bot.Utils.Language;
-import Bot.Utils.PermissionLevel;
+import Bot.Utils.*;
 import Bot.Database.IDatabase;
 import Bot.Shop.IShopItem;
 import Bot.Shop.ShopItemManager;
+import Bot.Utils.Error;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.TextChannel;
 
 import java.util.EnumSet;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 public class Feed implements ICommand {
 	private final ShopItemManager shopItemManager;
@@ -29,20 +27,16 @@ public class Feed implements ICommand {
 		final long authorID = ctx.getAuthorID();
 
 		if (!IDatabase.INSTANCE.isUserInDB(authorID)) {
-			channel.sendMessage(Emote.REDCROSS + " You do not own a alpaca, use **" + ctx.getPrefix() + "init** first").queue();
+			channel.sendMessage(Error.NOT_INITIALIZED.getMessage(ctx.getPrefix(), getName())).queue();
 			return;
 		}
 
-		final long sleepCooldown = IDatabase.INSTANCE.getCooldown(authorID, "sleep") - System.currentTimeMillis();
-		if (sleepCooldown > 0) {
-			final long minutes = TimeUnit.MILLISECONDS.toMinutes(sleepCooldown);
-
-			channel.sendMessage(Emote.REDCROSS + " Your alpaca sleeps, it will wake up in **" + Language.handle(minutes, "minute")).queue();
+		if (Cooldown.isActive(Activity.SLEEP, authorID, channel)) {
 			return;
 		}
 
 		if (args.isEmpty() || args.size() < 2) {
-			channel.sendMessage(Emote.REDCROSS + " Missing arguments").queue();
+			channel.sendMessage(Error.MISSING_ARGS.getMessage(ctx.getPrefix(), getName())).queue();
 			return;
 		}
 
@@ -59,15 +53,12 @@ public class Feed implements ICommand {
 				return;
 			}
 
-			final String category = item.getCategory();
-			final String name = item.getName();
-
-			if (IDatabase.INSTANCE.getInventory(authorID, category, name) - amount < 0) {
+			if (IDatabase.INSTANCE.getInventory(authorID, item) - amount < 0) {
 				channel.sendMessage(Emote.REDCROSS + " You don't own that many items").queue();
 				return;
 			}
 
-			final int oldValue = IDatabase.INSTANCE.getAlpacaValues(authorID, category);
+			final int oldValue = IDatabase.INSTANCE.getStat(authorID, item.getStat());
 			final int saturation = item.getSaturation() * amount;
 
 			if (oldValue + saturation > 100) {
@@ -75,14 +66,14 @@ public class Feed implements ICommand {
 				return;
 			}
 
-			IDatabase.INSTANCE.setInventory(authorID, category, name, -amount);
-			IDatabase.INSTANCE.setAlpacaValues(authorID, category, saturation);
+			IDatabase.INSTANCE.setInventory(authorID, item, -amount);
+			IDatabase.INSTANCE.setStat(authorID, item.getStat(), saturation);
 
-			if (item.getCategory().equals("hunger")) {
-				channel.sendMessage(":meat_on_bone: Your alpaca eats the **" + Language.handle(amount, name) + " in one bite **Hunger + " + saturation + "**").queue();
+			if (item.getStat().equals(Stat.HUNGER)) {
+				channel.sendMessage(":meat_on_bone: Your alpaca eats the **" + Language.handle(amount, item.getName()) + "** in one bite **Hunger + " + saturation + "**").queue();
 			}
 			else {
-				channel.sendMessage(":beer: Your alpaca drinks the **" + Language.handle(amount, name) + " empty **Thirst + " + saturation + "**").queue();
+				channel.sendMessage(":beer: Your alpaca drinks the **" + Language.handle(amount, item.getName()) + "** empty **Thirst + " + saturation + "**").queue();
 			}
 		}
 		catch (NumberFormatException error) {
@@ -91,22 +82,32 @@ public class Feed implements ICommand {
 	}
 
 	@Override
-	public String getHelp(String prefix) {
-		return "**Usage:** " + prefix + "feed [itemName] [1-5]\n**Aliases:** " + getAliases() + "\n**Example:** " + prefix + "feed water 2";
-	}
-
-	@Override
 	public String getName() {
 		return "feed";
 	}
 
 	@Override
-	public Enum<PermissionLevel> getPermissionLevel() {
+	public PermissionLevel getPermissionLevel() {
 		return PermissionLevel.MEMBER;
 	}
 
 	@Override
 	public EnumSet<Permission> getRequiredPermissions() {
 		return EnumSet.of(Permission.MESSAGE_WRITE);
+	}
+
+	@Override
+	public String getSyntax() {
+		return "feed [item] [1-5]";
+	}
+
+	@Override
+	public String getExample() {
+		return "feed water 2";
+	}
+
+	@Override
+	public String getDescription() {
+		return "Feeds your alpaca with the specified item";
 	}
 }

@@ -1,7 +1,7 @@
 package Bot.Utils;
 
-public enum Activity {
-	SLEEP, WORK;
+public enum Stat {
+	HUNGER,	THIRST,	ENERGY,	JOY;
 
 	public String getName() {
 		return this.name().toLowerCase();

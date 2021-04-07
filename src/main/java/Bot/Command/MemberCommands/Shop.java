@@ -6,6 +6,7 @@ import Bot.Utils.PermissionLevel;
 import Bot.Config;
 import Bot.Shop.IShopItem;
 import Bot.Shop.ShopItemManager;
+import Bot.Utils.Stat;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.TextChannel;
@@ -28,21 +29,16 @@ public class Shop implements ICommand {
 		final User dev = ctx.getJDA().getUserById(Config.get("DEV_ID"));
 		final EmbedBuilder embed = new EmbedBuilder();
 		embed.setTitle("Shop")
-			 .addField("Item", getItemsByCategory("hunger", "name"), true)
-			 .addField("Price", getItemsByCategory("hunger", "price"), true)
-			 .addField("Saturation", getItemsByCategory("hunger", "saturation"), true)
-			 .addField("Item", getItemsByCategory("thirst", "name"), true)
-			 .addField("Price", getItemsByCategory("thirst", "price"), true)
-			 .addField("Saturation", getItemsByCategory("thirst", "saturation"), true)
+			 .addField("Item", getItemsByCategory(Stat.HUNGER, "name"), true)
+			 .addField("Price", getItemsByCategory(Stat.HUNGER, "price"), true)
+			 .addField("Saturation", getItemsByCategory(Stat.HUNGER, "saturation"), true)
+			 .addField("Item", getItemsByCategory(Stat.THIRST, "name"), true)
+			 .addField("Price", getItemsByCategory(Stat.THIRST, "price"), true)
+			 .addField("Saturation", getItemsByCategory(Stat.THIRST, "saturation"), true)
 			 .setFooter("Created by " + dev.getName(), dev.getEffectiveAvatarUrl())
 			 .setTimestamp(Instant.now());
 
 		channel.sendMessage(embed.build()).queue();
-	}
-
-	@Override
-	public String getHelp(String prefix) {
-		return "**Usage:** " + prefix + "shop\n**Aliases:** " + getAliases() + "\n**Example:** " + prefix + "shop";
 	}
 
 	@Override
@@ -51,7 +47,7 @@ public class Shop implements ICommand {
 	}
 
 	@Override
-	public Enum<PermissionLevel> getPermissionLevel() {
+	public PermissionLevel getPermissionLevel() {
 		return PermissionLevel.MEMBER;
 	}
 
@@ -60,14 +56,24 @@ public class Shop implements ICommand {
 		return EnumSet.of(Permission.MESSAGE_WRITE, Permission.MESSAGE_EMBED_LINKS);
 	}
 
-	private String getItemsByCategory(String category, String filter) {
-		String emoji = category.equals("hunger") ? ":meat_on_bone: " : ":beer: ";
+	@Override
+	public String getSyntax() {
+		return "shop";
+	}
+
+	@Override
+	public String getDescription() {
+		return null;
+	}
+
+	private String getItemsByCategory(Stat stat, String filter) {
+		String emoji = stat == Stat.HUNGER ? ":meat_on_bone: " : ":beer: ";
 
 		StringBuilder builder = new StringBuilder();
 		itemManager.getShopItems()
 				   .stream()
 				   .sorted(Comparator.comparingInt(IShopItem::getPrice))
-				   .filter((item) -> item.getCategory().equals(category))
+				   .filter((item) -> item.getStat().equals(stat))
 				   .forEach((item) -> {
 					   if (filter.equals("name")) {
 						   builder.append(":package: ").append(item.getName()).append("\n");

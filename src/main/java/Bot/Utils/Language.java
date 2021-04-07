@@ -1,7 +1,7 @@
 package Bot.Utils;
 
 public class Language {
-	public static <T> String handle(T amount, String word) {
-		return amount.equals(1) ? amount + " " + word : amount + " " + word + "s";
+	public static String handle(Number amount, String word) {
+		return amount + (amount.longValue() == 1 ? " " + word : " " + word + "s");
 	}
 }

@@ -3,6 +3,7 @@ package Bot.Command.MemberCommands;
 import Bot.Command.CommandContext;
 import Bot.Command.ICommand;
 import Bot.Utils.Emote;
+import Bot.Utils.Error;
 import Bot.Utils.Language;
 import Bot.Utils.PermissionLevel;
 import Bot.Shop.IShopItem;
@@ -29,12 +30,12 @@ public class Buy implements ICommand {
 		final TextChannel channel = ctx.getChannel();
 
 		if (!IDatabase.INSTANCE.isUserInDB(authorID)) {
-			channel.sendMessage(Emote.REDCROSS + " You don't own an alpaca, use **" + prefix + "init** first").queue();
+			channel.sendMessage(Error.NOT_INITIALIZED.getMessage(prefix, getName())).queue();
 			return;
 		}
 
 		if (args.isEmpty() || args.size() < 2) {
-			channel.sendMessage(Emote.REDCROSS + " Missing arguments").queue();
+			channel.sendMessage(Error.MISSING_ARGS.getMessage(prefix, getName())).queue();
 			return;
 		}
 
@@ -58,21 +59,14 @@ public class Buy implements ICommand {
 				return;
 			}
 
-			final String name = item.getName();
-
 			IDatabase.INSTANCE.setBalance(authorID, -price);
-			IDatabase.INSTANCE.setInventory(authorID, item.getCategory(), name, amount);
+			IDatabase.INSTANCE.setInventory(authorID, item, amount);
 
-			channel.sendMessage(":moneybag: You successfully bought **" + Language.handle(amount, name) + "** for **" + price + "** fluffies").queue();
+			channel.sendMessage(":moneybag: You successfully bought **" + Language.handle(amount, item.getName()) + "** for **" + price + "** fluffies").queue();
 		}
 		catch (NumberFormatException error) {
-			channel.sendMessage(Emote.REDCROSS + " Couldn't resolve the item amount").queue();
+			channel.sendMessage(Error.NaN.getMessage(prefix, getName())).queue();
 		}
-	}
-
-	@Override
-	public String getHelp(String prefix) {
-		return "**Usage:** " + prefix + "buy [item] [1-10]\n**Aliases:** " + getAliases() + "\n**Example:** " + prefix + "buy salad 3";
 	}
 
 	@Override
@@ -81,12 +75,27 @@ public class Buy implements ICommand {
 	}
 
 	@Override
-	public Enum<PermissionLevel> getPermissionLevel() {
+	public PermissionLevel getPermissionLevel() {
 		return PermissionLevel.MEMBER;
 	}
 
 	@Override
 	public EnumSet<Permission> getRequiredPermissions() {
 		return EnumSet.of(Permission.MESSAGE_WRITE);
+	}
+
+	@Override
+	public String getSyntax() {
+		return "buy [item] [1-10]";
+	}
+
+	@Override
+	public String getExample() {
+		return "buy salad 3";
+	}
+
+	@Override
+	public String getDescription() {
+		return "Buys a specific amount of an item from the shop";
 	}
 }

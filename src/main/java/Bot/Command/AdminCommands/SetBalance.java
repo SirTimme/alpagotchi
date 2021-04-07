@@ -4,6 +4,7 @@ import Bot.Command.CommandContext;
 import Bot.Command.ICommand;
 import Bot.Config;
 import Bot.Utils.Emote;
+import Bot.Utils.Error;
 import Bot.Utils.PermissionLevel;
 import Bot.Database.IDatabase;
 import net.dv8tion.jda.api.Permission;
@@ -18,6 +19,7 @@ public class SetBalance implements ICommand {
 	public void execute(CommandContext ctx) {
 		final TextChannel channel = ctx.getChannel();
 		final List<String> args = ctx.getArgs();
+		final String prefix = ctx.getPrefix();
 
 		if (!PermissionLevel.ADMIN.hasPermission(ctx.getMember())) {
 			channel.sendMessage(Emote.REDCROSS + " This is an **admin-only** command, you're missing the **Manage Server** permission").queue();
@@ -25,13 +27,13 @@ public class SetBalance implements ICommand {
 		}
 
 		if (args.isEmpty() || args.size() < 2) {
-			channel.sendMessage(Emote.REDCROSS + " Missing arguments").queue();
+			channel.sendMessage(Error.MISSING_ARGS.getMessage(prefix, getName())).queue();
 			return;
 		}
 
 		final List<User> mentionedUser = ctx.getMessage().getMentionedUsers();
 		if (mentionedUser.isEmpty()) {
-			channel.sendMessage(Emote.REDCROSS + " Couldn't resolve the mentioned user").queue();
+			channel.sendMessage(Error.MISSING_ARGS.getMessage(prefix, getName())).queue();
 			return;
 		}
 
@@ -39,7 +41,7 @@ public class SetBalance implements ICommand {
 		final long userID = user.getIdLong();
 
 		if (!IDatabase.INSTANCE.isUserInDB(userID)) {
-			channel.sendMessage(Emote.REDCROSS + " The mentioned user doesn't own an alpaca, he has to use **" + ctx.getPrefix() + "init** first").queue();
+			channel.sendMessage(Emote.REDCROSS + " The mentioned user doesn't own an alpaca, he's to use **" + prefix + "init** first").queue();
 			return;
 		}
 
@@ -52,13 +54,8 @@ public class SetBalance implements ICommand {
 			channel.sendMessage("\uD83D\uDCB3 The balance of **" + user.getName() + "** has been set to **" + newBalance + "**").queue();
 		}
 		catch (NumberFormatException error) {
-			channel.sendMessage(Emote.REDCROSS + " Couldn't resolve the new balance").queue();
+			channel.sendMessage(Error.NaN.getMessage(prefix, getName())).queue();
 		}
-	}
-
-	@Override
-	public String getHelp(String prefix) {
-		return "**Usage:** " + prefix + "setbalance [@user] [balance]\n**Aliases**: " + getAliases() + "\n**Example:** " + prefix + "setbalance <@" + Config.get("BOT_ID") + "> 150";
 	}
 
 	@Override
@@ -67,12 +64,24 @@ public class SetBalance implements ICommand {
 	}
 
 	@Override
-	public Enum<PermissionLevel> getPermissionLevel() {
+	public PermissionLevel getPermissionLevel() {
 		return PermissionLevel.ADMIN;
 	}
 
 	@Override
 	public EnumSet<Permission> getRequiredPermissions() {
 		return EnumSet.of(Permission.MESSAGE_WRITE);
+	}
+
+	@Override public String getSyntax() {
+		return "setbalance [@user] [balance]";
+	}
+
+	@Override public String getExample() {
+		return "setbalance <@" + Config.get("BOT_ID") + "> 150";
+	}
+
+	@Override public String getDescription() {
+		return "Sets the balance of a specific user";
 	}
 }

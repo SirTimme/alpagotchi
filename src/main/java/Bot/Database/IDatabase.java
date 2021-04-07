@@ -1,5 +1,9 @@
 package Bot.Database;
 
+import Bot.Shop.IShopItem;
+import Bot.Utils.Activity;
+import Bot.Utils.Stat;
+
 public interface IDatabase {
 	IDatabase INSTANCE = new MongoDB();
 
@@ -15,21 +19,21 @@ public interface IDatabase {
 
 	void setOutfit(long memberID, String newOutfit);
 
-	int getAlpacaValues(long memberID, String column);
+	int getStat(long memberID, Stat stat);
 
-	void setAlpacaValues(long memberID, String column, int newValue);
+	void setStat(long memberID, Stat stat, int newValue);
 
 	int getBalance(long memberID);
 
 	void setBalance(long memberID, int newBalance);
 
-	int getInventory(long memberID, String category, String item);
+	int getInventory(long memberID, IShopItem item);
 
-	void setInventory(long memberID, String category, String item, int newAmount);
+	void setInventory(long memberID, IShopItem item, int newAmount);
 
-	long getCooldown(long memberID, String column);
+	long getCooldown(long memberID, Activity activity);
 
-	void setCooldown(long memberID, String column, long newValue);
+	void setCooldown(long memberID, Activity activity, long newValue);
 
 	void createUserEntry(long memberID);
 
@@ -42,4 +46,6 @@ public interface IDatabase {
 	boolean isUserInDB(long memberID);
 
 	void decreaseValues();
+
+	long getAll();
 }
