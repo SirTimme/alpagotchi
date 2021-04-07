@@ -83,7 +83,6 @@ public class Inventory implements ICommand {
 		itemManager.getShopItems()
 				   .stream()
 				   .filter((item) -> item.getStat().equals(stat))
-				   .sorted()
 				   .forEach((item) -> {
 					   final int amount = IDatabase.INSTANCE.getInventory(memberID, item);
 
