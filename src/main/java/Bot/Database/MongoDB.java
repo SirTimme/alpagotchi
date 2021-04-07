@@ -100,7 +100,7 @@ public class MongoDB implements IDatabase {
 		final Document resultDoc = alpacaCollection.find(Filters.eq("_id", memberID)).first();
 		final String category = item.getStat().getName();
 
-		return resultDoc.get("inventory", Document.class).get(category, Document.class).getInteger(item);
+		return resultDoc.get("inventory", Document.class).get(category, Document.class).getInteger(item.getName());
 	}
 
 	@Override
@@ -109,7 +109,7 @@ public class MongoDB implements IDatabase {
 		final String category = item.getStat().getName();
 		final int oldAmount = getInventory(memberID, item);
 
-		alpacaCollection.updateOne(resultDoc, Updates.set("inventory." + category + "." + item, oldAmount + newAmount));
+		alpacaCollection.updateOne(resultDoc, Updates.set("inventory." + category + "." + item.getName(), oldAmount + newAmount));
 	}
 
 	@Override

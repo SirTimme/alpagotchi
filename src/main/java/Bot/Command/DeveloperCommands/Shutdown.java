@@ -20,7 +20,7 @@ public class Shutdown implements ICommand {
 			return;
 		}
 
-		channel.sendMessage(Emote.GREENTICK + " **Alpagotchi** is shutting down...").queue();
+		channel.sendMessage(Emote.GREENTICK + " **Alpagotchi** is shutting down...").complete();
 
 		ctx.getJDA().shutdown();
 		System.exit(0);

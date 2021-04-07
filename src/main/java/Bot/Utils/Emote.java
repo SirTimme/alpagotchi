@@ -1,8 +1,8 @@
 package Bot.Utils;
 
 public enum Emote {
-	REDCROSS("<:RedCross:827140649136029706>"),
-	GREENTICK("<:GreenTick:827140711341097000>");
+	REDCROSS("<:RedCross:782229279312314368>"),
+	GREENTICK("<:GreenTick:782229268914372609>");
 
 	private final String emoteID;
 
