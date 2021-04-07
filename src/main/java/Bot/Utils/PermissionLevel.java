@@ -14,7 +14,7 @@ public enum PermissionLevel {
 			case ADMIN:
 				return member.hasPermission(Permission.MANAGE_SERVER);
 			default:
-				return member.hasPermission(Permission.MESSAGE_WRITE);
+				return true;
 		}
 	}
 }

@@ -3,6 +3,7 @@ package Bot.Command.MemberCommands;
 import Bot.Command.CommandContext;
 import Bot.Command.ICommand;
 import Bot.Utils.Emote;
+import Bot.Utils.Error;
 import Bot.Utils.PermissionLevel;
 import Bot.Config;
 import Bot.Database.IDatabase;
@@ -31,7 +32,7 @@ public class Outfit implements ICommand {
 		final List<String> args = ctx.getArgs();
 
 		if (!IDatabase.INSTANCE.isUserInDB(authorID)) {
-			channel.sendMessage(Emote.REDCROSS + " You don't own an alpaca, use **" + ctx.getPrefix() + "init** first").queue();
+			channel.sendMessage(Error.NOT_INITIALIZED.getMessage(ctx.getPrefix(), getName())).queue();
 			return;
 		}
 
@@ -64,22 +65,32 @@ public class Outfit implements ICommand {
 	}
 
 	@Override
-	public String getHelp(String prefix) {
-		return "**Usage:** " + prefix + "outfit (outfit)\n**Aliases:** " + getAliases() + "\n**Example:** " + prefix + "outfit pirate";
-	}
-
-	@Override
 	public String getName() {
 		return "outfit";
 	}
 
 	@Override
-	public Enum<PermissionLevel> getPermissionLevel() {
+	public PermissionLevel getPermissionLevel() {
 		return PermissionLevel.MEMBER;
 	}
 
 	@Override
 	public EnumSet<Permission> getRequiredPermissions() {
 		return EnumSet.of(Permission.MESSAGE_WRITE, Permission.MESSAGE_EMBED_LINKS);
+	}
+
+	@Override
+	public String getSyntax() {
+		return "outfit (outfit)";
+	}
+
+	@Override
+	public String getExample() {
+		return "outfit king";
+	}
+
+	@Override
+	public String getDescription() {
+		return "Gives your alpaca an outfit";
 	}
 }

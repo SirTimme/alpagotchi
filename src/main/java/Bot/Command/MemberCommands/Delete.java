@@ -3,6 +3,7 @@ package Bot.Command.MemberCommands;
 import Bot.Command.CommandContext;
 import Bot.Command.ICommand;
 import Bot.Utils.Emote;
+import Bot.Utils.Error;
 import Bot.Utils.PermissionLevel;
 import Bot.Database.IDatabase;
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
@@ -28,7 +29,7 @@ public class Delete implements ICommand {
 		final long authorID = ctx.getAuthorID();
 
 		if (!IDatabase.INSTANCE.isUserInDB(authorID)) {
-			channel.sendMessage(Emote.REDCROSS + " You don't own an alpaca").queue();
+			channel.sendMessage(Error.NOT_INITIALIZED.getMessage(ctx.getPrefix(), getName())).queue();
 			return;
 		}
 
@@ -64,17 +65,12 @@ public class Delete implements ICommand {
 	}
 
 	@Override
-	public String getHelp(String prefix) {
-		return "**Usage:** " + prefix + "delete\n**Aliases:** " + getAliases() + "**Example:** " + prefix + "delete";
-	}
-
-	@Override
 	public String getName() {
 		return "delete";
 	}
 
 	@Override
-	public Enum<PermissionLevel> getPermissionLevel() {
+	public PermissionLevel getPermissionLevel() {
 		return PermissionLevel.MEMBER;
 	}
 
@@ -84,5 +80,15 @@ public class Delete implements ICommand {
 			Permission.MESSAGE_WRITE,
 			Permission.MESSAGE_ADD_REACTION
 		);
+	}
+
+	@Override
+	public String getSyntax() {
+		return "delete";
+	}
+
+	@Override
+	public String getDescription() {
+		return "Deletes all of your data";
 	}
 }

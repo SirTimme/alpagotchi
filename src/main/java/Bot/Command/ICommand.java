@@ -9,15 +9,19 @@ import java.util.List;
 public interface ICommand {
     void execute(CommandContext ctx);
 
-    String getHelp(String prefix);
-
     String getName();
 
-    Enum<PermissionLevel> getPermissionLevel();
+    PermissionLevel getPermissionLevel();
 
     default List<String> getAliases() {
         return List.of();
     }
 
     EnumSet<Permission> getRequiredPermissions();
+
+    String getSyntax();
+
+    default String getExample() { return getSyntax();};
+
+    String getDescription();
 }

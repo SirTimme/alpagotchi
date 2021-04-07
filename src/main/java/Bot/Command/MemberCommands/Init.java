@@ -35,7 +35,7 @@ public class Init implements ICommand {
 		final String prefix = ctx.getPrefix();
 
 		if (IDatabase.INSTANCE.isUserInDB(authorID)) {
-			channel.sendMessage(Emote.REDCROSS + " Your alpaca has already been set up").queue();
+			channel.sendMessage(Emote.REDCROSS + " You already own an alpaca").queue();
 			return;
 		}
 
@@ -90,17 +90,12 @@ public class Init implements ICommand {
 	}
 
 	@Override
-	public String getHelp(String prefix) {
-		return "**Usage:** " + prefix + "init\n**Aliases:** " + getAliases() + "\n**Example:** " + prefix + "init";
-	}
-
-	@Override
 	public String getName() {
 		return "init";
 	}
 
 	@Override
-	public Enum<PermissionLevel> getPermissionLevel() {
+	public PermissionLevel getPermissionLevel() {
 		return PermissionLevel.MEMBER;
 	}
 
@@ -115,5 +110,15 @@ public class Init implements ICommand {
 			Permission.MESSAGE_ADD_REACTION,
 			Permission.MESSAGE_WRITE
 		);
+	}
+
+	@Override
+	public String getSyntax() {
+		return "init";
+	}
+
+	@Override
+	public String getDescription() {
+		return "Initializes your alpaca in the database";
 	}
 }

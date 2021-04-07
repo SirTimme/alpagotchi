@@ -1,6 +1,9 @@
 package Bot.Database;
 
 import Bot.Config;
+import Bot.Shop.IShopItem;
+import Bot.Utils.Activity;
+import Bot.Utils.Stat;
 import com.mongodb.client.*;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.ReplaceOptions;
@@ -63,18 +66,18 @@ public class MongoDB implements IDatabase {
 	}
 
 	@Override
-	public int getAlpacaValues(long memberID, String column) {
+	public int getStat(long memberID, Stat stat) {
 		Document resultDoc = alpacaCollection.find(Filters.eq("_id", memberID)).first();
 
-		return resultDoc.get("alpaca", Document.class).getInteger(column);
+		return resultDoc.get("alpaca", Document.class).getInteger(stat.getName());
 	}
 
 	@Override
-	public void setAlpacaValues(long memberID, String column, int newValue) {
+	public void setStat(long memberID, Stat stat, int newValue) {
 		Document resultDoc = alpacaCollection.find(Filters.eq("_id", memberID)).first();
-		int oldValue = getAlpacaValues(memberID, column);
+		int oldValue = getStat(memberID, stat);
 
-		alpacaCollection.updateOne(resultDoc, Updates.set("alpaca." + column, oldValue + newValue));
+		alpacaCollection.updateOne(resultDoc, Updates.set("alpaca." + stat.getName(), oldValue + newValue));
 	}
 
 	@Override
@@ -93,38 +96,41 @@ public class MongoDB implements IDatabase {
 	}
 
 	@Override
-	public int getInventory(long memberID, String category, String item) {
-		Document resultDoc = alpacaCollection.find(Filters.eq("_id", memberID)).first();
+	public int getInventory(long memberID, IShopItem item) {
+		final Document resultDoc = alpacaCollection.find(Filters.eq("_id", memberID)).first();
+		final String category = item.getStat().getName();
 
-		return resultDoc.get("inventory", Document.class).get(category, Document.class).getInteger(item);
+		return resultDoc.get("inventory", Document.class).get(category, Document.class).getInteger(item.getName());
 	}
 
 	@Override
-	public void setInventory(long memberID, String category, String item, int newAmount) {
-		Document resultDoc = alpacaCollection.find(Filters.eq("_id", memberID)).first();
-		int oldAmount = getInventory(memberID, category, item);
+	public void setInventory(long memberID, IShopItem item, int newAmount) {
+		final Document resultDoc = alpacaCollection.find(Filters.eq("_id", memberID)).first();
+		final String category = item.getStat().getName();
+		final int oldAmount = getInventory(memberID, item);
 
-		alpacaCollection.updateOne(resultDoc, Updates.set("inventory." + category + "." + item, oldAmount + newAmount));
+		alpacaCollection.updateOne(resultDoc, Updates.set("inventory." + category + "." + item.getName(), oldAmount + newAmount));
 	}
 
 	@Override
-	public long getCooldown(long memberID, String column) {
+	public long getCooldown(long memberID, Activity activity) {
 		Document resultDoc = alpacaCollection.find(Filters.eq("_id", memberID)).first();
-		Object result = resultDoc.get("cooldowns", Document.class).get(column);
+		Object result = resultDoc.get("cooldowns", Document.class).get(activity.getName());
 
 		return result instanceof Integer ? ((Integer) result).longValue() : (Long) result;
 	}
 
 	@Override
-	public void setCooldown(long memberID, String column, long newValue) {
+	public void setCooldown(long memberID, Activity activity, long newValue) {
 		Document resultDoc = alpacaCollection.find(Filters.eq("_id", memberID)).first();
 
-		alpacaCollection.updateOne(resultDoc, Updates.set("cooldowns." + column, newValue));
+		alpacaCollection.updateOne(resultDoc, Updates.set("cooldowns." + activity.getName(), newValue));
 	}
 
 	@Override
 	public void createUserEntry(long memberID) {
 		Document newUser = new Document();
+
 		newUser.append("_id", memberID)
 			   .append("alpaca", new Document()
 				   .append("nickname", "alpaca")
@@ -163,6 +169,7 @@ public class MongoDB implements IDatabase {
 	@Override
 	public void createGuildEntry(long guildID) {
 		Document newGuild = new Document();
+
 		newGuild.append("_id", guildID)
 				.append("prefix", Config.get("PREFIX"));
 
@@ -183,5 +190,10 @@ public class MongoDB implements IDatabase {
 	public void decreaseValues() {
 		alpacaCollection.updateMany(Filters.gte("alpaca.hunger", 2), Updates.inc("alpaca.hunger", -1));
 		alpacaCollection.updateMany(Filters.gte("alpaca.thirst", 2), Updates.inc("alpaca.thirst", -1));
+	}
+
+	@Override
+	public long getAll() {
+		return alpacaCollection.countDocuments();
 	}
 }

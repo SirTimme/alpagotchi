@@ -3,6 +3,7 @@ package Bot.Command.AdminCommands;
 import Bot.Command.CommandContext;
 import Bot.Command.ICommand;
 import Bot.Utils.Emote;
+import Bot.Utils.Error;
 import Bot.Utils.PermissionLevel;
 import Bot.Database.IDatabase;
 import net.dv8tion.jda.api.Permission;
@@ -18,26 +19,27 @@ public class SetPrefix implements ICommand {
 		final TextChannel channel = ctx.getChannel();
 		final List<String> args = ctx.getArgs();
 		final Guild guild = ctx.getGuild();
+		final String prefix = ctx.getPrefix();
 
 		if (!PermissionLevel.ADMIN.hasPermission(ctx.getMember())) {
-			channel.sendMessage(Emote.REDCROSS + " This is an **admin-only** command, you're missing the **Manage Server** permission").queue();
+			channel.sendMessage(Error.ADMIN_ONLY.getMessage(prefix, getName())).queue();
 			return;
 		}
 
 		if (args.isEmpty()) {
-			channel.sendMessage(Emote.REDCROSS + " Couldn't resolve the new prefix").queue();
+			channel.sendMessage(Error.MISSING_ARGS.getMessage(prefix, getName())).queue();
 			return;
 		}
 
-		final String prefix = String.join("", args);
-		IDatabase.INSTANCE.setPrefix(guild.getIdLong(), prefix);
+		final String newPrefix = String.join("", args);
+		if (newPrefix.equals(prefix)) {
+			channel.sendMessage(Emote.REDCROSS + " The new prefix can't be the old one").queue();
+			return;
+		}
 
-		channel.sendMessage(Emote.GREENTICK + " The prefix of **" + guild.getName() + "** has been set to **" + prefix + "**").queue();
-	}
+		IDatabase.INSTANCE.setPrefix(guild.getIdLong(), newPrefix);
 
-	@Override
-	public String getHelp(String prefix) {
-		return "**" + prefix + "setprefix [prefix]**\n*+Aliases:** " + getAliases() + "\n**Example:** " + prefix + "setprefix ?";
+		channel.sendMessage(Emote.GREENTICK + " The prefix of **" + guild.getName() + "** has been set to **" + newPrefix + "**").queue();
 	}
 
 	@Override
@@ -53,5 +55,20 @@ public class SetPrefix implements ICommand {
 	@Override
 	public EnumSet<Permission> getRequiredPermissions() {
 		return EnumSet.of(Permission.MESSAGE_WRITE);
+	}
+
+	@Override
+	public String getSyntax() {
+		return "setprefix [prefix]";
+	}
+
+	@Override
+	public String getExample() {
+		return "setprefix ?";
+	}
+
+	@Override
+	public String getDescription() {
+		return "Sets the prefix of the bot for the guild";
 	}
 }

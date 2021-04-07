@@ -2,11 +2,9 @@ package Bot.Command.MemberCommands;
 
 import Bot.Command.CommandContext;
 import Bot.Command.ICommand;
-import Bot.Utils.Activity;
-import Bot.Utils.Cooldown;
-import Bot.Utils.Emote;
-import Bot.Utils.PermissionLevel;
+import Bot.Utils.*;
 import Bot.Database.IDatabase;
+import Bot.Utils.Error;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.TextChannel;
 
@@ -21,12 +19,12 @@ public class Sleep implements ICommand {
 		final List<String> args = ctx.getArgs();
 
 		if (!IDatabase.INSTANCE.isUserInDB(authorID)) {
-			channel.sendMessage(Emote.REDCROSS + " You don't own an alpaca, use **" + ctx.getPrefix() + "init** first").queue();
+			channel.sendMessage(Error.NOT_INITIALIZED.getMessage(ctx.getPrefix(), getName())).queue();
 			return;
 		}
 
 		if (args.isEmpty()) {
-			channel.sendMessage(Emote.REDCROSS + " Please specify the sleep duration").queue();
+			channel.sendMessage(Error.MISSING_ARGS.getMessage(ctx.getPrefix(), getName())).queue();
 			return;
 		}
 
@@ -34,35 +32,30 @@ public class Sleep implements ICommand {
 			return;
 		}
 
-		final int energy = IDatabase.INSTANCE.getAlpacaValues(authorID, "energy");
+		int energy = IDatabase.INSTANCE.getStat(authorID, Stat.ENERGY);
 		if (energy == 100) {
-			channel.sendMessage( Emote.REDCROSS + " The energy of your alpaca is already at the maximum").queue();
+			channel.sendMessage(Emote.REDCROSS + " The energy of your alpaca is already at the maximum").queue();
 			return;
 		}
 
 		try {
 			final int duration = Integer.parseInt(args.get(0));
 			if (duration < 1 || duration > 100) {
-				channel.sendMessage(Emote.REDCROSS + " Please enter a number between 1 - 120").queue();
+				channel.sendMessage(Emote.REDCROSS + " Please enter a number between 1 - 100").queue();
 				return;
 			}
 
-			final int newEnergy = energy + duration > 100 ? 100 - energy : duration ;
-			final long newCooldown = System.currentTimeMillis() + 1000L * 60 * newEnergy;
+			energy = energy + duration > 100 ? 100 - energy : duration;
+			final long cooldown = System.currentTimeMillis() + 1000L * 60 * energy;
 
-			IDatabase.INSTANCE.setAlpacaValues(authorID, "energy", newEnergy);
-			IDatabase.INSTANCE.setCooldown(authorID, "sleep", newCooldown);
+			IDatabase.INSTANCE.setStat(authorID, Stat.ENERGY, energy);
+			IDatabase.INSTANCE.setCooldown(authorID, Activity.SLEEP, cooldown);
 
-			channel.sendMessage("\uD83D\uDCA4 Your alpaca goes to bed for **" + duration + "** minutes and rests well **Energy + " + newEnergy + "**").queue();
+			channel.sendMessage("\uD83D\uDCA4 Your alpaca goes to bed for **" + energy + "** minutes and rests well **Energy + " + energy + "**").queue();
 		}
 		catch (NumberFormatException error) {
-			channel.sendMessage(Emote.REDCROSS + " Please enter a number between 1 - 120").queue();
+			channel.sendMessage(Error.NaN.getMessage(ctx.getPrefix(), getName())).queue();
 		}
-	}
-
-	@Override
-	public String getHelp(String prefix) {
-		return "**Usage:** " + prefix + "sleep [1-100]\n**Aliases:** " + getAliases() + "\n**Example:** " + prefix + "sleep 56";
 	}
 
 	@Override
@@ -71,12 +64,27 @@ public class Sleep implements ICommand {
 	}
 
 	@Override
-	public Enum<PermissionLevel> getPermissionLevel() {
+	public PermissionLevel getPermissionLevel() {
 		return PermissionLevel.MEMBER;
 	}
 
 	@Override
 	public EnumSet<Permission> getRequiredPermissions() {
 		return EnumSet.of(Permission.MESSAGE_WRITE);
+	}
+
+	@Override
+	public String getSyntax() {
+		return "sleep [1-100]";
+	}
+
+	@Override
+	public String getExample() {
+		return "sleep 85";
+	}
+
+	@Override
+	public String getDescription() {
+		return "Lets your alpaca sleep for the specified duration";
 	}
 }
