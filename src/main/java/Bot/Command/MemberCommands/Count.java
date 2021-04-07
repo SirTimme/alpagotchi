@@ -2,30 +2,23 @@ package Bot.Command.MemberCommands;
 
 import Bot.Command.CommandContext;
 import Bot.Command.ICommand;
+import Bot.Database.IDatabase;
 import Bot.Utils.PermissionLevel;
 import net.dv8tion.jda.api.Permission;
-import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.entities.TextChannel;
 
-import java.time.temporal.ChronoUnit;
 import java.util.EnumSet;
 
-public class Ping implements ICommand {
+public class Count implements ICommand {
 	@Override
 	public void execute(CommandContext ctx) {
-		final TextChannel channel = ctx.getChannel();
-		final Message message = ctx.getMessage();
+		final long totalSize = IDatabase.INSTANCE.getAll();
 
-		channel.sendMessage("Pinging alpacafarm...").queue((msg) -> {
-			final long ping = ChronoUnit.MILLIS.between(message.getTimeCreated(), msg.getTimeCreated());
-
-			msg.editMessage(":satellite: You reached the alpacafarm in **" + ping + "**ms").queue();
-		});
+		ctx.getChannel().sendMessage("\uD83D\uDC65 There are **" + totalSize + "** alpacas in the farm by now").queue();
 	}
 
 	@Override
 	public String getName() {
-		return "ping";
+		return "count";
 	}
 
 	@Override
@@ -40,11 +33,11 @@ public class Ping implements ICommand {
 
 	@Override
 	public String getSyntax() {
-		return "ping";
+		return "count";
 	}
 
 	@Override
 	public String getDescription() {
-		return "Displays the current ping of the bot";
+		return "Counts all alpacas across all guilds";
 	}
 }

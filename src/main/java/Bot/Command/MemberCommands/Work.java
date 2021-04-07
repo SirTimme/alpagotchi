@@ -4,6 +4,7 @@ import Bot.Command.CommandContext;
 import Bot.Command.ICommand;
 import Bot.Utils.*;
 import Bot.Database.IDatabase;
+import Bot.Utils.Error;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.TextChannel;
 
@@ -17,17 +18,17 @@ public class Work implements ICommand {
 		final String prefix = ctx.getPrefix();
 
 		if (!IDatabase.INSTANCE.isUserInDB(authorID)) {
-			channel.sendMessage(Emote.REDCROSS + " You don't own an alpaca, use **" + prefix + "init** first").queue();
+			channel.sendMessage(Error.NOT_INITIALIZED.getMessage(prefix, getName())).queue();
 			return;
 		}
 
-		final int energy = IDatabase.INSTANCE.getAlpacaValues(authorID, "energy");
+		final int energy = IDatabase.INSTANCE.getStat(authorID, Stat.ENERGY);
 		if (energy < 10) {
 			channel.sendMessage("\uD83E\uDD71 Your alpaca is too tired to work, let it rest first with **" + prefix + "sleep**").queue();
 			return;
 		}
 
-		final int joy = IDatabase.INSTANCE.getAlpacaValues(authorID, "joy");
+		final int joy = IDatabase.INSTANCE.getStat(authorID, Stat.JOY);
 		if (joy < 15) {
 			channel.sendMessage(":pensive: Your alpaca is too sad to work, give him some love with **" + prefix + "pet**").queue();
 			return;
@@ -41,22 +42,17 @@ public class Work implements ICommand {
 		IDatabase.INSTANCE.setBalance(authorID, fluffies);
 
 		final int energyCost = (int) (Math.random() * 8 + 1);
-		IDatabase.INSTANCE.setAlpacaValues(authorID, "energy", -energyCost);
+		IDatabase.INSTANCE.setStat(authorID, Stat.ENERGY, -energyCost);
 
 		final int joyCost = (int) (Math.random() * 10 + 2);
-		IDatabase.INSTANCE.setAlpacaValues(authorID, "joy", -joyCost);
+		IDatabase.INSTANCE.setStat(authorID, Stat.JOY, -joyCost);
 
 		final long cooldown = System.currentTimeMillis() + 1000L * 60 * 20;
-		IDatabase.INSTANCE.setCooldown(authorID, "work", cooldown);
+		IDatabase.INSTANCE.setCooldown(authorID, Activity.WORK, cooldown);
 
 		final String message = ResourcesManager.getRandomMessage("work");
 
 		channel.sendMessage("⛏ " + message + " **Fluffies + " + fluffies + ", Energy - " + energyCost + ", Joy - " + joyCost + "**").queue();
-	}
-
-	@Override
-	public String getHelp(String prefix) {
-		return "**Usage:** " + prefix + "work\n**Aliases:** " + getAliases() + "\n**Example:** " + prefix + "work";
 	}
 
 	@Override
@@ -65,12 +61,22 @@ public class Work implements ICommand {
 	}
 
 	@Override
-	public Enum<PermissionLevel> getPermissionLevel() {
+	public PermissionLevel getPermissionLevel() {
 		return PermissionLevel.MEMBER;
 	}
 
 	@Override
 	public EnumSet<Permission> getRequiredPermissions() {
 		return EnumSet.of(Permission.MESSAGE_WRITE);
+	}
+
+	@Override
+	public String getSyntax() {
+		return "work";
+	}
+
+	@Override
+	public String getDescription() {
+		return "Work to earn a random amount of fluffies";
 	}
 }

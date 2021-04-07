@@ -23,30 +23,32 @@ import java.util.regex.Pattern;
 @SuppressWarnings("ConstantConditions")
 public class CommandManager {
 	private final List<ICommand> commands = new ArrayList<>();
-	ShopItemManager shopItemManager = new ShopItemManager();
-	OutfitManager outfitManager = new OutfitManager();
 
 	public CommandManager(EventWaiter waiter) {
+		ShopItemManager shopItemManager = new ShopItemManager();
+		OutfitManager outfitManager = new OutfitManager();
+
 		addCommand(new MyAlpaca());
 		addCommand(new Help(this));
 		addCommand(new SetPrefix());
 		addCommand(new Balance());
 		addCommand(new Work());
-		addCommand(new Shop(this.shopItemManager));
-		addCommand(new Buy(this.shopItemManager));
-		addCommand(new Inventory(this.shopItemManager));
-		addCommand(new Feed(this.shopItemManager));
+		addCommand(new Shop(shopItemManager));
+		addCommand(new Buy(shopItemManager));
+		addCommand(new Inventory(shopItemManager));
+		addCommand(new Feed(shopItemManager));
 		addCommand(new Decrease());
 		addCommand(new Nick());
 		addCommand(new Pet());
-		addCommand(new Gift(this.shopItemManager));
+		addCommand(new Gift(shopItemManager));
 		addCommand(new Shutdown());
 		addCommand(new Sleep());
 		addCommand(new SetBalance());
 		addCommand(new Init(waiter));
-		addCommand(new Outfit(this.outfitManager));
+		addCommand(new Outfit(outfitManager));
 		addCommand(new Delete(waiter));
 		addCommand(new Ping());
+		addCommand(new Count());
 	}
 
 	private void addCommand(ICommand command) {
@@ -69,9 +71,9 @@ public class CommandManager {
 
 	public void handle(GuildMessageReceivedEvent event, String prefix) {
 		final String[] cmdArgs = event.getMessage()
-								.getContentRaw()
-								.replaceFirst("(?i)" + Pattern.quote(prefix), "")
-								.split("\\s+");
+									  .getContentRaw()
+									  .replaceFirst("(?i)" + Pattern.quote(prefix), "")
+									  .split("\\s+");
 
 		final ICommand cmd = getCommand(cmdArgs[0].toLowerCase());
 

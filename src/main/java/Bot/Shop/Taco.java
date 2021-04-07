@@ -1,5 +1,7 @@
 package Bot.Shop;
 
+import Bot.Utils.Stat;
+
 public class Taco implements IShopItem {
 	@Override
 	public int getPrice() {
@@ -17,7 +19,7 @@ public class Taco implements IShopItem {
 	}
 
 	@Override
-	public String getCategory() {
-		return "hunger";
+	public Stat getStat() {
+		return Stat.HUNGER;
 	}
 }

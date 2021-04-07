@@ -4,6 +4,7 @@ import Bot.Command.CommandContext;
 import Bot.Command.ICommand;
 import Bot.Config;
 import Bot.Utils.Emote;
+import Bot.Utils.Error;
 import Bot.Utils.PermissionLevel;
 import Bot.Database.IDatabase;
 import Bot.Shop.IShopItem;
@@ -30,18 +31,18 @@ public class Gift implements ICommand {
 		final String prefix = ctx.getPrefix();
 
 		if (!IDatabase.INSTANCE.isUserInDB(authorID)) {
-			channel.sendMessage(Emote.REDCROSS + " You don't own an alpaca, use **" + prefix + "init** first").queue();
+			channel.sendMessage(Error.NOT_INITIALIZED.getMessage(prefix, getName())).queue();
 			return;
 		}
 
 		if (args.isEmpty() || args.size() < 3) {
-			channel.sendMessage(Emote.REDCROSS + " Missing arguments").queue();
+			channel.sendMessage(Error.MISSING_ARGS.getMessage(prefix, getName())).queue();
 			return;
 		}
 
 		final List<User> users = ctx.getMessage().getMentionedUsers();
 		if (users.isEmpty()) {
-			channel.sendMessage(Emote.REDCROSS + " Couldn't resolve the mentioned user").queue();
+			channel.sendMessage(Error.MISSING_ARGS.getMessage(prefix, getName())).queue();
 			return;
 		}
 
@@ -59,7 +60,7 @@ public class Gift implements ICommand {
 
 		IShopItem item = shopItemManager.getShopItem(ctx.getArgs().get(1));
 		if (item == null) {
-			channel.sendMessage(Emote.REDCROSS + " Couldn't resolve the specified item").queue();
+			channel.sendMessage(Emote.REDCROSS + " This item doesn't exists").queue();
 			return;
 		}
 
@@ -70,27 +71,19 @@ public class Gift implements ICommand {
 				return;
 			}
 
-			final String name = item.getName();
-			final String category = item.getCategory();
-
-			if (IDatabase.INSTANCE.getInventory(authorID, category, name) - amount < 0) {
+			if (IDatabase.INSTANCE.getInventory(authorID, item) - amount < 0) {
 				channel.sendMessage(Emote.REDCROSS + " You don't own that many items to gift").queue();
 				return;
 			}
 
-			IDatabase.INSTANCE.setInventory(authorID, category, name, -amount);
-			IDatabase.INSTANCE.setInventory(userID, category, name, amount);
+			IDatabase.INSTANCE.setInventory(authorID, item, -amount);
+			IDatabase.INSTANCE.setInventory(userID, item, amount);
 
-			channel.sendMessage("\uD83C\uDF81 You successfully gifted **" + amount + " " + name + "** to **" + user.getName() + "**").queue();
+			channel.sendMessage("\uD83C\uDF81 You successfully gifted **" + amount + " " + item.getName() + "** to **" + user.getName() + "**").queue();
 		}
 		catch (NumberFormatException error) {
-			channel.sendMessage(Emote.REDCROSS + " Couldn't resolve the amount of items").queue();
+			channel.sendMessage(Error.NaN.getMessage(prefix, getName())).queue();
 		}
-	}
-
-	@Override
-	public String getHelp(String prefix) {
-		return "**Usage:** " + prefix + "gift [@user] [item] [1-5]\n**Aliases:** " + getAliases() + "\n**Example:** " + prefix + "gift <@" + Config.get("BOT_ID") + "> taco 3";
 	}
 
 	@Override
@@ -99,12 +92,27 @@ public class Gift implements ICommand {
 	}
 
 	@Override
-	public Enum<PermissionLevel> getPermissionLevel() {
+	public PermissionLevel getPermissionLevel() {
 		return PermissionLevel.MEMBER;
 	}
 
 	@Override
 	public EnumSet<Permission> getRequiredPermissions() {
 		return EnumSet.of(Permission.MESSAGE_WRITE);
+	}
+
+	@Override
+	public String getSyntax() {
+		return "gift [@user] [item] [1-5]";
+	}
+
+	@Override
+	public String getExample() {
+		return "gift <@" + Config.get("BOT_ID") + "> taco 3";
+	}
+
+	@Override
+	public String getDescription() {
+		return "Gifts the mentioned user the specific items";
 	}
 }

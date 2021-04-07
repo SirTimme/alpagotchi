@@ -2,12 +2,10 @@ package Bot.Command.MemberCommands;
 
 import Bot.Command.CommandContext;
 import Bot.Command.ICommand;
-import Bot.Utils.Emote;
-import Bot.Utils.Language;
-import Bot.Utils.PermissionLevel;
+import Bot.Utils.*;
 import Bot.Config;
 import Bot.Database.IDatabase;
-import Bot.Utils.ResourcesManager;
+import Bot.Utils.Error;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.TextChannel;
@@ -27,6 +25,7 @@ import java.util.concurrent.TimeUnit;
 
 public class MyAlpaca implements ICommand {
 	private static final Logger LOGGER = LoggerFactory.getLogger(MyAlpaca.class);
+	private final Color[] colors = {Color.BLACK, Color.RED, Color.ORANGE, Color.YELLOW, Color.GREEN};
 
 	@Override
 	public void execute(CommandContext ctx) {
@@ -34,14 +33,92 @@ public class MyAlpaca implements ICommand {
 		final TextChannel channel = ctx.getChannel();
 
 		if (!IDatabase.INSTANCE.isUserInDB(authorID)) {
-			channel.sendMessage(Emote.REDCROSS + " You don't own an alpaca, use **" + ctx.getPrefix() + "init** first").queue();
+			channel.sendMessage(Error.NOT_INITIALIZED.getMessage(ctx.getPrefix(), getName())).queue();
 			return;
 		}
 
-		final int hunger = IDatabase.INSTANCE.getAlpacaValues(authorID, "hunger");
-		final int thirst = IDatabase.INSTANCE.getAlpacaValues(authorID, "thirst");
-		final int energy = IDatabase.INSTANCE.getAlpacaValues(authorID, "energy");
-		final int joy = IDatabase.INSTANCE.getAlpacaValues(authorID, "joy");
+		try {
+			final ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
+			ImageIO.write(createImage(authorID), "jpg", byteStream);
+
+			final long sleepCooldown = IDatabase.INSTANCE.getCooldown(authorID, Activity.SLEEP) - System.currentTimeMillis();
+			final long workCooldown = IDatabase.INSTANCE.getCooldown(authorID, Activity.WORK) - System.currentTimeMillis();
+
+			final User dev = ctx.getJDA().getUserById(Config.get("DEV_ID"));
+			final EmbedBuilder embed = new EmbedBuilder();
+
+			embed.setTitle(IDatabase.INSTANCE.getNickname(authorID))
+				 .setDescription("_Have a llamazing day!_")
+				 .addField("Work", checkCooldown(workCooldown), true)
+				 .addField("Sleep", checkCooldown(sleepCooldown), true)
+				 .setThumbnail(ctx.getMember().getUser().getAvatarUrl())
+				 .setFooter("Created by " + dev.getName(), dev.getEffectiveAvatarUrl())
+				 .setTimestamp(Instant.now())
+				 .setImage("attachment://alpagotchi.jpg");
+
+			channel.sendFile(byteStream.toByteArray(), "alpagotchi.jpg").embed(embed.build()).queue();
+		}
+		catch (IOException error) {
+			LOGGER.error(error.getMessage());
+		}
+	}
+
+	@Override
+	public String getName() {
+		return "myalpaca";
+	}
+
+	@Override
+	public PermissionLevel getPermissionLevel() {
+		return PermissionLevel.MEMBER;
+	}
+
+	@Override
+	public List<String> getAliases() {
+		return List.of("ma", "stats");
+	}
+
+	@Override
+	public EnumSet<Permission> getRequiredPermissions() {
+		return EnumSet.of(Permission.MESSAGE_WRITE, Permission.MESSAGE_EMBED_LINKS, Permission.MESSAGE_ATTACH_FILES);
+	}
+
+	@Override
+	public String getSyntax() {
+		return "myalpaca";
+	}
+
+	@Override
+	public String getDescription() {
+		return "Displays your alpaca";
+	}
+
+	private Color getValueColor(int value) {
+		return value == 100 ? Color.GREEN : colors[value / 20];
+	}
+
+	private int getPosition(int value, String position) {
+		if (value == 100) {
+			return position.equalsIgnoreCase("front") ? 145 : 534;
+		}
+		else if (value >= 10) {
+			return position.equalsIgnoreCase("front") ? 155 : 544;
+		}
+		else {
+			return position.equalsIgnoreCase("front") ? 165 : 554;
+		}
+	}
+
+	private String checkCooldown(long cooldown) {
+		final long minutes = TimeUnit.MILLISECONDS.toMinutes(cooldown);
+		return cooldown > 0 ? Emote.REDCROSS + " " + Language.handle(minutes, "minute") : Emote.GREENTICK + " ready";
+	}
+
+	private BufferedImage createImage(long authorID) {
+		final int hunger = IDatabase.INSTANCE.getStat(authorID, Stat.HUNGER);
+		final int thirst = IDatabase.INSTANCE.getStat(authorID, Stat.THIRST);
+		final int energy = IDatabase.INSTANCE.getStat(authorID, Stat.ENERGY);
+		final int joy = IDatabase.INSTANCE.getStat(authorID, Stat.JOY);
 		final String outfit = IDatabase.INSTANCE.getOutfit(authorID);
 
 		final BufferedImage background = ResourcesManager.getAlpacaImage(outfit);
@@ -70,88 +147,6 @@ public class MyAlpaca implements ICommand {
 		graphics.setColor(getValueColor(joy));
 		graphics.fillRect(420, 73, (int) (joy * 1.75), 12);
 
-		try {
-			final ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
-			ImageIO.write(img, "jpg", byteStream);
-
-			final long sleepCooldown = IDatabase.INSTANCE.getCooldown(authorID, "sleep") - System.currentTimeMillis();
-			final long workCooldown = IDatabase.INSTANCE.getCooldown(authorID, "work") - System.currentTimeMillis();
-
-			final User dev = ctx.getJDA().getUserById(Config.get("DEV_ID"));
-			final EmbedBuilder embed = new EmbedBuilder();
-			embed.setTitle(IDatabase.INSTANCE.getNickname(authorID))
-				 .setDescription("_Have a llamazing day!_")
-				 .addField("Work", checkCooldown(workCooldown), true)
-				 .addField("Sleep", checkCooldown(sleepCooldown), true)
-				 .setThumbnail(ctx.getMember().getUser().getAvatarUrl())
-				 .setFooter("Created by " + dev.getName(), dev.getEffectiveAvatarUrl())
-				 .setTimestamp(Instant.now())
-				 .setImage("attachment://alpagotchi.jpg");
-
-			channel.sendFile(byteStream.toByteArray(), "alpagotchi.jpg").embed(embed.build()).queue();
-		}
-		catch (IOException error) {
-			LOGGER.error(error.getMessage());
-		}
-	}
-
-	@Override
-	public String getHelp(String prefix) {
-		return "**Usage:** " + prefix + "myalpaca\n**Aliases:** " + getAliases() + "\n**Example**: " + prefix + "myalpaca";
-	}
-
-	@Override
-	public String getName() {
-		return "myalpaca";
-	}
-
-	@Override
-	public Enum<PermissionLevel> getPermissionLevel() {
-		return PermissionLevel.MEMBER;
-	}
-
-	@Override
-	public List<String> getAliases() {
-		return List.of("ma", "stats");
-	}
-
-	@Override
-	public EnumSet<Permission> getRequiredPermissions() {
-		return EnumSet.of(Permission.MESSAGE_WRITE, Permission.MESSAGE_EMBED_LINKS, Permission.MESSAGE_ATTACH_FILES);
-	}
-
-	private Color getValueColor(int value) {
-		if (value >= 80) {
-			return Color.GREEN;
-		}
-		else if (value >= 60) {
-			return Color.YELLOW;
-		}
-		else if (value >= 40) {
-			return Color.ORANGE;
-		}
-		else if (value >= 20) {
-			return Color.RED;
-		}
-		else {
-			return Color.BLACK;
-		}
-	}
-
-	private int getPosition(int value, String position) {
-		if (value == 100) {
-			return position.equalsIgnoreCase("front") ? 145 : 534;
-		}
-		else if (value >= 10) {
-			return position.equalsIgnoreCase("front") ? 155 : 544;
-		}
-		else {
-			return position.equalsIgnoreCase("front") ? 165 : 554;
-		}
-	}
-
-	private String checkCooldown(long cooldown) {
-		final long minutes = TimeUnit.MILLISECONDS.toMinutes(cooldown);
-		return cooldown > 0 ? Emote.REDCROSS + " " + Language.handle(minutes, "minute") : Emote.GREENTICK + " ready";
+		return img;
 	}
 }
