@@ -41,6 +41,7 @@ public class Pet implements ICommand {
 			IDatabase.INSTANCE.setStat(authorID, Stat.JOY, newJoy);
 
 			channel.sendMessage("\uD83E\uDD99 Your alpaca loves to spend time with you **Joy + " + newJoy + "**").queue();
+			return;
 		}
 
 		final String favouriteSpot = spots.get((int) (Math.random() * 4));
