@@ -86,8 +86,12 @@ public class CommandManager {
 			final TextChannel channel = event.getChannel();
 
 			switch (cmd.getPermLevel()) {
-				case DEVELOPER -> channel.sendMessage(Emote.REDCROSS + " This is an **admin-only** command, you're missing the **Manage Server** permission").queue();
-				case ADMIN -> channel.sendMessage(Emote.REDCROSS + " This is a **dev-only** command").queue();
+				case DEVELOPER:
+					channel.sendMessage(Emote.REDCROSS + " This is an **admin-only** command, you're missing the **Manage Server** permission").queue();
+					break;
+				case ADMIN:
+					channel.sendMessage(Emote.REDCROSS + " This is a **dev-only** command").queue();
+					break;
 			}
 			return;
 		}

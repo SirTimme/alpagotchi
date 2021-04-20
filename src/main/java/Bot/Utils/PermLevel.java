@@ -8,10 +8,13 @@ public enum PermLevel {
 	DEVELOPER, ADMIN, MEMBER;
 
 	public boolean hasPermission(Member member) {
-		return switch (this) {
-			case DEVELOPER -> member.getId().equals(Config.get("DEV_ID"));
-			case ADMIN -> member.hasPermission(Permission.MANAGE_SERVER);
-			default -> true;
-		};
+		switch (this) {
+			case DEVELOPER:
+				return member.getId().equals(Config.get("DEV_ID"));
+			case ADMIN:
+				return member.hasPermission(Permission.MANAGE_SERVER);
+			default:
+				return true;
+		}
 	}
 }

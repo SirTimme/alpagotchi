@@ -13,8 +13,12 @@ public class Cooldown {
 			final long minutes = TimeUnit.MILLISECONDS.toMinutes(cooldown);
 
 			switch (stat) {
-				case SLEEP -> channel.sendMessage(Emote.REDCROSS + " Your alpaca sleeps, it will wake up in **" + Language.handle(minutes, "minute") + "**").queue();
-				case WORK -> channel.sendMessage(Emote.REDCROSS + " Your alpaca has to rest **" + Language.handle(minutes, "minute") + "** to work again").queue();
+				case SLEEP:
+					channel.sendMessage(Emote.REDCROSS + " Your alpaca sleeps, it will wake up in **" + Language.handle(minutes, "minute") + "**").queue();
+					break;
+				case WORK:
+					channel.sendMessage(Emote.REDCROSS + " Your alpaca has to rest **" + Language.handle(minutes, "minute") + "** to work again").queue();
+					break;
 			}
 			return true;
 		}

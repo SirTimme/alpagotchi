@@ -33,11 +33,17 @@ public class MongoDB implements IDatabase {
 
 	@Override
 	public int getStatInt(long memberID, Stat stat) {
-		return switch (stat) {
-			case JOY, ENERGY, HUNGER, THIRST -> getUser(memberID).get("alpaca", Document.class).getInteger(stat.getName());
-			case CURRENCY -> getUser(memberID).get("inventory", Document.class).getInteger(stat.getName());
-			default -> 0;
-		};
+		switch (stat) {
+			case JOY:
+			case ENERGY:
+			case HUNGER:
+			case THIRST:
+				return getUser(memberID).get("alpaca", Document.class).getInteger(stat.getName());
+			case CURRENCY:
+				return getUser(memberID).get("inventory", Document.class).getInteger(stat.getName());
+			default:
+				return 0;
+		}
 	}
 
 	@Override
@@ -48,10 +54,13 @@ public class MongoDB implements IDatabase {
 
 	@Override
 	public long getStatLong(long memberID, Stat stat) {
-		return switch (stat) {
-			case SLEEP, WORK -> getUser(memberID).get("cooldowns", Document.class).getLong(stat.getName());
-			default -> 0;
-		};
+		switch (stat) {
+			case SLEEP:
+			case WORK:
+				return getUser(memberID).get("cooldowns", Document.class).getLong(stat.getName());
+			default:
+				return 0;
+		}
 	}
 
 	@Override
@@ -61,10 +70,13 @@ public class MongoDB implements IDatabase {
 
 	@Override
 	public String getStatString(long memberID, Stat stat) {
-		return switch (stat) {
-			case NICKNAME, OUTFIT -> getUser(memberID).get("alpaca", Document.class).getString(stat.getName());
-			default -> "";
-		};
+		switch (stat) {
+			case NICKNAME:
+			case OUTFIT:
+				return getUser(memberID).get("alpaca", Document.class).getString(stat.getName());
+			default:
+				return "";
+		}
 	}
 
 	@Override
