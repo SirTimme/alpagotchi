@@ -2,7 +2,7 @@ package Bot.Command.MemberCommands;
 
 import Bot.Command.CommandContext;
 import Bot.Utils.Emote;
-import Bot.Utils.PermissionLevel;
+import Bot.Utils.PermLevel;
 import Bot.Config;
 import Bot.Command.CommandManager;
 import Bot.Command.ICommand;
@@ -35,8 +35,8 @@ public class Help implements ICommand {
 
 			embed.setTitle("Overview of all commands")
 				 .setDescription("Further information to any command:\n**```fix\n" + prefix + "help [command]\n```**")
-				 .addField("Admin commands", getCommandsByLevel(prefix, PermissionLevel.ADMIN), true)
-				 .addField("Member commands", getCommandsByLevel(prefix, PermissionLevel.MEMBER), true)
+				 .addField("Admin commands", getCommandsByLevel(prefix, PermLevel.ADMIN), true)
+				 .addField("Member commands", getCommandsByLevel(prefix, PermLevel.MEMBER), true)
 				 .addField(
 					 "Need further help or found a bug?",
 					 "Join the [Alpagotchi Support](https://discord.gg/DXtYyzGhXR) server!",
@@ -73,8 +73,8 @@ public class Help implements ICommand {
 	}
 
 	@Override
-	public PermissionLevel getPermissionLevel() {
-		return PermissionLevel.MEMBER;
+	public PermLevel getPermLevel() {
+		return PermLevel.MEMBER;
 	}
 
 	@Override
@@ -83,7 +83,7 @@ public class Help implements ICommand {
 	}
 
 	@Override
-	public EnumSet<Permission> getRequiredPermissions() {
+	public EnumSet<Permission> getCommandPerms() {
 		return EnumSet.of(Permission.MESSAGE_WRITE, Permission.MESSAGE_EMBED_LINKS);
 	}
 
@@ -102,12 +102,12 @@ public class Help implements ICommand {
 		return "Displays all available commands or help for a specific command";
 	}
 
-	private String getCommandsByLevel(String prefix, PermissionLevel level) {
+	private String getCommandsByLevel(String prefix, PermLevel permLevel) {
 		StringBuilder builder = new StringBuilder();
 
 		this.cmdManager.getCommands()
 					   .stream()
-					   .filter((cmd) -> cmd.getPermissionLevel() == level)
+					   .filter((cmd) -> cmd.getPermLevel() == permLevel)
 					   .map(ICommand::getName)
 					   .sorted()
 					   .forEach((cmd) -> builder.append("`").append(prefix).append(cmd).append("`\n"));

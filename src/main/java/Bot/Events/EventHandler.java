@@ -32,25 +32,21 @@ public class EventHandler extends ListenerAdapter {
 
 	@Override
 	public void onGuildJoin(@NotNull GuildJoinEvent event) {
-		long joinedGuildID = event.getGuild().getIdLong();
-		IDatabase.INSTANCE.createGuildEntry(joinedGuildID);
+		IDatabase.INSTANCE.createGuild(event.getGuild().getIdLong());
 	}
 
 	@Override
 	public void onUnavailableGuildJoined(UnavailableGuildJoinedEvent event) {
-		long joinedGuildID = event.getGuildIdLong();
-		IDatabase.INSTANCE.createGuildEntry(joinedGuildID);
+		IDatabase.INSTANCE.createGuild(event.getGuildIdLong());
 	}
 
 	@Override
 	public void onGuildLeave(@NotNull GuildLeaveEvent event) {
-		long leftGuildID = event.getGuild().getIdLong();
-		IDatabase.INSTANCE.deleteGuildEntry(leftGuildID);
+		IDatabase.INSTANCE.deleteGuild(event.getGuild().getIdLong());
 	}
 
 	@Override
 	public void onUnavailableGuildLeave(@NotNull UnavailableGuildLeaveEvent event) {
-		long leftGuildID = event.getGuildIdLong();
-		IDatabase.INSTANCE.deleteGuildEntry(leftGuildID);
+		IDatabase.INSTANCE.deleteGuild(event.getGuildIdLong());
 	}
 }

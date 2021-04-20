@@ -2,13 +2,11 @@ package Bot.Command.MemberCommands;
 
 import Bot.Command.CommandContext;
 import Bot.Command.ICommand;
-import Bot.Utils.Emote;
-import Bot.Utils.Error;
-import Bot.Utils.Language;
-import Bot.Utils.PermissionLevel;
-import Bot.Shop.IShopItem;
+import Bot.Shop.Item;
+import Bot.Utils.*;
 import Bot.Database.IDatabase;
-import Bot.Shop.ShopItemManager;
+import Bot.Shop.ItemManager;
+import Bot.Utils.Error;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.TextChannel;
 
@@ -16,10 +14,10 @@ import java.util.EnumSet;
 import java.util.List;
 
 public class Buy implements ICommand {
-	private final ShopItemManager shopItemManager;
+	private final ItemManager itemManager;
 
-	public Buy(ShopItemManager shopItemManager) {
-		this.shopItemManager = shopItemManager;
+	public Buy(ItemManager itemManager) {
+		this.itemManager = itemManager;
 	}
 
 	@Override
@@ -29,8 +27,8 @@ public class Buy implements ICommand {
 		final String prefix = ctx.getPrefix();
 		final TextChannel channel = ctx.getChannel();
 
-		if (!IDatabase.INSTANCE.isUserInDB(authorID)) {
-			channel.sendMessage(Error.NOT_INITIALIZED.getMessage(prefix, getName())).queue();
+		if (IDatabase.INSTANCE.getUser(authorID) == null) {
+			channel.sendMessage(Error.NOT_INITIALIZED.getMessage(ctx.getPrefix(), getName())).queue();
 			return;
 		}
 
@@ -39,7 +37,7 @@ public class Buy implements ICommand {
 			return;
 		}
 
-		final IShopItem item = shopItemManager.getShopItem(args.get(0));
+		final Item item = itemManager.getItem(args.get(0));
 		if (item == null) {
 			channel.sendMessage(Emote.REDCROSS + " Couldn't resolve the item").queue();
 			return;
@@ -53,13 +51,13 @@ public class Buy implements ICommand {
 			}
 
 			final int price = item.getPrice() * amount;
-			final int balance = IDatabase.INSTANCE.getBalance(authorID);
+			final int balance = IDatabase.INSTANCE.getStatInt(authorID, Stat.CURRENCY);
 			if (balance - price < 0) {
 				channel.sendMessage(Emote.REDCROSS + " Insufficient amount of fluffies").queue();
 				return;
 			}
 
-			IDatabase.INSTANCE.setBalance(authorID, -price);
+			IDatabase.INSTANCE.setStatInt(authorID, Stat.CURRENCY, -price);
 			IDatabase.INSTANCE.setInventory(authorID, item, amount);
 
 			channel.sendMessage(":moneybag: You successfully bought **" + Language.handle(amount, item.getName()) + "** for **" + price + "** fluffies").queue();
@@ -75,12 +73,12 @@ public class Buy implements ICommand {
 	}
 
 	@Override
-	public PermissionLevel getPermissionLevel() {
-		return PermissionLevel.MEMBER;
+	public PermLevel getPermLevel() {
+		return PermLevel.MEMBER;
 	}
 
 	@Override
-	public EnumSet<Permission> getRequiredPermissions() {
+	public EnumSet<Permission> getCommandPerms() {
 		return EnumSet.of(Permission.MESSAGE_WRITE);
 	}
 

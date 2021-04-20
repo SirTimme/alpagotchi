@@ -1,7 +1,6 @@
 package Bot;
 
 import Bot.Events.EventHandler;
-import Bot.Utils.ResourcesManager;
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
@@ -17,7 +16,6 @@ public class Bot {
 
 	public static void main(String[] args) {
 		EventWaiter waiter = new EventWaiter();
-		ResourcesManager.preloadData();
 
 		try {
 			JDABuilder.create(

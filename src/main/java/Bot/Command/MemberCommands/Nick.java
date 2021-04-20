@@ -4,8 +4,9 @@ import Bot.Command.CommandContext;
 import Bot.Command.ICommand;
 import Bot.Utils.Emote;
 import Bot.Utils.Error;
-import Bot.Utils.PermissionLevel;
+import Bot.Utils.PermLevel;
 import Bot.Database.IDatabase;
+import Bot.Utils.Stat;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.TextChannel;
 
@@ -19,7 +20,7 @@ public class Nick implements ICommand {
 		final TextChannel channel = ctx.getChannel();
 		final List<String> args = ctx.getArgs();
 
-		if (!IDatabase.INSTANCE.isUserInDB(authorID)) {
+		if (IDatabase.INSTANCE.getUser(authorID) == null) {
 			channel.sendMessage(Error.NOT_INITIALIZED.getMessage(ctx.getPrefix(), getName())).queue();
 			return;
 		}
@@ -35,7 +36,7 @@ public class Nick implements ICommand {
 			return;
 		}
 
-		IDatabase.INSTANCE.setNickname(authorID, nickname);
+		IDatabase.INSTANCE.setStatString(authorID, Stat.NICKNAME, nickname);
 
 		channel.sendMessage("\uD83D\uDD8A The nickname of your alpaca has been set to **" + nickname + "**").queue();
 	}
@@ -46,12 +47,12 @@ public class Nick implements ICommand {
 	}
 
 	@Override
-	public PermissionLevel getPermissionLevel() {
-		return PermissionLevel.MEMBER;
+	public PermLevel getPermLevel() {
+		return PermLevel.MEMBER;
 	}
 
 	@Override
-	public EnumSet<Permission> getRequiredPermissions() {
+	public EnumSet<Permission> getCommandPerms() {
 		return EnumSet.of(Permission.MESSAGE_WRITE);
 	}
 

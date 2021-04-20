@@ -2,13 +2,14 @@ package Bot.Command.MemberCommands;
 
 import Bot.Command.CommandContext;
 import Bot.Command.ICommand;
+import Bot.Dresses.Dress;
 import Bot.Utils.Emote;
 import Bot.Utils.Error;
-import Bot.Utils.PermissionLevel;
+import Bot.Utils.PermLevel;
 import Bot.Config;
 import Bot.Database.IDatabase;
-import Bot.Outfits.IOutfit;
-import Bot.Outfits.OutfitManager;
+import Bot.Dresses.DressManager;
+import Bot.Utils.Stat;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.TextChannel;
@@ -19,10 +20,10 @@ import java.util.EnumSet;
 import java.util.List;
 
 public class Outfit implements ICommand {
-	private final OutfitManager outfitManager;
+	private final DressManager dressManager;
 
-	public Outfit(OutfitManager outfitManager) {
-		this.outfitManager = outfitManager;
+	public Outfit(DressManager dressManager) {
+		this.dressManager = dressManager;
 	}
 
 	@Override
@@ -31,7 +32,7 @@ public class Outfit implements ICommand {
 		final TextChannel channel = ctx.getChannel();
 		final List<String> args = ctx.getArgs();
 
-		if (!IDatabase.INSTANCE.isUserInDB(authorID)) {
+		if (IDatabase.INSTANCE.getUser(authorID) == null) {
 			channel.sendMessage(Error.NOT_INITIALIZED.getMessage(ctx.getPrefix(), getName())).queue();
 			return;
 		}
@@ -40,7 +41,7 @@ public class Outfit implements ICommand {
 			final User dev = ctx.getJDA().getUserById(Config.get("DEV_ID"));
 			final EmbedBuilder embed = new EmbedBuilder();
 
-			for (IOutfit outfit : outfitManager.getOutfits()) {
+			for (Dress outfit : dressManager.getOutfits()) {
 				embed.addField("\uD83D\uDC54 " + outfit.getName(), outfit.getDescription(), false);
 			}
 
@@ -52,14 +53,14 @@ public class Outfit implements ICommand {
 			return;
 		}
 
-		IOutfit outfit = outfitManager.getOutfit(args.get(0).toLowerCase());
+		Dress outfit = dressManager.getOutfit(args.get(0).toLowerCase());
 		if (outfit == null) {
 			channel.sendMessage(Emote.REDCROSS + " Couldn't resolve the outfit").queue();
 			return;
 		}
 
 		final String outfitName = outfit.getName();
-		IDatabase.INSTANCE.setOutfit(authorID, outfitName);
+		IDatabase.INSTANCE.setStatString(authorID, Stat.OUTFIT , outfitName);
 
 		channel.sendMessage("\uD83D\uDC54 The outfit of your alpaca has been set to **" + outfitName + "**").queue();
 	}
@@ -70,12 +71,12 @@ public class Outfit implements ICommand {
 	}
 
 	@Override
-	public PermissionLevel getPermissionLevel() {
-		return PermissionLevel.MEMBER;
+	public PermLevel getPermLevel() {
+		return PermLevel.MEMBER;
 	}
 
 	@Override
-	public EnumSet<Permission> getRequiredPermissions() {
+	public EnumSet<Permission> getCommandPerms() {
 		return EnumSet.of(Permission.MESSAGE_WRITE, Permission.MESSAGE_EMBED_LINKS);
 	}
 

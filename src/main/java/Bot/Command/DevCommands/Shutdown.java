@@ -1,29 +1,31 @@
-package Bot.Command.MemberCommands;
+package Bot.Command.DevCommands;
 
 import Bot.Command.CommandContext;
 import Bot.Command.ICommand;
-import Bot.Database.IDatabase;
+import Bot.Utils.Emote;
 import Bot.Utils.PermLevel;
+import me.duncte123.botcommons.BotCommons;
 import net.dv8tion.jda.api.Permission;
 
 import java.util.EnumSet;
 
-public class Count implements ICommand {
+public class Shutdown implements ICommand {
 	@Override
 	public void execute(CommandContext ctx) {
-		final long totalSize = IDatabase.INSTANCE.getEntries();
+		ctx.getChannel().sendMessage(Emote.GREENTICK + " **Alpagotchi** is shutting down...").queue();
 
-		ctx.getChannel().sendMessage("\uD83D\uDC65 There are **" + totalSize + "** alpacas in the farm by now").queue();
+		ctx.getJDA().shutdown();
+		BotCommons.shutdown(ctx.getJDA());
 	}
 
 	@Override
 	public String getName() {
-		return "count";
+		return "shutdown";
 	}
 
 	@Override
 	public PermLevel getPermLevel() {
-		return PermLevel.MEMBER;
+		return PermLevel.DEVELOPER;
 	}
 
 	@Override
@@ -33,11 +35,11 @@ public class Count implements ICommand {
 
 	@Override
 	public String getSyntax() {
-		return "count";
+		return "shutdown";
 	}
 
 	@Override
 	public String getDescription() {
-		return "Counts all alpacas across all guilds";
+		return "Shutdowns the bot";
 	}
 }

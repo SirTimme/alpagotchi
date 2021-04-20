@@ -3,8 +3,7 @@ package Bot.Command.DeveloperCommands;
 import Bot.Command.CommandContext;
 import Bot.Command.ICommand;
 import Bot.Utils.Emote;
-import Bot.Utils.Error;
-import Bot.Utils.PermissionLevel;
+import Bot.Utils.PermLevel;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.TextChannel;
 
@@ -14,11 +13,6 @@ public class Shutdown implements ICommand {
 	@Override
 	public void execute(CommandContext ctx) {
 		final TextChannel channel = ctx.getChannel();
-
-		if (!PermissionLevel.DEVELOPER.hasPermission(ctx.getMember())) {
-			channel.sendMessage(Error.DEV_ONLY.getMessage(ctx.getPrefix(), getName())).queue();
-			return;
-		}
 
 		channel.sendMessage(Emote.GREENTICK + " **Alpagotchi** is shutting down...").complete();
 
@@ -32,12 +26,12 @@ public class Shutdown implements ICommand {
 	}
 
 	@Override
-	public PermissionLevel getPermissionLevel() {
-		return PermissionLevel.DEVELOPER;
+	public PermLevel getPermLevel() {
+		return PermLevel.DEVELOPER;
 	}
 
 	@Override
-	public EnumSet<Permission> getRequiredPermissions() {
+	public EnumSet<Permission> getCommandPerms() {
 		return EnumSet.of(Permission.MESSAGE_WRITE);
 	}
 

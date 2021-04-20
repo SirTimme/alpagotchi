@@ -1,12 +1,13 @@
 package Bot.Command;
 
 import Bot.Command.AdminCommands.SetBalance;
-import Bot.Command.DeveloperCommands.Decrease;
 import Bot.Command.AdminCommands.SetPrefix;
-import Bot.Command.DeveloperCommands.Shutdown;
+import Bot.Command.DevCommands.Decrease;
+import Bot.Command.DevCommands.Shutdown;
 import Bot.Command.MemberCommands.*;
-import Bot.Outfits.OutfitManager;
-import Bot.Shop.ShopItemManager;
+import Bot.Dresses.DressManager;
+import Bot.Shop.ItemManager;
+import Bot.Utils.Emote;
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
@@ -25,33 +26,33 @@ public class CommandManager {
 	private final List<ICommand> commands = new ArrayList<>();
 
 	public CommandManager(EventWaiter waiter) {
-		ShopItemManager shopItemManager = new ShopItemManager();
-		OutfitManager outfitManager = new OutfitManager();
+		ItemManager itemManager = new ItemManager();
+		DressManager dressManager = new DressManager();
 
-		addCommand(new MyAlpaca());
-		addCommand(new Help(this));
-		addCommand(new SetPrefix());
-		addCommand(new Balance());
-		addCommand(new Work());
-		addCommand(new Shop(shopItemManager));
-		addCommand(new Buy(shopItemManager));
-		addCommand(new Inventory(shopItemManager));
-		addCommand(new Feed(shopItemManager));
-		addCommand(new Decrease());
-		addCommand(new Nick());
-		addCommand(new Pet());
-		addCommand(new Gift(shopItemManager));
-		addCommand(new Shutdown());
-		addCommand(new Sleep());
-		addCommand(new SetBalance());
-		addCommand(new Init(waiter));
-		addCommand(new Outfit(outfitManager));
-		addCommand(new Delete(waiter));
-		addCommand(new Ping());
-		addCommand(new Count());
+		add(new MyAlpaca());
+		add(new Help(this));
+		add(new SetPrefix());
+		add(new Balance());
+		add(new Work());
+		add(new Shop(itemManager));
+		add(new Buy(itemManager));
+		add(new Inventory(itemManager));
+		add(new Feed(itemManager));
+		add(new Decrease());
+		add(new Nick());
+		add(new Pet());
+		add(new Gift(itemManager));
+		add(new Shutdown());
+		add(new Sleep());
+		add(new SetBalance());
+		add(new Init(waiter));
+		add(new Outfit(dressManager));
+		add(new Delete(waiter));
+		add(new Ping());
+		add(new Count());
 	}
 
-	private void addCommand(ICommand command) {
+	private void add(ICommand command) {
 		this.commands.add(command);
 	}
 
@@ -77,7 +78,17 @@ public class CommandManager {
 
 		final ICommand cmd = getCommand(cmdArgs[0].toLowerCase());
 
-		if (cmd == null || !checkPermissions(cmd, event)) {
+		if (cmd == null || !permsValid(cmd, event)) {
+			return;
+		}
+
+		if (!cmd.getPermLevel().hasPermission(event.getMember())) {
+			final TextChannel channel = event.getChannel();
+
+			switch (cmd.getPermLevel()) {
+				case DEVELOPER -> channel.sendMessage(Emote.REDCROSS + " This is an **admin-only** command, you're missing the **Manage Server** permission").queue();
+				case ADMIN -> channel.sendMessage(Emote.REDCROSS + " This is a **dev-only** command").queue();
+			}
 			return;
 		}
 
@@ -87,11 +98,11 @@ public class CommandManager {
 		cmd.execute(new CommandContext(event, args, authorID, prefix));
 	}
 
-	private boolean checkPermissions(ICommand command, GuildMessageReceivedEvent event) {
+	private boolean permsValid(ICommand command, GuildMessageReceivedEvent event) {
 		Member botClient = event.getGuild().getSelfMember();
 		TextChannel channel = event.getChannel();
 
-		EnumSet<Permission> requiredPermissions = command.getRequiredPermissions();
+		EnumSet<Permission> requiredPermissions = command.getCommandPerms();
 		EnumSet<Permission> actualPermissions = botClient.getPermissions(channel);
 
 		requiredPermissions.removeAll(actualPermissions);

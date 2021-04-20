@@ -2,12 +2,11 @@ package Bot.Command.MemberCommands;
 
 import Bot.Command.CommandContext;
 import Bot.Command.ICommand;
-import Bot.Utils.Emote;
 import Bot.Utils.Error;
-import Bot.Utils.PermissionLevel;
+import Bot.Utils.PermLevel;
 import Bot.Config;
 import Bot.Database.IDatabase;
-import Bot.Shop.ShopItemManager;
+import Bot.Shop.ItemManager;
 import Bot.Utils.Stat;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
@@ -19,9 +18,9 @@ import java.util.EnumSet;
 import java.util.List;
 
 public class Inventory implements ICommand {
-	private final ShopItemManager itemManager;
+	private final ItemManager itemManager;
 
-	public Inventory(ShopItemManager itemManager) {
+	public Inventory(ItemManager itemManager) {
 		this.itemManager = itemManager;
 	}
 
@@ -30,7 +29,7 @@ public class Inventory implements ICommand {
 		final TextChannel channel = ctx.getChannel();
 		final long authorID = ctx.getAuthorID();
 
-		if (!IDatabase.INSTANCE.isUserInDB(authorID)) {
+		if (IDatabase.INSTANCE.getUser(authorID) == null) {
 			channel.sendMessage(Error.NOT_INITIALIZED.getMessage(ctx.getPrefix(), getName())).queue();
 			return;
 		}
@@ -52,8 +51,8 @@ public class Inventory implements ICommand {
 	}
 
 	@Override
-	public PermissionLevel getPermissionLevel() {
-		return PermissionLevel.MEMBER;
+	public PermLevel getPermLevel() {
+		return PermLevel.MEMBER;
 	}
 
 	@Override
@@ -62,7 +61,7 @@ public class Inventory implements ICommand {
 	}
 
 	@Override
-	public EnumSet<Permission> getRequiredPermissions() {
+	public EnumSet<Permission> getCommandPerms() {
 		return EnumSet.of(Permission.MESSAGE_WRITE, Permission.MESSAGE_EMBED_LINKS);
 	}
 
@@ -80,7 +79,7 @@ public class Inventory implements ICommand {
 		StringBuilder builder = new StringBuilder();
 		String emoji = stat.equals(Stat.HUNGER) ? ":meat_on_bone:" : ":beer:";
 
-		itemManager.getShopItems()
+		itemManager.getSortedItemStream()
 				   .stream()
 				   .filter((item) -> item.getStat().equals(stat))
 				   .forEach((item) -> {

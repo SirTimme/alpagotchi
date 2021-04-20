@@ -2,10 +2,10 @@ package Bot.Command.MemberCommands;
 
 import Bot.Command.CommandContext;
 import Bot.Command.ICommand;
+import Bot.Shop.Item;
 import Bot.Utils.*;
 import Bot.Database.IDatabase;
-import Bot.Shop.IShopItem;
-import Bot.Shop.ShopItemManager;
+import Bot.Shop.ItemManager;
 import Bot.Utils.Error;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.TextChannel;
@@ -14,10 +14,10 @@ import java.util.EnumSet;
 import java.util.List;
 
 public class Feed implements ICommand {
-	private final ShopItemManager shopItemManager;
+	private final ItemManager itemManager;
 
-	public Feed(ShopItemManager shopItemManager) {
-		this.shopItemManager = shopItemManager;
+	public Feed(ItemManager itemManager) {
+		this.itemManager = itemManager;
 	}
 
 	@Override
@@ -26,12 +26,12 @@ public class Feed implements ICommand {
 		final List<String> args = ctx.getArgs();
 		final long authorID = ctx.getAuthorID();
 
-		if (!IDatabase.INSTANCE.isUserInDB(authorID)) {
+		if (IDatabase.INSTANCE.getUser(authorID) == null) {
 			channel.sendMessage(Error.NOT_INITIALIZED.getMessage(ctx.getPrefix(), getName())).queue();
 			return;
 		}
 
-		if (Cooldown.isActive(Activity.SLEEP, authorID, channel)) {
+		if (Cooldown.isActive(Stat.SLEEP, authorID, channel)) {
 			return;
 		}
 
@@ -40,7 +40,7 @@ public class Feed implements ICommand {
 			return;
 		}
 
-		final IShopItem item = shopItemManager.getShopItem(args.get(0));
+		final Item item = itemManager.getItem(args.get(0));
 		if (item == null) {
 			channel.sendMessage(Emote.REDCROSS + "Couldn't resolve the item").queue();
 			return;
@@ -58,7 +58,7 @@ public class Feed implements ICommand {
 				return;
 			}
 
-			final int oldValue = IDatabase.INSTANCE.getStat(authorID, item.getStat());
+			final int oldValue = IDatabase.INSTANCE.getStatInt(authorID, item.getStat());
 			final int saturation = item.getSaturation() * amount;
 
 			if (oldValue + saturation > 100) {
@@ -67,7 +67,7 @@ public class Feed implements ICommand {
 			}
 
 			IDatabase.INSTANCE.setInventory(authorID, item, -amount);
-			IDatabase.INSTANCE.setStat(authorID, item.getStat(), saturation);
+			IDatabase.INSTANCE.setStatInt(authorID, item.getStat(), saturation);
 
 			if (item.getStat().equals(Stat.HUNGER)) {
 				channel.sendMessage(":meat_on_bone: Your alpaca eats the **" + Language.handle(amount, item.getName()) + "** in one bite **Hunger + " + saturation + "**").queue();
@@ -87,12 +87,12 @@ public class Feed implements ICommand {
 	}
 
 	@Override
-	public PermissionLevel getPermissionLevel() {
-		return PermissionLevel.MEMBER;
+	public PermLevel getPermLevel() {
+		return PermLevel.MEMBER;
 	}
 
 	@Override
-	public EnumSet<Permission> getRequiredPermissions() {
+	public EnumSet<Permission> getCommandPerms() {
 		return EnumSet.of(Permission.MESSAGE_WRITE);
 	}
 

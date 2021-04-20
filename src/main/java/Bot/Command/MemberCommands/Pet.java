@@ -4,7 +4,7 @@ import Bot.Command.CommandContext;
 import Bot.Command.ICommand;
 import Bot.Utils.Emote;
 import Bot.Utils.Error;
-import Bot.Utils.PermissionLevel;
+import Bot.Utils.PermLevel;
 import Bot.Database.IDatabase;
 import Bot.Utils.Stat;
 import net.dv8tion.jda.api.Permission;
@@ -23,12 +23,12 @@ public class Pet implements ICommand {
 		final TextChannel channel = ctx.getChannel();
 		final List<String> args = ctx.getArgs();
 
-		if (!IDatabase.INSTANCE.isUserInDB(authorID)) {
+		if (IDatabase.INSTANCE.getUser(authorID) == null) {
 			channel.sendMessage(Error.NOT_INITIALIZED.getMessage(ctx.getPrefix(), getName())).queue();
 			return;
 		}
 
-		final int joy = IDatabase.INSTANCE.getStat(authorID, Stat.JOY);
+		final int joy = IDatabase.INSTANCE.getStatInt(authorID, Stat.JOY);
 		if (joy == 100) {
 			channel.sendMessage(Emote.REDCROSS + " The joy of your alpaca is already at the maximum").queue();
 			return;
@@ -38,7 +38,7 @@ public class Pet implements ICommand {
 			int newJoy = (int) (Math.random() * 8 + 1);
 			newJoy = newJoy + joy > 100 ? 100 - joy : newJoy;
 
-			IDatabase.INSTANCE.setStat(authorID, Stat.JOY, newJoy);
+			IDatabase.INSTANCE.setStatInt(authorID, Stat.JOY, newJoy);
 
 			channel.sendMessage("\uD83E\uDD99 Your alpaca loves to spend time with you **Joy + " + newJoy + "**").queue();
 		}
@@ -57,7 +57,7 @@ public class Pet implements ICommand {
 			int newJoy = (int) (Math.random() * 13 + 5);
 			newJoy = newJoy + joy > 100 ? 100 - joy : newJoy;
 
-			IDatabase.INSTANCE.setStat(authorID, Stat.JOY, newJoy);
+			IDatabase.INSTANCE.setStatInt(authorID, Stat.JOY, newJoy);
 
 			channel.sendMessage("\uD83E\uDD99 You found the favourite spot of your alpaca **Joy + " + newJoy + "**").queue();
 		}
@@ -65,7 +65,7 @@ public class Pet implements ICommand {
 			int newJoy = (int) (Math.random() * 9 + 3);
 			newJoy = newJoy + joy > 100 ? 100 - joy : newJoy;
 
-			IDatabase.INSTANCE.setStat(authorID, Stat.JOY, newJoy);
+			IDatabase.INSTANCE.setStatInt(authorID, Stat.JOY, newJoy);
 
 			channel.sendMessage("\uD83E\uDD99 Your alpaca enjoyed the petting, but it wasn't his favourite spot **Joy + " + newJoy + "**").queue();
 		}
@@ -77,12 +77,12 @@ public class Pet implements ICommand {
 	}
 
 	@Override
-	public PermissionLevel getPermissionLevel() {
-		return PermissionLevel.MEMBER;
+	public PermLevel getPermLevel() {
+		return PermLevel.MEMBER;
 	}
 
 	@Override
-	public EnumSet<Permission> getRequiredPermissions() {
+	public EnumSet<Permission> getCommandPerms() {
 		return EnumSet.of(Permission.MESSAGE_WRITE);
 	}
 
