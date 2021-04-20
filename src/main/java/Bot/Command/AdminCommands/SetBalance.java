@@ -5,8 +5,9 @@ import Bot.Command.ICommand;
 import Bot.Config;
 import Bot.Utils.Emote;
 import Bot.Utils.Error;
-import Bot.Utils.PermissionLevel;
+import Bot.Utils.PermLevel;
 import Bot.Database.IDatabase;
+import Bot.Utils.Stat;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
@@ -20,11 +21,6 @@ public class SetBalance implements ICommand {
 		final TextChannel channel = ctx.getChannel();
 		final List<String> args = ctx.getArgs();
 		final String prefix = ctx.getPrefix();
-
-		if (!PermissionLevel.ADMIN.hasPermission(ctx.getMember())) {
-			channel.sendMessage(Emote.REDCROSS + " This is an **admin-only** command, you're missing the **Manage Server** permission").queue();
-			return;
-		}
 
 		if (args.isEmpty() || args.size() < 2) {
 			channel.sendMessage(Error.MISSING_ARGS.getMessage(prefix, getName())).queue();
@@ -40,16 +36,16 @@ public class SetBalance implements ICommand {
 		final User user = mentionedUser.get(0);
 		final long userID = user.getIdLong();
 
-		if (!IDatabase.INSTANCE.isUserInDB(userID)) {
+		if (IDatabase.INSTANCE.getUser(userID) == null) {
 			channel.sendMessage(Emote.REDCROSS + " The mentioned user doesn't own an alpaca, he's to use **" + prefix + "init** first").queue();
 			return;
 		}
 
 		try {
 			final int newBalance = Integer.parseInt(args.get(1));
-			final int currentBalance = IDatabase.INSTANCE.getBalance(userID);
+			final int currentBalance = IDatabase.INSTANCE.getStatInt(userID, Stat.CURRENCY);
 
-			IDatabase.INSTANCE.setBalance(userID, newBalance - currentBalance);
+			IDatabase.INSTANCE.setStatInt(userID, Stat.CURRENCY, newBalance - currentBalance);
 
 			channel.sendMessage("\uD83D\uDCB3 The balance of **" + user.getName() + "** has been set to **" + newBalance + "**").queue();
 		}
@@ -64,12 +60,12 @@ public class SetBalance implements ICommand {
 	}
 
 	@Override
-	public PermissionLevel getPermissionLevel() {
-		return PermissionLevel.ADMIN;
+	public PermLevel getPermLevel() {
+		return PermLevel.ADMIN;
 	}
 
 	@Override
-	public EnumSet<Permission> getRequiredPermissions() {
+	public EnumSet<Permission> getCommandPerms() {
 		return EnumSet.of(Permission.MESSAGE_WRITE);
 	}
 

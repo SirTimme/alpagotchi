@@ -4,7 +4,7 @@ import Bot.Command.CommandContext;
 import Bot.Command.ICommand;
 import Bot.Utils.Emote;
 import Bot.Utils.Error;
-import Bot.Utils.PermissionLevel;
+import Bot.Utils.PermLevel;
 import Bot.Database.IDatabase;
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import net.dv8tion.jda.api.Permission;
@@ -28,7 +28,7 @@ public class Delete implements ICommand {
 		final TextChannel channel = ctx.getChannel();
 		final long authorID = ctx.getAuthorID();
 
-		if (!IDatabase.INSTANCE.isUserInDB(authorID)) {
+		if (IDatabase.INSTANCE.getUser(authorID) == null) {
 			channel.sendMessage(Error.NOT_INITIALIZED.getMessage(ctx.getPrefix(), getName())).queue();
 			return;
 		}
@@ -48,7 +48,7 @@ public class Delete implements ICommand {
 					msg.delete().queue();
 
 					if (emoteID.equals(emoteIDs[0])) {
-						IDatabase.INSTANCE.deleteUserEntry(authorID);
+						IDatabase.INSTANCE.deleteUser(authorID);
 						channel.sendMessage(Emote.GREENTICK + " Data successfully deleted").queue();
 					}
 					else {
@@ -70,12 +70,12 @@ public class Delete implements ICommand {
 	}
 
 	@Override
-	public PermissionLevel getPermissionLevel() {
-		return PermissionLevel.MEMBER;
+	public PermLevel getPermLevel() {
+		return PermLevel.MEMBER;
 	}
 
 	@Override
-	public EnumSet<Permission> getRequiredPermissions() {
+	public EnumSet<Permission> getCommandPerms() {
 		return EnumSet.of(
 			Permission.MESSAGE_WRITE,
 			Permission.MESSAGE_ADD_REACTION

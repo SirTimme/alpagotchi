@@ -3,12 +3,12 @@ package Bot.Command.MemberCommands;
 import Bot.Command.CommandContext;
 import Bot.Command.ICommand;
 import Bot.Config;
+import Bot.Shop.Item;
 import Bot.Utils.Emote;
 import Bot.Utils.Error;
-import Bot.Utils.PermissionLevel;
+import Bot.Utils.PermLevel;
 import Bot.Database.IDatabase;
-import Bot.Shop.IShopItem;
-import Bot.Shop.ShopItemManager;
+import Bot.Shop.ItemManager;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
@@ -17,10 +17,10 @@ import java.util.EnumSet;
 import java.util.List;
 
 public class Gift implements ICommand {
-	private final ShopItemManager shopItemManager;
+	private final ItemManager itemManager;
 
-	public Gift(ShopItemManager shopItemManager) {
-		this.shopItemManager = shopItemManager;
+	public Gift(ItemManager itemManager) {
+		this.itemManager = itemManager;
 	}
 
 	@Override
@@ -30,8 +30,8 @@ public class Gift implements ICommand {
 		final long authorID = ctx.getAuthorID();
 		final String prefix = ctx.getPrefix();
 
-		if (!IDatabase.INSTANCE.isUserInDB(authorID)) {
-			channel.sendMessage(Error.NOT_INITIALIZED.getMessage(prefix, getName())).queue();
+		if (IDatabase.INSTANCE.getUser(authorID) == null) {
+			channel.sendMessage(Error.NOT_INITIALIZED.getMessage(ctx.getPrefix(), getName())).queue();
 			return;
 		}
 
@@ -53,12 +53,12 @@ public class Gift implements ICommand {
 			return;
 		}
 
-		if (!IDatabase.INSTANCE.isUserInDB(userID)) {
+		if (IDatabase.INSTANCE.getUser(userID) == null) {
 			channel.sendMessage(Emote.REDCROSS + " The mentioned user doesn't own an alpaca, he's to use **" + prefix + "init** first").queue();
 			return;
 		}
 
-		IShopItem item = shopItemManager.getShopItem(ctx.getArgs().get(1));
+		Item item = itemManager.getItem(ctx.getArgs().get(1));
 		if (item == null) {
 			channel.sendMessage(Emote.REDCROSS + " This item doesn't exists").queue();
 			return;
@@ -92,12 +92,12 @@ public class Gift implements ICommand {
 	}
 
 	@Override
-	public PermissionLevel getPermissionLevel() {
-		return PermissionLevel.MEMBER;
+	public PermLevel getPermLevel() {
+		return PermLevel.MEMBER;
 	}
 
 	@Override
-	public EnumSet<Permission> getRequiredPermissions() {
+	public EnumSet<Permission> getCommandPerms() {
 		return EnumSet.of(Permission.MESSAGE_WRITE);
 	}
 

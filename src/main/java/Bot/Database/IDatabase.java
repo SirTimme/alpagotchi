@@ -1,51 +1,36 @@
 package Bot.Database;
 
-import Bot.Shop.IShopItem;
-import Bot.Utils.Activity;
+import Bot.Shop.Item;
 import Bot.Utils.Stat;
+import org.bson.Document;
 
 public interface IDatabase {
 	IDatabase INSTANCE = new MongoDB();
 
 	String getPrefix(long guildID);
-
 	void setPrefix(long guildID, String newPrefix);
 
-	String getNickname(long memberID);
+	int getStatInt(long memberID, Stat stat);
+	void setStatInt(long memberID, Stat stat, int newValue);
 
-	void setNickname(long memberID, String newNickname);
+	String getStatString(long memberID, Stat stat);
+	void setStatString(long memberID, Stat stat, String newValue);
 
-	String getOutfit(long memberID);
+	long getStatLong(long memberID, Stat stat);
+	void setStatLong(long memberID, Stat stat, long newValue);
 
-	void setOutfit(long memberID, String newOutfit);
+	int getInventory(long memberID, Item item);
+	void setInventory(long memberID, Item item, int newAmount);
 
-	int getStat(long memberID, Stat stat);
+	void createUser(long memberID);
+	void deleteUser(long memberID);
 
-	void setStat(long memberID, Stat stat, int newValue);
-
-	int getBalance(long memberID);
-
-	void setBalance(long memberID, int newBalance);
-
-	int getInventory(long memberID, IShopItem item);
-
-	void setInventory(long memberID, IShopItem item, int newAmount);
-
-	long getCooldown(long memberID, Activity activity);
-
-	void setCooldown(long memberID, Activity activity, long newValue);
-
-	void createUserEntry(long memberID);
-
-	void deleteUserEntry(long memberID);
-
-	void createGuildEntry(long guildID);
-
-	void deleteGuildEntry(long guildID);
-
-	boolean isUserInDB(long memberID);
+	void createGuild(long guildID);
+	void deleteGuild(long guildID);
 
 	void decreaseValues();
+	long getEntries();
 
-	long getAll();
+	Document getUser(long memberID);
+	Document getGuild(long guildID);
 }

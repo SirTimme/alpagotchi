@@ -3,7 +3,7 @@ package Bot.Command.MemberCommands;
 import Bot.Command.CommandContext;
 import Bot.Command.ICommand;
 import Bot.Utils.Emote;
-import Bot.Utils.PermissionLevel;
+import Bot.Utils.PermLevel;
 import Bot.Config;
 import Bot.Database.IDatabase;
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
@@ -34,7 +34,7 @@ public class Init implements ICommand {
 		final long authorID = ctx.getAuthorID();
 		final String prefix = ctx.getPrefix();
 
-		if (IDatabase.INSTANCE.isUserInDB(authorID)) {
+		if (IDatabase.INSTANCE.getUser(authorID) != null) {
 			channel.sendMessage(Emote.REDCROSS + " You already own an alpaca").queue();
 			return;
 		}
@@ -73,7 +73,7 @@ public class Init implements ICommand {
 					msg.delete().queue();
 
 					if (emoteID.equals(emoteIDs[0])) {
-						IDatabase.INSTANCE.createUserEntry(authorID);
+						IDatabase.INSTANCE.createUser(authorID);
 						channel.sendMessage(Emote.GREENTICK + " Your alpaca has been set up, use **" + prefix + "myalpaca** to see it").queue();
 					}
 					else {
@@ -95,8 +95,8 @@ public class Init implements ICommand {
 	}
 
 	@Override
-	public PermissionLevel getPermissionLevel() {
-		return PermissionLevel.MEMBER;
+	public PermLevel getPermLevel() {
+		return PermLevel.MEMBER;
 	}
 
 	@Override
@@ -105,7 +105,7 @@ public class Init implements ICommand {
 	}
 
 	@Override
-	public EnumSet<Permission> getRequiredPermissions() {
+	public EnumSet<Permission> getCommandPerms() {
 		return EnumSet.of(
 			Permission.MESSAGE_ADD_REACTION,
 			Permission.MESSAGE_WRITE

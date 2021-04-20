@@ -1,6 +1,6 @@
 package Bot.Command;
 
-import Bot.Utils.PermissionLevel;
+import Bot.Utils.PermLevel;
 import net.dv8tion.jda.api.Permission;
 
 import java.util.EnumSet;
@@ -11,13 +11,13 @@ public interface ICommand {
 
     String getName();
 
-    PermissionLevel getPermissionLevel();
+    PermLevel getPermLevel();
 
     default List<String> getAliases() {
         return List.of();
     }
 
-    EnumSet<Permission> getRequiredPermissions();
+    EnumSet<Permission> getCommandPerms();
 
     String getSyntax();
 

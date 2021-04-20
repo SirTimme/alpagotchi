@@ -4,7 +4,7 @@ import Bot.Command.CommandContext;
 import Bot.Command.ICommand;
 import Bot.Utils.Emote;
 import Bot.Utils.Error;
-import Bot.Utils.PermissionLevel;
+import Bot.Utils.PermLevel;
 import Bot.Database.IDatabase;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Guild;
@@ -20,11 +20,6 @@ public class SetPrefix implements ICommand {
 		final List<String> args = ctx.getArgs();
 		final Guild guild = ctx.getGuild();
 		final String prefix = ctx.getPrefix();
-
-		if (!PermissionLevel.ADMIN.hasPermission(ctx.getMember())) {
-			channel.sendMessage(Error.ADMIN_ONLY.getMessage(prefix, getName())).queue();
-			return;
-		}
 
 		if (args.isEmpty()) {
 			channel.sendMessage(Error.MISSING_ARGS.getMessage(prefix, getName())).queue();
@@ -48,12 +43,12 @@ public class SetPrefix implements ICommand {
 	}
 
 	@Override
-	public PermissionLevel getPermissionLevel() {
-		return PermissionLevel.ADMIN;
+	public PermLevel getPermLevel() {
+		return PermLevel.ADMIN;
 	}
 
 	@Override
-	public EnumSet<Permission> getRequiredPermissions() {
+	public EnumSet<Permission> getCommandPerms() {
 		return EnumSet.of(Permission.MESSAGE_WRITE);
 	}
 

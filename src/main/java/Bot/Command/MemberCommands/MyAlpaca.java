@@ -17,22 +17,42 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.time.Instant;
 import java.util.EnumSet;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+@SuppressWarnings("ConstantConditions")
 public class MyAlpaca implements ICommand {
+	private static final Map<String, BufferedImage> images = new HashMap<>();
 	private static final Logger LOGGER = LoggerFactory.getLogger(MyAlpaca.class);
 	private final Color[] colors = {Color.BLACK, Color.RED, Color.ORANGE, Color.YELLOW, Color.GREEN};
+
+	public MyAlpaca() {
+		final File folder = new File("src/main/resources/outfits");
+		try {
+			for (File file : folder.listFiles()) {
+				final BufferedImage image = ImageIO.read(file);
+				final String key = file.getName().split("\\.")[0];
+
+				images.put(key, image);
+			}
+		}
+		catch (IOException error) {
+			LOGGER.error(error.getMessage());
+		}
+	}
 
 	@Override
 	public void execute(CommandContext ctx) {
 		final long authorID = ctx.getAuthorID();
 		final TextChannel channel = ctx.getChannel();
 
-		if (!IDatabase.INSTANCE.isUserInDB(authorID)) {
+		if (IDatabase.INSTANCE.getUser(authorID) == null) {
 			channel.sendMessage(Error.NOT_INITIALIZED.getMessage(ctx.getPrefix(), getName())).queue();
 			return;
 		}
@@ -41,13 +61,13 @@ public class MyAlpaca implements ICommand {
 			final ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
 			ImageIO.write(createImage(authorID), "jpg", byteStream);
 
-			final long sleepCooldown = IDatabase.INSTANCE.getCooldown(authorID, Activity.SLEEP) - System.currentTimeMillis();
-			final long workCooldown = IDatabase.INSTANCE.getCooldown(authorID, Activity.WORK) - System.currentTimeMillis();
+			final long sleepCooldown = IDatabase.INSTANCE.getStatLong(authorID, Stat.SLEEP) - System.currentTimeMillis();
+			final long workCooldown = IDatabase.INSTANCE.getStatLong(authorID, Stat.WORK) - System.currentTimeMillis();
 
 			final User dev = ctx.getJDA().getUserById(Config.get("DEV_ID"));
 			final EmbedBuilder embed = new EmbedBuilder();
 
-			embed.setTitle(IDatabase.INSTANCE.getNickname(authorID))
+			embed.setTitle(IDatabase.INSTANCE.getStatString(authorID, Stat.NICKNAME))
 				 .setDescription("_Have a llamazing day!_")
 				 .addField("Work", checkCooldown(workCooldown), true)
 				 .addField("Sleep", checkCooldown(sleepCooldown), true)
@@ -69,8 +89,8 @@ public class MyAlpaca implements ICommand {
 	}
 
 	@Override
-	public PermissionLevel getPermissionLevel() {
-		return PermissionLevel.MEMBER;
+	public PermLevel getPermLevel() {
+		return PermLevel.MEMBER;
 	}
 
 	@Override
@@ -79,7 +99,7 @@ public class MyAlpaca implements ICommand {
 	}
 
 	@Override
-	public EnumSet<Permission> getRequiredPermissions() {
+	public EnumSet<Permission> getCommandPerms() {
 		return EnumSet.of(Permission.MESSAGE_WRITE, Permission.MESSAGE_EMBED_LINKS, Permission.MESSAGE_ATTACH_FILES);
 	}
 
@@ -115,13 +135,13 @@ public class MyAlpaca implements ICommand {
 	}
 
 	private BufferedImage createImage(long authorID) {
-		final int hunger = IDatabase.INSTANCE.getStat(authorID, Stat.HUNGER);
-		final int thirst = IDatabase.INSTANCE.getStat(authorID, Stat.THIRST);
-		final int energy = IDatabase.INSTANCE.getStat(authorID, Stat.ENERGY);
-		final int joy = IDatabase.INSTANCE.getStat(authorID, Stat.JOY);
-		final String outfit = IDatabase.INSTANCE.getOutfit(authorID);
+		final int hunger = IDatabase.INSTANCE.getStatInt(authorID, Stat.HUNGER);
+		final int thirst = IDatabase.INSTANCE.getStatInt(authorID, Stat.THIRST);
+		final int energy = IDatabase.INSTANCE.getStatInt(authorID, Stat.ENERGY);
+		final int joy = IDatabase.INSTANCE.getStatInt(authorID, Stat.JOY);
+		final String outfit = IDatabase.INSTANCE.getStatString(authorID, Stat.OUTFIT);
 
-		final BufferedImage background = ResourcesManager.getAlpacaImage(outfit);
+		final BufferedImage background = getAlpacaImage(outfit);
 		final BufferedImage img = new BufferedImage(background.getWidth(), background.getHeight(), BufferedImage.TYPE_INT_RGB);
 
 		final Graphics graphics = img.createGraphics();
@@ -148,5 +168,9 @@ public class MyAlpaca implements ICommand {
 		graphics.fillRect(420, 73, (int) (joy * 1.75), 12);
 
 		return img;
+	}
+
+	private BufferedImage getAlpacaImage(String image) {
+		return images.get(image);
 	}
 }

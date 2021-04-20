@@ -18,7 +18,7 @@ public class Sleep implements ICommand {
 		final long authorID = ctx.getAuthorID();
 		final List<String> args = ctx.getArgs();
 
-		if (!IDatabase.INSTANCE.isUserInDB(authorID)) {
+		if (IDatabase.INSTANCE.getUser(authorID) == null) {
 			channel.sendMessage(Error.NOT_INITIALIZED.getMessage(ctx.getPrefix(), getName())).queue();
 			return;
 		}
@@ -28,11 +28,11 @@ public class Sleep implements ICommand {
 			return;
 		}
 
-		if (Cooldown.isActive(Activity.SLEEP, authorID, channel)) {
+		if (Cooldown.isActive(Stat.SLEEP, authorID, channel)) {
 			return;
 		}
 
-		int energy = IDatabase.INSTANCE.getStat(authorID, Stat.ENERGY);
+		int energy = IDatabase.INSTANCE.getStatInt(authorID, Stat.ENERGY);
 		if (energy == 100) {
 			channel.sendMessage(Emote.REDCROSS + " The energy of your alpaca is already at the maximum").queue();
 			return;
@@ -48,8 +48,8 @@ public class Sleep implements ICommand {
 			energy = energy + duration > 100 ? 100 - energy : duration;
 			final long cooldown = System.currentTimeMillis() + 1000L * 60 * energy;
 
-			IDatabase.INSTANCE.setStat(authorID, Stat.ENERGY, energy);
-			IDatabase.INSTANCE.setCooldown(authorID, Activity.SLEEP, cooldown);
+			IDatabase.INSTANCE.setStatInt(authorID, Stat.ENERGY, energy);
+			IDatabase.INSTANCE.setStatLong(authorID, Stat.SLEEP, cooldown);
 
 			channel.sendMessage("\uD83D\uDCA4 Your alpaca goes to bed for **" + energy + "** minutes and rests well **Energy + " + energy + "**").queue();
 		}
@@ -64,12 +64,12 @@ public class Sleep implements ICommand {
 	}
 
 	@Override
-	public PermissionLevel getPermissionLevel() {
-		return PermissionLevel.MEMBER;
+	public PermLevel getPermLevel() {
+		return PermLevel.MEMBER;
 	}
 
 	@Override
-	public EnumSet<Permission> getRequiredPermissions() {
+	public EnumSet<Permission> getCommandPerms() {
 		return EnumSet.of(Permission.MESSAGE_WRITE);
 	}
 

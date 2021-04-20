@@ -2,10 +2,9 @@ package Bot.Command.MemberCommands;
 
 import Bot.Command.CommandContext;
 import Bot.Command.ICommand;
-import Bot.Utils.PermissionLevel;
+import Bot.Utils.PermLevel;
 import Bot.Config;
-import Bot.Shop.IShopItem;
-import Bot.Shop.ShopItemManager;
+import Bot.Shop.ItemManager;
 import Bot.Utils.Stat;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
@@ -13,13 +12,12 @@ import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
 
 import java.time.Instant;
-import java.util.Comparator;
 import java.util.EnumSet;
 
 public class Shop implements ICommand {
-	private final ShopItemManager itemManager;
+	private final ItemManager itemManager;
 
-	public Shop(ShopItemManager itemManager) {
+	public Shop(ItemManager itemManager) {
 		this.itemManager = itemManager;
 	}
 
@@ -28,15 +26,20 @@ public class Shop implements ICommand {
 		final TextChannel channel = ctx.getChannel();
 		final User dev = ctx.getJDA().getUserById(Config.get("DEV_ID"));
 		final EmbedBuilder embed = new EmbedBuilder();
+
 		embed.setTitle("Shop")
-			 .addField("Item", getItemsByCategory(Stat.HUNGER, "name"), true)
-			 .addField("Price", getItemsByCategory(Stat.HUNGER, "price"), true)
-			 .addField("Saturation", getItemsByCategory(Stat.HUNGER, "saturation"), true)
-			 .addField("Item", getItemsByCategory(Stat.THIRST, "name"), true)
-			 .addField("Price", getItemsByCategory(Stat.THIRST, "price"), true)
-			 .addField("Saturation", getItemsByCategory(Stat.THIRST, "saturation"), true)
 			 .setFooter("Created by " + dev.getName(), dev.getEffectiveAvatarUrl())
+			 .addField("__**:meat_on_bone: Hunger items**__", "These items are used to fill up the hunger of your alpaca", false)
 			 .setTimestamp(Instant.now());
+
+		itemManager.getSortedItemStream(Stat.HUNGER)
+				   .forEach(item -> embed.addField(":package: " + item.getName(), "Saturation: " + item.getSaturation() + "\nPrice: " + item.getPrice(), true));
+
+		embed.addBlankField(false)
+			 .addField("__**:beer: Thirst items**__", "Following items replenish the thirst of your alpaca", false);
+
+		itemManager.getSortedItemStream(Stat.THIRST)
+				   .forEach(item -> embed.addField(":package: " + item.getName(), "Saturation: " + item.getSaturation() + "\nPrice: " + item.getPrice(), true));
 
 		channel.sendMessage(embed.build()).queue();
 	}
@@ -47,12 +50,12 @@ public class Shop implements ICommand {
 	}
 
 	@Override
-	public PermissionLevel getPermissionLevel() {
-		return PermissionLevel.MEMBER;
+	public PermLevel getPermLevel() {
+		return PermLevel.MEMBER;
 	}
 
 	@Override
-	public EnumSet<Permission> getRequiredPermissions() {
+	public EnumSet<Permission> getCommandPerms() {
 		return EnumSet.of(Permission.MESSAGE_WRITE, Permission.MESSAGE_EMBED_LINKS);
 	}
 
@@ -63,29 +66,6 @@ public class Shop implements ICommand {
 
 	@Override
 	public String getDescription() {
-		return null;
-	}
-
-	private String getItemsByCategory(Stat stat, String filter) {
-		String emoji = stat == Stat.HUNGER ? ":meat_on_bone: " : ":beer: ";
-
-		StringBuilder builder = new StringBuilder();
-		itemManager.getShopItems()
-				   .stream()
-				   .sorted(Comparator.comparingInt(IShopItem::getPrice))
-				   .filter((item) -> item.getStat().equals(stat))
-				   .forEach((item) -> {
-					   if (filter.equals("name")) {
-						   builder.append(":package: ").append(item.getName()).append("\n");
-					   }
-					   else if (filter.equals("price")) {
-						   builder.append(":coin: ").append(item.getPrice()).append("\n");
-					   }
-					   else {
-						   builder.append(emoji).append(item.getSaturation()).append("\n");
-					   }
-				   });
-
-		return builder.toString();
+		return "Displays all purchasable items";
 	}
 }

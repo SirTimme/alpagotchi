@@ -1,4 +1,4 @@
-package Bot.Command.DeveloperCommands;
+package Bot.Command.DevCommands;
 
 import Bot.Command.CommandContext;
 import Bot.Command.ICommand;
@@ -6,18 +6,21 @@ import Bot.Database.IDatabase;
 import Bot.Utils.Emote;
 import Bot.Utils.Error;
 import Bot.Utils.PermLevel;
+import Bot.Utils.ThreadFactory;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.TextChannel;
 
 import java.util.EnumSet;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class Decrease implements ICommand {
-	private final Timer timer = new Timer();
 	private boolean running = false;
-	private TimerTask task;
+	private Future<?> result;
+	private final ScheduledExecutorService service = Executors.newSingleThreadScheduledExecutor(new ThreadFactory());
 
 	@Override
 	public void execute(CommandContext ctx) {
@@ -36,18 +39,13 @@ public class Decrease implements ICommand {
 		}
 
 		if (args.get(0).equalsIgnoreCase("enable")) {
-			timer.schedule(task = new TimerTask() {
-				@Override
-				public void run() {
-					IDatabase.INSTANCE.decreaseValues();
-				}
-			}, 1000 * 7200, 1000 * 7200);
+			result = service.scheduleAtFixedRate(IDatabase.INSTANCE::decreaseValues, 2, 2, TimeUnit.HOURS);
 			running = true;
 
 			channel.sendMessage(Emote.GREENTICK + " Alpacas begin to lose stats").queue();
 		}
 		else {
-			task.cancel();
+			result.cancel(true);
 			running = false;
 
 			channel.sendMessage(Emote.REDCROSS + " Alpacas stop losing stats").queue();

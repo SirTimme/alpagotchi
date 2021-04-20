@@ -2,10 +2,11 @@ package Bot.Command.MemberCommands;
 
 import Bot.Command.CommandContext;
 import Bot.Command.ICommand;
-import Bot.Utils.Emote;
 import Bot.Utils.Error;
-import Bot.Utils.PermissionLevel;
+import Bot.Utils.Language;
+import Bot.Utils.PermLevel;
 import Bot.Database.IDatabase;
+import Bot.Utils.Stat;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.TextChannel;
 
@@ -18,14 +19,14 @@ public class Balance implements ICommand {
 		final long authorID = ctx.getAuthorID();
 		final TextChannel channel = ctx.getChannel();
 
-		if (!IDatabase.INSTANCE.isUserInDB(authorID)) {
+		if (IDatabase.INSTANCE.getUser(authorID) == null) {
 			channel.sendMessage(Error.NOT_INITIALIZED.getMessage(ctx.getPrefix(), getName())).queue();
 			return;
 		}
 
-		final int balance = IDatabase.INSTANCE.getBalance(authorID);
+		final int balance = IDatabase.INSTANCE.getStatInt(authorID, Stat.CURRENCY);
 
-		channel.sendMessage("\uD83D\uDCB5 Your current balance is **" + balance + (balance == 1 ? "** fluffy" : "** fluffies")).queue();
+		channel.sendMessage("\uD83D\uDCB5 Your current balance is **" + Language.handle(balance, "fluffy") + "**").queue();
 	}
 
 	@Override
@@ -34,17 +35,17 @@ public class Balance implements ICommand {
 	}
 
 	@Override
-	public PermissionLevel getPermissionLevel() {
-		return PermissionLevel.MEMBER;
+	public PermLevel getPermLevel() {
+		return PermLevel.MEMBER;
 	}
 
 	@Override
 	public List<String> getAliases() {
-		return List.of("wallet", "money");
+		return List.of("wallet", "money", "fluffies");
 	}
 
 	@Override
-	public EnumSet<Permission> getRequiredPermissions() {
+	public EnumSet<Permission> getCommandPerms() {
 		return EnumSet.of(Permission.MESSAGE_WRITE);
 	}
 
