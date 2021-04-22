@@ -57,7 +57,8 @@ public class MongoDB implements IDatabase {
 		switch (stat) {
 			case SLEEP:
 			case WORK:
-				return getUser(memberID).get("cooldowns", Document.class).getLong(stat.getName());
+				Object result = getUser(memberID).get("cooldowns", Document.class).get(stat.getName());
+				return result instanceof Integer ? ((Integer) result).longValue() : (Long) result;
 			default:
 				return 0;
 		}
