@@ -57,8 +57,7 @@ public class MongoDB implements IDatabase {
 		switch (stat) {
 			case SLEEP:
 			case WORK:
-				Object result = getUser(memberID).get("cooldowns", Document.class).get(stat.getName());
-				return result instanceof Integer ? ((Integer) result).longValue() : (Long) result;
+				return getUser(memberID).get("cooldowns", Document.class).getLong(stat.getName());
 			default:
 				return 0;
 		}
@@ -127,8 +126,8 @@ public class MongoDB implements IDatabase {
 				)
 			)
 			.append("cooldowns", new Document()
-				.append("work", 0)
-				.append("sleep", 0)
+				.append("work", 0L)
+				.append("sleep", 0L)
 			);
 
 		users.insertOne(user);
