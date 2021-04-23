@@ -49,7 +49,16 @@ public class MongoDB implements IDatabase {
 	@Override
 	public void setStatInt(long memberID, Stat stat, int newValue) {
 		int oldValue = getStatInt(memberID, stat);
-		users.updateOne(getUser(memberID), Updates.set("alpaca." + stat.getName(), oldValue + newValue));
+		switch (stat) {
+			case JOY:
+			case ENERGY:
+			case HUNGER:
+			case THIRST:
+				users.updateOne(getUser(memberID), Updates.set("alpaca." + stat.getName(), oldValue + newValue));
+			case CURRENCY:
+				users.updateOne(getUser(memberID), Updates.set("inventory." + stat.getName(), oldValue + newValue));
+			default:
+		}
 	}
 
 	@Override
