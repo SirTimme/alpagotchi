@@ -55,8 +55,10 @@ public class MongoDB implements IDatabase {
 			case HUNGER:
 			case THIRST:
 				users.updateOne(getUser(memberID), Updates.set("alpaca." + stat.getName(), oldValue + newValue));
+				break;
 			case CURRENCY:
 				users.updateOne(getUser(memberID), Updates.set("inventory." + stat.getName(), oldValue + newValue));
+				break;
 			default:
 		}
 	}

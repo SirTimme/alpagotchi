@@ -38,7 +38,7 @@ public class ItemManager {
 		}
 	}
 
-	public List<Item> getSortedItemStream() {
+	public List<Item> getItems() {
 		return items;
 	}
 

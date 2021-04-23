@@ -79,7 +79,7 @@ public class Inventory implements ICommand {
 		StringBuilder builder = new StringBuilder();
 		String emoji = stat.equals(Stat.HUNGER) ? ":meat_on_bone:" : ":beer:";
 
-		itemManager.getSortedItemStream()
+		itemManager.getItems()
 				   .stream()
 				   .filter((item) -> item.getStat().equals(stat))
 				   .forEach((item) -> {
