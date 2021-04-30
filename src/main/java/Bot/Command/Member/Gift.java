@@ -1,4 +1,4 @@
-package Bot.Command.MemberCommands;
+package Bot.Command.Member;
 
 import Bot.Command.CommandContext;
 import Bot.Command.ICommand;
@@ -6,9 +6,9 @@ import Bot.Config;
 import Bot.Shop.Item;
 import Bot.Utils.Emote;
 import Bot.Utils.Error;
-import Bot.Utils.PermLevel;
 import Bot.Database.IDatabase;
 import Bot.Shop.ItemManager;
+import Bot.Utils.Level;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
@@ -92,8 +92,8 @@ public class Gift implements ICommand {
 	}
 
 	@Override
-	public PermLevel getPermLevel() {
-		return PermLevel.MEMBER;
+	public Level getLevel() {
+		return Level.MEMBER;
 	}
 
 	@Override

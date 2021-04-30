@@ -4,7 +4,7 @@ import Bot.Config;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
 
-public enum PermLevel {
+public enum Level {
 	DEVELOPER, ADMIN, MEMBER;
 
 	public boolean hasPermission(Member member) {

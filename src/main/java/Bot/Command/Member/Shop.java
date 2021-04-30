@@ -1,10 +1,11 @@
-package Bot.Command.MemberCommands;
+package Bot.Command.Member;
 
 import Bot.Command.CommandContext;
 import Bot.Command.ICommand;
-import Bot.Utils.PermLevel;
 import Bot.Config;
+import Bot.Shop.Item;
 import Bot.Shop.ItemManager;
+import Bot.Utils.Level;
 import Bot.Utils.Stat;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
@@ -12,6 +13,7 @@ import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
 
 import java.time.Instant;
+import java.util.Comparator;
 import java.util.EnumSet;
 
 public class Shop implements ICommand {
@@ -32,13 +34,15 @@ public class Shop implements ICommand {
 			 .addField("__**:meat_on_bone: Hunger items**__", "These items are used to fill up the hunger of your alpaca", false)
 			 .setTimestamp(Instant.now());
 
-		itemManager.getSortedItemStream(Stat.HUNGER)
+		itemManager.getItems(Stat.HUNGER)
+				   .stream().sorted(Comparator.comparingInt(Item::getPrice))
 				   .forEach(item -> embed.addField(":package: " + item.getName(), "Saturation: " + item.getSaturation() + "\nPrice: " + item.getPrice(), true));
 
 		embed.addBlankField(false)
 			 .addField("__**:beer: Thirst items**__", "Following items replenish the thirst of your alpaca", false);
 
-		itemManager.getSortedItemStream(Stat.THIRST)
+		itemManager.getItems(Stat.THIRST)
+				   .stream().sorted(Comparator.comparingInt(Item::getPrice))
 				   .forEach(item -> embed.addField(":package: " + item.getName(), "Saturation: " + item.getSaturation() + "\nPrice: " + item.getPrice(), true));
 
 		channel.sendMessage(embed.build()).queue();
@@ -50,8 +54,8 @@ public class Shop implements ICommand {
 	}
 
 	@Override
-	public PermLevel getPermLevel() {
-		return PermLevel.MEMBER;
+	public Level getLevel() {
+		return Level.MEMBER;
 	}
 
 	@Override

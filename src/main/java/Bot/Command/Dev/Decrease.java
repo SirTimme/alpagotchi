@@ -1,11 +1,11 @@
-package Bot.Command.DevCommands;
+package Bot.Command.Dev;
 
 import Bot.Command.CommandContext;
 import Bot.Command.ICommand;
 import Bot.Database.IDatabase;
 import Bot.Utils.Emote;
 import Bot.Utils.Error;
-import Bot.Utils.PermLevel;
+import Bot.Utils.Level;
 import Bot.Utils.ThreadFactory;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.TextChannel;
@@ -58,8 +58,8 @@ public class Decrease implements ICommand {
 	}
 
 	@Override
-	public PermLevel getPermLevel() {
-		return PermLevel.DEVELOPER;
+	public Level getLevel() {
+		return Level.DEVELOPER;
 	}
 
 	@Override
