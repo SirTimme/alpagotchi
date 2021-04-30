@@ -1,5 +1,6 @@
 package Bot.Dresses;
 
+import com.mongodb.lang.Nullable;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,7 +18,7 @@ public class DressManager {
 
 	public DressManager() {
 		try {
-			final File file = new File("src/main/resources/data/outfits.json");
+			final File file = new File("src/main/resources/data/Outfits.json");
 			final Path filePath = Path.of(file.getPath());
 			final String content = Files.readString(filePath);
 
@@ -38,6 +39,7 @@ public class DressManager {
 		return this.dresses;
 	}
 
+	@Nullable
 	public Dress getOutfit(String search) {
 		for (Dress dress : this.dresses) {
 			if (dress.getName().equals(search)) {

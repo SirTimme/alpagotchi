@@ -1,12 +1,12 @@
-package Bot.Command.MemberCommands;
+package Bot.Command.Member;
 
 import Bot.Command.CommandContext;
 import Bot.Utils.Emote;
-import Bot.Utils.PermLevel;
 import Bot.Config;
 import Bot.Command.CommandManager;
 import Bot.Command.ICommand;
 import Bot.Database.IDatabase;
+import Bot.Utils.Level;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.TextChannel;
@@ -28,20 +28,22 @@ public class Help implements ICommand {
 		final String prefix = IDatabase.INSTANCE.getPrefix(ctx.getGuild().getIdLong());
 		final TextChannel channel = ctx.getChannel();
 		final List<String> args = ctx.getArgs();
+		final User dev = ctx.getJDA().getUserById(Config.get("DEV_ID"));
 
 		if (args.isEmpty()) {
-			final User dev = ctx.getJDA().getUserById(Config.get("DEV_ID"));
 			final EmbedBuilder embed = new EmbedBuilder();
 
 			embed.setTitle("Overview of all commands")
-				 .setDescription("Further information to any command:\n**```fix\n" + prefix + "help [command]\n```**")
-				 .addField("Admin commands", getCommandsByLevel(prefix, PermLevel.ADMIN), true)
-				 .addField("Member commands", getCommandsByLevel(prefix, PermLevel.MEMBER), true)
-				 .addField(
-					 "Need further help or found a bug?",
-					 "Join the [Alpagotchi Support](https://discord.gg/DXtYyzGhXR) server!",
-					 false
-				 )
+				 .setDescription("Further information to any command:\n**```fix\n" + prefix + "help (command)\n```**")
+				 .setThumbnail("https://cdn.discordapp.com/attachments/795637300661977132/836542447186214942/avatar.png")
+				 .setImage("https://cdn.discordapp.com/attachments/795637300661977132/836986469607276554/Help.PNG")
+				 .addField("Admin commands", cmdManager.getCommandsString(prefix, Level.ADMIN, false), true)
+				 .addField("", cmdManager.getCommandsString(prefix, Level.ADMIN, true), true)
+				 .addBlankField(true)
+				 .addField("Member commands", cmdManager.getCommandsString(prefix, Level.MEMBER, true), true)
+				 .addField("", cmdManager.getCommandsString(prefix, Level.MEMBER, false), true)
+				 .addBlankField(true)
+				 .addField("Need further help or found a bug?","Join the [Alpagotchi Support](https://discord.gg/DXtYyzGhXR) server!",false)
 				 .setFooter("Created by " + dev.getName(), dev.getEffectiveAvatarUrl())
 				 .setTimestamp(Instant.now());
 
@@ -57,12 +59,16 @@ public class Help implements ICommand {
 
 		final EmbedBuilder embed = new EmbedBuilder();
 
-		embed.setTitle("Help for " + cmd.getName())
-			 .setDescription("[] = required parameters\n() = optional parameters")
+		embed.setTitle("__Help for " + prefix + cmd.getName() + "__")
+			 .setThumbnail("https://cdn.discordapp.com/attachments/795637300661977132/836542447186214942/avatar.png")
+			 .setImage("https://cdn.discordapp.com/attachments/795637300661977132/836986469607276554/Help.PNG")
 			 .addField("Description", cmd.getDescription(), false)
+			 .addField("Aliases", cmd.getAliases().isEmpty() ? "none" : cmd.getAliases().toString(), false)
 			 .addField("Usage", prefix + cmd.getSyntax(), false)
 			 .addField("Example", prefix + cmd.getExample(), false)
-			 .addField("Aliases", cmd.getAliases().toString(), false);
+			 .addField("Need further help or found a bug?","Join the [Alpagotchi Support](https://discord.gg/DXtYyzGhXR) server!",false)
+			 .setFooter("Created by " + dev.getName(), dev.getEffectiveAvatarUrl())
+			 .setTimestamp(Instant.now());
 
 		channel.sendMessage(embed.build()).queue();
 	}
@@ -73,8 +79,8 @@ public class Help implements ICommand {
 	}
 
 	@Override
-	public PermLevel getPermLevel() {
-		return PermLevel.MEMBER;
+	public Level getLevel() {
+		return Level.MEMBER;
 	}
 
 	@Override
@@ -100,19 +106,6 @@ public class Help implements ICommand {
 	@Override
 	public String getDescription() {
 		return "Displays all available commands or help for a specific command";
-	}
-
-	private String getCommandsByLevel(String prefix, PermLevel permLevel) {
-		StringBuilder builder = new StringBuilder();
-
-		this.cmdManager.getCommands()
-					   .stream()
-					   .filter((cmd) -> cmd.getPermLevel() == permLevel)
-					   .map(ICommand::getName)
-					   .sorted()
-					   .forEach((cmd) -> builder.append("`").append(prefix).append(cmd).append("`\n"));
-
-		return builder.toString();
 	}
 }
 

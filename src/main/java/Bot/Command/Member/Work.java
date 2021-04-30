@@ -1,4 +1,4 @@
-package Bot.Command.MemberCommands;
+package Bot.Command.Member;
 
 import Bot.Command.CommandContext;
 import Bot.Command.ICommand;
@@ -23,7 +23,7 @@ public class Work implements ICommand {
 
 	public Work() {
 		try {
-			final File file = new File("src/main/resources/data/work.json");
+			final File file = new File("src/main/resources/data/Messages.json");
 			final Path filePath = Path.of(file.getPath());
 			final String content = Files.readString(filePath);
 
@@ -88,8 +88,8 @@ public class Work implements ICommand {
 	}
 
 	@Override
-	public PermLevel getPermLevel() {
-		return PermLevel.MEMBER;
+	public Level getLevel() {
+		return Level.MEMBER;
 	}
 
 	@Override

@@ -1,8 +1,8 @@
-package Bot.Command.MemberCommands;
+package Bot.Command.Member;
 
 import Bot.Command.CommandContext;
 import Bot.Command.ICommand;
-import Bot.Utils.PermLevel;
+import Bot.Utils.Level;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
@@ -29,8 +29,8 @@ public class Ping implements ICommand {
 	}
 
 	@Override
-	public PermLevel getPermLevel() {
-		return PermLevel.MEMBER;
+	public Level getLevel() {
+		return Level.MEMBER;
 	}
 
 	@Override

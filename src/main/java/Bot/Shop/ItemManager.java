@@ -11,9 +11,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Stream;
+import java.util.stream.Collectors;
 
 public class ItemManager {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ItemManager.class);
@@ -21,7 +20,7 @@ public class ItemManager {
 
 	public ItemManager() {
 		try {
-			final File file = new File("src/main/resources/data/items.json");
+			final File file = new File("src/main/resources/data/Items.json");
 			final Path filePath = Path.of(file.getPath());
 			final String content = Files.readString(filePath);
 
@@ -42,8 +41,8 @@ public class ItemManager {
 		return items;
 	}
 
-	public Stream<Item> getSortedItemStream(Stat filter) {
-		return items.stream().filter(item -> item.getStat().equals(filter)).sorted(Comparator.comparingInt(Item::getPrice));
+	public List<Item> getItems(Stat stat) {
+		return items.stream().filter(item -> item.getStat().equals(stat)).collect(Collectors.toList());
 	}
 
 	@Nullable

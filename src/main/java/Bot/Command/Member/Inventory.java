@@ -1,12 +1,12 @@
-package Bot.Command.MemberCommands;
+package Bot.Command.Member;
 
 import Bot.Command.CommandContext;
 import Bot.Command.ICommand;
 import Bot.Utils.Error;
-import Bot.Utils.PermLevel;
 import Bot.Config;
 import Bot.Database.IDatabase;
 import Bot.Shop.ItemManager;
+import Bot.Utils.Level;
 import Bot.Utils.Stat;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
@@ -36,11 +36,20 @@ public class Inventory implements ICommand {
 
 		final User dev = ctx.getJDA().getUserById(Config.get("DEV_ID"));
 		final EmbedBuilder embed = new EmbedBuilder();
+
 		embed.setTitle("Inventory")
-			 .addField("Hunger", getItemsByStat(Stat.HUNGER, authorID), true)
-			 .addField("Thirst", getItemsByStat(Stat.THIRST, authorID), true)
+			 .addField("__**:meat_on_bone: Hunger items**__", "These items are used to fill up the hunger of your alpaca", false)
 			 .setFooter("Created by " + dev.getName(), dev.getEffectiveAvatarUrl())
 			 .setTimestamp(Instant.now());
+
+		itemManager.getItems(Stat.HUNGER)
+				   .forEach(item -> embed.addField(":package: " + item.getName(), "Quantity: **" + IDatabase.INSTANCE.getInventory(authorID, item) + "**", true));
+
+		embed.addBlankField(false)
+			 .addField("__**:beer: Thirst items**__", "Following items replenish the thirst of your alpaca", false);
+
+		itemManager.getItems(Stat.THIRST)
+				   .forEach(item -> embed.addField(":package: " + item.getName(), "Quantity: **" + IDatabase.INSTANCE.getInventory(authorID, item) + "**", true));
 
 		channel.sendMessage(embed.build()).queue();
 	}
@@ -51,8 +60,8 @@ public class Inventory implements ICommand {
 	}
 
 	@Override
-	public PermLevel getPermLevel() {
-		return PermLevel.MEMBER;
+	public Level getLevel() {
+		return Level.MEMBER;
 	}
 
 	@Override
@@ -73,22 +82,6 @@ public class Inventory implements ICommand {
 	@Override
 	public String getDescription() {
 		return "Displays your bought items";
-	}
-
-	private String getItemsByStat(Stat stat, long memberID) {
-		StringBuilder builder = new StringBuilder();
-		String emoji = stat.equals(Stat.HUNGER) ? ":meat_on_bone:" : ":beer:";
-
-		itemManager.getItems()
-				   .stream()
-				   .filter((item) -> item.getStat().equals(stat))
-				   .forEach((item) -> {
-					   final int amount = IDatabase.INSTANCE.getInventory(memberID, item);
-
-					   builder.append(emoji).append(" **").append(amount).append("** ").append(item.getName()).append("\n");
-				   });
-
-		return builder.toString();
 	}
 }
 

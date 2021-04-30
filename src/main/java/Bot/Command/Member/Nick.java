@@ -1,11 +1,11 @@
-package Bot.Command.MemberCommands;
+package Bot.Command.Member;
 
 import Bot.Command.CommandContext;
 import Bot.Command.ICommand;
 import Bot.Utils.Emote;
 import Bot.Utils.Error;
-import Bot.Utils.PermLevel;
 import Bot.Database.IDatabase;
+import Bot.Utils.Level;
 import Bot.Utils.Stat;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.TextChannel;
@@ -47,8 +47,8 @@ public class Nick implements ICommand {
 	}
 
 	@Override
-	public PermLevel getPermLevel() {
-		return PermLevel.MEMBER;
+	public Level getLevel() {
+		return Level.MEMBER;
 	}
 
 	@Override

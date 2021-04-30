@@ -1,11 +1,11 @@
-package Bot.Command.AdminCommands;
+package Bot.Command.Admin;
 
 import Bot.Command.CommandContext;
 import Bot.Command.ICommand;
 import Bot.Utils.Emote;
 import Bot.Utils.Error;
-import Bot.Utils.PermLevel;
 import Bot.Database.IDatabase;
+import Bot.Utils.Level;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.TextChannel;
@@ -43,8 +43,8 @@ public class SetPrefix implements ICommand {
 	}
 
 	@Override
-	public PermLevel getPermLevel() {
-		return PermLevel.ADMIN;
+	public Level getLevel() {
+		return Level.ADMIN;
 	}
 
 	@Override

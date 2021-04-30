@@ -1,9 +1,9 @@
-package Bot.Command.DevCommands;
+package Bot.Command.Dev;
 
 import Bot.Command.CommandContext;
 import Bot.Command.ICommand;
 import Bot.Utils.Emote;
-import Bot.Utils.PermLevel;
+import Bot.Utils.Level;
 import me.duncte123.botcommons.BotCommons;
 import net.dv8tion.jda.api.Permission;
 
@@ -24,8 +24,8 @@ public class Shutdown implements ICommand {
 	}
 
 	@Override
-	public PermLevel getPermLevel() {
-		return PermLevel.DEVELOPER;
+	public Level getLevel() {
+		return Level.DEVELOPER;
 	}
 
 	@Override

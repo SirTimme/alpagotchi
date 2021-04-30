@@ -1,14 +1,14 @@
-package Bot.Command.MemberCommands;
+package Bot.Command.Member;
 
 import Bot.Command.CommandContext;
 import Bot.Command.ICommand;
 import Bot.Dresses.Dress;
 import Bot.Utils.Emote;
 import Bot.Utils.Error;
-import Bot.Utils.PermLevel;
 import Bot.Config;
 import Bot.Database.IDatabase;
 import Bot.Dresses.DressManager;
+import Bot.Utils.Level;
 import Bot.Utils.Stat;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
@@ -71,8 +71,8 @@ public class Outfit implements ICommand {
 	}
 
 	@Override
-	public PermLevel getPermLevel() {
-		return PermLevel.MEMBER;
+	public Level getLevel() {
+		return Level.MEMBER;
 	}
 
 	@Override
