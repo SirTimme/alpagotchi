@@ -49,6 +49,7 @@ public class CommandManager {
 		addCommand(new Delete(waiter));
 		addCommand(new Ping());
 		addCommand(new Count());
+		addCommand(new Image());
 
 		commands = commands.stream().sorted().collect(Collectors.toList());
 	}

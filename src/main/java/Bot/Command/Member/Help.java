@@ -59,7 +59,7 @@ public class Help implements ICommand {
 
 		final EmbedBuilder embed = new EmbedBuilder();
 
-		embed.setTitle("__Help for " + prefix + cmd.getName() + "__")
+		embed.setTitle("Help")
 			 .setThumbnail("https://cdn.discordapp.com/attachments/795637300661977132/836542447186214942/avatar.png")
 			 .setImage("https://cdn.discordapp.com/attachments/795637300661977132/836986469607276554/Help.PNG")
 			 .addField("Description", cmd.getDescription(), false)

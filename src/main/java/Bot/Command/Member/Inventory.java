@@ -38,6 +38,7 @@ public class Inventory implements ICommand {
 		final EmbedBuilder embed = new EmbedBuilder();
 
 		embed.setTitle("Inventory")
+			 .setThumbnail("https://cdn.discordapp.com/attachments/795637300661977132/839074173459365908/inventory.png")
 			 .addField("__**:meat_on_bone: Hunger items**__", "These items are used to fill up the hunger of your alpaca", false)
 			 .setFooter("Created by " + dev.getName(), dev.getEffectiveAvatarUrl())
 			 .setTimestamp(Instant.now());
