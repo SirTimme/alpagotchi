@@ -30,6 +30,7 @@ public class Shop implements ICommand {
 		final EmbedBuilder embed = new EmbedBuilder();
 
 		embed.setTitle("Shop")
+			 .setThumbnail("https://cdn.discordapp.com/attachments/795637300661977132/839072735182323732/shop.png")
 			 .setFooter("Created by " + dev.getName(), dev.getEffectiveAvatarUrl())
 			 .addField("__**:meat_on_bone: Hunger items**__", "These items are used to fill up the hunger of your alpaca", false)
 			 .setTimestamp(Instant.now());
