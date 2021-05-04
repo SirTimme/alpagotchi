@@ -20,7 +20,7 @@ public class ItemManager {
 
 	public ItemManager() {
 		try {
-			final File file = new File("src/main/resources/data/items.json");
+			final File file = new File("src/main/resources/data/Items.json");
 			final Path filePath = Path.of(file.getPath());
 			final String content = Files.readString(filePath);
 
