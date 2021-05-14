@@ -35,8 +35,8 @@ public class Help implements ICommand {
 
 			embed.setTitle("Overview of all commands")
 				 .setDescription("Further information to any command:\n**```fix\n" + prefix + "help (command)\n```**")
-				 .setThumbnail("https://cdn.discordapp.com/attachments/795637300661977132/836542447186214942/avatar.png")
-				 .setImage("https://cdn.discordapp.com/attachments/795637300661977132/836986469607276554/Help.PNG")
+				 .setThumbnail("https://cdn.discordapp.com/attachments/840135073835122699/842742529371144240/help.png")
+				 .setImage("https://cdn.discordapp.com/attachments/840135073835122699/842755535694200912/Params.png")
 				 .addField("Admin commands", cmdManager.getCommandsString(prefix, Level.ADMIN, false), true)
 				 .addField("", cmdManager.getCommandsString(prefix, Level.ADMIN, true), true)
 				 .addBlankField(true)

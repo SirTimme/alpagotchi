@@ -17,7 +17,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -46,26 +45,26 @@ public class Image implements ICommand {
 		}
 
 		try {
-			URIBuilder uri = new URIBuilder("https://pixabay.com/api/");
-			uri.addParameter("key", Config.get("API_KEY"));
-			uri.addParameter("q", query);
-			uri.addParameter("safesearch", "true");
-			uri.addParameter("lang", "en");
-			uri.addParameter("orientation", "horizontal");
+			final URIBuilder requestURI = new URIBuilder("https://pixabay.com/api/");
+			requestURI.addParameter("key", Config.get("API_KEY"));
+			requestURI.addParameter("q", query);
+			requestURI.addParameter("safesearch", "true");
+			requestURI.addParameter("lang", "en");
+			requestURI.addParameter("orientation", "horizontal");
 
-			HttpRequest request = HttpRequest.newBuilder().uri(new URI(uri.toString())).GET().build();
-			HttpResponse<String> response = HttpClient.newHttpClient().send(request, BodyHandlers.ofString());
+			final HttpRequest request = HttpRequest.newBuilder().uri(requestURI.build()).GET().build();
+			final HttpResponse<String> response = HttpClient.newHttpClient().send(request, BodyHandlers.ofString());
 
-			JSONObject json = new JSONObject(response.body());
-			JSONArray hits = json.getJSONArray("hits");
+			final JSONObject json = new JSONObject(response.body());
+			final JSONArray hits = json.getJSONArray("hits");
 
 			if (hits.isEmpty()) {
 				channel.sendMessage(Emote.REDCROSS + " No results found for **" + query + "**").queue();
 				return;
 			}
 
-			JSONObject object = json.getJSONArray("hits").getJSONObject((int) (Math.random() * hits.length()));
-			String imageURL = object.getString("largeImageURL");
+			final JSONObject object = hits.getJSONObject((int) (Math.random() * hits.length()));
+			final String imageURL = object.getString("largeImageURL");
 
 			final User dev = ctx.getJDA().getUserById(Config.get("DEV_ID"));
 			final EmbedBuilder embed = new EmbedBuilder();
@@ -76,7 +75,7 @@ public class Image implements ICommand {
 				 .addField("Likes", String.valueOf(object.getInt("likes")), true)
 				 .addField("Source", "[Direct Link](" + imageURL + ")", true)
 				 .setImage(imageURL)
-				 .setThumbnail("https://cdn.discordapp.com/attachments/795637300661977132/838094951187087360/avatar.png")
+				 .setThumbnail("https://cdn.discordapp.com/attachments/840135073835122699/842742541148880896/internet.png")
 				 .setFooter("Created by " + dev.getName(), dev.getEffectiveAvatarUrl())
 				 .setTimestamp(Instant.now());
 
