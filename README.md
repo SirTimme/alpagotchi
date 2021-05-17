@@ -3,20 +3,27 @@
 # Alpagotchi | Alpaca + Tamagotchi
 
 Alpagotchi allows any user to create and take care of their own alpaca.  \
-Items can be bought to satisfy hunger and thirst and work can be done to earn money for the items.
+Items can be bought to satisfy hunger and thirst and work can be done to earn money for the items. 
 
-## Commands
+## Invite
+If you are interested in Alpagotchi and want it to add to your guild you can use this [Invite Link](https://discord.com/oauth2/authorize?client_id=780910199875567616&permissions=2147798080&scope=bot%20applications.commands)
 
-`Default prefix: a!`
+## Vote 
+You can vote for me on [top.gg](https://top.gg/bot/780910199875567616/vote) and leave a review it is greatly appreciated!
 
-### Admin Commands
+# Commands
+The default prefix of Alpagotchi is `a!` but can be customized to any prefix you want.
+
+## Admin Commands
+You need the `Manage Server` permission to be allowed to use following commands:
 
 | Usage        | Aliases        | Task           | 
 | -------------| ---------------| ---------------| 
 | setprefix [prefix] | - | Sets the prefix of the guild |
 | setbalance [@user] [balance] | - | Sets the balance of the mentioned user |
 
-### Member Commands
+## Member Commands
+Everyone is allowed to use following commands:
 
 | Usage        | Aliases        | Task           | 
 | -------------| ---------------| ---------------| 
@@ -35,3 +42,7 @@ Items can be bought to satisfy hunger and thirst and work can be done to earn mo
 | outfit [outfit] | - | Change the appearance of your alpaca |
 | delete | - | Deletes all of your stored data |
 | init | setup | Initialize your alpaca in the database |
+| image [query] | img | Searches a random image based on the query with pixabay |
+
+## Help
+If you need additional help or want to report a bug you can join the Alpagotchi [Support Discord](https://discord.gg/DXtYyzGhXR)
