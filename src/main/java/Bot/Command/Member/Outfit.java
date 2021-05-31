@@ -87,7 +87,7 @@ public class Outfit implements ICommand {
 
 	@Override
 	public String getExample() {
-		return "outfit king";
+		return "outfit default";
 	}
 
 	@Override
