@@ -1,14 +1,5 @@
 {
   "default": {
     "description": "standard outfit"
-  },
-  "pirate": {
-    "description": "find the hidden treasure as a pirate"
-  },
-  "gentleman": {
-    "description": "show your best manners with this"
-  },
-  "king": {
-    "description": "rule over the world with this stylish outfit"
   }
 }
