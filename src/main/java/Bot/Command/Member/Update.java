@@ -84,7 +84,7 @@ public class Update implements ISlashCommand {
                                                      new Command.Choice("enable", "enable"),
                                                      new Command.Choice("disable", "disable")
                                              )
-                                             .setRequired(false)
+                                             .setRequired(true)
                              )
                              .setDefaultEnabled(false),
                      new CommandData("myalpaca", "Shows your alpaca with its stats"),
@@ -116,20 +116,20 @@ public class Update implements ISlashCommand {
                      ),
                      new CommandData("inventory", "Shows your items for your alpaca"),
                      new CommandData("shop", "Shows the shop with all the items to buy"),
-                     new CommandData("update", "Refreshes all slashcommands").setDefaultEnabled(true)
+                     new CommandData("update", "Refreshes all slashcommands").setDefaultEnabled(false)
              )
              .queue();
 
         event.getGuild()
-             .updateCommandPrivilegesById(861643199525552188L, CommandPrivilege.enableUser(Config.get("DEV_ID")))
+             .updateCommandPrivilegesById(861647564481626152L, CommandPrivilege.enableUser(Config.get("DEV_ID")))
              .queue();
 
         event.getGuild()
-             .updateCommandPrivilegesById(861643199477710849L, CommandPrivilege.enableUser(Config.get("DEV_ID")))
+             .updateCommandPrivilegesById(861647564440600636L, CommandPrivilege.enableUser(Config.get("DEV_ID")))
              .queue();
 
         event.getGuild()
-             .updateCommandPrivilegesById(861643199477710848L, CommandPrivilege.enableUser(Config.get("DEV_ID")))
+             .updateCommandPrivilegesById(861647564440600637L, CommandPrivilege.enableUser(Config.get("DEV_ID")))
              .queue();
 
         event.reply(Emote.GREENTICK + " Successfully refreshed all slash command").queue();

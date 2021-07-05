@@ -57,6 +57,7 @@ public class EventHandler extends ListenerAdapter {
 
     @Override
     public void onSlashCommand(@NotNull SlashCommandEvent event) {
+        System.out.println(event.getCommandIdLong());
         slashCommandManager.handle(event);
     }
 
