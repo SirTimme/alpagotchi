@@ -27,7 +27,12 @@ public class ItemManager {
 			final JSONObject json = new JSONObject(content);
 			for (String key : json.keySet()) {
 				JSONObject object = json.getJSONObject(key);
-				Item item = new Item(key, object.getInt("price"), object.getInt("saturation"), Stat.valueOf(object.getString("stat").toUpperCase()));
+				Item item = new Item(
+						key,
+						object.getInt("price"),
+						object.getInt("saturation"),
+						Stat.valueOf(object.getString("stat").toUpperCase())
+				);
 
 				items.add(item);
 			}
@@ -35,10 +40,6 @@ public class ItemManager {
 		catch (IOException error) {
 			LOGGER.error(error.getMessage());
 		}
-	}
-
-	public List<Item> getItems() {
-		return items;
 	}
 
 	public List<Item> getItems(Stat stat) {

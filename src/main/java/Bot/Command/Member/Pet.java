@@ -1,104 +1,55 @@
 package Bot.Command.Member;
 
-import Bot.Command.CommandContext;
-import Bot.Command.ICommand;
-import Bot.Utils.Emote;
-import Bot.Utils.Error;
+import Bot.Command.ISlashCommand;
 import Bot.Database.IDatabase;
-import Bot.Utils.Level;
+import Bot.Models.Entry;
+import Bot.Utils.Emote;
 import Bot.Utils.Stat;
-import net.dv8tion.jda.api.Permission;
-import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 
 import java.util.Arrays;
-import java.util.EnumSet;
 import java.util.List;
 
-public class Pet implements ICommand {
-	private final List<String> spots = Arrays.asList("head", "tail", "leg", "neck");
+public class Pet implements ISlashCommand {
+    private final List<String> spots = Arrays.asList("head", "tail", "leg", "neck", "back");
 
-	@Override
-	public void execute(CommandContext ctx) {
-		final long authorID = ctx.getAuthorID();
-		final TextChannel channel = ctx.getChannel();
-		final List<String> args = ctx.getArgs();
+    @Override
+    public void execute(SlashCommandEvent event, long authorID) {
+        Entry entry = IDatabase.INSTANCE.getEntry(authorID);
 
-		if (IDatabase.INSTANCE.getUser(authorID) == null) {
-			channel.sendMessage(Error.NOT_INITIALIZED.getMessage(ctx.getPrefix(), getName())).queue();
-			return;
-		}
+        if (entry == null) {
+            event.reply(Emote.REDCROSS + " You don't own an alpaca, use **/init** first")
+                 .setEphemeral(true)
+                 .queue();
+            return;
+        }
 
-		final int joy = IDatabase.INSTANCE.getStatInt(authorID, Stat.JOY);
-		if (joy == 100) {
-			channel.sendMessage(Emote.REDCROSS + " The joy of your alpaca is already at the maximum").queue();
-			return;
-		}
+        final int joy = entry.getAlpaca().getJoy();
 
-		if (args.isEmpty()) {
-			int newJoy = (int) (Math.random() * 8 + 1);
-			newJoy = newJoy + joy > 100 ? 100 - joy : newJoy;
+        if (joy == 100) {
+            event.reply(Emote.REDCROSS + " The joy of your alpaca is already at the maximum")
+                 .setEphemeral(true)
+                 .queue();
+            return;
+        }
 
-			IDatabase.INSTANCE.setStatInt(authorID, Stat.JOY, newJoy);
+        final String favouriteSpot = spots.get((int) (Math.random() * 5));
+        final String spot = event.getOption("spot").getAsString();
 
-			channel.sendMessage("\uD83E\uDD99 Your alpaca loves to spend time with you **Joy + " + newJoy + "**").queue();
-			return;
-		}
+        if (spot.equals(favouriteSpot)) {
+            int newJoy = (int) (Math.random() * 13 + 5);
+            newJoy = newJoy + joy > 100 ? 100 - joy : newJoy;
 
-		final String favouriteSpot = spots.get((int) (Math.random() * 4));
-		final String userSpot = args.get(0);
+            IDatabase.INSTANCE.setEntry(authorID, Stat.JOY, newJoy);
 
-		final boolean validSpot = spots.contains(userSpot);
+            event.reply("\uD83E\uDD99 You found the favourite spot of your alpaca **Joy + " + newJoy + "**").queue();
+        } else {
+            int newJoy = (int) (Math.random() * 9 + 3);
+            newJoy = newJoy + joy > 100 ? 100 - joy : newJoy;
 
-		if (!validSpot) {
-			channel.sendMessage(Emote.REDCROSS + " This spot doesn't exists").queue();
-			return;
-		}
+            IDatabase.INSTANCE.setEntry(authorID, Stat.JOY, newJoy);
 
-		if (userSpot.equals(favouriteSpot)) {
-			int newJoy = (int) (Math.random() * 13 + 5);
-			newJoy = newJoy + joy > 100 ? 100 - joy : newJoy;
-
-			IDatabase.INSTANCE.setStatInt(authorID, Stat.JOY, newJoy);
-
-			channel.sendMessage("\uD83E\uDD99 You found the favourite spot of your alpaca **Joy + " + newJoy + "**").queue();
-		}
-		else {
-			int newJoy = (int) (Math.random() * 9 + 3);
-			newJoy = newJoy + joy > 100 ? 100 - joy : newJoy;
-
-			IDatabase.INSTANCE.setStatInt(authorID, Stat.JOY, newJoy);
-
-			channel.sendMessage("\uD83E\uDD99 Your alpaca enjoyed the petting, but it wasn't his favourite spot **Joy + " + newJoy + "**").queue();
-		}
-	}
-
-	@Override
-	public String getName() {
-		return "pet";
-	}
-
-	@Override
-	public Level getLevel() {
-		return Level.MEMBER;
-	}
-
-	@Override
-	public EnumSet<Permission> getCommandPerms() {
-		return EnumSet.of(Permission.MESSAGE_WRITE);
-	}
-
-	@Override
-	public String getSyntax() {
-		return "pet (spot)";
-	}
-
-	@Override
-	public String getExample() {
-		return "pet head";
-	}
-
-	@Override
-	public String getDescription() {
-		return "Gives your alpaca a hug and restores joy";
-	}
+            event.reply("\uD83E\uDD99 Your alpaca enjoyed the petting, but it wasn't his favourite spot **Joy + " + newJoy + "**").queue();
+        }
+    }
 }
