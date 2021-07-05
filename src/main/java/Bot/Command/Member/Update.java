@@ -76,7 +76,7 @@ public class Update implements ISlashCommand {
                                              .setRequired(true)
                              ),
                      new CommandData("work", "Lets your alpaca work for fluffies"),
-                     new CommandData("shutdown", "Shutdowns Alpagotchi").setDefaultEnabled(true),
+                     new CommandData("shutdown", "Shutdowns Alpagotchi").setDefaultEnabled(false),
                      new CommandData("decrease", "Let the alpacas lose stats")
                              .addOptions(
                                      new OptionData(STRING, "status", "Status of decreasing")
@@ -84,9 +84,9 @@ public class Update implements ISlashCommand {
                                                      new Command.Choice("enable", "enable"),
                                                      new Command.Choice("disable", "disable")
                                              )
-                                             .setRequired(true)
+                                             .setRequired(false)
                              )
-                             .setDefaultEnabled(true),
+                             .setDefaultEnabled(false),
                      new CommandData("myalpaca", "Shows your alpaca with its stats"),
                      new CommandData("nick", "Gives your alpaca a new nickname")
                              .addOptions(
