@@ -48,7 +48,11 @@ public class SlashCommandManager {
         }
     }
 
-    public String getCommands() {
+    public Map<String, ISlashCommand> getCommands() {
+        return commands;
+    }
+
+    public String getCommandsAsString() {
         StringBuilder sb = new StringBuilder();
         this.commands.keySet().forEach(cmd -> sb.append("`/").append(cmd).append("`\n"));
 
