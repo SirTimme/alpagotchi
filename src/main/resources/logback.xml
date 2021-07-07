@@ -8,6 +8,4 @@
     <root level="INFO">
         <appender-ref ref="STDOUT"/>
     </root>
-
-    <logger name="org.mongodb.driver" level="WARN"/>
 </configuration>
