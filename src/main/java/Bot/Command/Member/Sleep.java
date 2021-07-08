@@ -22,14 +22,18 @@ public class Sleep implements ISlashCommand {
         int energy = entry.getAlpaca().getEnergy();
 
         if (energy == 100) {
-            event.reply(Emote.REDCROSS + " The energy of your alpaca is already at the maximum").setEphemeral(true).queue();
+            event.reply(Emote.REDCROSS + " The energy of your alpaca is already at the maximum")
+                 .setEphemeral(true)
+                 .queue();
             return;
         }
 
         final int duration = (int) event.getOption("duration").getAsLong();
 
         if (duration < 1 || duration > 100) {
-            event.reply(Emote.REDCROSS + " Please enter a number between 1 - 100").setEphemeral(true).queue();
+            event.reply(Emote.REDCROSS + " Please enter a number between 1 - 100")
+                 .setEphemeral(true)
+                 .queue();
             return;
         }
 

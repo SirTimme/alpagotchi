@@ -76,17 +76,6 @@ public class Update implements ISlashCommand {
                                              .setRequired(true)
                              ),
                      new CommandData("work", "Lets your alpaca work for fluffies"),
-                     new CommandData("shutdown", "Shutdowns Alpagotchi").setDefaultEnabled(false),
-                     new CommandData("decrease", "Let the alpacas lose stats")
-                             .addOptions(
-                                     new OptionData(STRING, "status", "Status of decreasing")
-                                             .addChoices(
-                                                     new Command.Choice("enable", "enable"),
-                                                     new Command.Choice("disable", "disable")
-                                             )
-                                             .setRequired(true)
-                             )
-                             .setDefaultEnabled(false),
                      new CommandData("myalpaca", "Shows your alpaca with its stats"),
                      new CommandData("nick", "Gives your alpaca a new nickname")
                              .addOptions(
@@ -94,9 +83,10 @@ public class Update implements ISlashCommand {
                                              .setRequired(true)
                              ),
                      new CommandData("help", "Shows all commands or additional help for a specific"),
-                     new CommandData("sleep", "Lets your alpaca sleep for the specified duration to regain energy").addOptions(
-                             new OptionData(INTEGER, "duration", "The duration in minutes").setRequired(true)
-                     ),
+                     new CommandData("sleep", "Lets your alpaca sleep for the specified duration to regain energy")
+                             .addOptions(
+                                     new OptionData(INTEGER, "duration", "The duration in minutes").setRequired(true)
+                             ),
                      new CommandData("outfit", "Changes the appearance of your alpaca").addOptions(
                              new OptionData(STRING, "outfit", "The new outfit of your alpaca")
                                      .addChoices(
@@ -115,21 +105,38 @@ public class Update implements ISlashCommand {
                                      ).setRequired(true)
                      ),
                      new CommandData("inventory", "Shows your items for your alpaca"),
-                     new CommandData("shop", "Shows the shop with all the items to buy"),
+                     new CommandData("shop", "Shows the shop with all the items to buy")
+             )
+             .queue();
+
+        event.getGuild()
+             .updateCommands()
+             .addCommands(
+                     new CommandData("shutdown", "Shutdowns Alpagotchi").setDefaultEnabled(false),
+                     new CommandData("decrease", "Let the alpacas lose stats")
+                             .addOptions(
+                                     new OptionData(STRING, "status", "Status of decreasing")
+                                             .addChoices(
+                                                     new Command.Choice("enable", "enable"),
+                                                     new Command.Choice("disable", "disable")
+                                             )
+                                             .setRequired(true)
+                             )
+                             .setDefaultEnabled(false),
                      new CommandData("update", "Refreshes all slashcommands").setDefaultEnabled(false)
              )
              .queue();
 
         event.getGuild()
-             .updateCommandPrivilegesById(861647564481626152L, CommandPrivilege.enableUser(Config.get("DEV_ID")))
+             .updateCommandPrivilegesById(862727791070281732L, CommandPrivilege.enableUser(Config.get("DEV_ID")))
              .queue();
 
         event.getGuild()
-             .updateCommandPrivilegesById(861647564440600636L, CommandPrivilege.enableUser(Config.get("DEV_ID")))
+             .updateCommandPrivilegesById(862727791070281731L, CommandPrivilege.enableUser(Config.get("DEV_ID")))
              .queue();
 
         event.getGuild()
-             .updateCommandPrivilegesById(861647564440600637L, CommandPrivilege.enableUser(Config.get("DEV_ID")))
+             .updateCommandPrivilegesById(862727791070281730L, CommandPrivilege.enableUser(Config.get("DEV_ID")))
              .queue();
 
         event.reply(Emote.GREENTICK + " Successfully refreshed all slash command").queue();

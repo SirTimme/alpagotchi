@@ -53,12 +53,13 @@ public class MyAlpaca implements ISlashCommand {
 
         try {
             final ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
+
             ImageIO.write(createImage(entry), "jpg", byteStream);
 
             final long sleepCooldown = entry.getCooldowns().getSleep() - System.currentTimeMillis();
             final long workCooldown = entry.getCooldowns().getWork() - System.currentTimeMillis();
-            final EmbedBuilder embed = new EmbedBuilder();
 
+            final EmbedBuilder embed = new EmbedBuilder();
             embed.setTitle(entry.getAlpaca().getNickname())
                  .setDescription("_Have a llamazing day!_")
                  .addField("Work", checkCooldown(workCooldown), true)
