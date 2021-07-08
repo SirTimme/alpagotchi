@@ -7,7 +7,6 @@ public class ThreadFactory implements java.util.concurrent.ThreadFactory {
 	public Thread newThread(@NotNull Runnable runnable) {
 		Thread thread = new Thread(runnable);
 		thread.setDaemon(true);
-
 		return thread;
 	}
 }

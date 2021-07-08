@@ -1,113 +1,80 @@
 package Bot.Command.Member;
 
-import Bot.Command.CommandContext;
-import Bot.Command.ICommand;
-import Bot.Shop.Item;
-import Bot.Utils.*;
+import Bot.Command.ISlashCommand;
+import Bot.Models.Entry;
 import Bot.Database.IDatabase;
+import Bot.Shop.Item;
 import Bot.Shop.ItemManager;
-import Bot.Utils.Error;
-import net.dv8tion.jda.api.Permission;
-import net.dv8tion.jda.api.entities.TextChannel;
+import Bot.Utils.Emote;
+import Bot.Utils.Language;
+import Bot.Utils.Stat;
+import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 
-import java.util.EnumSet;
-import java.util.List;
+import java.util.concurrent.TimeUnit;
 
-public class Feed implements ICommand {
-	private final ItemManager itemManager;
+public class Feed implements ISlashCommand {
+    private final ItemManager itemMan;
 
-	public Feed(ItemManager itemManager) {
-		this.itemManager = itemManager;
-	}
+    public Feed(ItemManager itemMan) {
+        this.itemMan = itemMan;
+    }
 
-	@Override
-	public void execute(CommandContext ctx) {
-		final TextChannel channel = ctx.getChannel();
-		final List<String> args = ctx.getArgs();
-		final long authorID = ctx.getAuthorID();
+    @Override
+    public void execute(SlashCommandEvent event, long authorID) {
+        Entry entry = IDatabase.INSTANCE.getEntry(authorID);
 
-		if (IDatabase.INSTANCE.getUser(authorID) == null) {
-			channel.sendMessage(Error.NOT_INITIALIZED.getMessage(ctx.getPrefix(), getName())).queue();
-			return;
-		}
+        if (entry == null) {
+            event.reply(Emote.REDCROSS + " You don't own an alpaca, use **/init** first")
+                 .setEphemeral(true)
+                 .queue();
+            return;
+        }
 
-		if (Cooldown.isActive(Stat.SLEEP, authorID, channel)) {
-			return;
-		}
+        long sleep = TimeUnit.MILLISECONDS.toMinutes(entry.getCooldowns().getSleep() - System.currentTimeMillis());
 
-		if (args.isEmpty() || args.size() < 2) {
-			channel.sendMessage(Error.MISSING_ARGS.getMessage(ctx.getPrefix(), getName())).queue();
-			return;
-		}
+        if (sleep > 0) {
+            event.reply(Emote.REDCROSS + " Your alpaca sleeps, it'll wake up in **" + Language.handle(sleep, "minute") + "**")
+                 .setEphemeral(true)
+                 .queue();
+            return;
+        }
 
-		final Item item = itemManager.getItem(args.get(0));
-		if (item == null) {
-			channel.sendMessage(Emote.REDCROSS + "Couldn't resolve the item").queue();
-			return;
-		}
+        final int amount = (int) event.getOption("amount").getAsLong();
 
-		try {
-			final int amount = Integer.parseInt(args.get(1));
-			if (amount > 5) {
-				channel.sendMessage(Emote.REDCROSS + " You can only feed max. 5 items at a time").queue();
-				return;
-			}
+        if (amount > 5) {
+            event.reply(Emote.REDCROSS + " You can only feed max. 5 items at a time")
+                 .setEphemeral(true)
+                 .queue();
+            return;
+        }
 
-			if (IDatabase.INSTANCE.getInventory(authorID, item) - amount < 0) {
-				channel.sendMessage(Emote.REDCROSS + " You don't own that many items").queue();
-				return;
-			}
+        final Item item = this.itemMan.getItem(event.getOption("item").getAsString());
 
-			final int oldValue = IDatabase.INSTANCE.getStatInt(authorID, item.getStat());
-			final int saturation = item.getSaturation() * amount;
+        if (entry.getInventory().getItem(item.getName()) - amount < 0) {
+            event.reply(Emote.REDCROSS + " You don't own that many items")
+                 .setEphemeral(true)
+                 .queue();
+            return;
+        }
 
-			if (oldValue + saturation > 100) {
-				channel.sendMessage(Emote.REDCROSS + " You would overfeed your alpaca").queue();
-				return;
-			}
+        final int oldValue = item.getStat().equals(Stat.HUNGER) ? entry.getAlpaca().getHunger() : entry.getAlpaca().getThirst();
+        final int saturation = amount * item.getSaturation();
 
-			IDatabase.INSTANCE.setInventory(authorID, item, -amount);
-			IDatabase.INSTANCE.setStatInt(authorID, item.getStat(), saturation);
+        if (oldValue + saturation > 100) {
+            event.reply(Emote.REDCROSS + " You would overfeed your alpaca")
+                 .setEphemeral(true)
+                 .queue();
+            return;
+        }
 
-			if (item.getStat().equals(Stat.HUNGER)) {
-				channel.sendMessage(":meat_on_bone: Your alpaca eats the **" + Language.handle(amount, item.getName()) + "** in one bite **Hunger + " + saturation + "**").queue();
-			}
-			else {
-				channel.sendMessage(":beer: Your alpaca drinks the **" + Language.handle(amount, item.getName()) + "** empty **Thirst + " + saturation + "**").queue();
-			}
-		}
-		catch (NumberFormatException error) {
-			channel.sendMessage(Emote.REDCROSS + " Couldn't resolve the item amount").queue();
-		}
-	}
+        IDatabase.INSTANCE.setEntry(authorID, Stat.valueOf(item.getName().toUpperCase()), -amount);
+        IDatabase.INSTANCE.setEntry(authorID, item.getStat(), saturation);
 
-	@Override
-	public String getName() {
-		return "feed";
-	}
-
-	@Override
-	public Level getLevel() {
-		return Level.MEMBER;
-	}
-
-	@Override
-	public EnumSet<Permission> getCommandPerms() {
-		return EnumSet.of(Permission.MESSAGE_WRITE);
-	}
-
-	@Override
-	public String getSyntax() {
-		return "feed [item] [1-5]";
-	}
-
-	@Override
-	public String getExample() {
-		return "feed water 2";
-	}
-
-	@Override
-	public String getDescription() {
-		return "Feeds your alpaca with the specified item";
-	}
+        if (item.getStat().equals(Stat.HUNGER)) {
+            event.reply(":meat_on_bone: Your alpaca eats the **" + Language.handle(amount, item.getName()) + "** in one bite **Hunger + " + saturation + "**").queue();
+        }
+        else {
+            event.reply(":beer: Your alpaca drinks the **" + Language.handle(amount, item.getName()) + "** empty **Thirst + " + saturation + "**").queue();
+        }
+    }
 }

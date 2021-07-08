@@ -1,88 +1,51 @@
 package Bot.Command.Member;
 
-import Bot.Command.CommandContext;
-import Bot.Command.ICommand;
-import Bot.Utils.Error;
-import Bot.Config;
+import Bot.Command.ISlashCommand;
 import Bot.Database.IDatabase;
+import Bot.Models.Entry;
 import Bot.Shop.ItemManager;
-import Bot.Utils.Level;
+import Bot.Utils.Emote;
 import Bot.Utils.Stat;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.Permission;
-import net.dv8tion.jda.api.entities.TextChannel;
-import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 
 import java.time.Instant;
-import java.util.EnumSet;
-import java.util.List;
 
-public class Inventory implements ICommand {
-	private final ItemManager itemManager;
+public class Inventory implements ISlashCommand {
+    private final ItemManager itemMan;
 
-	public Inventory(ItemManager itemManager) {
-		this.itemManager = itemManager;
-	}
+    public Inventory(ItemManager itemMan) {
+        this.itemMan = itemMan;
+    }
 
-	@Override
-	public void execute(CommandContext ctx) {
-		final TextChannel channel = ctx.getChannel();
-		final long authorID = ctx.getAuthorID();
+    @Override
+    public void execute(SlashCommandEvent event, long authorID) {
+        Entry entry = IDatabase.INSTANCE.getEntry(authorID);
 
-		if (IDatabase.INSTANCE.getUser(authorID) == null) {
-			channel.sendMessage(Error.NOT_INITIALIZED.getMessage(ctx.getPrefix(), getName())).queue();
-			return;
-		}
+        if (entry == null) {
+            event.reply(Emote.REDCROSS + " You don't own an alpaca, use **/init** first")
+                 .setEphemeral(true)
+                 .queue();
+            return;
+        }
 
-		final User dev = ctx.getJDA().getUserById(Config.get("DEV_ID"));
-		final EmbedBuilder embed = new EmbedBuilder();
+        final EmbedBuilder embed = new EmbedBuilder();
 
-		embed.setTitle("Inventory")
-			 .setThumbnail("https://cdn.discordapp.com/attachments/840135073835122699/842742550359703572/inventory.png")
-			 .addField("__**:meat_on_bone: Hunger items**__", "These items are used to fill up the hunger of your alpaca", false)
-			 .setFooter("Created by " + dev.getName(), dev.getEffectiveAvatarUrl())
-			 .setTimestamp(Instant.now());
+        embed.setTitle("Inventory")
+             .setThumbnail("https://cdn.discordapp.com/attachments/795637300661977132/839074173459365908/inventory.png")
+             .addField("__**:meat_on_bone: Hunger items**__", "These items are used to fill up the hunger of your alpaca", false)
+             .setFooter("Created by SirTimme", "https://cdn.discordapp.com/avatars/483012399893577729/ba3996b7728a950565a79bd4b550b8dd.png")
+             .setTimestamp(Instant.now());
 
-		itemManager.getItems(Stat.HUNGER)
-				   .forEach(item -> embed.addField(":package: " + item.getName(), "Quantity: **" + IDatabase.INSTANCE.getInventory(authorID, item) + "**", true));
+        itemMan.getItems(Stat.HUNGER)
+               .forEach(item -> embed.addField(":package: " + item.getName(), "Quantity: **" + entry.getInventory().getItem(item.getName()) + "**", true));
 
-		embed.addBlankField(false)
-			 .addField("__**:beer: Thirst items**__", "Following items replenish the thirst of your alpaca", false);
+        embed.addBlankField(false)
+             .addField("__**:beer: Thirst items**__", "Following items replenish the thirst of your alpaca", false);
 
-		itemManager.getItems(Stat.THIRST)
-				   .forEach(item -> embed.addField(":package: " + item.getName(), "Quantity: **" + IDatabase.INSTANCE.getInventory(authorID, item) + "**", true));
+        itemMan.getItems(Stat.THIRST)
+                   .forEach(item -> embed.addField(":package: " + item.getName(), "Quantity: **" + entry.getInventory().getItem(item.getName()) + "**", true));
 
-		channel.sendMessage(embed.build()).queue();
-	}
-
-	@Override
-	public String getName() {
-		return "inventory";
-	}
-
-	@Override
-	public Level getLevel() {
-		return Level.MEMBER;
-	}
-
-	@Override
-	public List<String> getAliases() {
-		return List.of("inv");
-	}
-
-	@Override
-	public EnumSet<Permission> getCommandPerms() {
-		return EnumSet.of(Permission.MESSAGE_WRITE, Permission.MESSAGE_EMBED_LINKS);
-	}
-
-	@Override
-	public String getSyntax() {
-		return "inventory";
-	}
-
-	@Override
-	public String getDescription() {
-		return "Displays your bought items";
-	}
+        event.replyEmbeds(embed.build()).queue();
+    }
 }
-

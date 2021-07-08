@@ -1,43 +1,12 @@
 package Bot.Command.Member;
 
-import Bot.Command.CommandContext;
-import Bot.Command.ICommand;
+import Bot.Command.ISlashCommand;
 import Bot.Database.IDatabase;
-import Bot.Utils.Level;
-import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 
-import java.util.EnumSet;
-
-public class Count implements ICommand {
-	@Override
-	public void execute(CommandContext ctx) {
-		final long totalSize = IDatabase.INSTANCE.getEntries();
-
-		ctx.getChannel().sendMessage("\uD83D\uDC65 There are **" + totalSize + "** alpacas in the farm by now").queue();
-	}
-
-	@Override
-	public String getName() {
-		return "count";
-	}
-
-	@Override
-	public Level getLevel() {
-		return Level.MEMBER;
-	}
-
-	@Override
-	public EnumSet<Permission> getCommandPerms() {
-		return EnumSet.of(Permission.MESSAGE_WRITE);
-	}
-
-	@Override
-	public String getSyntax() {
-		return "count";
-	}
-
-	@Override
-	public String getDescription() {
-		return "Counts all alpacas across all guilds";
-	}
+public class Count implements ISlashCommand {
+    @Override
+    public void execute(SlashCommandEvent event, long authorID) {
+        event.reply("\uD83D\uDC65 There are **" + IDatabase.INSTANCE.getEntries() + "** alpacas in the farm by now").queue();
+    }
 }
