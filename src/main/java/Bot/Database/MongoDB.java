@@ -6,21 +6,42 @@ import Bot.Models.Cooldowns;
 import Bot.Models.Entry;
 import Bot.Models.Inventory;
 import Bot.Utils.Stat;
+import com.mongodb.ConnectionString;
+import com.mongodb.MongoClientSettings;
+import com.mongodb.ReadConcern;
 import com.mongodb.client.*;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.ReplaceOptions;
 import com.mongodb.client.model.Updates;
+import com.mongodb.connection.ConnectionPoolSettings;
 import org.bson.Document;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 public class MongoDB implements IDatabase {
     private final MongoCollection<Document> users;
     private final MongoCollection<Document> guilds;
 
     public MongoDB() {
-        MongoClient client = MongoClients.create(Config.get("DB_URI"));
+        ConnectionPoolSettings pool = ConnectionPoolSettings.builder()
+                                                            .maxConnectionIdleTime(10, TimeUnit.MINUTES)
+                                                            .maxConnectionLifeTime(30, TimeUnit.MINUTES)
+                                                            .maintenanceInitialDelay(20, TimeUnit.MINUTES)
+                                                            .maintenanceFrequency(10, TimeUnit.MINUTES)
+                                                            .build();
+
+        ConnectionString connString = new ConnectionString(Config.get("DB_URI"));
+
+        MongoClientSettings settings = MongoClientSettings.builder()
+                                                          .applyToConnectionPoolSettings(builder -> builder.applySettings(pool))
+                                                          .applyConnectionString(connString)
+                                                          .retryWrites(true)
+                                                          .readConcern(ReadConcern.MAJORITY)
+                                                          .build();
+
+        MongoClient client = MongoClients.create(settings);
         MongoDatabase database = client.getDatabase(Config.get("DB_NAME"));
 
         users = database.getCollection("alpacas_manager");
