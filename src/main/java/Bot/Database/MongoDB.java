@@ -27,7 +27,6 @@ public class MongoDB implements IDatabase {
     public MongoDB() {
         ConnectionPoolSettings pool = ConnectionPoolSettings.builder()
                                                             .maxConnectionIdleTime(1, TimeUnit.HOURS)
-                                                            .maxConnectionLifeTime(2, TimeUnit.HOURS)
                                                             .maintenanceInitialDelay(1, TimeUnit.HOURS)
                                                             .maintenanceFrequency(2, TimeUnit.HOURS)
                                                             .build();
