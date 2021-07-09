@@ -26,10 +26,10 @@ public class MongoDB implements IDatabase {
 
     public MongoDB() {
         ConnectionPoolSettings pool = ConnectionPoolSettings.builder()
-                                                            .maxConnectionIdleTime(10, TimeUnit.MINUTES)
-                                                            .maxConnectionLifeTime(30, TimeUnit.MINUTES)
-                                                            .maintenanceInitialDelay(20, TimeUnit.MINUTES)
-                                                            .maintenanceFrequency(10, TimeUnit.MINUTES)
+                                                            .maxConnectionIdleTime(1, TimeUnit.HOURS)
+                                                            .maxConnectionLifeTime(2, TimeUnit.HOURS)
+                                                            .maintenanceInitialDelay(1, TimeUnit.HOURS)
+                                                            .maintenanceFrequency(2, TimeUnit.HOURS)
                                                             .build();
 
         ConnectionString connString = new ConnectionString(Config.get("DB_URI"));
@@ -67,10 +67,7 @@ public class MongoDB implements IDatabase {
         Document shopItems = inventory.get("items", Document.class);
 
         Map<String, Integer> items = new HashMap<>();
-
-        for (String itemName : shopItems.keySet()) {
-            items.put(itemName, shopItems.getInteger(itemName));
-        }
+        shopItems.keySet().forEach((item -> items.put(item, shopItems.getInteger(item))));
 
         return new Entry(
                 new Alpaca(
