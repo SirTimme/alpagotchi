@@ -8,7 +8,6 @@ import Bot.Models.Inventory;
 import Bot.Utils.Stat;
 import com.mongodb.ConnectionString;
 import com.mongodb.MongoClientSettings;
-import com.mongodb.ReadConcern;
 import com.mongodb.client.*;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.ReplaceOptions;
@@ -26,21 +25,16 @@ public class MongoDB implements IDatabase {
 
     public MongoDB() {
         ConnectionPoolSettings pool = ConnectionPoolSettings.builder()
-                                                            .maxConnectionIdleTime(1, TimeUnit.HOURS)
-                                                            .maintenanceInitialDelay(1, TimeUnit.HOURS)
-                                                            .maintenanceFrequency(2, TimeUnit.HOURS)
+                                                            .maxConnectionIdleTime(1, TimeUnit.MINUTES)
                                                             .build();
-
-        ConnectionString connString = new ConnectionString(Config.get("DB_URI"));
 
         MongoClientSettings settings = MongoClientSettings.builder()
                                                           .applyToConnectionPoolSettings(builder -> builder.applySettings(pool))
-                                                          .applyConnectionString(connString)
-                                                          .retryWrites(true)
-                                                          .readConcern(ReadConcern.MAJORITY)
+                                                          .applyConnectionString(new ConnectionString(Config.get("DB_URI")))
                                                           .build();
 
         MongoClient client = MongoClients.create(settings);
+
         MongoDatabase database = client.getDatabase(Config.get("DB_NAME"));
 
         users = database.getCollection("alpacas_manager");
@@ -66,7 +60,7 @@ public class MongoDB implements IDatabase {
         Document shopItems = inventory.get("items", Document.class);
 
         Map<String, Integer> items = new HashMap<>();
-        shopItems.keySet().forEach((item -> items.put(item, shopItems.getInteger(item))));
+        shopItems.keySet().forEach(item -> items.put(item, shopItems.getInteger(item)));
 
         return new Entry(
                 new Alpaca(
