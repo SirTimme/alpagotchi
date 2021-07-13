@@ -12,24 +12,17 @@ import com.mongodb.client.*;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.ReplaceOptions;
 import com.mongodb.client.model.Updates;
-import com.mongodb.connection.ConnectionPoolSettings;
 import org.bson.Document;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 public class MongoDB implements IDatabase {
     private final MongoCollection<Document> users;
     private final MongoCollection<Document> guilds;
 
     public MongoDB() {
-        ConnectionPoolSettings pool = ConnectionPoolSettings.builder()
-                                                            .maxConnectionIdleTime(1, TimeUnit.MINUTES)
-                                                            .build();
-
         MongoClientSettings settings = MongoClientSettings.builder()
-                                                          .applyToConnectionPoolSettings(builder -> builder.applySettings(pool))
                                                           .applyConnectionString(new ConnectionString(Config.get("DB_URI")))
                                                           .build();
 
