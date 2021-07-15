@@ -93,7 +93,7 @@ public class Work implements ISlashCommand {
 
         entry.getInventory().setCurrency(fluffies);
         entry.getAlpaca().setEnergy(-energyCost);
-        entry.getAlpaca().setJoy(-joy);
+        entry.getAlpaca().setJoy(-joyCost);
         entry.getCooldowns().setWork(cooldown);
 
         IDatabase.INSTANCE.setEntry(authorID, entry);
