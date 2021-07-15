@@ -7,17 +7,14 @@ import Bot.Models.Entry;
 import Bot.Models.Inventory;
 import com.mongodb.ConnectionString;
 import com.mongodb.MongoClientSettings;
-import com.mongodb.ReadConcern;
 import com.mongodb.client.*;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.ReplaceOptions;
 import com.mongodb.client.model.Updates;
-import com.mongodb.connection.ConnectionPoolSettings;
 import org.bson.Document;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 import static com.mongodb.client.model.Filters.eq;
 
@@ -26,23 +23,12 @@ public class MongoDB implements IDatabase {
     private final MongoCollection<Document> guilds;
 
     public MongoDB() {
-        ConnectionPoolSettings pool = ConnectionPoolSettings.builder()
-                                                            .maxConnectionIdleTime(10, TimeUnit.MINUTES)
-                                                            .maxConnectionLifeTime(30, TimeUnit.MINUTES)
-                                                            .maintenanceInitialDelay(20, TimeUnit.MINUTES)
-                                                            .maintenanceFrequency(10, TimeUnit.MINUTES)
-                                                            .build();
-
-        ConnectionString connString = new ConnectionString(Config.get("DB_URI"));
-
         MongoClientSettings settings = MongoClientSettings.builder()
-                                                          .applyToConnectionPoolSettings(builder -> builder.applySettings(pool))
-                                                          .applyConnectionString(connString)
-                                                          .retryWrites(true)
-                                                          .readConcern(ReadConcern.MAJORITY)
+                                                          .applyConnectionString(new ConnectionString(Config.get("DB_URI")))
                                                           .build();
 
         MongoClient client = MongoClients.create(settings);
+
         MongoDatabase database = client.getDatabase(Config.get("DB_NAME"));
 
         users = database.getCollection("alpacas_manager");
@@ -68,10 +54,7 @@ public class MongoDB implements IDatabase {
         Document shopItems = inventory.get("items", Document.class);
 
         Map<String, Integer> items = new HashMap<>();
-
-        for (String itemName : shopItems.keySet()) {
-            items.put(itemName, shopItems.getInteger(itemName));
-        }
+        shopItems.keySet().forEach(item -> items.put(item, shopItems.getInteger(item)));
 
         return new Entry(
                 new Alpaca(

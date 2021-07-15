@@ -2,6 +2,7 @@ package Bot.Command;
 
 import Bot.Command.Dev.Decrease;
 import Bot.Command.Dev.Shutdown;
+import Bot.Command.Dev.Update;
 import Bot.Command.Member.*;
 import Bot.Shop.ItemManager;
 import com.mongodb.lang.Nullable;
@@ -10,7 +11,7 @@ import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import java.util.*;
 
 public class SlashCommandManager {
-    private Map<String, ISlashCommand> commands = new HashMap<>();
+    private final Map<String, ISlashCommand> commands = new TreeMap<>();
 
     public SlashCommandManager() {
         ItemManager itemMan = new ItemManager();
