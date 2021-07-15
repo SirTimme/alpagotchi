@@ -53,7 +53,6 @@ public class SlashCommandManager {
 
     public String getCommandsAsString() {
         StringBuilder sb = new StringBuilder();
-
         commands.keySet().forEach(cmd -> sb.append("`").append(cmd).append("` "));
 
         return sb.toString();

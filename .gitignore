@@ -2,6 +2,3 @@
 .env
 target/
 *.iml
-.classpath
-.project
-.settings
