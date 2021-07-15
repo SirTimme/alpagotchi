@@ -5,7 +5,7 @@ import com.mongodb.lang.Nullable;
 import java.util.Map;
 
 public class Inventory {
-    private final int currency;
+    private int currency;
     private final Map<String, Integer> items;
 
     public Inventory(int currency, Map<String, Integer> items) {
@@ -20,5 +20,13 @@ public class Inventory {
     @Nullable
     public int getItem(String name) {
         return items.get(name);
+    }
+
+    public void setCurrency(int currency) {
+        this.currency = this.currency + currency;
+    }
+
+    public void setItem(String item, int newValue) {
+        items.replace(item, items.get(item) + newValue);
     }
 }

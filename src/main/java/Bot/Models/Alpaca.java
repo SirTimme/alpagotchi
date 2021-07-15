@@ -1,8 +1,8 @@
 package Bot.Models;
 
 public class Alpaca {
-    private final String outfit, nickname;
-    private final int hunger, thirst, energy, joy;
+    private String outfit, nickname;
+    private int hunger, thirst, energy, joy;
 
     public Alpaca(String outfit, String nickname, int hunger, int thirst, int energy, int joy) {
         this.outfit = outfit;
@@ -35,5 +35,29 @@ public class Alpaca {
 
     public int getJoy() {
         return joy;
+    }
+
+    public void setOutfit(String outfit) {
+        this.outfit = outfit;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public void setHunger(int hunger) {
+        this.hunger = this.hunger + hunger;
+    }
+
+    public void setThirst(int thirst) {
+        this.thirst = this.thirst + thirst;
+    }
+
+    public void setEnergy(int energy) {
+        this.energy = this.energy + energy;
+    }
+
+    public void setJoy(int joy) {
+        this.joy = this.joy + joy;
     }
 }

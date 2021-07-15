@@ -85,19 +85,18 @@ public class Work implements ISlashCommand {
             return;
         }
 
-        final int fluffies = (int) (Math.random() * 15 + 1);
-        IDatabase.INSTANCE.setEntry(authorID, Stat.CURRENCY, fluffies);
-
-        final int energyCost = (int) (Math.random() * 8 + 1);
-        IDatabase.INSTANCE.setEntry(authorID, Stat.ENERGY, -energyCost);
-
-        final int joyCost = (int) (Math.random() * 10 + 2);
-        IDatabase.INSTANCE.setEntry(authorID, Stat.JOY, -joyCost);
-
-        final long cooldown = System.currentTimeMillis() + 1000L * 60 * 20;
-        IDatabase.INSTANCE.setEntry(authorID, Stat.WORK, cooldown);
-
         final String message = getRandomMessage();
+        final int fluffies = (int) (Math.random() * 15 + 1);
+        final int energyCost = (int) (Math.random() * 8 + 1);
+        final int joyCost = (int) (Math.random() * 10 + 2);
+        final long cooldown = System.currentTimeMillis() + 1000L * 60 * 20;
+
+        entry.getInventory().setCurrency(fluffies);
+        entry.getAlpaca().setEnergy(-energyCost);
+        entry.getAlpaca().setJoy(-joy);
+        entry.getCooldowns().setWork(cooldown);
+
+        IDatabase.INSTANCE.setEntry(authorID, entry);
 
         event.reply("⛏ " + message + " **Fluffies + " + fluffies + ", Energy - " + energyCost + ", Joy - " + joyCost + "**").queue();
     }

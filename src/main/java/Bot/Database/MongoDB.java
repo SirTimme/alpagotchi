@@ -5,7 +5,6 @@ import Bot.Models.Alpaca;
 import Bot.Models.Cooldowns;
 import Bot.Models.Entry;
 import Bot.Models.Inventory;
-import Bot.Utils.Stat;
 import com.mongodb.ConnectionString;
 import com.mongodb.MongoClientSettings;
 import com.mongodb.ReadConcern;
@@ -19,6 +18,8 @@ import org.bson.Document;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
+
+import static com.mongodb.client.model.Filters.eq;
 
 public class MongoDB implements IDatabase {
     private final MongoCollection<Document> users;
@@ -50,12 +51,12 @@ public class MongoDB implements IDatabase {
 
     @Override
     public String getPrefix(long guildID) {
-        return guilds.find(Filters.eq("_id", guildID)).first().getString("prefix");
+        return guilds.find(eq("_id", guildID)).first().getString("prefix");
     }
 
     @Override
     public Entry getEntry(long memberID) {
-        Document result = users.find(Filters.eq("_id", memberID)).first();
+        Document result = users.find(eq("_id", memberID)).first();
 
         if (result == null) {
             return null;
@@ -93,41 +94,35 @@ public class MongoDB implements IDatabase {
     }
 
     @Override
-    public <T> void setEntry(long memberID, Stat stat, T newValue) {
-        Document doc = users.find(Filters.eq("_id", memberID)).first();
-        Number oldValue;
+    public void setEntry(long memberID, Entry entry) {
+        Document updated = new Document();
 
-        switch (stat) {
-            case JOY:
-            case ENERGY:
-            case HUNGER:
-            case THIRST:
-                oldValue = doc.get("alpaca", Document.class).getInteger(stat.getName());
-                users.updateOne(doc, Updates.set("alpaca." + stat.getName(), oldValue.intValue() + (int) newValue));
-                break;
-            case CURRENCY:
-                oldValue = doc.get("inventory", Document.class).getInteger(stat.getName());
-                users.updateOne(doc, Updates.set("inventory." + stat.getName(), oldValue.intValue() + (int) newValue));
-                break;
-            case WORK:
-            case SLEEP:
-                users.updateOne(doc, Updates.set("cooldowns." + stat.getName(), (long) newValue));
-                break;
-            case NICKNAME:
-            case OUTFIT:
-                users.updateOne(doc, Updates.set("alpaca." + stat.getName(), newValue.toString()));
-                break;
-            case SALAD:
-            case TACO:
-            case STEAK:
-            case WATER:
-            case LEMONADE:
-            case CACAO:
-                oldValue = doc.get("inventory", Document.class).get("items", Document.class).getInteger(stat.getName());
-                users.updateOne(doc, Updates.set("inventory.items." + stat.getName(), oldValue.intValue() + (int) newValue));
-                break;
-            default:
-        }
+        updated.append("_id", memberID)
+            .append("alpaca", new Document()
+                    .append("nickname", entry.getAlpaca().getNickname())
+                    .append("hunger", entry.getAlpaca().getHunger())
+                    .append("thirst", entry.getAlpaca().getThirst())
+                    .append("energy", entry.getAlpaca().getEnergy())
+                    .append("joy", entry.getAlpaca().getJoy())
+                    .append("outfit", entry.getAlpaca().getOutfit())
+            )
+            .append("inventory", new Document()
+                    .append("currency", entry.getInventory().getCurrency())
+                    .append("items", new Document()
+                            .append("salad", entry.getInventory().getItem("salad"))
+                            .append("taco", entry.getInventory().getItem("taco"))
+                            .append("steak", entry.getInventory().getItem("steak"))
+                            .append("water", entry.getInventory().getItem("water"))
+                            .append("lemonade", entry.getInventory().getItem("lemonade"))
+                            .append("cacao", entry.getInventory().getItem("cacao"))
+                    )
+            )
+            .append("cooldowns", new Document()
+                    .append("work", entry.getCooldowns().getWork())
+                    .append("sleep", entry.getCooldowns().getSleep())
+            );
+
+        users.replaceOne(eq("_id", memberID), updated);
     }
 
     @Override
@@ -164,7 +159,7 @@ public class MongoDB implements IDatabase {
 
     @Override
     public void deleteEntry(long memberID) {
-        users.deleteOne(Filters.eq("_id", memberID));
+        users.deleteOne(eq("_id", memberID));
     }
 
     @Override
@@ -174,12 +169,12 @@ public class MongoDB implements IDatabase {
         guild.append("_id", guildID)
              .append("prefix", Config.get("PREFIX"));
 
-        guilds.replaceOne(Filters.eq("_id", guildID), guild, new ReplaceOptions().upsert(true));
+        guilds.replaceOne(eq("_id", guildID), guild, new ReplaceOptions().upsert(true));
     }
 
     @Override
     public void deleteGuild(long guildID) {
-        guilds.deleteOne(Filters.eq("_id", guildID));
+        guilds.deleteOne(eq("_id", guildID));
     }
 
     @Override

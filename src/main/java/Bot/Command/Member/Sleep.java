@@ -40,8 +40,10 @@ public class Sleep implements ISlashCommand {
         energy = energy + duration > 100 ? 100 - energy : duration;
         final long cooldown = System.currentTimeMillis() + 1000L * 60 * energy;
 
-        IDatabase.INSTANCE.setEntry(authorID, Stat.ENERGY, energy);
-        IDatabase.INSTANCE.setEntry(authorID, Stat.SLEEP, cooldown);
+        entry.getAlpaca().setEnergy(energy);
+        entry.getCooldowns().setSleep(cooldown);
+
+        IDatabase.INSTANCE.setEntry(authorID, entry);
 
         event.reply("\uD83D\uDCA4 Your alpaca goes to bed for **" + energy + "** minutes and rests well **Energy + " + energy + "**")
              .queue();

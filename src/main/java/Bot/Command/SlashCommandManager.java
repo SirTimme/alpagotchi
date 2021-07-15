@@ -15,29 +15,27 @@ public class SlashCommandManager {
     public SlashCommandManager() {
         ItemManager itemMan = new ItemManager();
 
-        this.commands.put("ping", new Ping());
-        this.commands.put("init", new Init());
-        this.commands.put("balance", new Balance());
-        this.commands.put("buy", new Buy(itemMan));
-        this.commands.put("count", new Count());
-        this.commands.put("delete", new Delete());
-        this.commands.put("feed", new Feed(itemMan));
-        this.commands.put("gift", new Gift(itemMan));
-        this.commands.put("image", new Image());
-        this.commands.put("work", new Work());
-        this.commands.put("shutdown", new Shutdown());
-        this.commands.put("decrease", new Decrease());
-        this.commands.put("myalpaca", new MyAlpaca());
-        this.commands.put("nick", new Nick());
-        this.commands.put("help", new Help(this));
-        this.commands.put("sleep", new Sleep());
-        this.commands.put("outfit", new Outfit());
-        this.commands.put("pet", new Pet());
-        this.commands.put("inventory", new Inventory(itemMan));
-        this.commands.put("shop", new Shop(itemMan));
-        this.commands.put("update", new Update());
-
-        this.commands = new TreeMap<>(commands);
+        commands.put("ping", new Ping());
+        commands.put("init", new Init());
+        commands.put("balance", new Balance());
+        commands.put("buy", new Buy(itemMan));
+        commands.put("count", new Count());
+        commands.put("delete", new Delete());
+        commands.put("feed", new Feed(itemMan));
+        commands.put("gift", new Gift(itemMan));
+        commands.put("image", new Image());
+        commands.put("work", new Work());
+        commands.put("shutdown", new Shutdown());
+        commands.put("decrease", new Decrease());
+        commands.put("myalpaca", new MyAlpaca());
+        commands.put("nick", new Nick());
+        commands.put("help", new Help(this));
+        commands.put("sleep", new Sleep());
+        commands.put("outfit", new Outfit());
+        commands.put("pet", new Pet());
+        commands.put("inventory", new Inventory(itemMan));
+        commands.put("shop", new Shop(itemMan));
+        commands.put("update", new Update());
     }
 
     public void handle(SlashCommandEvent event) {
@@ -54,7 +52,8 @@ public class SlashCommandManager {
 
     public String getCommandsAsString() {
         StringBuilder sb = new StringBuilder();
-        this.commands.keySet().forEach(cmd -> sb.append("`/").append(cmd).append("`\n"));
+
+        commands.keySet().forEach(cmd -> sb.append("`").append(cmd).append("` "));
 
         return sb.toString();
     }

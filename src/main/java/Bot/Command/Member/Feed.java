@@ -12,6 +12,8 @@ import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 
 import java.util.concurrent.TimeUnit;
 
+import static Bot.Utils.Stat.HUNGER;
+
 public class Feed implements ISlashCommand {
     private final ItemManager itemMan;
 
@@ -57,7 +59,8 @@ public class Feed implements ISlashCommand {
             return;
         }
 
-        final int oldValue = item.getStat().equals(Stat.HUNGER) ? entry.getAlpaca().getHunger() : entry.getAlpaca().getThirst();
+        final int oldValue = item.getStat().equals(HUNGER) ? entry.getAlpaca().getHunger() : entry.getAlpaca()
+                                                                                                  .getThirst();
         final int saturation = amount * item.getSaturation();
 
         if (oldValue + saturation > 100) {
@@ -67,14 +70,18 @@ public class Feed implements ISlashCommand {
             return;
         }
 
-        IDatabase.INSTANCE.setEntry(authorID, Stat.valueOf(item.getName().toUpperCase()), -amount);
-        IDatabase.INSTANCE.setEntry(authorID, item.getStat(), saturation);
+        entry.getInventory().setItem(item.getName(), -amount);
 
-        if (item.getStat().equals(Stat.HUNGER)) {
-            event.reply(":meat_on_bone: Your alpaca eats the **" + Language.handle(amount, item.getName()) + "** in one bite **Hunger + " + saturation + "**").queue();
-        }
-        else {
-            event.reply(":beer: Your alpaca drinks the **" + Language.handle(amount, item.getName()) + "** empty **Thirst + " + saturation + "**").queue();
+        if (item.getStat().equals(HUNGER)) {
+            entry.getAlpaca().setHunger(saturation);
+            IDatabase.INSTANCE.setEntry(authorID, entry);
+            event.reply(":meat_on_bone: Your alpaca eats the **" + Language.handle(amount, item.getName()) + "** in one bite **Hunger + " + saturation + "**")
+                 .queue();
+        } else {
+            entry.getAlpaca().setThirst(saturation);
+            IDatabase.INSTANCE.setEntry(authorID, entry);
+            event.reply(":beer: Your alpaca drinks the **" + Language.handle(amount, item.getName()) + "** empty **Thirst + " + saturation + "**")
+                 .queue();
         }
     }
 }
