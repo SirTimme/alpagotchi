@@ -10,7 +10,11 @@ import javax.security.auth.login.LoginException;
 
 public class Bot {
     public static void main(String[] args) throws LoginException {
-        JDABuilder.create(Config.get("TOKEN"), GatewayIntent.GUILD_MESSAGES, GatewayIntent.GUILD_MEMBERS)
+        JDABuilder.create(
+                Config.get("TOKEN"),
+                GatewayIntent.GUILD_MESSAGES,
+                GatewayIntent.GUILD_MEMBERS
+        )
                   .disableCache(
                           CacheFlag.ACTIVITY,
                           CacheFlag.VOICE_STATE,

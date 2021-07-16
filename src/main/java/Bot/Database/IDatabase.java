@@ -1,13 +1,12 @@
 package Bot.Database;
 
 import Bot.Models.Entry;
-import Bot.Utils.Stat;
 
 public interface IDatabase {
 	IDatabase INSTANCE = new MongoDB();
 
 	Entry getEntry(long memberID);
-	<T> void setEntry(long memberID, Stat stat, T newValue);
+	void setEntry(long memberID, Entry entry);
 
 	String getPrefix(long guildID);
 

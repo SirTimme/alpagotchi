@@ -56,8 +56,8 @@ public class MyAlpaca implements ISlashCommand {
 
             ImageIO.write(createImage(entry), "jpg", byteStream);
 
-            final long sleepCooldown = entry.getCooldowns().getSleep() - System.currentTimeMillis();
-            final long workCooldown = entry.getCooldowns().getWork() - System.currentTimeMillis();
+            final long sleepCooldown = entry.getCooldown().getSleep() - System.currentTimeMillis();
+            final long workCooldown = entry.getCooldown().getWork() - System.currentTimeMillis();
 
             final EmbedBuilder embed = new EmbedBuilder();
             embed.setTitle(entry.getAlpaca().getNickname())

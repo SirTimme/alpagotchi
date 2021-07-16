@@ -48,8 +48,10 @@ public class Buy implements ISlashCommand {
             return;
         }
 
-        IDatabase.INSTANCE.setEntry(authorID, Stat.CURRENCY, -price);
-        IDatabase.INSTANCE.setEntry(authorID, Stat.valueOf(item.getName().toUpperCase()), amount);
+        entry.getInventory().setCurrency(-price);
+        entry.getInventory().setItem(item.getName(), amount);
+
+        IDatabase.INSTANCE.setEntry(authorID, entry);
 
         event.reply(":moneybag: You successfully bought **" + Language.handle(amount, item.getName()) + "** for **" + price + "** fluffies")
              .queue();

@@ -21,7 +21,9 @@ public class Outfit implements ISlashCommand {
 
         final String outfit = event.getOption("outfit").getAsString();
 
-        IDatabase.INSTANCE.setEntry(authorID, Stat.OUTFIT, outfit);
+        entry.getAlpaca().setOutfit(outfit);
+
+        IDatabase.INSTANCE.setEntry(authorID, entry);
 
         event.reply("\uD83D\uDC54 The outfit of your alpaca has been set to **" + outfit + "**").queue();
     }

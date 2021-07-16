@@ -5,7 +5,6 @@ import Bot.Database.IDatabase;
 import Bot.Models.Entry;
 import Bot.Utils.Emote;
 import Bot.Utils.Language;
-import Bot.Utils.Stat;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import org.json.JSONArray;
 import org.slf4j.Logger;
@@ -49,7 +48,7 @@ public class Work implements ISlashCommand {
             return;
         }
 
-        long sleep = TimeUnit.MILLISECONDS.toMinutes(entry.getCooldowns().getSleep() - System.currentTimeMillis());
+        long sleep = TimeUnit.MILLISECONDS.toMinutes(entry.getCooldown().getSleep() - System.currentTimeMillis());
 
         if (sleep > 0) {
             event.reply(Emote.REDCROSS + " Your alpaca sleeps, it'll wake up in **" + Language.handle(sleep, "minute") + "**")
@@ -58,7 +57,7 @@ public class Work implements ISlashCommand {
             return;
         }
 
-        long work = TimeUnit.MILLISECONDS.toMinutes(entry.getCooldowns().getWork() - System.currentTimeMillis());
+        long work = TimeUnit.MILLISECONDS.toMinutes(entry.getCooldown().getWork() - System.currentTimeMillis());
 
         if (work > 0) {
             event.reply(Emote.REDCROSS + " Your alpaca has to rest **" + Language.handle(work, "minute") + "** to work again")
@@ -85,21 +84,21 @@ public class Work implements ISlashCommand {
             return;
         }
 
-        final int fluffies = (int) (Math.random() * 15 + 1);
-        IDatabase.INSTANCE.setEntry(authorID, Stat.CURRENCY, fluffies);
-
-        final int energyCost = (int) (Math.random() * 8 + 1);
-        IDatabase.INSTANCE.setEntry(authorID, Stat.ENERGY, -energyCost);
-
-        final int joyCost = (int) (Math.random() * 10 + 2);
-        IDatabase.INSTANCE.setEntry(authorID, Stat.JOY, -joyCost);
-
-        final long cooldown = System.currentTimeMillis() + 1000L * 60 * 20;
-        IDatabase.INSTANCE.setEntry(authorID, Stat.WORK, cooldown);
-
         final String message = getRandomMessage();
+        final int fluffies = (int) (Math.random() * 15 + 1);
+        final int energyCost = (int) (Math.random() * 8 + 1);
+        final int joyCost = (int) (Math.random() * 10 + 2);
+        final long cooldown = System.currentTimeMillis() + 1000L * 60 * 20;
 
-        event.reply("⛏ " + message + " **Fluffies + " + fluffies + ", Energy - " + energyCost + ", Joy - " + joyCost + "**").queue();
+        entry.getInventory().setCurrency(fluffies);
+        entry.getAlpaca().setEnergy(-energyCost);
+        entry.getAlpaca().setJoy(-joyCost);
+        entry.getCooldown().setWork(cooldown);
+
+        IDatabase.INSTANCE.setEntry(authorID, entry);
+
+        event.reply("⛏ " + message + " **Fluffies + " + fluffies + ", Energy - " + energyCost + ", Joy - " + joyCost + "**")
+             .queue();
     }
 
     private String getRandomMessage() {

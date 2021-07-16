@@ -64,8 +64,11 @@ public class Gift implements ISlashCommand {
             return;
         }
 
-        IDatabase.INSTANCE.setEntry(authorID, Stat.valueOf(item.getName().toUpperCase()), -amount);
-        IDatabase.INSTANCE.setEntry(user.getIdLong(), Stat.valueOf(item.getName().toUpperCase()), amount);
+        authorEntry.getInventory().setItem(item.getName(), -amount);
+        giftedUserEntry.getInventory().setItem(item.getName(), amount);
+
+        IDatabase.INSTANCE.setEntry(authorID, authorEntry);
+        IDatabase.INSTANCE.setEntry(user.getIdLong(), giftedUserEntry);
 
         event.reply("\uD83C\uDF81 You successfully gifted **" + amount + " " + item.getName() + "** to **" + user.getName() + "**")
              .queue();

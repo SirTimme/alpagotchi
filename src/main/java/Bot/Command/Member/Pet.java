@@ -40,14 +40,17 @@ public class Pet implements ISlashCommand {
             int newJoy = (int) (Math.random() * 13 + 5);
             newJoy = newJoy + joy > 100 ? 100 - joy : newJoy;
 
-            IDatabase.INSTANCE.setEntry(authorID, Stat.JOY, newJoy);
+            entry.getAlpaca().setJoy(newJoy);
+            IDatabase.INSTANCE.setEntry(authorID, entry);
 
             event.reply("\uD83E\uDD99 You found the favourite spot of your alpaca **Joy + " + newJoy + "**").queue();
         } else {
             int newJoy = (int) (Math.random() * 9 + 3);
             newJoy = newJoy + joy > 100 ? 100 - joy : newJoy;
 
-            IDatabase.INSTANCE.setEntry(authorID, Stat.JOY, newJoy);
+            entry.getAlpaca().setJoy(newJoy);
+
+            IDatabase.INSTANCE.setEntry(authorID, entry);
 
             event.reply("\uD83E\uDD99 Your alpaca enjoyed the petting, but it wasn't his favourite spot **Joy + " + newJoy + "**").queue();
         }

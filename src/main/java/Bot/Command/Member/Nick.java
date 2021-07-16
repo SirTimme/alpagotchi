@@ -28,7 +28,9 @@ public class Nick implements ISlashCommand {
             return;
         }
 
-        IDatabase.INSTANCE.setEntry(authorID, Stat.NICKNAME, nickname);
+        entry.getAlpaca().setNickname(nickname);
+
+        IDatabase.INSTANCE.setEntry(authorID, entry);
 
         event.reply("\uD83D\uDD8A The nickname of your alpaca has been set to **" + nickname + "**").queue();
     }
