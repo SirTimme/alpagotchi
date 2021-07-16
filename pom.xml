@@ -65,7 +65,7 @@
         <dependency>
             <groupId>net.dv8tion</groupId>
             <artifactId>JDA</artifactId>
-            <version>4.3.0_277</version>
+            <version>4.3.0_296</version>
         </dependency>
         <dependency>
             <groupId>io.github.cdimascio</groupId>
@@ -75,7 +75,7 @@
         <dependency>
             <groupId>org.mongodb</groupId>
             <artifactId>mongodb-driver-sync</artifactId>
-            <version>4.2.3</version>
+            <version>4.3.0</version>
         </dependency>
         <dependency>
             <groupId>ch.qos.logback</groupId>
