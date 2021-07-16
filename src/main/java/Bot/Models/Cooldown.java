@@ -4,8 +4,8 @@ public class Cooldown {
     private long sleep, work;
 
     public Cooldown() {
-        this.sleep = 0;
-        this.work = 0;
+        this.sleep = 0L;
+        this.work = 0L;
     }
 
     public long getSleep() {
