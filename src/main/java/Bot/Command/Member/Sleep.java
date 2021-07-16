@@ -4,7 +4,6 @@ import Bot.Command.ISlashCommand;
 import Bot.Database.IDatabase;
 import Bot.Models.Entry;
 import Bot.Utils.Emote;
-import Bot.Utils.Stat;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 
 public class Sleep implements ISlashCommand {
@@ -41,7 +40,7 @@ public class Sleep implements ISlashCommand {
         final long cooldown = System.currentTimeMillis() + 1000L * 60 * energy;
 
         entry.getAlpaca().setEnergy(energy);
-        entry.getCooldowns().setSleep(cooldown);
+        entry.getCooldown().setSleep(cooldown);
 
         IDatabase.INSTANCE.setEntry(authorID, entry);
 

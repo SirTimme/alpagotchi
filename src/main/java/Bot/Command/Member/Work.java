@@ -5,7 +5,6 @@ import Bot.Database.IDatabase;
 import Bot.Models.Entry;
 import Bot.Utils.Emote;
 import Bot.Utils.Language;
-import Bot.Utils.Stat;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import org.json.JSONArray;
 import org.slf4j.Logger;
@@ -49,7 +48,7 @@ public class Work implements ISlashCommand {
             return;
         }
 
-        long sleep = TimeUnit.MILLISECONDS.toMinutes(entry.getCooldowns().getSleep() - System.currentTimeMillis());
+        long sleep = TimeUnit.MILLISECONDS.toMinutes(entry.getCooldown().getSleep() - System.currentTimeMillis());
 
         if (sleep > 0) {
             event.reply(Emote.REDCROSS + " Your alpaca sleeps, it'll wake up in **" + Language.handle(sleep, "minute") + "**")
@@ -58,7 +57,7 @@ public class Work implements ISlashCommand {
             return;
         }
 
-        long work = TimeUnit.MILLISECONDS.toMinutes(entry.getCooldowns().getWork() - System.currentTimeMillis());
+        long work = TimeUnit.MILLISECONDS.toMinutes(entry.getCooldown().getWork() - System.currentTimeMillis());
 
         if (work > 0) {
             event.reply(Emote.REDCROSS + " Your alpaca has to rest **" + Language.handle(work, "minute") + "** to work again")
@@ -94,11 +93,12 @@ public class Work implements ISlashCommand {
         entry.getInventory().setCurrency(fluffies);
         entry.getAlpaca().setEnergy(-energyCost);
         entry.getAlpaca().setJoy(-joyCost);
-        entry.getCooldowns().setWork(cooldown);
+        entry.getCooldown().setWork(cooldown);
 
         IDatabase.INSTANCE.setEntry(authorID, entry);
 
-        event.reply("⛏ " + message + " **Fluffies + " + fluffies + ", Energy - " + energyCost + ", Joy - " + joyCost + "**").queue();
+        event.reply("⛏ " + message + " **Fluffies + " + fluffies + ", Energy - " + energyCost + ", Joy - " + joyCost + "**")
+             .queue();
     }
 
     private String getRandomMessage() {

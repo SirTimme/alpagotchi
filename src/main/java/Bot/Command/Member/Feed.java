@@ -7,7 +7,6 @@ import Bot.Shop.Item;
 import Bot.Shop.ItemManager;
 import Bot.Utils.Emote;
 import Bot.Utils.Language;
-import Bot.Utils.Stat;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 
 import java.util.concurrent.TimeUnit;
@@ -32,7 +31,7 @@ public class Feed implements ISlashCommand {
             return;
         }
 
-        long sleep = TimeUnit.MILLISECONDS.toMinutes(entry.getCooldowns().getSleep() - System.currentTimeMillis());
+        long sleep = TimeUnit.MILLISECONDS.toMinutes(entry.getCooldown().getSleep() - System.currentTimeMillis());
 
         if (sleep > 0) {
             event.reply(Emote.REDCROSS + " Your alpaca sleeps, it'll wake up in **" + Language.handle(sleep, "minute") + "**")

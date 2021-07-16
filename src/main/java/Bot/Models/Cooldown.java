@@ -1,11 +1,11 @@
 package Bot.Models;
 
-public class Cooldowns {
+public class Cooldown {
     private long sleep, work;
 
-    public Cooldowns(long sleep, long work) {
-        this.sleep = sleep;
-        this.work = work;
+    public Cooldown() {
+        this.sleep = 0;
+        this.work = 0;
     }
 
     public long getSleep() {

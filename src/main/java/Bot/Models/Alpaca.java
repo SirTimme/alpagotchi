@@ -4,13 +4,13 @@ public class Alpaca {
     private String outfit, nickname;
     private int hunger, thirst, energy, joy;
 
-    public Alpaca(String outfit, String nickname, int hunger, int thirst, int energy, int joy) {
-        this.outfit = outfit;
-        this.nickname = nickname;
-        this.hunger = hunger;
-        this.thirst = thirst;
-        this.energy = energy;
-        this.joy = joy;
+    public Alpaca() {
+        this.outfit = "default";
+        this.nickname = "alpaca";
+        this.hunger = 100;
+        this.thirst = 100;
+        this.energy = 100;
+        this.joy = 100;
     }
 
     public String getOutfit() {

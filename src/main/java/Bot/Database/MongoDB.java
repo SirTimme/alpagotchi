@@ -1,34 +1,28 @@
 package Bot.Database;
 
 import Bot.Config;
-import Bot.Models.Alpaca;
-import Bot.Models.Cooldowns;
 import Bot.Models.Entry;
-import Bot.Models.Inventory;
+import com.google.gson.Gson;
 import com.mongodb.ConnectionString;
 import com.mongodb.MongoClientSettings;
 import com.mongodb.client.*;
-import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.ReplaceOptions;
 import com.mongodb.client.model.Updates;
 import org.bson.Document;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import static com.mongodb.client.model.Filters.eq;
+import static com.mongodb.client.model.Filters.*;
 
 public class MongoDB implements IDatabase {
     private final MongoCollection<Document> users;
     private final MongoCollection<Document> guilds;
 
     public MongoDB() {
+        ConnectionString connection = new ConnectionString(Config.get("DB_URI"));
         MongoClientSettings settings = MongoClientSettings.builder()
-                                                          .applyConnectionString(new ConnectionString(Config.get("DB_URI")))
+                                                          .applyConnectionString(connection)
                                                           .build();
 
         MongoClient client = MongoClients.create(settings);
-
         MongoDatabase database = client.getDatabase(Config.get("DB_NAME"));
 
         users = database.getCollection("alpacas_manager");
@@ -47,95 +41,24 @@ public class MongoDB implements IDatabase {
         if (result == null) {
             return null;
         }
+        Gson gson = new Gson();
 
-        Document alpaca = result.get("alpaca", Document.class);
-        Document cooldowns = result.get("cooldowns", Document.class);
-        Document inventory = result.get("inventory", Document.class);
-        Document shopItems = inventory.get("items", Document.class);
-
-        Map<String, Integer> items = new HashMap<>();
-        shopItems.keySet().forEach(item -> items.put(item, shopItems.getInteger(item)));
-
-        return new Entry(
-                new Alpaca(
-                        alpaca.getString("outfit"),
-                        alpaca.getString("nickname"),
-                        alpaca.getInteger("hunger"),
-                        alpaca.getInteger("thirst"),
-                        alpaca.getInteger("energy"),
-                        alpaca.getInteger("joy")
-                ),
-                new Cooldowns(
-                        cooldowns.getLong("sleep"),
-                        cooldowns.getLong("work")
-                ),
-                new Inventory(
-                        inventory.getInteger("currency"),
-                        items
-                )
-        );
+        return gson.fromJson(result.toJson(), Entry.class);
     }
 
     @Override
     public void setEntry(long memberID, Entry entry) {
-        Document updated = new Document();
-
-        updated.append("_id", memberID)
-            .append("alpaca", new Document()
-                    .append("nickname", entry.getAlpaca().getNickname())
-                    .append("hunger", entry.getAlpaca().getHunger())
-                    .append("thirst", entry.getAlpaca().getThirst())
-                    .append("energy", entry.getAlpaca().getEnergy())
-                    .append("joy", entry.getAlpaca().getJoy())
-                    .append("outfit", entry.getAlpaca().getOutfit())
-            )
-            .append("inventory", new Document()
-                    .append("currency", entry.getInventory().getCurrency())
-                    .append("items", new Document()
-                            .append("salad", entry.getInventory().getItem("salad"))
-                            .append("taco", entry.getInventory().getItem("taco"))
-                            .append("steak", entry.getInventory().getItem("steak"))
-                            .append("water", entry.getInventory().getItem("water"))
-                            .append("lemonade", entry.getInventory().getItem("lemonade"))
-                            .append("cacao", entry.getInventory().getItem("cacao"))
-                    )
-            )
-            .append("cooldowns", new Document()
-                    .append("work", entry.getCooldowns().getWork())
-                    .append("sleep", entry.getCooldowns().getSleep())
-            );
+        Gson gson = new Gson();
+        Document updated = Document.parse(gson.toJson(entry));
 
         users.replaceOne(eq("_id", memberID), updated);
     }
 
     @Override
     public void createEntry(long memberID) {
-        Document user = new Document();
-
-        user.append("_id", memberID)
-            .append("alpaca", new Document()
-                    .append("nickname", "alpaca")
-                    .append("hunger", 100)
-                    .append("thirst", 100)
-                    .append("energy", 100)
-                    .append("joy", 100)
-                    .append("outfit", "default")
-            )
-            .append("inventory", new Document()
-                    .append("currency", 0)
-                    .append("items", new Document()
-                            .append("salad", 0)
-                            .append("taco", 0)
-                            .append("steak", 0)
-                            .append("water", 0)
-                            .append("lemonade", 0)
-                            .append("cacao", 0)
-                    )
-            )
-            .append("cooldowns", new Document()
-                    .append("work", 0L)
-                    .append("sleep", 0L)
-            );
+        Gson gson = new Gson();
+        Document user = Document.parse(gson.toJson(new Entry()));
+        user.append("_id", memberID);
 
         users.insertOne(user);
     }
@@ -162,8 +85,8 @@ public class MongoDB implements IDatabase {
 
     @Override
     public void decreaseValues() {
-        users.updateMany(Filters.gte("alpaca.hunger", 2), Updates.inc("alpaca.hunger", -1));
-        users.updateMany(Filters.gte("alpaca.thirst", 2), Updates.inc("alpaca.thirst", -1));
+        users.updateMany(gte("alpaca.hunger", 2), Updates.inc("alpaca.hunger", -1));
+        users.updateMany(gte("alpaca.thirst", 2), Updates.inc("alpaca.thirst", -1));
     }
 
     @Override

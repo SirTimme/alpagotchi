@@ -96,14 +96,11 @@ public class Update implements ISlashCommand {
                                      )
                      ),
                      new CommandData("inventory", "Shows your items for your alpaca"),
-                     new CommandData("shop", "Shows the shop with all the items to buy")
-             )
-             .queue();
+                     new CommandData("shop", "Shows the shop with all the items to buy")).queue();
 
         event.getGuild()
              .updateCommands()
              .addCommands(
-                     new CommandData("shutdown", "Shutdowns Alpagotchi").setDefaultEnabled(false),
                      new CommandData("decrease", "Let the alpacas lose stats")
                              .addOptions(
                                      new OptionData(STRING, "status", "Status of decreasing", true)
@@ -113,7 +110,8 @@ public class Update implements ISlashCommand {
                                              )
                              )
                              .setDefaultEnabled(false),
-                     new CommandData("update", "Refreshes all slashcommands").setDefaultEnabled(false)
+                     new CommandData("update", "Refreshes all slashcommands").setDefaultEnabled(false),
+                     new CommandData("shutdown", "Shutdowns Alpagotchi").setDefaultEnabled(false)
              )
              .queue();
 
