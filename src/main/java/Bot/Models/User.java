@@ -1,11 +1,13 @@
 package Bot.Models;
 
-public class Entry {
+public class User {
+    private final long _id;
     private final Alpaca alpaca;
     private final Cooldown cooldown;
     private final Inventory inventory;
 
-    public Entry() {
+    public User(long memberID) {
+        this._id = memberID;
         this.alpaca = new Alpaca();
         this.cooldown = new Cooldown();
         this.inventory = new Inventory();

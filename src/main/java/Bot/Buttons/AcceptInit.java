@@ -9,7 +9,7 @@ import java.util.Collections;
 public class AcceptInit implements IButton {
     @Override
     public void execute(ButtonClickEvent event, long authorID) {
-        IDatabase.INSTANCE.createEntry(authorID);
+        IDatabase.INSTANCE.createUser(authorID);
 
         event.editMessage(Emote.GREENTICK + " Your alpaca has been set up")
              .setEmbeds(Collections.emptyList())

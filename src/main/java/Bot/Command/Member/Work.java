@@ -2,7 +2,7 @@ package Bot.Command.Member;
 
 import Bot.Command.ISlashCommand;
 import Bot.Database.IDatabase;
-import Bot.Models.Entry;
+import Bot.Models.User;
 import Bot.Utils.Emote;
 import Bot.Utils.Language;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
@@ -39,16 +39,16 @@ public class Work implements ISlashCommand {
 
     @Override
     public void execute(SlashCommandEvent event, long authorID) {
-        final Entry entry = IDatabase.INSTANCE.getEntry(authorID);
+        final User user = IDatabase.INSTANCE.getUser(authorID);
 
-        if (entry == null) {
+        if (user == null) {
             event.reply(Emote.REDCROSS + " You don't own an alpaca, use **/init** first")
                  .setEphemeral(true)
                  .queue();
             return;
         }
 
-        long sleep = TimeUnit.MILLISECONDS.toMinutes(entry.getCooldown().getSleep() - System.currentTimeMillis());
+        long sleep = TimeUnit.MILLISECONDS.toMinutes(user.getCooldown().getSleep() - System.currentTimeMillis());
 
         if (sleep > 0) {
             event.reply(Emote.REDCROSS + " Your alpaca sleeps, it'll wake up in **" + Language.handle(sleep, "minute") + "**")
@@ -57,7 +57,7 @@ public class Work implements ISlashCommand {
             return;
         }
 
-        long work = TimeUnit.MILLISECONDS.toMinutes(entry.getCooldown().getWork() - System.currentTimeMillis());
+        long work = TimeUnit.MILLISECONDS.toMinutes(user.getCooldown().getWork() - System.currentTimeMillis());
 
         if (work > 0) {
             event.reply(Emote.REDCROSS + " Your alpaca has to rest **" + Language.handle(work, "minute") + "** to work again")
@@ -66,7 +66,7 @@ public class Work implements ISlashCommand {
             return;
         }
 
-        final int energy = entry.getAlpaca().getEnergy();
+        final int energy = user.getAlpaca().getEnergy();
 
         if (energy < 10) {
             event.reply("\uD83E\uDD71 Your alpaca is too tired to work, let it rest first with **/sleep**")
@@ -75,7 +75,7 @@ public class Work implements ISlashCommand {
             return;
         }
 
-        final int joy = entry.getAlpaca().getJoy();
+        final int joy = user.getAlpaca().getJoy();
 
         if (joy < 15) {
             event.reply(":pensive: Your alpaca is too sad to work, give him some love with **/pet**")
@@ -90,12 +90,12 @@ public class Work implements ISlashCommand {
         final int joyCost = (int) (Math.random() * 10 + 2);
         final long cooldown = System.currentTimeMillis() + 1000L * 60 * 20;
 
-        entry.getInventory().setCurrency(fluffies);
-        entry.getAlpaca().setEnergy(-energyCost);
-        entry.getAlpaca().setJoy(-joyCost);
-        entry.getCooldown().setWork(cooldown);
+        user.getInventory().setCurrency(fluffies);
+        user.getAlpaca().setEnergy(-energyCost);
+        user.getAlpaca().setJoy(-joyCost);
+        user.getCooldown().setWork(cooldown);
 
-        IDatabase.INSTANCE.setEntry(authorID, entry);
+        IDatabase.INSTANCE.setUser(authorID, user);
 
         event.reply("⛏ " + message + " **Fluffies + " + fluffies + ", Energy - " + energyCost + ", Joy - " + joyCost + "**")
              .queue();

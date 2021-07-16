@@ -1,13 +1,12 @@
 package Bot.Command.Member;
 
 import Bot.Command.ISlashCommand;
-import Bot.Models.Entry;
+import Bot.Models.User;
 import Bot.Database.IDatabase;
 import Bot.Shop.Item;
 import Bot.Shop.ItemManager;
 import Bot.Utils.Emote;
 import Bot.Utils.Language;
-import Bot.Utils.Stat;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 
 public class Buy implements ISlashCommand {
@@ -19,9 +18,9 @@ public class Buy implements ISlashCommand {
 
     @Override
     public void execute(SlashCommandEvent event, long authorID) {
-        Entry entry = IDatabase.INSTANCE.getEntry(authorID);
+        User user = IDatabase.INSTANCE.getUser(authorID);
 
-        if (entry == null) {
+        if (user == null) {
             event.reply(Emote.REDCROSS + " You don't own an alpaca, use **/init** first")
                  .setEphemeral(true)
                  .queue();
@@ -32,7 +31,7 @@ public class Buy implements ISlashCommand {
         final int amount = (int) event.getOption("amount").getAsLong();
         final int price = amount * item.getPrice();
 
-        final int balance = entry.getInventory().getCurrency();
+        final int balance = user.getInventory().getCurrency();
 
         if (amount > 10) {
             event.reply(Emote.REDCROSS + " You can purchase max. 10 items at a time")
@@ -48,10 +47,10 @@ public class Buy implements ISlashCommand {
             return;
         }
 
-        entry.getInventory().setCurrency(-price);
-        entry.getInventory().setItem(item.getName(), amount);
+        user.getInventory().setCurrency(-price);
+        user.getInventory().setItem(item.getName(), amount);
 
-        IDatabase.INSTANCE.setEntry(authorID, entry);
+        IDatabase.INSTANCE.setUser(authorID, user);
 
         event.reply(":moneybag: You successfully bought **" + Language.handle(amount, item.getName()) + "** for **" + price + "** fluffies")
              .queue();

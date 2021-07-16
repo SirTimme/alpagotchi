@@ -2,7 +2,7 @@ package Bot.Command.Member;
 
 import Bot.Command.ISlashCommand;
 import Bot.Database.IDatabase;
-import Bot.Models.Entry;
+import Bot.Models.User;
 import Bot.Utils.Emote;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
@@ -13,9 +13,9 @@ import java.time.Instant;
 public class Init implements ISlashCommand {
     @Override
     public void execute(SlashCommandEvent event, long authorID) {
-        Entry entry = IDatabase.INSTANCE.getEntry(authorID);
+        User user = IDatabase.INSTANCE.getUser(authorID);
 
-        if (entry != null) {
+        if (user != null) {
             event.reply(Emote.REDCROSS + " You already own an alpaca").setEphemeral(true).queue();
             return;
         }

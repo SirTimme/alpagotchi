@@ -9,7 +9,7 @@ import java.util.Collections;
 public class AcceptDelete implements IButton {
     @Override
     public void execute(ButtonClickEvent event, long authorID) {
-        IDatabase.INSTANCE.deleteEntry(authorID);
+        IDatabase.INSTANCE.deleteUser(authorID);
 
         event.editMessage(Emote.GREENTICK + " Data successfully deleted")
              .setActionRows(Collections.emptyList())

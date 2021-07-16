@@ -1,7 +1,7 @@
 package Bot.Command.Member;
 
 import Bot.Command.ISlashCommand;
-import Bot.Models.Entry;
+import Bot.Models.User;
 import Bot.Database.IDatabase;
 import Bot.Utils.Emote;
 import Bot.Utils.Language;
@@ -42,9 +42,9 @@ public class MyAlpaca implements ISlashCommand {
 
     @Override
     public void execute(SlashCommandEvent event, long authorID) {
-        Entry entry = IDatabase.INSTANCE.getEntry(authorID);
+        User user = IDatabase.INSTANCE.getUser(authorID);
 
-        if (entry == null) {
+        if (user == null) {
             event.reply(Emote.REDCROSS + " You don't own an alpaca, use **/init** first")
                  .setEphemeral(true)
                  .queue();
@@ -54,13 +54,13 @@ public class MyAlpaca implements ISlashCommand {
         try {
             final ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
 
-            ImageIO.write(createImage(entry), "jpg", byteStream);
+            ImageIO.write(createImage(user), "jpg", byteStream);
 
-            final long sleepCooldown = entry.getCooldown().getSleep() - System.currentTimeMillis();
-            final long workCooldown = entry.getCooldown().getWork() - System.currentTimeMillis();
+            final long sleepCooldown = user.getCooldown().getSleep() - System.currentTimeMillis();
+            final long workCooldown = user.getCooldown().getWork() - System.currentTimeMillis();
 
             final EmbedBuilder embed = new EmbedBuilder();
-            embed.setTitle(entry.getAlpaca().getNickname())
+            embed.setTitle(user.getAlpaca().getNickname())
                  .setDescription("_Have a llamazing day!_")
                  .addField("Work", checkCooldown(workCooldown), true)
                  .addField("Sleep", checkCooldown(sleepCooldown), true)
@@ -77,13 +77,13 @@ public class MyAlpaca implements ISlashCommand {
         }
     }
 
-    private BufferedImage createImage(Entry entry) {
-        final int hunger = entry.getAlpaca().getHunger();
-        final int thirst = entry.getAlpaca().getThirst();
-        final int energy = entry.getAlpaca().getEnergy();
-        final int joy = entry.getAlpaca().getJoy();
+    private BufferedImage createImage(User user) {
+        final int hunger = user.getAlpaca().getHunger();
+        final int thirst = user.getAlpaca().getThirst();
+        final int energy = user.getAlpaca().getEnergy();
+        final int joy = user.getAlpaca().getJoy();
 
-        final BufferedImage background = images.get(entry.getAlpaca().getOutfit());
+        final BufferedImage background = images.get(user.getAlpaca().getOutfit());
         final BufferedImage img = new BufferedImage(background.getWidth(), background.getHeight(), BufferedImage.TYPE_INT_RGB);
 
         final Graphics graphics = img.createGraphics();

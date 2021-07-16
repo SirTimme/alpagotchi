@@ -1,7 +1,7 @@
 package Bot.Command.Member;
 
 import Bot.Command.ISlashCommand;
-import Bot.Models.Entry;
+import Bot.Models.User;
 import Bot.Database.IDatabase;
 import Bot.Shop.Item;
 import Bot.Shop.ItemManager;
@@ -22,16 +22,16 @@ public class Feed implements ISlashCommand {
 
     @Override
     public void execute(SlashCommandEvent event, long authorID) {
-        Entry entry = IDatabase.INSTANCE.getEntry(authorID);
+        User user = IDatabase.INSTANCE.getUser(authorID);
 
-        if (entry == null) {
+        if (user == null) {
             event.reply(Emote.REDCROSS + " You don't own an alpaca, use **/init** first")
                  .setEphemeral(true)
                  .queue();
             return;
         }
 
-        long sleep = TimeUnit.MILLISECONDS.toMinutes(entry.getCooldown().getSleep() - System.currentTimeMillis());
+        long sleep = TimeUnit.MILLISECONDS.toMinutes(user.getCooldown().getSleep() - System.currentTimeMillis());
 
         if (sleep > 0) {
             event.reply(Emote.REDCROSS + " Your alpaca sleeps, it'll wake up in **" + Language.handle(sleep, "minute") + "**")
@@ -51,15 +51,15 @@ public class Feed implements ISlashCommand {
 
         final Item item = this.itemMan.getItem(event.getOption("item").getAsString());
 
-        if (entry.getInventory().getItem(item.getName()) - amount < 0) {
+        if (user.getInventory().getItem(item.getName()) - amount < 0) {
             event.reply(Emote.REDCROSS + " You don't own that many items")
                  .setEphemeral(true)
                  .queue();
             return;
         }
 
-        final int oldValue = item.getStat().equals(HUNGER) ? entry.getAlpaca().getHunger() : entry.getAlpaca()
-                                                                                                  .getThirst();
+        final int oldValue = item.getStat().equals(HUNGER) ? user.getAlpaca().getHunger() : user.getAlpaca()
+                                                                                                .getThirst();
         final int saturation = amount * item.getSaturation();
 
         if (oldValue + saturation > 100) {
@@ -69,16 +69,16 @@ public class Feed implements ISlashCommand {
             return;
         }
 
-        entry.getInventory().setItem(item.getName(), -amount);
+        user.getInventory().setItem(item.getName(), -amount);
 
         if (item.getStat().equals(HUNGER)) {
-            entry.getAlpaca().setHunger(saturation);
-            IDatabase.INSTANCE.setEntry(authorID, entry);
+            user.getAlpaca().setHunger(saturation);
+            IDatabase.INSTANCE.setUser(authorID, user);
             event.reply(":meat_on_bone: Your alpaca eats the **" + Language.handle(amount, item.getName()) + "** in one bite **Hunger + " + saturation + "**")
                  .queue();
         } else {
-            entry.getAlpaca().setThirst(saturation);
-            IDatabase.INSTANCE.setEntry(authorID, entry);
+            user.getAlpaca().setThirst(saturation);
+            IDatabase.INSTANCE.setUser(authorID, user);
             event.reply(":beer: Your alpaca drinks the **" + Language.handle(amount, item.getName()) + "** empty **Thirst + " + saturation + "**")
                  .queue();
         }

@@ -1,7 +1,7 @@
 package Bot.Database;
 
 import Bot.Config;
-import Bot.Models.Entry;
+import Bot.Models.User;
 import com.google.gson.Gson;
 import com.mongodb.ConnectionString;
 import com.mongodb.MongoClientSettings;
@@ -35,7 +35,7 @@ public class MongoDB implements IDatabase {
     }
 
     @Override
-    public Entry getEntry(long memberID) {
+    public User getUser(long memberID) {
         Document result = users.find(eq("_id", memberID)).first();
 
         if (result == null) {
@@ -43,28 +43,27 @@ public class MongoDB implements IDatabase {
         }
         Gson gson = new Gson();
 
-        return gson.fromJson(result.toJson(), Entry.class);
+        return gson.fromJson(result.toJson(), User.class);
     }
 
     @Override
-    public void setEntry(long memberID, Entry entry) {
+    public void setUser(long memberID, User user) {
         Gson gson = new Gson();
-        Document updated = Document.parse(gson.toJson(entry));
+        Document updated = Document.parse(gson.toJson(user));
 
         users.replaceOne(eq("_id", memberID), updated);
     }
 
     @Override
-    public void createEntry(long memberID) {
+    public void createUser(long memberID) {
         Gson gson = new Gson();
-        Document user = Document.parse(gson.toJson(new Entry()));
-        user.append("_id", memberID);
+        Document user = Document.parse(gson.toJson(new User(memberID)));
 
         users.insertOne(user);
     }
 
     @Override
-    public void deleteEntry(long memberID) {
+    public void deleteUser(long memberID) {
         users.deleteOne(eq("_id", memberID));
     }
 

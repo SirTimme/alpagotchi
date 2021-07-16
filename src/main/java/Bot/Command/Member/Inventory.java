@@ -2,7 +2,7 @@ package Bot.Command.Member;
 
 import Bot.Command.ISlashCommand;
 import Bot.Database.IDatabase;
-import Bot.Models.Entry;
+import Bot.Models.User;
 import Bot.Shop.ItemManager;
 import Bot.Utils.Emote;
 import Bot.Utils.Stat;
@@ -20,9 +20,9 @@ public class Inventory implements ISlashCommand {
 
     @Override
     public void execute(SlashCommandEvent event, long authorID) {
-        Entry entry = IDatabase.INSTANCE.getEntry(authorID);
+        User user = IDatabase.INSTANCE.getUser(authorID);
 
-        if (entry == null) {
+        if (user == null) {
             event.reply(Emote.REDCROSS + " You don't own an alpaca, use **/init** first")
                  .setEphemeral(true)
                  .queue();
@@ -38,13 +38,13 @@ public class Inventory implements ISlashCommand {
              .setTimestamp(Instant.now());
 
         itemMan.getItems(Stat.HUNGER)
-               .forEach(item -> embed.addField(":package: " + item.getName(), "Quantity: **" + entry.getInventory().getItem(item.getName()) + "**", true));
+               .forEach(item -> embed.addField(":package: " + item.getName(), "Quantity: **" + user.getInventory().getItem(item.getName()) + "**", true));
 
         embed.addBlankField(false)
              .addField("__**:beer: Thirst items**__", "Following items replenish the thirst of your alpaca", false);
 
         itemMan.getItems(Stat.THIRST)
-                   .forEach(item -> embed.addField(":package: " + item.getName(), "Quantity: **" + entry.getInventory().getItem(item.getName()) + "**", true));
+                   .forEach(item -> embed.addField(":package: " + item.getName(), "Quantity: **" + user.getInventory().getItem(item.getName()) + "**", true));
 
         event.replyEmbeds(embed.build()).queue();
     }
