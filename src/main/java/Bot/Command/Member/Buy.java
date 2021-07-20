@@ -19,7 +19,6 @@ public class Buy implements ISlashCommand {
     @Override
     public void execute(SlashCommandEvent event, long authorID) {
         User user = IDatabase.INSTANCE.getUser(authorID);
-
         if (user == null) {
             event.reply(Emote.REDCROSS + " You don't own an alpaca, use **/init** first")
                  .setEphemeral(true)
@@ -28,11 +27,9 @@ public class Buy implements ISlashCommand {
         }
 
         final Item item = this.itemMan.getItem(event.getOption("item").getAsString());
-        final int amount = (int) event.getOption("amount").getAsLong();
-        final int price = amount * item.getPrice();
-
         final int balance = user.getInventory().getCurrency();
 
+        final int amount = (int) event.getOption("amount").getAsLong();
         if (amount > 10) {
             event.reply(Emote.REDCROSS + " You can purchase max. 10 items at a time")
                  .setEphemeral(true)
@@ -40,6 +37,7 @@ public class Buy implements ISlashCommand {
             return;
         }
 
+        final int price = amount * item.getPrice();
         if (balance - price < 0) {
             event.reply(Emote.REDCROSS + " Insufficient amount of fluffies")
                  .setEphemeral(true)

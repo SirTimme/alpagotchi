@@ -11,7 +11,6 @@ public class Balance implements ISlashCommand {
     @Override
     public void execute(SlashCommandEvent event, long authorID) {
         User user = IDatabase.INSTANCE.getUser(authorID);
-
         if (user == null) {
             event.reply(Emote.REDCROSS + " You don't own an alpaca, use **/init** first")
                  .setEphemeral(true)
