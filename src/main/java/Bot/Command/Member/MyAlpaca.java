@@ -33,7 +33,7 @@ public class MyAlpaca implements ISlashCommand {
                 final BufferedImage image = ImageIO.read(file);
                 final String key = file.getName().split("\\.")[0];
 
-                this.images.put(key, image);
+                images.put(key, image);
             }
         } catch (IOException error) {
             LOGGER.error(error.getMessage());

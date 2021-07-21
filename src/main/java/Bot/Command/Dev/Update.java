@@ -82,7 +82,8 @@ public class Update implements ISlashCommand {
                              new OptionData(STRING, "outfit", "The new outfit of your alpaca", true)
                                      .addChoices(
                                              new Command.Choice("default", "default"),
-                                             new Command.Choice("gentleman", "gentleman")
+                                             new Command.Choice("gentleman", "gentleman"),
+                                             new Command.Choice("lady", "lady")
                                      )
                      ),
                      new CommandData("pet", "Pets your alpaca to gain joy").addOptions(
