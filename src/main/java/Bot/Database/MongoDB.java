@@ -24,8 +24,8 @@ public class MongoDB implements IDatabase {
         ConnectionString connection = new ConnectionString(Config.get("DB_URI"));
 
         SocketSettings socketSettings = SocketSettings.builder()
-                                                      .connectTimeout(30, TimeUnit.SECONDS)
-                                                      .readTimeout(30, TimeUnit.SECONDS)
+                                                      .connectTimeout(1, TimeUnit.MINUTES)
+                                                      .readTimeout(1, TimeUnit.MINUTES)
                                                       .build();
 
         MongoClientSettings clientSettings = MongoClientSettings.builder()
