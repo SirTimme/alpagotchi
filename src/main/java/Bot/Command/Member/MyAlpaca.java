@@ -14,9 +14,6 @@ import org.slf4j.LoggerFactory;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.awt.image.BufferedImageOp;
-import java.awt.image.ConvolveOp;
-import java.awt.image.Kernel;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
@@ -33,11 +30,7 @@ public class MyAlpaca implements ISlashCommand {
         final File folder = new File("src/main/resources/Outfits");
         try {
             for (File file : folder.listFiles()) {
-                final Kernel kernel = new Kernel(3, 3, new float[]{0.0f, -1.0f, 0.0f, -1.0f, 5.0f, -1.0f, 0.0f, -1.0f, 0.0f});
-                final BufferedImageOp imgOp = new ConvolveOp(kernel);
-                BufferedImage img = ImageIO.read(file);
-                img = imgOp.filter(img, null);
-
+                final BufferedImage img = ImageIO.read(file);
                 final String name = file.getName().split("\\.")[0];
 
                 images.put(name, img);
@@ -59,7 +52,7 @@ public class MyAlpaca implements ISlashCommand {
 
         try {
             final ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-            ImageIO.write(createImage(user), "jpg", bytes);
+            ImageIO.write(createImage(user), "png", bytes);
 
             final EmbedBuilder embed = new EmbedBuilder();
             embed.setTitle(user.getAlpaca().getNickname())
@@ -69,10 +62,10 @@ public class MyAlpaca implements ISlashCommand {
                  .setThumbnail(event.getUser().getAvatarUrl())
                  .setFooter("Created by SirTimme", "https://cdn.discordapp.com/avatars/483012399893577729/ba3996b7728a950565a79bd4b550b8dd.png")
                  .setTimestamp(Instant.now())
-                 .setImage("attachment://alpagotchi.jpg");
+                 .setImage("attachment://alpagotchi.png");
 
             event.replyEmbeds(embed.build())
-                 .addFile(bytes.toByteArray(), "alpagotchi.jpg")
+                 .addFile(bytes.toByteArray(), "alpagotchi.png")
                  .queue();
         } catch (IOException error) {
             LOGGER.error(error.getMessage());
