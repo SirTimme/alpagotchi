@@ -52,23 +52,20 @@ public class MongoDB implements IDatabase {
         if (result == null) {
             return null;
         }
-        Gson gson = new Gson();
 
-        return gson.fromJson(result.toJson(), User.class);
+        return new Gson().fromJson(result.toJson(), User.class);
     }
 
     @Override
     public void setUser(long memberID, User user) {
-        Gson gson = new Gson();
-        Document updated = Document.parse(gson.toJson(user));
+        Document updated = Document.parse(new Gson().toJson(user));
 
         users.replaceOne(eq("_id", memberID), updated);
     }
 
     @Override
     public void createUser(long memberID) {
-        Gson gson = new Gson();
-        Document user = Document.parse(gson.toJson(new User(memberID)));
+        Document user = Document.parse(new Gson().toJson(new User(memberID)));
 
         users.insertOne(user);
     }

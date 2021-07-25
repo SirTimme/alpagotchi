@@ -4,6 +4,7 @@ import Bot.Command.ISlashCommand;
 import Bot.Command.SlashCommandManager;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 
 import java.time.Instant;
 
@@ -27,5 +28,10 @@ public class Help implements ISlashCommand {
              .setTimestamp(Instant.now());
 
         event.replyEmbeds(embed.build()).queue();
+    }
+
+    @Override
+    public CommandData getCommandData() {
+        return new CommandData("help", "Shows all commands or additional help for a specific");
     }
 }

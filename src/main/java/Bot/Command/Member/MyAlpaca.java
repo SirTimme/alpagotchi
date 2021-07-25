@@ -7,19 +7,22 @@ import Bot.Utils.Emote;
 import Bot.Utils.Language;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.awt.image.BufferedImageOp;
+import java.awt.image.ConvolveOp;
+import java.awt.image.Kernel;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 public class MyAlpaca implements ISlashCommand {
     private final Map<String, BufferedImage> images = new HashMap<>();
@@ -27,13 +30,17 @@ public class MyAlpaca implements ISlashCommand {
     private final Color[] colors = {Color.BLACK, Color.RED, Color.ORANGE, Color.YELLOW, Color.GREEN};
 
     public MyAlpaca() {
-        final File folder = new File("src/main/resources/outfits");
+        final File folder = new File("src/main/resources/Outfits");
         try {
             for (File file : folder.listFiles()) {
-                final BufferedImage image = ImageIO.read(file);
-                final String key = file.getName().split("\\.")[0];
+                final Kernel kernel = new Kernel(3, 3, new float[]{0.0f, -1.0f, 0.0f, -1.0f, 5.0f, -1.0f, 0.0f, -1.0f, 0.0f});
+                final BufferedImageOp imgOp = new ConvolveOp(kernel);
+                BufferedImage img = ImageIO.read(file);
+                img = imgOp.filter(img, null);
 
-                images.put(key, image);
+                final String name = file.getName().split("\\.")[0];
+
+                images.put(name, img);
             }
         } catch (IOException error) {
             LOGGER.error(error.getMessage());
@@ -43,7 +50,6 @@ public class MyAlpaca implements ISlashCommand {
     @Override
     public void execute(SlashCommandEvent event, long authorID) {
         User user = IDatabase.INSTANCE.getUser(authorID);
-
         if (user == null) {
             event.reply(Emote.REDCROSS + " You don't own an alpaca, use **/init** first")
                  .setEphemeral(true)
@@ -52,29 +58,30 @@ public class MyAlpaca implements ISlashCommand {
         }
 
         try {
-            final ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
-
-            ImageIO.write(createImage(user), "jpg", byteStream);
-
-            final long sleepCooldown = user.getCooldown().getSleep() - System.currentTimeMillis();
-            final long workCooldown = user.getCooldown().getWork() - System.currentTimeMillis();
+            final ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+            ImageIO.write(createImage(user), "jpg", bytes);
 
             final EmbedBuilder embed = new EmbedBuilder();
             embed.setTitle(user.getAlpaca().getNickname())
                  .setDescription("_Have a llamazing day!_")
-                 .addField("Work", checkCooldown(workCooldown), true)
-                 .addField("Sleep", checkCooldown(sleepCooldown), true)
+                 .addField("Work", checkCooldown(user.getCooldown().getWork()), true)
+                 .addField("Sleep", checkCooldown(user.getCooldown().getSleep()), true)
                  .setThumbnail(event.getUser().getAvatarUrl())
                  .setFooter("Created by SirTimme", "https://cdn.discordapp.com/avatars/483012399893577729/ba3996b7728a950565a79bd4b550b8dd.png")
                  .setTimestamp(Instant.now())
                  .setImage("attachment://alpagotchi.jpg");
 
             event.replyEmbeds(embed.build())
-                 .addFile(byteStream.toByteArray(), "alpagotchi.jpg")
+                 .addFile(bytes.toByteArray(), "alpagotchi.jpg")
                  .queue();
         } catch (IOException error) {
             LOGGER.error(error.getMessage());
         }
+    }
+
+    @Override
+    public CommandData getCommandData() {
+        return new CommandData("myalpaca", "Shows your alpaca with its stats");
     }
 
     private BufferedImage createImage(User user) {
@@ -127,7 +134,6 @@ public class MyAlpaca implements ISlashCommand {
     }
 
     private String checkCooldown(long cooldown) {
-        final long minutes = TimeUnit.MILLISECONDS.toMinutes(cooldown);
-        return cooldown > 0 ? Emote.REDCROSS + " " + Language.handle(minutes, "minute") : Emote.GREENTICK + " ready";
+        return cooldown > 0 ? Emote.REDCROSS + " " + Language.handle(cooldown, "minute") : Emote.GREENTICK + " ready";
     }
 }

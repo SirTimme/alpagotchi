@@ -7,10 +7,10 @@ public class User {
     private final Inventory inventory;
 
     public User(long memberID) {
-        this._id = memberID;
-        this.alpaca = new Alpaca();
-        this.cooldown = new Cooldown();
-        this.inventory = new Inventory();
+        _id = memberID;
+        alpaca = new Alpaca();
+        cooldown = new Cooldown();
+        inventory = new Inventory();
     }
 
     public Alpaca getAlpaca() {

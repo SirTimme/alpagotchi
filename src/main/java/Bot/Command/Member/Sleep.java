@@ -5,6 +5,10 @@ import Bot.Database.IDatabase;
 import Bot.Models.User;
 import Bot.Utils.Emote;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.interactions.commands.build.CommandData;
+import net.dv8tion.jda.api.interactions.commands.build.OptionData;
+
+import static net.dv8tion.jda.api.interactions.commands.OptionType.INTEGER;
 
 public class Sleep implements ISlashCommand {
     @Override
@@ -47,5 +51,13 @@ public class Sleep implements ISlashCommand {
         event.reply("\uD83D\uDCA4 Your alpaca goes to bed for **" + energy + "** minutes and rests well **Energy + " + energy + "**")
              .queue();
 
+    }
+
+    @Override
+    public CommandData getCommandData() {
+        return new CommandData("sleep", "Lets your alpaca sleep for the specified duration to regain energy")
+                .addOptions(
+                        new OptionData(INTEGER, "duration", "The duration in minutes", true)
+                );
     }
 }

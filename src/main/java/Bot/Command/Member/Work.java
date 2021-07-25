@@ -6,6 +6,7 @@ import Bot.Models.User;
 import Bot.Utils.Emote;
 import Bot.Utils.Language;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import org.json.JSONArray;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,7 +17,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 public class Work implements ISlashCommand {
     private static final Logger LOGGER = LoggerFactory.getLogger(Work.class);
@@ -24,7 +24,7 @@ public class Work implements ISlashCommand {
 
     public Work() {
         try {
-            final File file = new File("src/main/resources/data/Messages.json");
+            final File file = new File("src/main/resources/Data/Messages.json");
             final Path filePath = Path.of(file.getPath());
             final String content = Files.readString(filePath);
             final JSONArray messages = new JSONArray(content);
@@ -48,8 +48,7 @@ public class Work implements ISlashCommand {
             return;
         }
 
-        long sleep = TimeUnit.MILLISECONDS.toMinutes(user.getCooldown().getSleep() - System.currentTimeMillis());
-
+        long sleep = user.getCooldown().getSleep();
         if (sleep > 0) {
             event.reply(Emote.REDCROSS + " Your alpaca sleeps, it'll wake up in **" + Language.handle(sleep, "minute") + "**")
                  .setEphemeral(true)
@@ -57,8 +56,7 @@ public class Work implements ISlashCommand {
             return;
         }
 
-        long work = TimeUnit.MILLISECONDS.toMinutes(user.getCooldown().getWork() - System.currentTimeMillis());
-
+        long work = user.getCooldown().getWork();
         if (work > 0) {
             event.reply(Emote.REDCROSS + " Your alpaca has to rest **" + Language.handle(work, "minute") + "** to work again")
                  .setEphemeral(true)
@@ -67,7 +65,6 @@ public class Work implements ISlashCommand {
         }
 
         final int energy = user.getAlpaca().getEnergy();
-
         if (energy < 10) {
             event.reply("\uD83E\uDD71 Your alpaca is too tired to work, let it rest first with **/sleep**")
                  .setEphemeral(true)
@@ -76,7 +73,6 @@ public class Work implements ISlashCommand {
         }
 
         final int joy = user.getAlpaca().getJoy();
-
         if (joy < 15) {
             event.reply(":pensive: Your alpaca is too sad to work, give him some love with **/pet**")
                  .setEphemeral(true)
@@ -99,6 +95,11 @@ public class Work implements ISlashCommand {
 
         event.reply("⛏ " + message + " **Fluffies + " + fluffies + ", Energy - " + energyCost + ", Joy - " + joyCost + "**")
              .queue();
+    }
+
+    @Override
+    public CommandData getCommandData() {
+        return new CommandData("work", "Lets your alpaca work for fluffies");
     }
 
     private String getRandomMessage() {

@@ -6,6 +6,7 @@ import Bot.Models.User;
 import Bot.Utils.Emote;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.components.Button;
 
 import java.time.Instant;
@@ -45,5 +46,10 @@ public class Init implements ISlashCommand {
              )
              .setEphemeral(true)
              .queue();
+    }
+
+    @Override
+    public CommandData getCommandData() {
+        return new CommandData("init", "Initializes a new alpaca");
     }
 }

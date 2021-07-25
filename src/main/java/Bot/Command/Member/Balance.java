@@ -6,6 +6,7 @@ import Bot.Database.IDatabase;
 import Bot.Utils.Emote;
 import Bot.Utils.Language;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 
 public class Balance implements ISlashCommand {
     @Override
@@ -17,10 +18,13 @@ public class Balance implements ISlashCommand {
                  .queue();
             return;
         }
-
         final int balance = user.getInventory().getCurrency();
 
-        event.reply("\uD83D\uDCB5 Your current balance is **" + Language.handle(balance, "fluffy") + "**")
-             .queue();
+        event.reply("\uD83D\uDCB5 Your current balance is **" + Language.handle(balance, "fluffy") + "**").queue();
+    }
+
+    @Override
+    public CommandData getCommandData() {
+        return new CommandData("balance", "Shows your fluffy balance");
     }
 }

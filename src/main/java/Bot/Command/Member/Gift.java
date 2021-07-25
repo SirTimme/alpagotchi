@@ -7,6 +7,11 @@ import Bot.Shop.Item;
 import Bot.Shop.ItemManager;
 import Bot.Utils.Emote;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.interactions.commands.Command;
+import net.dv8tion.jda.api.interactions.commands.build.CommandData;
+import net.dv8tion.jda.api.interactions.commands.build.OptionData;
+
+import static net.dv8tion.jda.api.interactions.commands.OptionType.*;
 
 public class Gift implements ISlashCommand {
     private final ItemManager itemMan;
@@ -70,5 +75,23 @@ public class Gift implements ISlashCommand {
 
         event.reply("\uD83C\uDF81 You successfully gifted **" + amount + " " + item.getName() + "** to **" + user.getName() + "**")
              .queue();
+    }
+
+    @Override
+    public CommandData getCommandData() {
+        return new CommandData("gift", "Gifts another user items")
+                .addOptions(
+                        new OptionData(USER, "user", "The user you want to gift to", true),
+                        new OptionData(STRING, "item", "The item to gift", true)
+                                .addChoices(
+                                        new Command.Choice("salad", "salad"),
+                                        new Command.Choice("taco", "taco"),
+                                        new Command.Choice("steak", "steak"),
+                                        new Command.Choice("water", "water"),
+                                        new Command.Choice("lemonade", "lemonade"),
+                                        new Command.Choice("cacao", "cacao")
+                                ),
+                        new OptionData(INTEGER, "amount", "The amount of gifted items", true)
+                );
     }
 }

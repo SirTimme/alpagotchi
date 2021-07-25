@@ -5,9 +5,14 @@ import Bot.Database.IDatabase;
 import Bot.Models.User;
 import Bot.Utils.Emote;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.interactions.commands.Command;
+import net.dv8tion.jda.api.interactions.commands.build.CommandData;
+import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 
 import java.util.Arrays;
 import java.util.List;
+
+import static net.dv8tion.jda.api.interactions.commands.OptionType.STRING;
 
 public class Pet implements ISlashCommand {
     private final List<String> spots = Arrays.asList("head", "tail", "leg", "neck", "back");
@@ -53,5 +58,19 @@ public class Pet implements ISlashCommand {
 
             event.reply("\uD83E\uDD99 Your alpaca enjoyed the petting, but it wasn't his favourite spot **Joy + " + newJoy + "**").queue();
         }
+    }
+
+    @Override
+    public CommandData getCommandData() {
+        return new CommandData("pet", "Pets your alpaca to gain joy").addOptions(
+                new OptionData(STRING, "spot", "The spot where you want to pet your alpaca", true)
+                        .addChoices(
+                                new Command.Choice("neck", "neck"),
+                                new Command.Choice("head", "head"),
+                                new Command.Choice("tail", "tail"),
+                                new Command.Choice("leg", "leg"),
+                                new Command.Choice("back", "back")
+                        )
+        );
     }
 }

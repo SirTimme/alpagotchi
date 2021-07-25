@@ -8,10 +8,12 @@ import Bot.Shop.ItemManager;
 import Bot.Utils.Emote;
 import Bot.Utils.Language;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.interactions.commands.Command;
+import net.dv8tion.jda.api.interactions.commands.build.CommandData;
+import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 
-import java.util.concurrent.TimeUnit;
-
-import static Bot.Utils.Stat.HUNGER;
+import static net.dv8tion.jda.api.interactions.commands.OptionType.INTEGER;
+import static net.dv8tion.jda.api.interactions.commands.OptionType.STRING;
 
 public class Feed implements ISlashCommand {
     private final ItemManager itemMan;
@@ -31,8 +33,7 @@ public class Feed implements ISlashCommand {
             return;
         }
 
-        long sleep = TimeUnit.MILLISECONDS.toMinutes(user.getCooldown().getSleep() - System.currentTimeMillis());
-
+        final long sleep = user.getCooldown().getSleep();
         if (sleep > 0) {
             event.reply(Emote.REDCROSS + " Your alpaca sleeps, it'll wake up in **" + Language.handle(sleep, "minute") + "**")
                  .setEphemeral(true)
@@ -58,8 +59,8 @@ public class Feed implements ISlashCommand {
             return;
         }
 
-        final int oldValue = item.getStat().equals(HUNGER) ? user.getAlpaca().getHunger() : user.getAlpaca()
-                                                                                                .getThirst();
+        final int oldValue = item.getStat().equals("hunger") ? user.getAlpaca().getHunger() : user.getAlpaca()
+                                                                                                  .getThirst();
         final int saturation = amount * item.getSaturation();
 
         if (oldValue + saturation > 100) {
@@ -71,7 +72,7 @@ public class Feed implements ISlashCommand {
 
         user.getInventory().setItem(item.getName(), -amount);
 
-        if (item.getStat().equals(HUNGER)) {
+        if (item.getStat().equals("hunger")) {
             user.getAlpaca().setHunger(saturation);
             IDatabase.INSTANCE.setUser(authorID, user);
             event.reply(":meat_on_bone: Your alpaca eats the **" + Language.handle(amount, item.getName()) + "** in one bite **Hunger + " + saturation + "**")
@@ -82,5 +83,22 @@ public class Feed implements ISlashCommand {
             event.reply(":beer: Your alpaca drinks the **" + Language.handle(amount, item.getName()) + "** empty **Thirst + " + saturation + "**")
                  .queue();
         }
+    }
+
+    @Override
+    public CommandData getCommandData() {
+        return new CommandData("feed", "Feeds your alpaca items")
+                .addOptions(
+                        new OptionData(STRING, "item", "The item to feed", true)
+                                .addChoices(
+                                        new Command.Choice("salad", "salad"),
+                                        new Command.Choice("taco", "taco"),
+                                        new Command.Choice("steak", "steak"),
+                                        new Command.Choice("water", "water"),
+                                        new Command.Choice("lemonade", "lemonade"),
+                                        new Command.Choice("cacao", "cacao")
+                                ),
+                        new OptionData(INTEGER, "amount", "The amount of items", true)
+                );
     }
 }
