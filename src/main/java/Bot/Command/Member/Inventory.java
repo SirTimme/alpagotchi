@@ -2,12 +2,12 @@ package Bot.Command.Member;
 
 import Bot.Command.ISlashCommand;
 import Bot.Database.IDatabase;
-import Bot.Models.Entry;
+import Bot.Models.User;
 import Bot.Shop.ItemManager;
 import Bot.Utils.Emote;
-import Bot.Utils.Stat;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 
 import java.time.Instant;
 
@@ -20,9 +20,9 @@ public class Inventory implements ISlashCommand {
 
     @Override
     public void execute(SlashCommandEvent event, long authorID) {
-        Entry entry = IDatabase.INSTANCE.getEntry(authorID);
+        User user = IDatabase.INSTANCE.getUser(authorID);
 
-        if (entry == null) {
+        if (user == null) {
             event.reply(Emote.REDCROSS + " You don't own an alpaca, use **/init** first")
                  .setEphemeral(true)
                  .queue();
@@ -37,15 +37,20 @@ public class Inventory implements ISlashCommand {
              .setFooter("Created by SirTimme", "https://cdn.discordapp.com/avatars/483012399893577729/ba3996b7728a950565a79bd4b550b8dd.png")
              .setTimestamp(Instant.now());
 
-        itemMan.getItems(Stat.HUNGER)
-               .forEach(item -> embed.addField(":package: " + item.getName(), "Quantity: **" + entry.getInventory().getItem(item.getName()) + "**", true));
+        itemMan.getItems("hunger")
+               .forEach(item -> embed.addField(":package: " + item.getName(), "Quantity: **" + user.getInventory().getItem(item.getName()) + "**", true));
 
         embed.addBlankField(false)
              .addField("__**:beer: Thirst items**__", "Following items replenish the thirst of your alpaca", false);
 
-        itemMan.getItems(Stat.THIRST)
-                   .forEach(item -> embed.addField(":package: " + item.getName(), "Quantity: **" + entry.getInventory().getItem(item.getName()) + "**", true));
+        itemMan.getItems("thirst")
+                   .forEach(item -> embed.addField(":package: " + item.getName(), "Quantity: **" + user.getInventory().getItem(item.getName()) + "**", true));
 
         event.replyEmbeds(embed.build()).queue();
+    }
+
+    @Override
+    public CommandData getCommandData() {
+        return new CommandData("inventory", "Shows your items for your alpaca");
     }
 }

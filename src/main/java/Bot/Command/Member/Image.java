@@ -5,6 +5,8 @@ import Bot.Config;
 import Bot.Utils.Emote;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.interactions.commands.build.CommandData;
+import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import org.apache.http.client.utils.URIBuilder;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -17,6 +19,8 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.Instant;
+
+import static net.dv8tion.jda.api.interactions.commands.OptionType.STRING;
 
 public class Image implements ISlashCommand {
     private static final Logger LOGGER = LoggerFactory.getLogger(Image.class);
@@ -70,5 +74,13 @@ public class Image implements ISlashCommand {
         } catch (URISyntaxException | IOException | InterruptedException error) {
             LOGGER.error(error.getMessage());
         }
+    }
+
+    @Override
+    public CommandData getCommandData() {
+        return new CommandData("image", "Search pixabay with your query")
+                .addOptions(
+                        new OptionData(STRING, "query", "The query you want to search", true)
+                );
     }
 }

@@ -5,11 +5,16 @@ import Bot.Database.IDatabase;
 import Bot.Utils.Emote;
 import Bot.Utils.ThreadFactory;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.interactions.commands.Command;
+import net.dv8tion.jda.api.interactions.commands.build.CommandData;
+import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+
+import static net.dv8tion.jda.api.interactions.commands.OptionType.STRING;
 
 public class Decrease implements ISlashCommand {
     private boolean running = false;
@@ -19,32 +24,41 @@ public class Decrease implements ISlashCommand {
     @Override
     public void execute(SlashCommandEvent event, long authorID) {
         final String args = event.getOption("status").getAsString();
-
         if (running && args.equals("enable")) {
             event.reply(Emote.REDCROSS + " Decreasing is already enabled")
                  .setEphemeral(true)
                  .queue();
             return;
         }
-
         if (!running && args.equals("disable")) {
             event.reply(Emote.REDCROSS + " Decreasing is already disabled")
                  .setEphemeral(true)
                  .queue();
             return;
         }
-
         if (args.equals("enable")) {
             result = service.scheduleAtFixedRate(IDatabase.INSTANCE::decreaseValues, 2, 2, TimeUnit.HOURS);
             running = true;
 
             event.reply(Emote.GREENTICK + " Alpacas begin to lose stats").queue();
-        }
-        else {
+        } else {
             result.cancel(true);
             running = false;
 
             event.reply(Emote.REDCROSS + " Alpacas stop losing stats").queue();
         }
+    }
+
+    @Override
+    public CommandData getCommandData() {
+        return new CommandData("decrease", "Let the alpacas lose stats")
+                .addOptions(
+                        new OptionData(STRING, "status", "Status of decreasing", true)
+                                .addChoices(
+                                        new Command.Choice("enable", "enable"),
+                                        new Command.Choice("disable", "disable")
+                                )
+                )
+                .setDefaultEnabled(false);
     }
 }

@@ -1,14 +1,11 @@
 package Bot.Shop;
 
-import Bot.Utils.Stat;
-
 public class Item {
 	private final int price;
 	private final int saturation;
-	private final Stat stat;
-	private final String name;
+	private final String name, stat;
 
-	public Item(String name, int price, int saturation, Stat stat) {
+	public Item(String name, int price, int saturation, String stat) {
 		this.name = name;
 		this.price = price;
 		this.saturation = saturation;
@@ -16,18 +13,18 @@ public class Item {
 	}
 
 	public String getName() {
-		return this.name;
+		return name;
 	}
 
 	public int getPrice() {
-		return this.price;
+		return price;
 	}
 
 	public int getSaturation() {
-		return this.saturation;
+		return saturation;
 	}
 
-	public Stat getStat() {
-		return this.stat;
+	public String getStat() {
+		return stat;
 	}
 }

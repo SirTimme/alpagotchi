@@ -1,0 +1,38 @@
+[
+  {
+    "name": "salad",
+    "price": 10,
+    "saturation": 10,
+    "stat": "hunger"
+  },
+  {
+    "name": "taco",
+    "price": 25,
+    "saturation": 25,
+    "stat": "hunger"
+  },
+  {
+    "name": "steak",
+    "price": 40,
+    "saturation": 40,
+    "stat": "hunger"
+  },
+  {
+    "name": "water",
+    "price": 10,
+    "saturation": 10,
+    "stat": "thirst"
+  },
+  {
+    "name": "lemonade",
+    "price": 25,
+    "saturation": 25,
+    "stat": "thirst"
+  },
+  {
+    "name": "cacao",
+    "price": 40,
+    "saturation": 40,
+    "stat": "thirst"
+  }
+]

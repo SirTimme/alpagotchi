@@ -8,8 +8,8 @@ public class Inventory {
     private final Map<String, Integer> items;
 
     public Inventory() {
-        this.currency = 0;
-        this.items = new HashMap<>() {{
+        currency = 0;
+        items = new HashMap<>() {{
             put("salad", 0);
             put("taco", 0);
             put("steak", 0);

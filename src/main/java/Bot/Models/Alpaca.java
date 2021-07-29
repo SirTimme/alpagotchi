@@ -5,12 +5,12 @@ public class Alpaca {
     private int hunger, thirst, energy, joy;
 
     public Alpaca() {
-        this.outfit = "default";
-        this.nickname = "alpaca";
-        this.hunger = 100;
-        this.thirst = 100;
-        this.energy = 100;
-        this.joy = 100;
+        outfit = "default";
+        nickname = "alpaca";
+        hunger = 100;
+        thirst = 100;
+        energy = 100;
+        joy = 100;
     }
 
     public String getOutfit() {

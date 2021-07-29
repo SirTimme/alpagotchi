@@ -5,7 +5,6 @@ import Bot.Command.Dev.Shutdown;
 import Bot.Command.Dev.Update;
 import Bot.Command.Member.*;
 import Bot.Shop.ItemManager;
-import com.mongodb.lang.Nullable;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 
 import java.util.*;
@@ -36,15 +35,13 @@ public class SlashCommandManager {
         commands.put("pet", new Pet());
         commands.put("inventory", new Inventory(itemMan));
         commands.put("shop", new Shop(itemMan));
-        commands.put("update", new Update());
+        commands.put("update", new Update(this));
     }
 
     public void handle(SlashCommandEvent event) {
-        final ISlashCommand cmd = getCommand(event.getName());
+        final ISlashCommand cmd = commands.get(event.getName());
 
-        if (cmd != null) {
-            cmd.execute(event, event.getUser().getIdLong());
-        }
+        cmd.execute(event, event.getUser().getIdLong());
     }
 
     public Map<String, ISlashCommand> getCommands() {
@@ -56,10 +53,5 @@ public class SlashCommandManager {
         commands.keySet().forEach(cmd -> sb.append("`").append(cmd).append("` "));
 
         return sb.toString();
-    }
-
-    @Nullable
-    public ISlashCommand getCommand(String cmd) {
-        return this.commands.get(cmd);
     }
 }
