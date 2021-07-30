@@ -24,16 +24,9 @@ public class Update implements IInfoCommand {
 
     @Override
     public void execute(SlashCommandEvent event) {
+        event.getJDA().updateCommands().queue();
+
         final Guild guild = event.getGuild();
-        final List<Command> commands = guild.retrieveCommands().complete();
-
-        for (Command cmd : commands) {
-            if (DEV_COMMANDS.contains(cmd.getName())) {
-                guild.updateCommandPrivilegesById(cmd.getIdLong(), CommandPrivilege.enableUser(Config.get("DEV_ID")))
-                     .queue();
-            }
-        }
-
         slashCmdMan.getCommands().values().forEach(cmd -> {
             final CommandData cmdData = cmd.getCommandData();
             if (DEV_COMMANDS.contains(cmdData.getName())) {
@@ -43,6 +36,12 @@ public class Update implements IInfoCommand {
             }
         });
 
+        final List<Command> commands = guild.retrieveCommands().complete();
+        for (Command cmd : commands) {
+            if (DEV_COMMANDS.contains(cmd.getName())) {
+                guild.updateCommandPrivilegesById(cmd.getIdLong(), CommandPrivilege.enableUser(Config.get("DEV_ID"))).queue();
+            }
+        }
         event.reply(GREENTICK + " Successfully refreshed all slash commands").queue();
     }
 
