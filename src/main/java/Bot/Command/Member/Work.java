@@ -1,64 +1,53 @@
 package Bot.Command.Member;
 
-import Bot.Command.ISlashCommand;
 import Bot.Database.IDatabase;
-import Bot.Models.User;
-import Bot.Utils.Emote;
+import Bot.Command.IUserCommand;
+import Bot.Models.DBUser;
 import Bot.Utils.Language;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
-import org.json.JSONArray;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Work implements ISlashCommand {
+import static Bot.Utils.Emote.REDCROSS;
+
+public class Work implements IUserCommand {
     private static final Logger LOGGER = LoggerFactory.getLogger(Work.class);
-    private final List<String> json = new ArrayList<>();
+    private ArrayList<String> json;
 
     public Work() {
         try {
-            final File file = new File("src/main/resources/Data/Messages.json");
-            final Path filePath = Path.of(file.getPath());
-            final String content = Files.readString(filePath);
-            final JSONArray messages = new JSONArray(content);
+            final BufferedReader reader = new BufferedReader(new FileReader("src/main/resources/data/messages.json"));
+            final Type type = new TypeToken<List<String>>() {}.getType();
 
-            for (int i = 0; i < messages.length(); i++) {
-                this.json.add(messages.getString(i));
-            }
+            json = new Gson().fromJson(reader, type);
         } catch (IOException error) {
             LOGGER.error(error.getMessage());
         }
     }
 
     @Override
-    public void execute(SlashCommandEvent event, long authorID) {
-        final User user = IDatabase.INSTANCE.getUser(authorID);
-
-        if (user == null) {
-            event.reply(Emote.REDCROSS + " You don't own an alpaca, use **/init** first")
-                 .setEphemeral(true)
-                 .queue();
-            return;
-        }
-
-        long sleep = user.getCooldown().getSleep();
+    public void execute(SlashCommandEvent event, DBUser user) {
+        final long sleep = user.getCooldown().getSleep();
         if (sleep > 0) {
-            event.reply(Emote.REDCROSS + " Your alpaca sleeps, it'll wake up in **" + Language.handle(sleep, "minute") + "**")
+            event.reply(REDCROSS + " Your alpaca sleeps, it'll wake up in **" + sleep + " " + Language.handle(sleep, "minute", "minutes") + "**")
                  .setEphemeral(true)
                  .queue();
             return;
         }
 
-        long work = user.getCooldown().getWork();
+        final long work = user.getCooldown().getWork();
         if (work > 0) {
-            event.reply(Emote.REDCROSS + " Your alpaca has to rest **" + Language.handle(work, "minute") + "** to work again")
+            event.reply(REDCROSS + " Your alpaca has to rest **" + work + " " + Language.handle(work, "minute", "minutes") + "** to work again")
                  .setEphemeral(true)
                  .queue();
             return;
@@ -90,8 +79,7 @@ public class Work implements ISlashCommand {
         user.getAlpaca().setEnergy(-energyCost);
         user.getAlpaca().setJoy(-joyCost);
         user.getCooldown().setWork(cooldown);
-
-        IDatabase.INSTANCE.setUser(authorID, user);
+        IDatabase.INSTANCE.setUser(user.getId(), user);
 
         event.reply("⛏ " + message + " **Fluffies + " + fluffies + ", Energy - " + energyCost + ", Joy - " + joyCost + "**")
              .queue();

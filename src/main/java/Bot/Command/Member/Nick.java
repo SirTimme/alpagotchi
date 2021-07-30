@@ -1,7 +1,7 @@
 package Bot.Command.Member;
 
-import Bot.Command.ISlashCommand;
-import Bot.Models.User;
+import Bot.Command.IUserCommand;
+import Bot.Models.DBUser;
 import Bot.Database.IDatabase;
 import Bot.Utils.Emote;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
@@ -10,20 +10,10 @@ import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 
 import static net.dv8tion.jda.api.interactions.commands.OptionType.STRING;
 
-public class Nick implements ISlashCommand {
+public class Nick implements IUserCommand {
     @Override
-    public void execute(SlashCommandEvent event, long authorID) {
-        User user = IDatabase.INSTANCE.getUser(authorID);
-
-        if (user == null) {
-            event.reply(Emote.REDCROSS + " You don't own an alpaca, use **/ init** first")
-                 .setEphemeral(true)
-                 .queue();
-            return;
-        }
-
+    public void execute(SlashCommandEvent event, DBUser user) {
         final String nickname = event.getOption("nickname").getAsString();
-
         if (nickname.length() > 256) {
             event.reply(Emote.REDCROSS + " The nickname must not exceed **256** characters")
                  .setEphemeral(true)
@@ -32,8 +22,7 @@ public class Nick implements ISlashCommand {
         }
 
         user.getAlpaca().setNickname(nickname);
-
-        IDatabase.INSTANCE.setUser(authorID, user);
+        IDatabase.INSTANCE.setUser(user.getId(), user);
 
         event.reply("\uD83D\uDD8A The nickname of your alpaca has been set to **" + nickname + "**").queue();
     }

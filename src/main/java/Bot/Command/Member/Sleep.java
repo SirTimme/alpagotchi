@@ -1,8 +1,8 @@
 package Bot.Command.Member;
 
-import Bot.Command.ISlashCommand;
 import Bot.Database.IDatabase;
-import Bot.Models.User;
+import Bot.Command.IUserCommand;
+import Bot.Models.DBUser;
 import Bot.Utils.Emote;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
@@ -10,20 +10,10 @@ import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 
 import static net.dv8tion.jda.api.interactions.commands.OptionType.INTEGER;
 
-public class Sleep implements ISlashCommand {
+public class Sleep implements IUserCommand {
     @Override
-    public void execute(SlashCommandEvent event, long authorID) {
-        User user = IDatabase.INSTANCE.getUser(authorID);
-
-        if (user == null) {
-            event.reply(Emote.REDCROSS + " You don't own an alpaca, use **/init** first")
-                 .setEphemeral(true)
-                 .queue();
-            return;
-        }
-
+    public void execute(SlashCommandEvent event, DBUser user) {
         int energy = user.getAlpaca().getEnergy();
-
         if (energy == 100) {
             event.reply(Emote.REDCROSS + " The energy of your alpaca is already at the maximum")
                  .setEphemeral(true)
@@ -32,7 +22,6 @@ public class Sleep implements ISlashCommand {
         }
 
         final int duration = (int) event.getOption("duration").getAsLong();
-
         if (duration < 1 || duration > 100) {
             event.reply(Emote.REDCROSS + " Please enter a number between 1 - 100")
                  .setEphemeral(true)
@@ -45,8 +34,7 @@ public class Sleep implements ISlashCommand {
 
         user.getAlpaca().setEnergy(energy);
         user.getCooldown().setSleep(cooldown);
-
-        IDatabase.INSTANCE.setUser(authorID, user);
+        IDatabase.INSTANCE.setUser(user.getId(), user);
 
         event.reply("\uD83D\uDCA4 Your alpaca goes to bed for **" + energy + "** minutes and rests well **Energy + " + energy + "**")
              .queue();

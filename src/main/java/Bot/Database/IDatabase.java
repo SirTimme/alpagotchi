@@ -1,14 +1,12 @@
 package Bot.Database;
 
-import Bot.Models.User;
+import Bot.Models.DBUser;
 
 public interface IDatabase {
 	IDatabase INSTANCE = new MongoDB();
 
-	User getUser(long memberID);
-	void setUser(long memberID, User user);
-
-	String getPrefix(long guildID);
+	DBUser getUser(long memberID);
+	void setUser(long memberID, DBUser DBUser);
 
 	void createUser(long memberID);
 	void deleteUser(long memberID);

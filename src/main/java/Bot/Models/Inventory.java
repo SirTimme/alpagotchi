@@ -28,7 +28,7 @@ public class Inventory {
     }
 
     public void setCurrency(int currency) {
-        this.currency = this.currency + currency;
+        this.currency += currency;
     }
 
     public void setItem(String item, int newValue) {

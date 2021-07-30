@@ -1,0 +1,68 @@
+{
+  "decrease": {
+    "requireUser": false
+  },
+  "shutdown": {
+    "requireUser": false
+  },
+  "update": {
+    "requireUser": false
+  },
+  "balance": {
+    "requireUser": true
+  },
+  "buy": {
+    "requireUser": true
+  },
+  "count": {
+    "requireUser": false
+  },
+  "daily": {
+    "requireUser": true
+  },
+  "delete": {
+    "requireUser": true
+  },
+  "feed": {
+    "requireUser": true
+  },
+  "gift": {
+    "requireUser": true
+  },
+  "help": {
+    "requireUser": false
+  },
+  "image": {
+    "requireUser": false
+  },
+  "init": {
+    "requireUser": true
+  },
+  "inventory": {
+    "requireUser": true
+  },
+  "myalpaca": {
+    "requireUser": true
+  },
+  "nick": {
+    "requireUser": true
+  },
+  "outfit": {
+    "requireUser": true
+  },
+  "pet": {
+    "requireUser": true
+  },
+  "ping": {
+    "requireUser": false
+  },
+  "shop": {
+    "requireUser": false
+  },
+  "sleep": {
+    "requireUser": true
+  },
+  "work": {
+    "requireUser": true
+  }
+}

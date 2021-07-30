@@ -1,12 +1,12 @@
 package Bot.Command.Member;
 
-import Bot.Command.ISlashCommand;
+import Bot.Command.IInfoCommand;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 
-public class Ping implements ISlashCommand {
+public class Ping implements IInfoCommand {
     @Override
-    public void execute(SlashCommandEvent event, long authorID) {
+    public void execute(SlashCommandEvent event) {
         event.getJDA()
              .getRestPing()
              .queue((ping) -> event.reply(":satellite: You reached the alpacafarm in **" + ping + "**ms").queue());

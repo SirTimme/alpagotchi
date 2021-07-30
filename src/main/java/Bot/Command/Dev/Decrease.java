@@ -1,6 +1,6 @@
 package Bot.Command.Dev;
 
-import Bot.Command.ISlashCommand;
+import Bot.Command.IInfoCommand;
 import Bot.Database.IDatabase;
 import Bot.Utils.Emote;
 import Bot.Utils.ThreadFactory;
@@ -14,24 +14,25 @@ import java.util.concurrent.Future;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+import static Bot.Utils.Emote.REDCROSS;
 import static net.dv8tion.jda.api.interactions.commands.OptionType.STRING;
 
-public class Decrease implements ISlashCommand {
+public class Decrease implements IInfoCommand {
     private boolean running = false;
     private Future<?> result;
     private final ScheduledExecutorService service = Executors.newSingleThreadScheduledExecutor(new ThreadFactory());
 
     @Override
-    public void execute(SlashCommandEvent event, long authorID) {
+    public void execute(SlashCommandEvent event) {
         final String args = event.getOption("status").getAsString();
         if (running && args.equals("enable")) {
-            event.reply(Emote.REDCROSS + " Decreasing is already enabled")
+            event.reply(REDCROSS + " Decreasing is already enabled")
                  .setEphemeral(true)
                  .queue();
             return;
         }
         if (!running && args.equals("disable")) {
-            event.reply(Emote.REDCROSS + " Decreasing is already disabled")
+            event.reply(REDCROSS + " Decreasing is already disabled")
                  .setEphemeral(true)
                  .queue();
             return;
@@ -45,7 +46,7 @@ public class Decrease implements ISlashCommand {
             result.cancel(true);
             running = false;
 
-            event.reply(Emote.REDCROSS + " Alpacas stop losing stats").queue();
+            event.reply(REDCROSS + " Alpacas stop losing stats").queue();
         }
     }
 

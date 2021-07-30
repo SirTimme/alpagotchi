@@ -46,18 +46,18 @@ public class Alpaca {
     }
 
     public void setHunger(int hunger) {
-        this.hunger = this.hunger + hunger;
+        this.hunger += hunger;
     }
 
     public void setThirst(int thirst) {
-        this.thirst = this.thirst + thirst;
+        this.thirst += thirst;
     }
 
     public void setEnergy(int energy) {
-        this.energy = this.energy + energy;
+        this.energy += energy;
     }
 
     public void setJoy(int joy) {
-        this.joy = this.joy + joy;
+        this.joy += joy;
     }
 }
