@@ -1,9 +1,8 @@
 package Bot.Command.Member;
 
-import Bot.Command.ISlashCommand;
 import Bot.Database.IDatabase;
-import Bot.Models.User;
-import Bot.Utils.Emote;
+import Bot.Command.IUserCommand;
+import Bot.Models.DBUser;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.interactions.commands.Command;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
@@ -12,26 +11,17 @@ import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import java.util.Arrays;
 import java.util.List;
 
+import static Bot.Utils.Emote.REDCROSS;
 import static net.dv8tion.jda.api.interactions.commands.OptionType.STRING;
 
-public class Pet implements ISlashCommand {
+public class Pet implements IUserCommand {
     private final List<String> spots = Arrays.asList("head", "tail", "leg", "neck", "back");
 
     @Override
-    public void execute(SlashCommandEvent event, long authorID) {
-        User user = IDatabase.INSTANCE.getUser(authorID);
-
-        if (user == null) {
-            event.reply(Emote.REDCROSS + " You don't own an alpaca, use **/init** first")
-                 .setEphemeral(true)
-                 .queue();
-            return;
-        }
-
+    public void execute(SlashCommandEvent event, DBUser user) {
         final int joy = user.getAlpaca().getJoy();
-
         if (joy == 100) {
-            event.reply(Emote.REDCROSS + " The joy of your alpaca is already at the maximum")
+            event.reply(REDCROSS + " The joy of your alpaca is already at the maximum")
                  .setEphemeral(true)
                  .queue();
             return;
@@ -40,24 +30,20 @@ public class Pet implements ISlashCommand {
         final String favouriteSpot = spots.get((int) (Math.random() * 5));
         final String spot = event.getOption("spot").getAsString();
 
+        int newJoy;
         if (spot.equals(favouriteSpot)) {
-            int newJoy = (int) (Math.random() * 13 + 5);
-            newJoy = newJoy + joy > 100 ? 100 - joy : newJoy;
-
-            user.getAlpaca().setJoy(newJoy);
-            IDatabase.INSTANCE.setUser(authorID, user);
+            final int randomJoy = (int) (Math.random() * 13 + 5);
+            newJoy = randomJoy + joy > 100 ? 100 - joy : randomJoy;
 
             event.reply("\uD83E\uDD99 You found the favourite spot of your alpaca **Joy + " + newJoy + "**").queue();
         } else {
-            int newJoy = (int) (Math.random() * 9 + 3);
-            newJoy = newJoy + joy > 100 ? 100 - joy : newJoy;
-
-            user.getAlpaca().setJoy(newJoy);
-
-            IDatabase.INSTANCE.setUser(authorID, user);
+            final int randomJoy = (int) (Math.random() * 9 + 3);
+            newJoy = randomJoy + joy > 100 ? 100 - joy : randomJoy;
 
             event.reply("\uD83E\uDD99 Your alpaca enjoyed the petting, but it wasn't his favourite spot **Joy + " + newJoy + "**").queue();
         }
+        user.getAlpaca().setJoy(newJoy);
+        IDatabase.INSTANCE.setUser(user.getId(), user);
     }
 
     @Override

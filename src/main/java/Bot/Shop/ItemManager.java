@@ -14,13 +14,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static Bot.Utils.Language.SINGULAR;
+
 public class ItemManager {
     private static final Logger LOGGER = LoggerFactory.getLogger(ItemManager.class);
     private ArrayList<Item> items = new ArrayList<>();
 
     public ItemManager() {
         try {
-            final BufferedReader reader = new BufferedReader(new FileReader("src/main/resources/Data/Items.json"));
+            final BufferedReader reader = new BufferedReader(new FileReader("src/main/resources/data/items.json"));
             final Type type = new TypeToken<ArrayList<Item>>() {}.getType();
 
             items = new Gson().fromJson(reader, type);
@@ -35,6 +37,6 @@ public class ItemManager {
 
     @Nullable
     public Item getItem(String search) {
-        return items.stream().filter(item -> item.getName().equals(search)).findAny().orElse(null);
+        return items.stream().filter(item -> item.getName(SINGULAR).equals(search)).findAny().orElse(null);
     }
 }

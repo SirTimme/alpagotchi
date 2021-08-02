@@ -1,9 +1,7 @@
 package Bot.Command.Member;
 
-import Bot.Command.ISlashCommand;
-import Bot.Models.User;
-import Bot.Database.IDatabase;
-import Bot.Utils.Emote;
+import Bot.Command.IUserCommand;
+import Bot.Models.DBUser;
 import Bot.Utils.Language;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
@@ -21,13 +19,16 @@ import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
 
-public class MyAlpaca implements ISlashCommand {
+import static Bot.Utils.Emote.GREENTICK;
+import static Bot.Utils.Emote.REDCROSS;
+
+public class MyAlpaca implements IUserCommand {
     private final Map<String, BufferedImage> images = new HashMap<>();
     private static final Logger LOGGER = LoggerFactory.getLogger(MyAlpaca.class);
     private final Color[] colors = {Color.BLACK, Color.RED, Color.ORANGE, Color.YELLOW, Color.GREEN};
 
     public MyAlpaca() {
-        final File folder = new File("src/main/resources/Outfits");
+        final File folder = new File("src/main/resources/outfits");
         try {
             for (File file : folder.listFiles()) {
                 final BufferedImage img = ImageIO.read(file);
@@ -41,15 +42,7 @@ public class MyAlpaca implements ISlashCommand {
     }
 
     @Override
-    public void execute(SlashCommandEvent event, long authorID) {
-        User user = IDatabase.INSTANCE.getUser(authorID);
-        if (user == null) {
-            event.reply(Emote.REDCROSS + " You don't own an alpaca, use **/init** first")
-                 .setEphemeral(true)
-                 .queue();
-            return;
-        }
-
+    public void execute(SlashCommandEvent event, DBUser user) {
         try {
             final ByteArrayOutputStream bytes = new ByteArrayOutputStream();
             ImageIO.write(createImage(user), "png", bytes);
@@ -77,7 +70,7 @@ public class MyAlpaca implements ISlashCommand {
         return new CommandData("myalpaca", "Shows your alpaca with its stats");
     }
 
-    private BufferedImage createImage(User user) {
+    private BufferedImage createImage(DBUser user) {
         final int hunger = user.getAlpaca().getHunger();
         final int thirst = user.getAlpaca().getThirst();
         final int energy = user.getAlpaca().getEnergy();
@@ -127,6 +120,10 @@ public class MyAlpaca implements ISlashCommand {
     }
 
     private String checkCooldown(long cooldown) {
-        return cooldown > 0 ? Emote.REDCROSS + " " + Language.handle(cooldown, "minute") : Emote.GREENTICK + " ready";
+        if (cooldown > 0) {
+            return REDCROSS + " " + cooldown + " " + Language.handle(cooldown, "minute", "minutes");
+        } else {
+            return GREENTICK + " ready";
+        }
     }
 }

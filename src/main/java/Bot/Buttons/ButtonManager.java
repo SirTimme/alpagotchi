@@ -10,22 +10,19 @@ public class ButtonManager {
     private final Map<String, IButton> buttons = new HashMap<>();
 
     public ButtonManager() {
-        this.buttons.put("acceptInit", new AcceptInit());
-        this.buttons.put("declineInit", new DeclineInit());
-        this.buttons.put("acceptDelete", new AcceptDelete());
-        this.buttons.put("cancelDelete", new CancelDelete());
+        buttons.put("acceptInit", new AcceptInit());
+        buttons.put("declineInit", new DeclineInit());
+        buttons.put("acceptDelete", new AcceptDelete());
+        buttons.put("cancelDelete", new CancelDelete());
     }
 
     public void handle(ButtonClickEvent event) {
-        IButton btn = getButton(event);
+        final IButton btn = getButton(event);
 
-        if (btn != null) {
-            btn.execute(event, event.getUser().getIdLong());
-        }
+        btn.execute(event, event.getUser().getIdLong());
     }
 
-    @Nullable
     private IButton getButton(ButtonClickEvent event) {
-        return this.buttons.get(event.getComponentId());
+        return buttons.get(event.getComponentId());
     }
 }

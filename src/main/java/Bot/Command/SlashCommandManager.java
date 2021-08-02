@@ -1,19 +1,41 @@
 package Bot.Command;
 
-import Bot.Command.Dev.Decrease;
-import Bot.Command.Dev.Shutdown;
-import Bot.Command.Dev.Update;
+import Bot.Command.Dev.*;
+import Bot.Command.Dev.Count;
 import Bot.Command.Member.*;
+import Bot.Database.IDatabase;
+import Bot.Models.DBUser;
 import Bot.Shop.ItemManager;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.reflect.TypeToken;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.lang.reflect.Type;
 import java.util.*;
 
+import static Bot.Utils.Emote.REDCROSS;
+
 public class SlashCommandManager {
+    private final static Logger LOGGER = LoggerFactory.getLogger(SlashCommandManager.class);
     private final Map<String, ISlashCommand> commands = new TreeMap<>();
+    private Map<String, JsonObject> commandInfo;
 
     public SlashCommandManager() {
-        ItemManager itemMan = new ItemManager();
+        try {
+            final BufferedReader reader = new BufferedReader(new FileReader("src/main/resources/data/commands.json"));
+            final Type type = new TypeToken<Map<String, JsonObject>>() {}.getType();
+
+            commandInfo = new Gson().fromJson(reader, type);
+        } catch (IOException error) {
+            LOGGER.error(error.getMessage());
+        }
+        final ItemManager itemMan = new ItemManager();
 
         commands.put("ping", new Ping());
         commands.put("init", new Init());
@@ -39,9 +61,21 @@ public class SlashCommandManager {
     }
 
     public void handle(SlashCommandEvent event) {
-        final ISlashCommand cmd = commands.get(event.getName());
-
-        cmd.execute(event, event.getUser().getIdLong());
+        final boolean isUserRequired = commandInfo.get(event.getName()).get("requireUser").getAsBoolean();
+        if (isUserRequired) {
+            final DBUser user = IDatabase.INSTANCE.getUser(event.getUser().getIdLong());
+            if (user == null && !event.getName().equals("init")) {
+                event.reply(REDCROSS + " You don't own an alpaca, use **/init** first")
+                     .setEphemeral(true)
+                     .queue();
+                return;
+            }
+            final IUserCommand userCmd = (IUserCommand) commands.get(event.getName());
+            userCmd.execute(event, user);
+        } else {
+            final IInfoCommand infoCmd = (IInfoCommand) commands.get(event.getName());
+            infoCmd.execute(event);
+        }
     }
 
     public Map<String, ISlashCommand> getCommands() {

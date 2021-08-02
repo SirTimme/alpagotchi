@@ -1,29 +1,16 @@
 package Bot.Command.Member;
 
-import Bot.Command.ISlashCommand;
-import Bot.Models.User;
-import Bot.Database.IDatabase;
-import Bot.Utils.Emote;
+import Bot.Command.IUserCommand;
+import Bot.Models.DBUser;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.components.Button;
 
-public class Delete implements ISlashCommand {
+public class Delete implements IUserCommand {
     @Override
-    public void execute(SlashCommandEvent event, long authorID) {
-        final User user = IDatabase.INSTANCE.getUser(authorID);
-        if (user == null) {
-            event.reply(Emote.REDCROSS + " You don't own an alpaca, use **/init** first")
-                 .setEphemeral(true)
-                 .queue();
-            return;
-        }
-
+    public void execute(SlashCommandEvent event, DBUser user) {
         event.reply("⚠ Are you sure you want to delete your data? You **permanently** lose all progress")
-             .addActionRow(
-                     Button.success("acceptDelete", "Accept"),
-                     Button.danger("cancelDelete", "Cancel")
-             )
+             .addActionRow(Button.success("acceptDelete", "Accept"), Button.danger("cancelDelete", "Cancel"))
              .setEphemeral(true)
              .queue();
     }
