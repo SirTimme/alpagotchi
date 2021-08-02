@@ -9,10 +9,12 @@ import net.dv8tion.jda.api.interactions.commands.Command;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.privileges.CommandPrivilege;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
 import static Bot.Utils.Emote.GREENTICK;
+import static Bot.Utils.Emote.REDCROSS;
 
 public class Update implements IInfoCommand {
     private final SlashCommandManager slashCmdMan;
@@ -24,9 +26,14 @@ public class Update implements IInfoCommand {
 
     @Override
     public void execute(SlashCommandEvent event) {
-        event.getJDA().updateCommands().queue();
-
         final Guild guild = event.getGuild();
+        if (guild == null) {
+            event.reply(REDCROSS + " You need to execute this command in a guild!")
+                 .setEphemeral(true)
+                 .queue();
+            return;
+        }
+
         slashCmdMan.getCommands().values().forEach(cmd -> {
             final CommandData cmdData = cmd.getCommandData();
             if (DEV_COMMANDS.contains(cmdData.getName())) {
@@ -36,7 +43,9 @@ public class Update implements IInfoCommand {
             }
         });
 
-        final List<Command> commands = guild.retrieveCommands().complete();
+        List<Command> commands = new ArrayList<>();
+        guild.retrieveCommands().queue(commands::addAll);
+
         for (Command cmd : commands) {
             if (DEV_COMMANDS.contains(cmd.getName())) {
                 guild.updateCommandPrivilegesById(cmd.getIdLong(), CommandPrivilege.enableUser(Config.get("DEV_ID"))).queue();
