@@ -61,19 +61,22 @@ public class SlashCommandManager {
     }
 
     public void handle(SlashCommandEvent event) {
-        final boolean isUserRequired = commandInfo.get(event.getName()).get("requireUser").getAsBoolean();
-        if (isUserRequired) {
+        final String eventName = event.getName();
+
+        if (isUserRequired(eventName)) {
             final DBUser user = IDatabase.INSTANCE.getUser(event.getUser().getIdLong());
-            if (user == null && !event.getName().equals("init")) {
+
+            if (user == null && !eventName.equals("init")) {
                 event.reply(REDCROSS + " You don't own an alpaca, use **/init** first")
                      .setEphemeral(true)
                      .queue();
                 return;
             }
-            final IUserCommand userCmd = (IUserCommand) commands.get(event.getName());
+
+            final IUserCommand userCmd = (IUserCommand) getCommand(eventName);
             userCmd.execute(event, user);
         } else {
-            final IInfoCommand infoCmd = (IInfoCommand) commands.get(event.getName());
+            final IInfoCommand infoCmd = (IInfoCommand) getCommand(eventName);
             infoCmd.execute(event);
         }
     }
@@ -87,5 +90,13 @@ public class SlashCommandManager {
         commands.keySet().forEach(cmd -> sb.append("`").append(cmd).append("` "));
 
         return sb.toString();
+    }
+
+    private ISlashCommand getCommand(String eventName) {
+        return commands.get(eventName);
+    }
+
+    private boolean isUserRequired(String eventName) {
+        return commandInfo.get(eventName).get("requireUser").getAsBoolean();
     }
 }

@@ -9,9 +9,18 @@ import net.dv8tion.jda.api.interactions.components.Button;
 
 import java.time.Instant;
 
+import static Bot.Utils.Emote.REDCROSS;
+
 public class Init implements IUserCommand {
     @Override
     public void execute(SlashCommandEvent event, DBUser user) {
+        if (user != null) {
+            event.reply(REDCROSS + " You already own an alpaca")
+                 .setEphemeral(true)
+                 .queue();
+            return;
+        }
+
         final EmbedBuilder embed = new EmbedBuilder()
                 .setTitle("User information")
                 .setDescription("Im glad, that Alpagotchi interests you.\nHere are two important points before you can start:")
