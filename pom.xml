@@ -23,7 +23,7 @@
                     <finalName>Alpagotchi</finalName>
                     <archive>
                         <manifest>
-                            <mainClass>Bot.Bot</mainClass>
+                            <mainClass>bot.Bot</mainClass>
                         </manifest>
                     </archive>
                     <outputDirectory>./</outputDirectory>
