@@ -21,13 +21,13 @@ Alpagotchi works only with slashcommands! Simply enter `/` in your bar to execut
 | buy [itemName] [1-10] | Buys the amount of items from the shop |
 | feed [itemName] [1-5] | Feeds the alpaca with the item |
 | gift [@user] [itemName] [1-5] | Gifts the amount of items to the mentioned user |
-| help [command] | Displays further information to the specified command |
+| help | Displays all commands of Alpagotchi |
 | inventory | Shows the bought items from the shop |
 | myalpaca | Shows your alpaca and his stats |
 | nick [nickname] | Gives your alpaca a nickname |
 | pet | Increases joy of your alpaca |
 | shop | Displays all items which can be bought |
-| wallet | Shows your balance of fluffies |
+| balance | Shows your balance of fluffies |
 | work | Work to earn a random amount of fluffies |
 | sleep [minutes] | Let your alpaca sleeps  and regenerates energy |
 | outfit [outfit] | Change the appearance of your alpaca |
