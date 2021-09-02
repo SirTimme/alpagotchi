@@ -30,6 +30,6 @@ public class Help implements IInfoCommand {
 
     @Override
     public CommandData getCommandData() {
-        return new CommandData("help", "Shows all commands or additional help for a specific");
+        return new CommandData("help", "Shows all commands of Alpagotchi");
     }
 }
