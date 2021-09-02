@@ -4,6 +4,7 @@ import bot.Config;
 import bot.models.DBUser;
 import com.google.gson.Gson;
 import com.mongodb.client.*;
+import com.mongodb.client.model.ReplaceOptions;
 import com.mongodb.client.model.Updates;
 import org.bson.Document;
 
@@ -50,7 +51,7 @@ public class MongoDB implements IDatabase {
     @Override
     public void createGuild(long guildID) {
         final Document guild = new Document().append("_id", guildID);
-        guilds.insertOne(guild);
+        guilds.replaceOne(eq("_id", guildID), guild, new ReplaceOptions().upsert(true));
     }
 
     @Override
