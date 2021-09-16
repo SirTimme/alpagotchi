@@ -14,6 +14,5 @@ public interface IDatabase {
 	void createGuild(long guildID);
 	void deleteGuild(long guildID);
 
-	void decreaseValues();
 	long getEntries();
 }

@@ -60,12 +60,6 @@ public class MongoDB implements IDatabase {
     }
 
     @Override
-    public void decreaseValues() {
-        users.updateMany(gte("alpaca.hunger", 2), Updates.inc("alpaca.hunger", -1));
-        users.updateMany(gte("alpaca.thirst", 2), Updates.inc("alpaca.thirst", -1));
-    }
-
-    @Override
     public long getEntries() {
         return users.countDocuments();
     }

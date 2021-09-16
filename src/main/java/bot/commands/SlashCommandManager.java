@@ -48,7 +48,6 @@ public class SlashCommandManager {
         commands.put("image", new Image());
         commands.put("work", new Work());
         commands.put("shutdown", new Shutdown());
-        commands.put("decrease", new Decrease());
         commands.put("myalpaca", new MyAlpaca());
         commands.put("nick", new Nick());
         commands.put("help", new Help(this));
