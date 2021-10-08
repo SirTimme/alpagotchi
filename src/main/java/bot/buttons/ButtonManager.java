@@ -1,5 +1,9 @@
 package bot.buttons;
 
+import bot.buttons.deletion.DeleteAccept;
+import bot.buttons.deletion.DeleteCancel;
+import bot.buttons.initialization.InitAccept;
+import bot.buttons.initialization.InitCancel;
 import net.dv8tion.jda.api.events.interaction.ButtonClickEvent;
 
 import java.util.HashMap;
@@ -9,10 +13,10 @@ public class ButtonManager {
     private final Map<String, IButton> buttons = new HashMap<>();
 
     public ButtonManager() {
-        buttons.put("acceptInit", new AcceptInit());
-        buttons.put("declineInit", new DeclineInit());
-        buttons.put("acceptDelete", new AcceptDelete());
-        buttons.put("cancelDelete", new CancelDelete());
+        buttons.put("acceptInit", new InitAccept());
+        buttons.put("declineInit", new InitCancel());
+        buttons.put("acceptDelete", new DeleteAccept());
+        buttons.put("cancelDelete", new DeleteCancel());
     }
 
     public void handle(ButtonClickEvent event) {
