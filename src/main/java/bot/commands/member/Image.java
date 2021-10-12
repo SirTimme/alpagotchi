@@ -1,7 +1,7 @@
 package bot.commands.member;
 
 import bot.commands.IInfoCommand;
-import bot.Config;
+import bot.utils.Env;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -79,7 +79,7 @@ public class Image implements IInfoCommand {
         final HttpResponse<String> response;
         try {
             final URIBuilder requestURI = new URIBuilder("https://pixabay.com/api/")
-                    .addParameter("key", Config.get("API_KEY"))
+                    .addParameter("key", Env.get("API_KEY"))
                     .addParameter("q", query)
                     .addParameter("safesearch", "true")
                     .addParameter("lang", "en")

@@ -1,11 +1,10 @@
 package bot.db;
 
-import bot.Config;
+import bot.utils.Env;
 import bot.models.DBUser;
 import com.google.gson.Gson;
 import com.mongodb.client.*;
 import com.mongodb.client.model.ReplaceOptions;
-import com.mongodb.client.model.Updates;
 import org.bson.Document;
 
 import static com.mongodb.client.model.Filters.*;
@@ -15,8 +14,8 @@ public class MongoDB implements IDatabase {
     private final MongoCollection<Document> guilds;
 
     public MongoDB() {
-        final MongoClient client = MongoClients.create(Config.get("DB_URI"));
-        final MongoDatabase db = client.getDatabase(Config.get("DB_NAME"));
+        final MongoClient client = MongoClients.create(Env.get("DB_URI"));
+        final MongoDatabase db = client.getDatabase(Env.get("DB_NAME"));
 
         users = db.getCollection("alpacas_manager");
         guilds = db.getCollection("guild_settings");

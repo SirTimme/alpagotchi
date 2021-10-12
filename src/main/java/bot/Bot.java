@@ -1,6 +1,7 @@
 package bot;
 
 import bot.events.EventHandler;
+import bot.utils.Env;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.requests.GatewayIntent;
@@ -11,9 +12,9 @@ import javax.security.auth.login.LoginException;
 public class Bot {
     public static void main(String[] args) throws LoginException {
         JDABuilder.create(
-                Config.get("TOKEN"),
-                GatewayIntent.GUILD_MESSAGES,
-                GatewayIntent.GUILD_MEMBERS
+                          Env.get("TOKEN"),
+                          GatewayIntent.GUILD_MESSAGES,
+                          GatewayIntent.GUILD_MEMBERS
         )
                   .disableCache(
                           CacheFlag.ACTIVITY,

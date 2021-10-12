@@ -62,7 +62,7 @@ public class SlashCommandManager {
     public void handle(SlashCommandEvent event) {
         final String eventName = event.getName();
 
-        if (isUserRequired(eventName)) {
+        if (userRequired(eventName)) {
             final DBUser user = IDatabase.INSTANCE.getUser(event.getUser().getIdLong());
 
             if (user == null && !eventName.equals("init")) {
@@ -95,7 +95,7 @@ public class SlashCommandManager {
         return commands.get(eventName);
     }
 
-    private boolean isUserRequired(String eventName) {
+    private boolean userRequired(String eventName) {
         return commandInfo.get(eventName).get("requireUser").getAsBoolean();
     }
 }

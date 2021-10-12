@@ -2,7 +2,7 @@ package bot.commands.dev;
 
 import bot.commands.IInfoCommand;
 import bot.commands.SlashCommandManager;
-import bot.Config;
+import bot.utils.Env;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.interactions.commands.Command;
@@ -48,7 +48,7 @@ public class Update implements IInfoCommand {
 
         for (Command cmd : commands) {
             if (DEV_COMMANDS.contains(cmd.getName())) {
-                guild.updateCommandPrivilegesById(cmd.getIdLong(), CommandPrivilege.enableUser(Config.get("DEV_ID"))).queue();
+                guild.updateCommandPrivilegesById(cmd.getIdLong(), CommandPrivilege.enableUser(Env.get("DEV_ID"))).queue();
             }
         }
         event.reply(GREENTICK + " Successfully refreshed all slash commands").queue();
