@@ -2,7 +2,9 @@ package bot.commands.member;
 
 import bot.commands.IUserCommand;
 import bot.models.DBUser;
+import bot.utils.Env;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.components.Button;
@@ -21,6 +23,8 @@ public class Init implements IUserCommand {
             return;
         }
 
+        final User dev = event.getJDA().getUserById(Env.get("DEV_ID"));
+
         final EmbedBuilder embed = new EmbedBuilder()
                 .setTitle("User information")
                 .setDescription("Im glad, that Alpagotchi interests you.\nHere are two important points before you can start:")
@@ -35,7 +39,7 @@ public class Init implements IUserCommand {
                         "If you change your mind about storing your UserID,\nuse the `/delete` command to delete your data at any time.",
                         false
                 )
-                .setFooter("Created by SirTimme", "https://cdn.discordapp.com/avatars/483012399893577729/ba3996b7728a950565a79bd4b550b8dd.png")
+                .setFooter("Created by " + dev.getName(), dev.getAvatarUrl())
                 .setTimestamp(Instant.now());
 
         event.replyEmbeds(embed.build())

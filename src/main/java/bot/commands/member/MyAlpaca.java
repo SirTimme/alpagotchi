@@ -2,8 +2,10 @@ package bot.commands.member;
 
 import bot.commands.IUserCommand;
 import bot.models.DBUser;
+import bot.utils.Env;
 import bot.utils.Language;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import org.slf4j.Logger;
@@ -47,13 +49,15 @@ public class MyAlpaca implements IUserCommand {
             final ByteArrayOutputStream bytes = new ByteArrayOutputStream();
             ImageIO.write(createImage(user), "png", bytes);
 
+            final User dev = event.getJDA().getUserById(Env.get("DEV_ID"));
+
             final EmbedBuilder embed = new EmbedBuilder();
             embed.setTitle(user.getAlpaca().getNickname())
                  .setDescription("_Have a llamazing day!_")
                  .addField("Work", checkCooldown(user.getCooldown().getWork()), true)
                  .addField("Sleep", checkCooldown(user.getCooldown().getSleep()), true)
                  .setThumbnail(event.getUser().getAvatarUrl())
-                 .setFooter("Created by SirTimme", "https://cdn.discordapp.com/avatars/483012399893577729/ba3996b7728a950565a79bd4b550b8dd.png")
+                 .setFooter("Created by " + dev.getName(), dev.getAvatarUrl())
                  .setTimestamp(Instant.now())
                  .setImage("attachment://alpagotchi.png");
 

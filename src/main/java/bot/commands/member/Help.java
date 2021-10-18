@@ -2,7 +2,9 @@ package bot.commands.member;
 
 import bot.commands.IInfoCommand;
 import bot.commands.SlashCommandManager;
+import bot.utils.Env;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 
@@ -17,12 +19,14 @@ public class Help implements IInfoCommand {
 
     @Override
     public void execute(SlashCommandEvent event) {
+        final User dev = event.getJDA().getUserById(Env.get("DEV_ID"));
+
         final EmbedBuilder embed = new EmbedBuilder()
                 .setTitle("Overview of all commands")
                 .setThumbnail("https://cdn.discordapp.com/attachments/795637300661977132/836542447186214942/avatar.png")
                 .addField("Commands", slashCmdMan.getCommandsAsString(), true)
                 .addField("Need further help or found a bug?", "Join the [Alpagotchi Support](https://discord.gg/DXtYyzGhXR) server!", false)
-                .setFooter("Created by SirTimme", "https://cdn.discordapp.com/avatars/483012399893577729/ba3996b7728a950565a79bd4b550b8dd.png")
+                .setFooter("Created by " + dev.getName(), dev.getAvatarUrl())
                 .setTimestamp(Instant.now());
 
         event.replyEmbeds(embed.build()).queue();

@@ -6,6 +6,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
@@ -53,6 +54,8 @@ public class Image implements IInfoCommand {
         final JsonObject randomImg = images.get((int) (Math.random() * images.size())).getAsJsonObject();
         final String imageURL = randomImg.get("largeImageURL").getAsString();
 
+        final User dev = event.getJDA().getUserById(Env.get("DEV_ID"));
+
         final EmbedBuilder embed = new EmbedBuilder()
                 .setTitle("Result")
                 .setDescription("_**" + response.get("totalHits").getAsString() + "** Hits for " + query + "._")
@@ -61,7 +64,7 @@ public class Image implements IInfoCommand {
                 .addField("Source", "[Direct Link](" + imageURL + ")", true)
                 .setImage(imageURL)
                 .setThumbnail("https://cdn.discordapp.com/attachments/840135073835122699/842742541148880896/internet.png")
-                .setFooter("Created by SirTimme", "https://cdn.discordapp.com/avatars/483012399893577729/ba3996b7728a950565a79bd4b550b8dd.png")
+                .setFooter("Created by" + dev.getName(), dev.getAvatarUrl())
                 .setTimestamp(Instant.now());
 
         event.replyEmbeds(embed.build()).queue();
