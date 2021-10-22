@@ -8,7 +8,7 @@ Alpagotchi allows any user to create and take care of their own digital alpaca.
 If you are interested in Alpagotchi and want it to add to your guild you can use this [Invite Link](https://discord.com/oauth2/authorize?client_id=780910199875567616&permissions=2147798080&scope=bot%20applications.commands)!
 
 ## Vote 
-You can vote for me on [top.gg](https://top.gg/bot/780910199875567616/vote) and leave a review it is greatly appreciated!
+You can vote for me on [top.gg](https://top.gg/bot/780910199875567616/vote) and leave a review!
 
 ## Help
 If you need additional help or want to report a bug you can join the Alpagotchi [Support Discord](https://discord.gg/DXtYyzGhXR)!
