@@ -15,7 +15,7 @@ public class Nick implements IUserCommand {
     public void execute(SlashCommandEvent event, DBUser user) {
         final String nickname = event.getOption("nickname").getAsString();
         if (nickname.length() > 256) {
-            event.reply(Emote.REDCROSS + " The nickname must not exceed **256** characters")
+            event.reply(Emote.REDCROSS + " The nickname must not exceed **250** characters")
                  .setEphemeral(true)
                  .queue();
             return;
