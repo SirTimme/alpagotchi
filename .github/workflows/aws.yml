@@ -35,7 +35,7 @@ jobs:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           ECR_REPOSITORY: alpagotchi
           IMAGE_TAG: ${{ github.sha }}
-        run: |
+        run: 
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG \
           --build-arg TOKEN_ARG=${{ secrets.TOKEN }} \
           --build-arg DEV_ID_ARG=${{ secrets.DEV_ID }} \
