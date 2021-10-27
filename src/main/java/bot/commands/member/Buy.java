@@ -28,7 +28,7 @@ public class Buy implements IUserCommand {
     public void execute(SlashCommandEvent event, DBUser user) {
         final int amount = (int) event.getOption("amount").getAsLong();
         if (amount > 10) {
-            event.reply(Emote.REDCROSS + " You can purchase max. 10 items at a time")
+            event.reply(Emote.REDCROSS + " You can buy max. 10 items at a time")
                  .setEphemeral(true)
                  .queue();
             return;
