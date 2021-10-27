@@ -36,12 +36,12 @@ jobs:
           ECR_REPOSITORY: alpagotchi
           IMAGE_TAG: ${{ github.sha }}
         run: |
-          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG \
-          --build-arg TOKEN_ARG=${{ secrets.TOKEN }} \
-          --build-arg DEV_ID_ARG=${{ secrets.DEV_ID }} \
-          --build-arg BOT_ID_ARG=${{ secrets.BOT_ID }} \
-          --build-arg DB_URI_ARG=${{ secrets.DB_URI }} \
-          --build-arg DB_NAME_ARG=${{ secrets.DB_NAME }} \
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          --build-arg TOKEN_ARG=${{ secrets.TOKEN }} 
+          --build-arg DEV_ID_ARG=${{ secrets.DEV_ID }}
+          --build-arg BOT_ID_ARG=${{ secrets.BOT_ID }}
+          --build-arg DB_URI_ARG=${{ secrets.DB_URI }}
+          --build-arg DB_NAME_ARG=${{ secrets.DB_NAME }}
           --build-arg API_KEY_ARG=${{ secrets.API_KEY }} .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
 
