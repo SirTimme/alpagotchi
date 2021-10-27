@@ -1,68 +1,86 @@
 {
-  "decrease": {
-    "requireUser": false
-  },
   "shutdown": {
+    "devOnly": true,
     "requireUser": false
   },
   "update": {
+    "devOnly": false,
     "requireUser": false
   },
   "balance": {
+    "devOnly": false,
     "requireUser": true
   },
   "buy": {
+    "devOnly": false,
     "requireUser": true
   },
   "count": {
+    "devOnly": true,
     "requireUser": false
   },
   "daily": {
+    "devOnly": false,
     "requireUser": true
   },
   "delete": {
+    "devOnly": false,
     "requireUser": true
   },
   "feed": {
+    "devOnly": false,
     "requireUser": true
   },
   "gift": {
+    "devOnly": false,
     "requireUser": true
   },
   "help": {
+    "devOnly": false,
     "requireUser": false
   },
   "image": {
+    "devOnly": false,
     "requireUser": false
   },
   "init": {
+    "devOnly": false,
     "requireUser": true
   },
   "inventory": {
+    "devOnly": false,
     "requireUser": true
   },
   "myalpaca": {
+    "devOnly": false,
     "requireUser": true
   },
   "nick": {
+    "devOnly": false,
     "requireUser": true
   },
   "outfit": {
+    "devOnly": false,
     "requireUser": true
   },
   "pet": {
+    "devOnly": false,
     "requireUser": true
   },
   "ping": {
+    "devOnly": false,
     "requireUser": false
   },
   "shop": {
+    "devOnly": false,
     "requireUser": false
   },
   "sleep": {
+    "devOnly": false,
     "requireUser": true
   },
   "work": {
+    "devOnly": false,
     "requireUser": true
   }
 }

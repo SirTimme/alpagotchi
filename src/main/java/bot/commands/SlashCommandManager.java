@@ -62,7 +62,7 @@ public class SlashCommandManager {
     public void handle(SlashCommandEvent event) {
         final String eventName = event.getName();
 
-        if (userRequired(eventName)) {
+        if (commandInfo.get(eventName).get("requireUser").getAsBoolean()) {
             final DBUser user = IDatabase.INSTANCE.getUser(event.getUser().getIdLong());
 
             if (user == null && !eventName.equals("init")) {
@@ -80,22 +80,22 @@ public class SlashCommandManager {
         }
     }
 
-    public Map<String, ISlashCommand> getCommands() {
-        return commands;
+    public Collection<ISlashCommand> getCommands() {
+        return commands.values();
     }
 
-    public String getCommandsAsString() {
+    public String getCommandsString() {
         StringBuilder sb = new StringBuilder();
-        commands.keySet().forEach(cmd -> sb.append("`").append(cmd).append("` "));
+
+        commands.keySet()
+                .stream()
+                .filter(cmd -> !commandInfo.get(cmd).get("devOnly").getAsBoolean())
+                .forEach(cmd -> sb.append("`").append(cmd).append("` "));
 
         return sb.toString();
     }
 
     private ISlashCommand getCommand(String eventName) {
         return commands.get(eventName);
-    }
-
-    private boolean userRequired(String eventName) {
-        return commandInfo.get(eventName).get("requireUser").getAsBoolean();
     }
 }

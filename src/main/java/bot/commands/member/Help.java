@@ -24,7 +24,7 @@ public class Help implements IInfoCommand {
         final EmbedBuilder embed = new EmbedBuilder()
                 .setTitle("Overview of all commands")
                 .setThumbnail("https://cdn.discordapp.com/attachments/795637300661977132/836542447186214942/avatar.png")
-                .addField("Commands", slashCmdMan.getCommandsAsString(), true)
+                .addField("Commands", slashCmdMan.getCommandsString(), true)
                 .addField("Need further help or found a bug?", "Join the [Alpagotchi Support](https://discord.gg/DXtYyzGhXR) server!", false)
                 .setFooter("Created by " + dev.getName(), dev.getAvatarUrl())
                 .setTimestamp(Instant.now());

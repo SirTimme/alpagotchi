@@ -34,7 +34,7 @@ public class Update implements IInfoCommand {
             return;
         }
 
-        slashCmdMan.getCommands().values().forEach(cmd -> {
+        slashCmdMan.getCommands().forEach(cmd -> {
             final CommandData cmdData = cmd.getCommandData();
             if (DEV_COMMANDS.contains(cmdData.getName())) {
                 guild.upsertCommand(cmdData).queue();
