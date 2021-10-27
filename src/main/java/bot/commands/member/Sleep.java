@@ -36,7 +36,7 @@ public class Sleep implements IUserCommand {
         user.getCooldown().setSleep(cooldown);
         IDatabase.INSTANCE.setUser(user.getId(), user);
 
-        event.reply("\uD83D\uDCA4 Your alpaca goes to sleep for **" + energy + "** minutes and rests well **Energy + " + energy + "**")
+        event.reply("\uD83D\uDCA4 Your alpaca goes to bed for **" + energy + "** minutes and rests well **Energy + " + energy + "**")
              .queue();
 
     }
