@@ -9,7 +9,7 @@ public class Ping implements IInfoCommand {
     public void execute(SlashCommandEvent event) {
         event.getJDA()
              .getRestPing()
-             .queue((ping) -> event.reply(":satellite: You reached the alpacafarm in **" + ping + "**ms").queue());
+             .queue((ping) -> event.reply(":satellite: You reached the alpacafarm in **" + ping + "** ms").queue());
     }
 
     @Override
