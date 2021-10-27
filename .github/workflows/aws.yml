@@ -37,7 +37,12 @@ jobs:
           IMAGE_TAG: ${{ github.sha }}
         run: |
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG \
-          --build-arg TOKEN_ARG=${{ secrets.TOKEN }} .
+          --build-arg TOKEN_ARG=${{ secrets.TOKEN }} \
+          --build-arg TOKEN_ARG=${{ secrets.DEV_ID }} \
+          --build-arg TOKEN_ARG=${{ secrets.BOT_ID }} \
+          --build-arg TOKEN_ARG=${{ secrets.DB_URI }} \
+          --build-arg TOKEN_ARG=${{ secrets.DB_NAME }} \
+          --build-arg TOKEN_ARG=${{ secrets.API_KEY }} .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
 
