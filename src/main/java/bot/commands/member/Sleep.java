@@ -2,7 +2,7 @@ package bot.commands.member;
 
 import bot.db.IDatabase;
 import bot.commands.IUserCommand;
-import bot.models.DBUser;
+import bot.models.Entry;
 import bot.utils.Emote;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
@@ -12,13 +12,14 @@ import static net.dv8tion.jda.api.interactions.commands.OptionType.INTEGER;
 
 public class Sleep implements IUserCommand {
     @Override
-    public void execute(SlashCommandEvent event, DBUser user) {
-        int energy = user.getAlpaca().getEnergy();
+    public Entry execute(SlashCommandEvent event, Entry user) {
+        int energy = user.getEnergy();
+
         if (energy == 100) {
             event.reply(Emote.REDCROSS + " The energy of your alpaca is already at the maximum")
                  .setEphemeral(true)
                  .queue();
-            return;
+            return null;
         }
 
         final int duration = (int) event.getOption("duration").getAsLong();
@@ -26,19 +27,20 @@ public class Sleep implements IUserCommand {
             event.reply(Emote.REDCROSS + " Please enter a number between 1 - 100")
                  .setEphemeral(true)
                  .queue();
-            return;
+            return null;
         }
 
         energy = energy + duration > 100 ? 100 - energy : duration;
+
         final long cooldown = System.currentTimeMillis() + 1000L * 60 * energy;
 
-        user.getAlpaca().setEnergy(energy);
-        user.getCooldown().setSleep(cooldown);
-        IDatabase.INSTANCE.setUser(user.getId(), user);
+        user.setEnergy(energy);
+        user.setSleep(cooldown);
 
         event.reply("\uD83D\uDCA4 Your alpaca goes to bed for **" + energy + "** minutes and rests well **Energy + " + energy + "**")
              .queue();
 
+        return user;
     }
 
     @Override

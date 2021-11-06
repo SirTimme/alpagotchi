@@ -1,8 +1,8 @@
 package bot.commands.member;
 
 import bot.commands.IUserCommand;
-import bot.models.DBUser;
 import bot.db.IDatabase;
+import bot.models.Entry;
 import bot.shop.Item;
 import bot.shop.ItemManager;
 import bot.utils.Emote;
@@ -25,32 +25,33 @@ public class Buy implements IUserCommand {
     }
 
     @Override
-    public void execute(SlashCommandEvent event, DBUser user) {
+    public Entry execute(SlashCommandEvent event, Entry user) {
         final int amount = (int) event.getOption("amount").getAsLong();
         if (amount > 10) {
             event.reply(Emote.REDCROSS + " You can buy max. 10 items at a time")
                  .setEphemeral(true)
                  .queue();
-            return;
+            return null;
         }
 
         final String itemChoice = event.getOption("item").getAsString();
         final Item item = itemMan.getItem(itemChoice);
 
         final int price = amount * item.getPrice();
-        final int balance = user.getInventory().getCurrency();
+        final int balance = user.getCurrency();
         if (balance - price < 0) {
             event.reply(Emote.REDCROSS + " Insufficient amount of fluffies")
                  .setEphemeral(true)
                  .queue();
-            return;
+            return null;
         }
 
-        user.getInventory().setCurrency(-price);
-        user.getInventory().setItem(item.getName(SINGULAR), amount);
-        IDatabase.INSTANCE.setUser(user.getId(), user);
+        user.setCurrency(balance - price);
+        user.setItem(item.getName(SINGULAR), user.getItem(item.getName(SINGULAR)) + amount);
 
         event.reply(":moneybag: You successfully bought **" + amount + " " + Language.handle(amount, item.getName(SINGULAR), item.getName(PLURAL)) + "** for **" + price + "** fluffies").queue();
+
+        return user;
     }
 
     @Override

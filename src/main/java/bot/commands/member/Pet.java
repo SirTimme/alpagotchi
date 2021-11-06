@@ -2,7 +2,7 @@ package bot.commands.member;
 
 import bot.db.IDatabase;
 import bot.commands.IUserCommand;
-import bot.models.DBUser;
+import bot.models.Entry;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.interactions.commands.Command;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
@@ -18,13 +18,13 @@ public class Pet implements IUserCommand {
     private final List<String> spots = Arrays.asList("head", "tail", "leg", "neck", "back");
 
     @Override
-    public void execute(SlashCommandEvent event, DBUser user) {
-        final int joy = user.getAlpaca().getJoy();
+    public Entry execute(SlashCommandEvent event, Entry user) {
+        final int joy = user.getJoy();
         if (joy == 100) {
             event.reply(REDCROSS + " The joy of your alpaca is already at the maximum")
                  .setEphemeral(true)
                  .queue();
-            return;
+            return null;
         }
 
         final String favouriteSpot = spots.get((int) (Math.random() * 5));
@@ -42,8 +42,10 @@ public class Pet implements IUserCommand {
 
             event.reply("\uD83E\uDD99 Your alpaca enjoyed the petting, but it wasn't his favourite spot **Joy + " + newJoy + "**").queue();
         }
-        user.getAlpaca().setJoy(newJoy);
-        IDatabase.INSTANCE.setUser(user.getId(), user);
+
+        user.setJoy(newJoy);
+
+        return user;
     }
 
     @Override

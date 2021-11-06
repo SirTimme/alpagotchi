@@ -8,7 +8,9 @@ import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 public class Count implements IInfoCommand {
     @Override
     public void execute(SlashCommandEvent event) {
-        event.reply("\uD83D\uDC65 There are **" + IDatabase.INSTANCE.getEntries() + "** alpacas in the farm by now").queue();
+        event.reply("\uD83D\uDC65 There are **" + IDatabase.INSTANCE.getEntries() + "** " +
+                            "alpacas in **" + event.getJDA().getGuilds().size() + "** farms by now")
+             .queue();
     }
 
     @Override

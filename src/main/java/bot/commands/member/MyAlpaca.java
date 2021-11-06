@@ -1,7 +1,7 @@
 package bot.commands.member;
 
 import bot.commands.IUserCommand;
-import bot.models.DBUser;
+import bot.models.Entry;
 import bot.utils.Env;
 import bot.utils.Language;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import static bot.utils.Emote.GREENTICK;
 import static bot.utils.Emote.REDCROSS;
@@ -44,7 +45,7 @@ public class MyAlpaca implements IUserCommand {
     }
 
     @Override
-    public void execute(SlashCommandEvent event, DBUser user) {
+    public Entry execute(SlashCommandEvent event, Entry user) {
         try {
             final ByteArrayOutputStream bytes = new ByteArrayOutputStream();
             ImageIO.write(createImage(user), "png", bytes);
@@ -52,10 +53,10 @@ public class MyAlpaca implements IUserCommand {
             final User dev = event.getJDA().getUserById(Env.get("DEV_ID"));
 
             final EmbedBuilder embed = new EmbedBuilder();
-            embed.setTitle(user.getAlpaca().getNickname())
+            embed.setTitle(user.getNickname())
                  .setDescription("_Have a llamazing day!_")
-                 .addField("Work", checkCooldown(user.getCooldown().getWork()), true)
-                 .addField("Sleep", checkCooldown(user.getCooldown().getSleep()), true)
+                 .addField("Work", checkCooldown(user.getWork()), true)
+                 .addField("Sleep", checkCooldown(user.getSleep()), true)
                  .setThumbnail(event.getUser().getAvatarUrl())
                  .setFooter("Created by " + dev.getName(), dev.getAvatarUrl())
                  .setTimestamp(Instant.now())
@@ -67,6 +68,8 @@ public class MyAlpaca implements IUserCommand {
         } catch (IOException error) {
             LOGGER.error(error.getMessage());
         }
+
+        return null;
     }
 
     @Override
@@ -74,13 +77,13 @@ public class MyAlpaca implements IUserCommand {
         return new CommandData("myalpaca", "Shows your alpaca with its stats");
     }
 
-    private BufferedImage createImage(DBUser user) {
-        final int hunger = user.getAlpaca().getHunger();
-        final int thirst = user.getAlpaca().getThirst();
-        final int energy = user.getAlpaca().getEnergy();
-        final int joy = user.getAlpaca().getJoy();
+    private BufferedImage createImage(Entry user) {
+        final int hunger = user.getHunger();
+        final int thirst = user.getThirst();
+        final int energy = user.getEnergy();
+        final int joy = user.getJoy();
 
-        final BufferedImage background = images.get(user.getAlpaca().getOutfit());
+        final BufferedImage background = images.get(user.getOutfit());
         final BufferedImage img = new BufferedImage(background.getWidth(), background.getHeight(), BufferedImage.TYPE_INT_RGB);
 
         final Graphics graphics = img.createGraphics();
@@ -124,8 +127,10 @@ public class MyAlpaca implements IUserCommand {
     }
 
     private String checkCooldown(long cooldown) {
+        final long minutes = TimeUnit.MILLISECONDS.toMinutes(cooldown - System.currentTimeMillis());
+
         if (cooldown > 0) {
-            return REDCROSS + " " + cooldown + " " + Language.handle(cooldown, "minute", "minutes");
+            return REDCROSS + " " + minutes + " " + Language.handle(minutes, "minute", "minutes");
         } else {
             return GREENTICK + " ready";
         }

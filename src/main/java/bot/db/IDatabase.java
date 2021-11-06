@@ -1,18 +1,17 @@
 package bot.db;
 
-import bot.models.DBUser;
+import bot.models.Entry;
 
 public interface IDatabase {
 	IDatabase INSTANCE = new MongoDB();
 
-	DBUser getUser(long memberID);
-	void setUser(long memberID, DBUser DBUser);
+	Entry getUser(final long memberID);
 
-	void createUser(long memberID);
-	void deleteUser(long memberID);
+	void updateUser(final Entry DBUser);
 
-	void createGuild(long guildID);
-	void deleteGuild(long guildID);
+	void createUser(final long memberID);
+
+	void deleteUser(final long memberID);
 
 	long getEntries();
 }

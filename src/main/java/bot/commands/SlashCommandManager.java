@@ -4,7 +4,7 @@ import bot.commands.dev.*;
 import bot.commands.dev.Count;
 import bot.commands.member.*;
 import bot.db.IDatabase;
-import bot.models.DBUser;
+import bot.models.Entry;
 import bot.shop.ItemManager;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -63,7 +63,7 @@ public class SlashCommandManager {
         final String eventName = event.getName();
 
         if (commandInfo.get(eventName).get("requireUser").getAsBoolean()) {
-            final DBUser user = IDatabase.INSTANCE.getUser(event.getUser().getIdLong());
+            final Entry user = IDatabase.INSTANCE.getUser(event.getUser().getIdLong());
 
             if (user == null && !eventName.equals("init")) {
                 event.reply(REDCROSS + " You don't own an alpaca, use **/init** first")
@@ -72,8 +72,11 @@ public class SlashCommandManager {
                 return;
             }
 
-            final IUserCommand userCmd = (IUserCommand) getCommand(eventName);
-            userCmd.execute(event, user);
+            final Entry modifiedUser = ((IUserCommand)getCommand(eventName)).execute(event, user);
+
+            if (modifiedUser != null) {
+                IDatabase.INSTANCE.updateUser(modifiedUser);
+            }
         } else {
             final IInfoCommand infoCmd = (IInfoCommand) getCommand(eventName);
             infoCmd.execute(event);
