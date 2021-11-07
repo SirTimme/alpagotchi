@@ -1,7 +1,6 @@
 package bot.commands.member;
 
-import bot.commands.IUserCommand;
-import bot.db.IDatabase;
+import bot.commands.IDynamicUserCommand;
 import bot.models.Entry;
 import bot.shop.Item;
 import bot.shop.ItemManager;
@@ -17,7 +16,7 @@ import static bot.utils.Language.SINGULAR;
 import static net.dv8tion.jda.api.interactions.commands.OptionType.INTEGER;
 import static net.dv8tion.jda.api.interactions.commands.OptionType.STRING;
 
-public class Buy implements IUserCommand {
+public class Buy implements IDynamicUserCommand {
     private final ItemManager itemMan;
 
     public Buy(ItemManager itemMan) {

@@ -1,7 +1,6 @@
 package bot.commands.member;
 
-import bot.db.IDatabase;
-import bot.commands.IUserCommand;
+import bot.commands.IDynamicUserCommand;
 import bot.models.Entry;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.interactions.commands.Command;
@@ -14,7 +13,7 @@ import java.util.List;
 import static bot.utils.Emote.REDCROSS;
 import static net.dv8tion.jda.api.interactions.commands.OptionType.STRING;
 
-public class Pet implements IUserCommand {
+public class Pet implements IDynamicUserCommand {
     private final List<String> spots = Arrays.asList("head", "tail", "leg", "neck", "back");
 
     @Override

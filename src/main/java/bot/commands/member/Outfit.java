@@ -1,6 +1,6 @@
 package bot.commands.member;
 
-import bot.commands.IUserCommand;
+import bot.commands.IDynamicUserCommand;
 import bot.models.Entry;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.interactions.commands.Command;
@@ -9,7 +9,7 @@ import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 
 import static net.dv8tion.jda.api.interactions.commands.OptionType.STRING;
 
-public class Outfit implements IUserCommand {
+public class Outfit implements IDynamicUserCommand {
     @Override
     public Entry execute(SlashCommandEvent event, Entry user) {
         final String outfit = event.getOption("outfit").getAsString();

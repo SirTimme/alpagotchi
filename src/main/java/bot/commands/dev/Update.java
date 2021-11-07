@@ -18,7 +18,7 @@ import static bot.utils.Emote.REDCROSS;
 
 public class Update implements IInfoCommand {
     private final SlashCommandManager slashCmdMan;
-    private final static Set<String> DEV_COMMANDS = Set.of("decrease", "shutdown", "update", "count");
+    private final static Set<String> DEV_COMMANDS = Set.of("shutdown", "update", "count");
 
     public Update(SlashCommandManager slashCmdMan) {
         this.slashCmdMan = slashCmdMan;
@@ -36,6 +36,7 @@ public class Update implements IInfoCommand {
 
         slashCmdMan.getCommands().forEach(cmd -> {
             final CommandData cmdData = cmd.getCommandData();
+
             if (DEV_COMMANDS.contains(cmdData.getName())) {
                 guild.upsertCommand(cmdData).queue();
             } else {
@@ -51,6 +52,7 @@ public class Update implements IInfoCommand {
                 guild.updateCommandPrivilegesById(cmd.getIdLong(), CommandPrivilege.enableUser(Env.get("DEV_ID"))).queue();
             }
         }
+
         event.reply(GREENTICK + " Successfully refreshed all slash commands").queue();
     }
 

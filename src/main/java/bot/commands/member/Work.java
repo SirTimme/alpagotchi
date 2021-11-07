@@ -1,6 +1,7 @@
 package bot.commands.member;
 
-import bot.commands.IUserCommand;
+import bot.commands.IDynamicUserCommand;
+import bot.commands.IStaticUserCommand;
 import bot.models.Entry;
 import bot.utils.Language;
 import com.google.gson.Gson;
@@ -19,7 +20,7 @@ import java.util.List;
 
 import static bot.utils.Emote.REDCROSS;
 
-public class Work implements IUserCommand {
+public class Work implements IDynamicUserCommand {
     private static final Logger LOGGER = LoggerFactory.getLogger(Work.class);
     private ArrayList<String> json;
 

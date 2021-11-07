@@ -1,6 +1,6 @@
 package bot.commands.member;
 
-import bot.commands.IUserCommand;
+import bot.commands.IStaticUserCommand;
 import bot.models.Entry;
 import bot.utils.Env;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -13,14 +13,14 @@ import java.time.Instant;
 
 import static bot.utils.Emote.REDCROSS;
 
-public class Init implements IUserCommand {
+public class Init implements IStaticUserCommand {
     @Override
-    public Entry execute(SlashCommandEvent event, Entry user) {
+    public void execute(SlashCommandEvent event, Entry user) {
         if (user != null) {
             event.reply(REDCROSS + " You already own an alpaca")
                  .setEphemeral(true)
                  .queue();
-            return null;
+            return;
         }
 
         final User dev = event.getJDA().getUserById(Env.get("DEV_ID"));
@@ -49,8 +49,6 @@ public class Init implements IUserCommand {
              )
              .setEphemeral(true)
              .queue();
-
-        return null;
     }
 
     @Override

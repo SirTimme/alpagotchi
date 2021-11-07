@@ -1,6 +1,6 @@
 package bot.commands.member;
 
-import bot.commands.IUserCommand;
+import bot.commands.IStaticUserCommand;
 import bot.models.Entry;
 import bot.shop.ItemManager;
 import bot.utils.Env;
@@ -13,7 +13,7 @@ import java.time.Instant;
 
 import static bot.utils.Language.SINGULAR;
 
-public class Inventory implements IUserCommand {
+public class Inventory implements IStaticUserCommand {
     private final ItemManager itemMan;
 
     public Inventory(ItemManager itemMan) {
@@ -21,7 +21,7 @@ public class Inventory implements IUserCommand {
     }
 
     @Override
-    public Entry execute(SlashCommandEvent event, Entry user) {
+    public void execute(SlashCommandEvent event, Entry user) {
         final User dev = event.getJDA().getUserById(Env.get("DEV_ID"));
 
         final EmbedBuilder embed = new EmbedBuilder()
@@ -51,8 +51,6 @@ public class Inventory implements IUserCommand {
         );
 
         event.replyEmbeds(embed.build()).queue();
-
-        return null;
     }
 
     @Override

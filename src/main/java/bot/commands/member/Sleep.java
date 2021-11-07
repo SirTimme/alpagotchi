@@ -1,7 +1,6 @@
 package bot.commands.member;
 
-import bot.db.IDatabase;
-import bot.commands.IUserCommand;
+import bot.commands.IDynamicUserCommand;
 import bot.models.Entry;
 import bot.utils.Emote;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
@@ -10,7 +9,7 @@ import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 
 import static net.dv8tion.jda.api.interactions.commands.OptionType.INTEGER;
 
-public class Sleep implements IUserCommand {
+public class Sleep implements IDynamicUserCommand {
     @Override
     public Entry execute(SlashCommandEvent event, Entry user) {
         int energy = user.getEnergy();

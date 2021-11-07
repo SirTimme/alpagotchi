@@ -1,6 +1,6 @@
 package bot.commands.member;
 
-import bot.commands.IUserCommand;
+import bot.commands.IStaticUserCommand;
 import bot.models.Entry;
 import bot.utils.Env;
 import bot.utils.Language;
@@ -25,7 +25,7 @@ import java.util.concurrent.TimeUnit;
 import static bot.utils.Emote.GREENTICK;
 import static bot.utils.Emote.REDCROSS;
 
-public class MyAlpaca implements IUserCommand {
+public class MyAlpaca implements IStaticUserCommand {
     private final Map<String, BufferedImage> images = new HashMap<>();
     private static final Logger LOGGER = LoggerFactory.getLogger(MyAlpaca.class);
     private final Color[] colors = {Color.BLACK, Color.RED, Color.ORANGE, Color.YELLOW, Color.GREEN};
@@ -45,7 +45,7 @@ public class MyAlpaca implements IUserCommand {
     }
 
     @Override
-    public Entry execute(SlashCommandEvent event, Entry user) {
+    public void execute(SlashCommandEvent event, Entry user) {
         try {
             final ByteArrayOutputStream bytes = new ByteArrayOutputStream();
             ImageIO.write(createImage(user), "png", bytes);
@@ -68,8 +68,6 @@ public class MyAlpaca implements IUserCommand {
         } catch (IOException error) {
             LOGGER.error(error.getMessage());
         }
-
-        return null;
     }
 
     @Override
