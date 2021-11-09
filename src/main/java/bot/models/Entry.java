@@ -1,100 +1,147 @@
 package bot.models;
 
+import org.bson.codecs.pojo.annotations.BsonCreator;
+import org.bson.codecs.pojo.annotations.BsonIgnore;
+import org.bson.codecs.pojo.annotations.BsonProperty;
+
+import java.util.HashMap;
+
 public class Entry {
-    private final long memberID;
-    private final Alpaca alpaca;
-    private final Cooldown cooldown;
-    private final Inventory inventory;
+	@BsonProperty(value = "_id")
+	private final long memberID;
+	private final Alpaca alpaca;
+	private final Cooldown cooldown;
+	private final Inventory inventory;
 
-    public Entry(long memberID, Alpaca alpaca, Cooldown cooldown, Inventory inventory) {
-        this.memberID = memberID;
-        this.alpaca = alpaca;
-        this.cooldown = cooldown;
-        this.inventory = inventory;
-    }
+	@BsonCreator
+	public Entry(@BsonProperty(value = "_id") final long memberID) {
+		this.memberID = memberID;
+		this.alpaca = new Alpaca("default", "alpaca", 100, 100, 100, 100);
+		this.cooldown = new Cooldown(0L, 0L);
+		this.inventory = new Inventory(0, new HashMap<>() {{
+			put("salad", 0);
+			put("taco", 0);
+			put("steak", 0);
+			put("water", 0);
+			put("lemonade", 0);
+			put("cacao", 0);
+		}});
+	}
 
-    public long getMemberID() {
-        return this.memberID;
-    }
+	public long getMemberID() {
+		return this.memberID;
+	}
 
-    public String getNickname() {
-        return this.alpaca.getNickname();
-    }
+	public Alpaca getAlpaca() {
+		return this.alpaca;
+	}
 
-    public void setNickname(String nickname) {
-        this.alpaca.setNickname(nickname);
-    }
+	public Cooldown getCooldown() {
+		return this.cooldown;
+	}
 
-    public String getOutfit() {
-        return this.alpaca.getOutfit();
-    }
+	public Inventory getInventory() {
+		return this.inventory;
+	}
 
-    public void setOutfit(String outfit) {
-        this.alpaca.setOutfit(outfit);
-    }
+	@BsonIgnore
+	public String getNickname() {
+		return this.alpaca.getNickname();
+	}
 
-    public int getHunger() {
-        return this.alpaca.getHunger();
-    }
+	@BsonIgnore
+	public void setNickname(String nickname) {
+		this.alpaca.setNickname(nickname);
+	}
 
-    public void setHunger(int hunger) {
-        this.alpaca.setHunger(hunger);
-    }
+	@BsonIgnore
+	public String getOutfit() {
+		return this.alpaca.getOutfit();
+	}
 
-    public int getThirst() {
-        return this.alpaca.getThirst();
-    }
+	@BsonIgnore
+	public void setOutfit(String outfit) {
+		this.alpaca.setOutfit(outfit);
+	}
 
-    public void setThirst(int thirst) {
-        this.alpaca.setThirst(thirst);
-    }
+	@BsonIgnore
+	public int getHunger() {
+		return this.alpaca.getHunger();
+	}
 
-    public int getEnergy() {
-        return this.alpaca.getEnergy();
-    }
+	@BsonIgnore
+	public void setHunger(int hunger) {
+		this.alpaca.setHunger(hunger);
+	}
 
-    public void setEnergy(int energy) {
-        this.alpaca.setEnergy(energy);
-    }
+	@BsonIgnore
+	public int getThirst() {
+		return this.alpaca.getThirst();
+	}
 
-    public int getJoy() {
-        return this.alpaca.getJoy();
-    }
+	@BsonIgnore
+	public void setThirst(int thirst) {
+		this.alpaca.setThirst(thirst);
+	}
 
-    public void setJoy(int joy) {
-        this.alpaca.setJoy(joy);
-    }
+	@BsonIgnore
+	public int getEnergy() {
+		return this.alpaca.getEnergy();
+	}
 
-    public long getWork() {
-        return this.cooldown.getWork();
-    }
+	@BsonIgnore
+	public void setEnergy(int energy) {
+		this.alpaca.setEnergy(energy);
+	}
 
-    public void setWork(long work) {
-        this.cooldown.setWork(work);
-    }
+	@BsonIgnore
+	public int getJoy() {
+		return this.alpaca.getJoy();
+	}
 
-    public long getSleep() {
-        return this.cooldown.getSleep();
-    }
+	@BsonIgnore
+	public void setJoy(int joy) {
+		this.alpaca.setJoy(joy);
+	}
 
-    public void setSleep(long sleep) {
-        this.cooldown.setSleep(sleep);
-    }
+	@BsonIgnore
+	public long getWork() {
+		return this.cooldown.getWork();
+	}
 
-    public int getCurrency() {
-        return this.inventory.getCurrency();
-    }
+	@BsonIgnore
+	public void setWork(long work) {
+		this.cooldown.setWork(work);
+	}
 
-    public void setCurrency(int currency) {
-        this.inventory.setCurrency(currency);
-    }
+	@BsonIgnore
+	public long getSleep() {
+		return this.cooldown.getSleep();
+	}
 
-    public int getItem(String item) {
-        return this.inventory.getItem(item);
-    }
+	@BsonIgnore
+	public void setSleep(long sleep) {
+		this.cooldown.setSleep(sleep);
+	}
 
-    public void setItem(String name, int amount) {
-        this.inventory.setItem(name, amount);
-    }
+	@BsonIgnore
+	public int getCurrency() {
+		return this.inventory.getCurrency();
+	}
+
+	@BsonIgnore
+	public void setCurrency(int currency) {
+		this.inventory.setCurrency(currency);
+	}
+
+	@BsonIgnore
+	public int getItem(String item) {
+		return this.inventory.getItem(item);
+	}
+
+	@BsonIgnore
+	public void setItem(String name, int amount) {
+		this.inventory.setItem(name, amount);
+	}
 }
 

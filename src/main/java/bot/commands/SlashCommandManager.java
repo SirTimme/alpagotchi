@@ -13,7 +13,7 @@ import java.util.*;
 import static bot.utils.Emote.REDCROSS;
 
 public class SlashCommandManager {
-	private final static Set<String> INFO_COMMANDS = Set.of("help", "image", "ping", "shop");
+	private final static Set<String> INFO_COMMANDS = Set.of("help", "image", "ping", "shop", "count", "shutdown", "update");
 	private final static Set<String> STATIC_COMMANDS = Set.of("balance", "delete", "init", "inventory", "myalpaca");
 	private final static Set<String> DEV_COMMANDS = Set.of("count", "shutdown", "update");
 

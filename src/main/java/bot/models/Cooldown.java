@@ -1,9 +1,16 @@
 package bot.models;
 
-public class Cooldown {
-    private long sleep, work;
+import org.bson.codecs.pojo.annotations.BsonCreator;
+import org.bson.codecs.pojo.annotations.BsonProperty;
 
-    public Cooldown(long sleep, long work) {
+public class Cooldown {
+    private long sleep;
+    private long work;
+
+    @BsonCreator
+    public Cooldown(@BsonProperty(value = "sleep") final long sleep,
+                    @BsonProperty(value = "work") final long work
+    ) {
         this.sleep = sleep;
         this.work = work;
     }

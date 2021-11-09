@@ -1,10 +1,24 @@
 package bot.models;
 
-public class Alpaca {
-    private String outfit, nickname;
-    private int hunger, thirst, energy, joy;
+import org.bson.codecs.pojo.annotations.BsonCreator;
+import org.bson.codecs.pojo.annotations.BsonProperty;
 
-    public Alpaca(String outfit, String nickname, int hunger, int thirst, int energy, int joy) {
+public class Alpaca {
+    private String outfit;
+    private String nickname;
+    private int hunger;
+    private int thirst;
+    private int energy;
+    private int joy;
+
+    @BsonCreator
+    public Alpaca(@BsonProperty(value = "outfit") final String outfit,
+                  @BsonProperty(value = "nickname") final String nickname,
+                  @BsonProperty(value = "hunger") final int hunger,
+                  @BsonProperty(value = "thirst") final int thirst,
+                  @BsonProperty(value = "energy") final int energy,
+                  @BsonProperty(value = "joy") final int joy
+    ) {
         this.outfit = outfit;
         this.nickname = nickname;
         this.hunger = hunger;
