@@ -1,7 +1,7 @@
 package bot.commands.member;
 
-import bot.commands.IUserCommand;
-import bot.models.DBUser;
+import bot.commands.IStaticUserCommand;
+import bot.models.Entry;
 import bot.shop.ItemManager;
 import bot.utils.Env;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -13,7 +13,7 @@ import java.time.Instant;
 
 import static bot.utils.Language.SINGULAR;
 
-public class Inventory implements IUserCommand {
+public class Inventory implements IStaticUserCommand {
     private final ItemManager itemMan;
 
     public Inventory(ItemManager itemMan) {
@@ -21,7 +21,7 @@ public class Inventory implements IUserCommand {
     }
 
     @Override
-    public void execute(SlashCommandEvent event, DBUser user) {
+    public void execute(SlashCommandEvent event, Entry user) {
         final User dev = event.getJDA().getUserById(Env.get("DEV_ID"));
 
         final EmbedBuilder embed = new EmbedBuilder()
@@ -34,7 +34,7 @@ public class Inventory implements IUserCommand {
         itemMan.getItems("hunger")
                .forEach(item -> embed.addField(
                        ":package: " + item.getName(SINGULAR),
-                       "Quantity: **" + user.getInventory().getItem(item.getName(SINGULAR)) + "**",
+                       "Quantity: **" + user.getItem(item.getName(SINGULAR)) + "**",
                        true)
                );
 
@@ -46,7 +46,7 @@ public class Inventory implements IUserCommand {
 
         itemMan.getItems("thirst").forEach(item -> embed.addField(
                 ":package: " + item.getName(SINGULAR),
-                "Quantity: **" + user.getInventory().getItem(item.getName(SINGULAR)) + "**",
+                "Quantity: **" + user.getItem(item.getName(SINGULAR)) + "**",
                 true)
         );
 

@@ -1,8 +1,8 @@
 package bot.commands.member;
 
-import bot.db.IDatabase;
-import bot.commands.IUserCommand;
-import bot.models.DBUser;
+import bot.commands.IDynamicUserCommand;
+import bot.commands.IStaticUserCommand;
+import bot.models.Entry;
 import bot.utils.Language;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -20,7 +20,7 @@ import java.util.List;
 
 import static bot.utils.Emote.REDCROSS;
 
-public class Work implements IUserCommand {
+public class Work implements IDynamicUserCommand {
     private static final Logger LOGGER = LoggerFactory.getLogger(Work.class);
     private ArrayList<String> json;
 
@@ -36,37 +36,37 @@ public class Work implements IUserCommand {
     }
 
     @Override
-    public void execute(SlashCommandEvent event, DBUser user) {
-        final long sleep = user.getCooldown().getSleep();
+    public Entry execute(SlashCommandEvent event, Entry user) {
+        final long sleep = user.getSleep();
         if (sleep > 0) {
             event.reply(REDCROSS + " Your alpaca sleeps, it'll wake up in **" + sleep + " " + Language.handle(sleep, "minute", "minutes") + "**")
                  .setEphemeral(true)
                  .queue();
-            return;
+            return null;
         }
 
-        final long work = user.getCooldown().getWork();
+        final long work = user.getWork();
         if (work > 0) {
             event.reply(REDCROSS + " Your alpaca has to rest **" + work + " " + Language.handle(work, "minute", "minutes") + "** to work again")
                  .setEphemeral(true)
                  .queue();
-            return;
+            return null;
         }
 
-        final int energy = user.getAlpaca().getEnergy();
+        final int energy = user.getEnergy();
         if (energy < 10) {
             event.reply("\uD83E\uDD71 Your alpaca is too tired to work, let it rest first with **/sleep**")
                  .setEphemeral(true)
                  .queue();
-            return;
+            return null;
         }
 
-        final int joy = user.getAlpaca().getJoy();
+        final int joy = user.getJoy();
         if (joy < 15) {
             event.reply(":pensive: Your alpaca is too sad to work, give him some love with **/pet**")
                  .setEphemeral(true)
                  .queue();
-            return;
+            return null;
         }
 
         final String message = getRandomMessage();
@@ -75,14 +75,15 @@ public class Work implements IUserCommand {
         final int joyCost = (int) (Math.random() * 10 + 2);
         final long cooldown = System.currentTimeMillis() + 1000L * 60 * 20;
 
-        user.getInventory().setCurrency(fluffies);
-        user.getAlpaca().setEnergy(-energyCost);
-        user.getAlpaca().setJoy(-joyCost);
-        user.getCooldown().setWork(cooldown);
-        IDatabase.INSTANCE.setUser(user.getId(), user);
+        user.setCurrency(user.getCurrency() + fluffies);
+        user.setEnergy(user.getEnergy() - energyCost);
+        user.setJoy(user.getJoy() - joyCost);
+        user.setWork(cooldown);
 
         event.reply("⛏ " + message + " **Fluffies + " + fluffies + ", Energy - " + energyCost + ", Joy - " + joyCost + "**")
              .queue();
+
+        return user;
     }
 
     @Override
