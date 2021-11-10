@@ -11,6 +11,8 @@ import net.dv8tion.jda.api.interactions.commands.Command;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 
+import java.util.concurrent.TimeUnit;
+
 import static bot.utils.Language.PLURAL;
 import static bot.utils.Language.SINGULAR;
 import static net.dv8tion.jda.api.interactions.commands.OptionType.INTEGER;
@@ -25,7 +27,7 @@ public class Feed implements IDynamicUserCommand {
 
     @Override
     public Entry execute(SlashCommandEvent event, Entry user) {
-        final long sleep = user.getSleep();
+        final long sleep = TimeUnit.MILLISECONDS.toMinutes(user.getSleep() - System.currentTimeMillis());
         if (sleep > 0) {
             event.reply(Emote.REDCROSS + " Your alpaca sleeps, it'll wake up in **" + sleep + " " + Language.handle(sleep, "minute", "minutes") + "**")
                  .setEphemeral(true)

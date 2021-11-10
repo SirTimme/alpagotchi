@@ -1,7 +1,6 @@
 package bot.commands.member;
 
 import bot.commands.IDynamicUserCommand;
-import bot.commands.IStaticUserCommand;
 import bot.models.Entry;
 import bot.utils.Language;
 import com.google.gson.Gson;
@@ -17,6 +16,7 @@ import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import static bot.utils.Emote.REDCROSS;
 
@@ -37,7 +37,7 @@ public class Work implements IDynamicUserCommand {
 
     @Override
     public Entry execute(SlashCommandEvent event, Entry user) {
-        final long sleep = user.getSleep();
+        final long sleep = TimeUnit.MILLISECONDS.toMinutes(user.getSleep() - System.currentTimeMillis());
         if (sleep > 0) {
             event.reply(REDCROSS + " Your alpaca sleeps, it'll wake up in **" + sleep + " " + Language.handle(sleep, "minute", "minutes") + "**")
                  .setEphemeral(true)
@@ -45,7 +45,7 @@ public class Work implements IDynamicUserCommand {
             return null;
         }
 
-        final long work = user.getWork();
+        final long work = TimeUnit.MILLISECONDS.toMinutes(user.getWork() - System.currentTimeMillis());
         if (work > 0) {
             event.reply(REDCROSS + " Your alpaca has to rest **" + work + " " + Language.handle(work, "minute", "minutes") + "** to work again")
                  .setEphemeral(true)
@@ -73,12 +73,11 @@ public class Work implements IDynamicUserCommand {
         final int fluffies = (int) (Math.random() * 15 + 1);
         final int energyCost = (int) (Math.random() * 8 + 1);
         final int joyCost = (int) (Math.random() * 10 + 2);
-        final long cooldown = System.currentTimeMillis() + 1000L * 60 * 20;
 
         user.setCurrency(user.getCurrency() + fluffies);
         user.setEnergy(user.getEnergy() - energyCost);
         user.setJoy(user.getJoy() - joyCost);
-        user.setWork(cooldown);
+        user.setWork(System.currentTimeMillis() + 1000L * 60 * 20);
 
         event.reply("⛏ " + message + " **Fluffies + " + fluffies + ", Energy - " + energyCost + ", Joy - " + joyCost + "**")
              .queue();
