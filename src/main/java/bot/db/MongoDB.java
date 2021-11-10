@@ -27,7 +27,7 @@ public class MongoDB implements IDatabase {
 		final MongoClient client = MongoClients.create(settings);
 		final MongoDatabase db = client.getDatabase(Env.get("DB_NAME"));
 
-		this.entries = db.getCollection("alpagotchiDB", Entry.class);
+		this.entries = db.getCollection("alpacas_manager", Entry.class);
 	}
 
 	@Override
