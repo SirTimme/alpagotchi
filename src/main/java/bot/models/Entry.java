@@ -13,8 +13,7 @@ public class Entry {
 	private final Cooldown cooldown;
 	private final Inventory inventory;
 
-	@BsonCreator
-	public Entry(@BsonProperty(value = "_id") final long memberID) {
+	 public Entry(final long memberID) {
 		this.memberID = memberID;
 		this.alpaca = new Alpaca("default", "alpaca", 100, 100, 100, 100);
 		this.cooldown = new Cooldown(0L, 0L);
@@ -26,6 +25,18 @@ public class Entry {
 			put("lemonade", 0);
 			put("cacao", 0);
 		}});
+	}
+
+	@BsonCreator
+	public Entry(@BsonProperty(value = "_id") final long memberID,
+				 @BsonProperty(value = "alpaca") final Alpaca alpaca,
+				 @BsonProperty(value = "cooldown") final Cooldown cooldown,
+				 @BsonProperty(value = "inventory") final Inventory inventory
+	) {
+		this.memberID = memberID;
+		this.alpaca = alpaca;
+		this.cooldown = cooldown;
+		this.inventory = inventory;
 	}
 
 	public long getMemberID() {
