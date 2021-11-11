@@ -11,7 +11,7 @@ public class Balance implements IStaticUserCommand {
     public void execute(SlashCommandEvent event, Entry user) {
         final int balance = user.getCurrency();
 
-        event.reply("\uD83D\uDCB5 Your current balance is **" + balance + " " + Language.handle(balance, "fluffy", "fluffies") + "**")
+        event.reply("\uD83D\uDCB5 Your current balance is **" + balance + "** " + Language.handle(balance, "fluffy", "fluffies") + "")
              .queue();
     }
 

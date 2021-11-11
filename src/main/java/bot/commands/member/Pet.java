@@ -42,7 +42,7 @@ public class Pet implements IDynamicUserCommand {
             event.reply("\uD83E\uDD99 Your alpaca enjoyed the petting, but it wasn't his favourite spot **Joy + " + newJoy + "**").queue();
         }
 
-        user.setJoy(newJoy);
+        user.setJoy(joy + newJoy);
 
         return user;
     }

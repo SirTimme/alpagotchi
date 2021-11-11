@@ -29,14 +29,14 @@ public class Sleep implements IDynamicUserCommand {
             return null;
         }
 
-        energy = energy + duration > 100 ? 100 - energy : duration;
+        final int newEnergy = energy + duration > 100 ? 100 - energy : duration;
 
-        final long cooldown = System.currentTimeMillis() + 1000L * 60 * energy;
+        final long cooldown = System.currentTimeMillis() + 1000L * 60 * newEnergy;
 
-        user.setEnergy(energy);
+        user.setEnergy(energy + newEnergy);
         user.setSleep(cooldown);
 
-        event.reply("\uD83D\uDCA4 Your alpaca goes to bed for **" + energy + "** minutes and rests well **Energy + " + energy + "**")
+        event.reply("\uD83D\uDCA4 Your alpaca goes to bed for **" + newEnergy + "** minutes and rests well **Energy + " + newEnergy + "**")
              .queue();
 
         return user;

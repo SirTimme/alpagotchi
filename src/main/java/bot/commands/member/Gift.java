@@ -62,8 +62,8 @@ public class Gift implements IDynamicUserCommand {
             return null;
         }
 
-        user.setItem(item.getName(SINGULAR), -amount);
-        giftedUserDBUser.setItem(item.getName(SINGULAR), amount);
+        user.setItem(item.getName(SINGULAR), user.getItem(item.getName(SINGULAR)) - amount);
+        giftedUserDBUser.setItem(item.getName(SINGULAR), giftedUserDBUser.getItem(item.getName(SINGULAR)) + amount);
 
         IDatabase.INSTANCE.updateUser(giftedUserDBUser);
 
