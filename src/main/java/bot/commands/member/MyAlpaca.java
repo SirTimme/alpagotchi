@@ -127,7 +127,7 @@ public class MyAlpaca implements IStaticUserCommand {
     private String checkCooldown(long cooldown) {
         final long minutes = TimeUnit.MILLISECONDS.toMinutes(cooldown - System.currentTimeMillis());
 
-        if (cooldown > 0) {
+        if (minutes > 0) {
             return REDCROSS + " " + minutes + " " + Language.handle(minutes, "minute", "minutes");
         } else {
             return GREENTICK + " ready";
