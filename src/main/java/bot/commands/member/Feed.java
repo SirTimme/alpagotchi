@@ -66,11 +66,11 @@ public class Feed implements IDynamicUserCommand {
         user.setItem(item.getName(SINGULAR), userItems);
 
         if (item.getStat().equals("hunger")) {
-            user.setHunger(saturation);
+            user.setHunger(oldValue + saturation);
             event.reply(":meat_on_bone: Your alpaca eats the **" + Language.handle(amount, item.getName(SINGULAR), item.getName(PLURAL)) + "** in one bite **Hunger + " + saturation + "**")
                  .queue();
         } else {
-            user.setThirst(saturation);
+            user.setThirst(oldValue + saturation);
             event.reply(":beer: Your alpaca drinks the **" + Language.handle(amount, item.getName(SINGULAR), item.getName(PLURAL)) + "** empty **Thirst + " + saturation + "**")
                  .queue();
         }
