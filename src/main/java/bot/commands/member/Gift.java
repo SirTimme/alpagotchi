@@ -1,7 +1,6 @@
 package bot.commands.member;
 
 import bot.commands.IDynamicUserCommand;
-import bot.commands.IStaticUserCommand;
 import bot.db.IDatabase;
 import bot.models.Entry;
 import bot.shop.Item;
@@ -55,19 +54,19 @@ public class Gift implements IDynamicUserCommand {
         final String itemChoice = event.getOption("item").getAsString();
         final Item item = itemMan.getItem(itemChoice);
 
-        if (user.getItem(item.getName(SINGULAR)) - amount < 0) {
+        if (user.getItem(item.getName()) - amount < 0) {
             event.reply(REDCROSS + " You don't own that many items to gift")
                  .setEphemeral(true)
                  .queue();
             return null;
         }
 
-        user.setItem(item.getName(SINGULAR), user.getItem(item.getName(SINGULAR)) - amount);
-        giftedUserDBUser.setItem(item.getName(SINGULAR), giftedUserDBUser.getItem(item.getName(SINGULAR)) + amount);
+        user.setItem(item.getName(), user.getItem(item.getName()) - amount);
+        giftedUserDBUser.setItem(item.getName(), giftedUserDBUser.getItem(item.getName()) + amount);
 
         IDatabase.INSTANCE.updateUser(giftedUserDBUser);
 
-        event.reply("\uD83C\uDF81 You successfully gifted **" + amount + " " + Language.handle(amount, item.getName(SINGULAR), item.getName(PLURAL)) + "** to **" + userChoice.getName() + "**")
+        event.reply("\uD83C\uDF81 You successfully gifted **" + amount + " " + Language.handle(amount, item.getName(), item.getName()) + "** to **" + userChoice.getName() + "**")
              .queue();
 
         return user;

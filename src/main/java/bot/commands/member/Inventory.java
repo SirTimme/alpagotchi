@@ -33,8 +33,8 @@ public class Inventory implements IStaticUserCommand {
 
         itemMan.getItems("hunger")
                .forEach(item -> embed.addField(
-                       ":package: " + item.getName(SINGULAR),
-                       "Quantity: **" + user.getItem(item.getName(SINGULAR)) + "**",
+                       ":package: " + item.getName(),
+                       "Quantity: **" + user.getItem(item.getName()) + "**",
                        true)
                );
 
@@ -45,8 +45,8 @@ public class Inventory implements IStaticUserCommand {
         );
 
         itemMan.getItems("thirst").forEach(item -> embed.addField(
-                ":package: " + item.getName(SINGULAR),
-                "Quantity: **" + user.getItem(item.getName(SINGULAR)) + "**",
+                ":package: " + item.getName(),
+                "Quantity: **" + user.getItem(item.getName()) + "**",
                 true)
         );
 

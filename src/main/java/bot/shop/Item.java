@@ -1,24 +1,20 @@
 package bot.shop;
 
-import bot.utils.Language;
-
-import static bot.utils.Language.SINGULAR;
-
 public class Item {
 	private final int price;
 	private final int saturation;
 	private final String stat;
-	private final String[] names;
+	private final String name;
 
-	public Item(String[] names, int price, int saturation, String stat) {
-		this.names = names;
+	public Item(final String name, final int price, final int saturation, final String stat) {
+		this.name = name;
 		this.price = price;
 		this.saturation = saturation;
 		this.stat = stat;
 	}
 
-	public String getName(Language number) {
-		return number.equals(SINGULAR) ? names[0] : names[1];
+	public String getName() {
+		return this.name;
 	}
 
 	public int getPrice() {

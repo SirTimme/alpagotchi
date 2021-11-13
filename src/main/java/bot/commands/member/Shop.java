@@ -36,7 +36,7 @@ public class Shop implements IInfoCommand {
                .stream()
                .sorted(Comparator.comparingInt(Item::getPrice))
                .forEach(item -> embed.addField(
-                       ":package: " + item.getName(SINGULAR),
+                       ":package: " + item.getName(),
                        "Saturation: " + item.getSaturation() + "\nPrice: " + item.getPrice(),
                        true)
                );
@@ -48,7 +48,7 @@ public class Shop implements IInfoCommand {
                .stream()
                .sorted(Comparator.comparingInt(Item::getPrice))
                .forEach(item -> embed.addField(
-                       ":package: " + item.getName(SINGULAR),
+                       ":package: " + item.getName(),
                        "Saturation: " + item.getSaturation() + "\nPrice: " + item.getPrice(),
                        true)
                );

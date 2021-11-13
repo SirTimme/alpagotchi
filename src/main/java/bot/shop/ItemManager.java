@@ -12,9 +12,6 @@ import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
-
-import static bot.utils.Language.SINGULAR;
 
 public class ItemManager {
     private static final Logger LOGGER = LoggerFactory.getLogger(ItemManager.class);
@@ -25,18 +22,23 @@ public class ItemManager {
             final BufferedReader reader = new BufferedReader(new FileReader("src/main/resources/data/items.json"));
             final Type type = new TypeToken<ArrayList<Item>>() {}.getType();
 
-            items = new Gson().fromJson(reader, type);
+            this.items = new Gson().fromJson(reader, type);
         } catch (IOException error) {
             LOGGER.error(error.getMessage());
         }
     }
 
-    public List<Item> getItems(String stat) {
-        return items.stream().filter(entry -> entry.getStat().equals(stat)).collect(Collectors.toList());
+    public List<Item> getItems(final String stat) {
+        return this.items.stream()
+                         .filter(entry -> entry.getStat().equals(stat))
+                         .toList();
     }
 
     @Nullable
-    public Item getItem(String search) {
-        return items.stream().filter(item -> item.getName(SINGULAR).equals(search)).findAny().orElse(null);
+    public Item getItem(final String search) {
+        return this.items.stream()
+                         .filter(item -> item.getName().equals(search))
+                         .findAny()
+                         .orElse(null);
     }
 }
