@@ -3,17 +3,18 @@ package bot.commands.dev;
 import bot.commands.IInfoCommand;
 import bot.commands.SlashCommandManager;
 import bot.utils.Env;
+import bot.utils.Resources;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.interactions.commands.Command;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.privileges.CommandPrivilege;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import static bot.utils.Emote.GREENTICK;
 import static bot.utils.Emote.REDCROSS;
 
 public class Update implements IInfoCommand {
@@ -53,7 +54,8 @@ public class Update implements IInfoCommand {
             }
         }
 
-        event.reply(GREENTICK + " Successfully refreshed all slash commands").queue();
+        final MessageFormat formatter = new MessageFormat(Resources.getPattern("update"));
+        event.reply(formatter.format(new Object())).queue();
     }
 
     @Override
