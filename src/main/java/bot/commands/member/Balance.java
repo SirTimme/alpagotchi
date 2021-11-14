@@ -11,9 +11,8 @@ import java.text.MessageFormat;
 public class Balance implements IStaticUserCommand {
 	@Override
 	public void execute(SlashCommandEvent event, Entry user) {
-		final MessageFormat formatter = new MessageFormat(Resources.getPattern("balance"));
-
-		event.reply(formatter.format(new Object[]{ user.getCurrency() })).queue();
+		final MessageFormat msg = new MessageFormat(Resources.getPattern("balance"));
+		event.reply(msg.format(new Object[]{ user.getCurrency() })).queue();
 	}
 
 	@Override

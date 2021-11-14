@@ -48,9 +48,8 @@ public class Buy implements IDynamicUserCommand {
 		user.setCurrency(balance - price);
 		user.setItem(item.getName(), user.getItem(item.getName()) + amount);
 
-		final MessageFormat formatter = new MessageFormat(Resources.getPattern("buy"));
-
-		event.reply(formatter.format(new Object[]{ amount, item.getName(), price })).queue();
+		final MessageFormat msg = new MessageFormat(Resources.getPattern("buy"));
+		event.reply(msg.format(new Object[]{ amount, item.getName(), price })).queue();
 
 		return user;
 	}

@@ -10,8 +10,8 @@ import java.text.MessageFormat;
 public class Shutdown implements IInfoCommand {
 	@Override
 	public void execute(SlashCommandEvent event) {
-		final MessageFormat formatter = new MessageFormat(Resources.getPattern("shutdown"));
-		event.reply(formatter.format(new Object[]{ event.getJDA().getSelfUser().getName() })).queue();
+		final MessageFormat msg = new MessageFormat(Resources.getPattern("shutdown"));
+		event.reply(msg.format(new Object[]{ event.getJDA().getSelfUser().getName() })).queue();
 
 		event.getJDA().shutdown();
 	}

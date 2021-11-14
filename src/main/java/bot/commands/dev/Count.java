@@ -11,8 +11,8 @@ import java.text.MessageFormat;
 public class Count implements IInfoCommand {
 	@Override
 	public void execute(SlashCommandEvent event) {
-		final MessageFormat formatter = new MessageFormat(Resources.getPattern("count"));
-		event.reply(formatter.format(new Object[]{ IDatabase.INSTANCE.getEntries(), event.getJDA().getGuilds().size() })).queue();
+		final MessageFormat msg = new MessageFormat(Resources.getPattern("count"));
+		event.reply(msg.format(new Object[]{ IDatabase.INSTANCE.getEntries(), event.getJDA().getGuilds().size() })).queue();
 	}
 
 	@Override
