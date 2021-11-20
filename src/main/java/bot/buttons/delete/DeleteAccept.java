@@ -1,4 +1,4 @@
-package bot.buttons.deletion;
+package bot.buttons.delete;
 
 import bot.buttons.IButton;
 import bot.db.IDatabase;

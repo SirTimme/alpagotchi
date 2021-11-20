@@ -1,6 +1,6 @@
 package bot.commands.member;
 
-import bot.commands.IInfoCommand;
+import bot.commands.interfaces.IInfoCommand;
 import bot.shop.Item;
 import bot.shop.ItemManager;
 import bot.utils.Env;
@@ -11,8 +11,6 @@ import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 
 import java.time.Instant;
 import java.util.Comparator;
-
-import static bot.utils.Language.SINGULAR;
 
 public class Shop implements IInfoCommand {
     private final ItemManager itemMan;

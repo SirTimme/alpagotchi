@@ -1,6 +1,6 @@
 package bot.commands.member;
 
-import bot.commands.IInfoCommand;
+import bot.commands.interfaces.IInfoCommand;
 import bot.utils.Env;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;

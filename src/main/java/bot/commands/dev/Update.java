@@ -1,7 +1,8 @@
 package bot.commands.dev;
 
-import bot.commands.IInfoCommand;
+import bot.commands.interfaces.IDevCommand;
 import bot.commands.SlashCommandManager;
+import bot.utils.CommandType;
 import bot.utils.Env;
 import bot.utils.Resources;
 import net.dv8tion.jda.api.entities.Guild;
@@ -10,16 +11,14 @@ import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.privileges.CommandPrivilege;
 
 import java.text.MessageFormat;
-import java.util.Set;
 
 import static bot.utils.Emote.REDCROSS;
 
-public class Update implements IInfoCommand {
-	private final SlashCommandManager slashCmdMan;
-	private final static Set<String> DEV_COMMANDS = Set.of("shutdown", "update", "count");
+public class Update implements IDevCommand {
+	private final SlashCommandManager manager;
 
-	public Update(SlashCommandManager slashCmdMan) {
-		this.slashCmdMan = slashCmdMan;
+	public Update(SlashCommandManager manager) {
+		this.manager = manager;
 	}
 
 	@Override
@@ -32,13 +31,12 @@ public class Update implements IInfoCommand {
 			return;
 		}
 
-		slashCmdMan.getCommands().forEach(cmd -> {
-			final CommandData cmdData = cmd.getCommandData();
-			if (DEV_COMMANDS.contains(cmdData.getName())) {
-				guild.upsertCommand(cmdData).queue();
+		manager.getCommands().forEach(cmd -> {
+			if (cmd.getCommandType() == CommandType.DEV) {
+				guild.upsertCommand(cmd.getCommandData()).queue();
 			}
 			else {
-				event.getJDA().upsertCommand(cmdData).queue();
+				event.getJDA().upsertCommand(cmd.getCommandData()).queue();
 			}
 		});
 
@@ -50,7 +48,7 @@ public class Update implements IInfoCommand {
 			 });
 
 		final MessageFormat msg = new MessageFormat(Resources.getPattern("update"));
-		event.reply(msg.format(new Object[]{ slashCmdMan.getCommands().size() })).queue();
+		event.reply(msg.format(new Object[]{ manager.getCommands().size() })).queue();
 	}
 
 	@Override

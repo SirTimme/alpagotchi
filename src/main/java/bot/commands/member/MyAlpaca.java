@@ -1,6 +1,6 @@
 package bot.commands.member;
 
-import bot.commands.IStaticUserCommand;
+import bot.commands.interfaces.IStaticUserCommand;
 import bot.models.Entry;
 import bot.utils.Env;
 import bot.utils.Language;

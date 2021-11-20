@@ -1,9 +1,9 @@
 package bot.buttons;
 
-import bot.buttons.deletion.DeleteAccept;
-import bot.buttons.deletion.DeleteCancel;
-import bot.buttons.initialization.InitAccept;
-import bot.buttons.initialization.InitCancel;
+import bot.buttons.delete.DeleteAccept;
+import bot.buttons.delete.DeleteCancel;
+import bot.buttons.initialize.InitAccept;
+import bot.buttons.initialize.InitCancel;
 import net.dv8tion.jda.api.events.interaction.ButtonClickEvent;
 
 import java.util.HashMap;
@@ -20,12 +20,6 @@ public class ButtonManager {
     }
 
     public void handle(ButtonClickEvent event) {
-        final IButton btn = getButton(event);
-
-        btn.execute(event, event.getUser().getIdLong());
-    }
-
-    private IButton getButton(ButtonClickEvent event) {
-        return buttons.get(event.getComponentId());
+        buttons.get(event.getComponentId()).execute(event, event.getUser().getIdLong());
     }
 }

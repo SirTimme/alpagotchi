@@ -1,6 +1,6 @@
 package bot.commands.member;
 
-import bot.commands.IInfoCommand;
+import bot.commands.interfaces.IInfoCommand;
 import bot.commands.SlashCommandManager;
 import bot.utils.Env;
 import net.dv8tion.jda.api.EmbedBuilder;

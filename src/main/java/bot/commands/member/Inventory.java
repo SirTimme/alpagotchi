@@ -1,6 +1,6 @@
 package bot.commands.member;
 
-import bot.commands.IStaticUserCommand;
+import bot.commands.interfaces.IStaticUserCommand;
 import bot.models.Entry;
 import bot.shop.ItemManager;
 import bot.utils.Env;
@@ -10,8 +10,6 @@ import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 
 import java.time.Instant;
-
-import static bot.utils.Language.SINGULAR;
 
 public class Inventory implements IStaticUserCommand {
     private final ItemManager itemMan;

@@ -1,6 +1,6 @@
 package bot.commands.member;
 
-import bot.commands.IDynamicUserCommand;
+import bot.commands.interfaces.IDynamicUserCommand;
 import bot.db.IDatabase;
 import bot.models.Entry;
 import bot.shop.Item;
@@ -13,8 +13,6 @@ import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 
 import static bot.utils.Emote.REDCROSS;
-import static bot.utils.Language.PLURAL;
-import static bot.utils.Language.SINGULAR;
 import static net.dv8tion.jda.api.interactions.commands.OptionType.*;
 
 public class Gift implements IDynamicUserCommand {

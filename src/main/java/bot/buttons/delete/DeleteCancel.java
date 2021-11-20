@@ -1,4 +1,4 @@
-package bot.buttons.deletion;
+package bot.buttons.delete;
 
 import bot.buttons.IButton;
 import bot.utils.Emote;
@@ -9,7 +9,7 @@ import java.util.Collections;
 public class DeleteCancel implements IButton {
     @Override
     public void execute(ButtonClickEvent event, long authorID) {
-        event.editMessage(Emote.REDCROSS + " Data deletion cancelled")
+        event.editMessage(Emote.REDCROSS + " Data delete cancelled")
              .setActionRows(Collections.emptyList())
              .queue();
     }

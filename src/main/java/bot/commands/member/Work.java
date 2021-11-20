@@ -1,6 +1,6 @@
 package bot.commands.member;
 
-import bot.commands.IDynamicUserCommand;
+import bot.commands.interfaces.IDynamicUserCommand;
 import bot.models.Entry;
 import bot.utils.Language;
 import com.google.gson.Gson;

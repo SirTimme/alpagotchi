@@ -2,10 +2,12 @@ package bot.commands;
 
 import bot.commands.dev.*;
 import bot.commands.dev.Count;
+import bot.commands.interfaces.*;
 import bot.commands.member.*;
 import bot.db.IDatabase;
 import bot.models.Entry;
 import bot.shop.ItemManager;
+import bot.utils.CommandType;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 
 import java.util.*;
@@ -13,10 +15,6 @@ import java.util.*;
 import static bot.utils.Emote.REDCROSS;
 
 public class SlashCommandManager {
-	private final static Set<String> INFO_COMMANDS = Set.of("help", "image", "ping", "shop", "count", "shutdown", "update");
-	private final static Set<String> STATIC_COMMANDS = Set.of("balance", "delete", "init", "inventory", "myalpaca");
-	private final static Set<String> DEV_COMMANDS = Set.of("count", "shutdown", "update");
-
 	private final Map<String, ISlashCommand> commands = new TreeMap<>();
 
 	public SlashCommandManager() {
@@ -42,13 +40,18 @@ public class SlashCommandManager {
 		commands.put("inventory", new Inventory(items));
 		commands.put("shop", new Shop(items));
 		commands.put("update", new Update(this));
+		commands.put("language", new Language());
 	}
 
 	public void handle(SlashCommandEvent event) {
 		final String eventName = event.getName();
+		final ISlashCommand cmd = getCommand(eventName);
 
-		if (INFO_COMMANDS.contains(eventName)) {
+		if (cmd.getCommandType() == CommandType.INFO) {
 			((IInfoCommand) getCommand(eventName)).execute(event);
+		}
+		else if (cmd.getCommandType() == CommandType.DEV) {
+			((IDevCommand) getCommand(eventName)).execute(event);
 		}
 		else {
 			final Entry user = IDatabase.INSTANCE.getUser(event.getUser().getIdLong());
@@ -60,15 +63,14 @@ public class SlashCommandManager {
 				return;
 			}
 
-			if (STATIC_COMMANDS.contains(eventName)) {
-				((IStaticUserCommand) getCommand(eventName)).execute(event, user);
-			}
-			else {
+			if (cmd.getCommandType() == CommandType.DYNAMIC_USER) {
 				final Entry modifiedUser = ((IDynamicUserCommand) getCommand(eventName)).execute(event, user);
 
 				if (modifiedUser != null) {
 					IDatabase.INSTANCE.updateUser(modifiedUser);
 				}
+			} else {
+				((IStaticUserCommand) getCommand(eventName)).execute(event, user);
 			}
 		}
 	}
@@ -82,7 +84,7 @@ public class SlashCommandManager {
 
 		commands.keySet()
 				.stream()
-				.filter(cmd -> !DEV_COMMANDS.contains(cmd))
+				.filter(cmd -> getCommand(cmd).getCommandType() != CommandType.DEV)
 				.forEach(cmd -> sb.append("`").append(cmd).append("` "));
 
 		return sb.toString();

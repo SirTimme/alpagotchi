@@ -1,6 +1,6 @@
 package bot.commands.member;
 
-import bot.commands.IStaticUserCommand;
+import bot.commands.interfaces.IStaticUserCommand;
 import bot.models.Entry;
 import bot.utils.Resources;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
