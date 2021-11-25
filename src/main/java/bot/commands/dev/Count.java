@@ -8,11 +8,12 @@ import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 
 import java.text.MessageFormat;
+import java.util.Locale;
 
 public class Count implements IDevCommand {
 	@Override
 	public void execute(SlashCommandEvent event) {
-		final MessageFormat msg = new MessageFormat(Responses.get("count"));
+		final MessageFormat msg = new MessageFormat(Responses.get("count", new Locale("en-us")));
 		final String content = msg.format(new Object[]{ IDatabase.INSTANCE.getEntries(), event.getJDA().getGuilds().size() });
 
 		MessageService.reply(event, content, false);

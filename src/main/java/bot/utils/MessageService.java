@@ -14,7 +14,7 @@ public class MessageService {
 	 * @param msg The bots' response to the user
 	 * @param ephemeral If the message is sent ephemeral or not
 	 */
-	public static void reply(SlashCommandEvent event, String msg, boolean ephemeral) {
+	public static void reply(final SlashCommandEvent event, final String msg, final boolean ephemeral) {
 		event.reply(msg).setEphemeral(ephemeral).queue();
 	}
 
@@ -24,7 +24,7 @@ public class MessageService {
 	 * @param msg The bots' response to the user
 	 * @param ephemeral If the message is sent ephemeral or not
 	 */
-	public static void reply(SlashCommandEvent event, MessageFormat msg, boolean ephemeral) {
+	public static void reply(final SlashCommandEvent event, final MessageFormat msg, final boolean ephemeral) {
 		event.reply(msg.format(new Object[]{})).setEphemeral(ephemeral).queue();
 	}
 }

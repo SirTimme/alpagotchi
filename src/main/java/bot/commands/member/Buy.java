@@ -12,6 +12,7 @@ import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 
 import java.text.MessageFormat;
+import java.util.Locale;
 
 import static net.dv8tion.jda.api.interactions.commands.OptionType.INTEGER;
 import static net.dv8tion.jda.api.interactions.commands.OptionType.STRING;
@@ -37,7 +38,7 @@ public class Buy implements IDynamicUserCommand {
 		final int price = amount * item.getPrice();
 		final int balance = user.getCurrency();
 		if (balance - price < 0) {
-			final MessageFormat msg = new MessageFormat(Responses.get("balanceInsufficient"));
+			final MessageFormat msg = new MessageFormat(Responses.get("balanceInsufficient", new Locale("en-us")));
 			event.reply(msg.format(new Object[]{})).setEphemeral(true).queue();
 			return null;
 		}
@@ -45,7 +46,7 @@ public class Buy implements IDynamicUserCommand {
 		user.setCurrency(balance - price);
 		user.setItem(item.getName(), user.getItem(item.getName()) + amount);
 
-		final MessageFormat msg = new MessageFormat(Responses.get("buy"));
+		final MessageFormat msg = new MessageFormat(Responses.get("buy", new Locale("en-us")));
 		event.reply(msg.format(new Object[]{ amount, item.getName(), price })).queue();
 		return user;
 	}

@@ -8,16 +8,11 @@ import java.util.ResourceBundle;
  */
 public class Responses {
 	/**
-	 * Holds all responses for the english version
-	 */
-	private static final ResourceBundle bundle = ResourceBundle.getBundle("languages/en_us", new Locale("en-us"));
-
-	/**
-	 * Retrieves a response by key
 	 * @param key The key for the corresponding response in the resourcebundle
+	 * @param locale The language in which the bot should respond
 	 * @return The bots' response to the user
 	 */
-	public static String get(final String key) {
-		return bundle.getString(key);
+	public static String get(final String key, final Locale locale) {
+		return ResourceBundle.getBundle("messages", locale).getString(key);
 	}
 }

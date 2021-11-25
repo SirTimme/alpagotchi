@@ -12,6 +12,7 @@ import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.privileges.CommandPrivilege;
 
 import java.text.MessageFormat;
+import java.util.Locale;
 
 public class Update implements IDevCommand {
 	private final SlashCommandManager manager;
@@ -24,7 +25,7 @@ public class Update implements IDevCommand {
 	public void execute(SlashCommandEvent event) {
 		final Guild guild = event.getGuild();
 		if (guild == null) {
-			MessageService.reply(event, new MessageFormat(Responses.get("guildOnly")), true);
+			MessageService.reply(event, new MessageFormat(Responses.get("guildOnly", new Locale("en-us"))), true);
 			return;
 		}
 
@@ -44,7 +45,7 @@ public class Update implements IDevCommand {
 					)
 			 );
 
-		final MessageFormat msg = new MessageFormat(Responses.get("update"));
+		final MessageFormat msg = new MessageFormat(Responses.get("update", new Locale("en-us")));
 		final String content = msg.format(new Object[]{ manager.getCommands().size() });
 
 		MessageService.reply(event, content, false);

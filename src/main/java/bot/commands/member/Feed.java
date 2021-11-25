@@ -12,6 +12,7 @@ import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 
 import java.text.MessageFormat;
+import java.util.Locale;
 
 import static net.dv8tion.jda.api.interactions.commands.OptionType.INTEGER;
 import static net.dv8tion.jda.api.interactions.commands.OptionType.STRING;
@@ -27,7 +28,7 @@ public class Feed implements IDynamicUserCommand {
 	public Entry execute(SlashCommandEvent event, Entry user) {
 		final long remainingSleep = user.getSleepAsMinutes();
 		if (remainingSleep > 0) {
-			final MessageFormat formatter = new MessageFormat(Responses.get("sleep"));
+			final MessageFormat formatter = new MessageFormat(Responses.get("sleep", new Locale("en-us")));
 			event.reply(formatter.format(new Object[]{ remainingSleep })).setEphemeral(true).queue();
 
 			return null;
@@ -61,11 +62,11 @@ public class Feed implements IDynamicUserCommand {
 		final String pattern;
 		if (item.getStat().equals("hunger")) {
 			user.setHunger(oldValue + itemSaturation);
-			pattern = Responses.get("eat");
+			pattern = Responses.get("eat", new Locale("en-us"));
 		}
 		else {
 			user.setThirst(oldValue + itemSaturation);
-			pattern = Responses.get("drink");
+			pattern = Responses.get("drink", new Locale("en-us"));
 		}
 
 		event.reply(new MessageFormat(pattern).format(new Object[]{ itemAmount, item.getName(), itemSaturation })).queue();
