@@ -30,7 +30,7 @@ public class Shop implements IInfoCommand {
                 .addField("__**:meat_on_bone: Hunger items**__", "These items are used to fill up the hunger of your alpaca", false)
                 .setTimestamp(Instant.now());
 
-        itemMan.getItems("hunger")
+        itemMan.getItemsByStat("hunger")
                .stream()
                .sorted(Comparator.comparingInt(Item::getPrice))
                .forEach(item -> embed.addField(
@@ -42,7 +42,7 @@ public class Shop implements IInfoCommand {
         embed.addBlankField(false)
              .addField("__**:beer: Thirst items**__", "Following items replenish the thirst of your alpaca", false);
 
-        itemMan.getItems("thirst")
+        itemMan.getItemsByStat("thirst")
                .stream()
                .sorted(Comparator.comparingInt(Item::getPrice))
                .forEach(item -> embed.addField(

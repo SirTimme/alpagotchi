@@ -13,6 +13,9 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Manages the items of the shop
+ */
 public class ItemManager {
     private static final Logger LOGGER = LoggerFactory.getLogger(ItemManager.class);
     private ArrayList<Item> items = new ArrayList<>();
@@ -28,7 +31,7 @@ public class ItemManager {
         }
     }
 
-    public List<Item> getItems(final String stat) {
+    public List<Item> getItemsByStat(final String stat) {
         return this.items.stream()
                          .filter(entry -> entry.getStat().equals(stat))
                          .toList();

@@ -5,7 +5,7 @@ import bot.models.Entry;
 import bot.shop.Item;
 import bot.shop.ItemManager;
 import bot.utils.Emote;
-import bot.utils.Resources;
+import bot.utils.Responses;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.interactions.commands.Command;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
@@ -27,7 +27,7 @@ public class Feed implements IDynamicUserCommand {
 	public Entry execute(SlashCommandEvent event, Entry user) {
 		final long remainingSleep = user.getSleepAsMinutes();
 		if (remainingSleep > 0) {
-			final MessageFormat formatter = new MessageFormat(Resources.getPattern("sleep"));
+			final MessageFormat formatter = new MessageFormat(Responses.get("sleep"));
 			event.reply(formatter.format(new Object[]{ remainingSleep })).setEphemeral(true).queue();
 
 			return null;
@@ -61,11 +61,11 @@ public class Feed implements IDynamicUserCommand {
 		final String pattern;
 		if (item.getStat().equals("hunger")) {
 			user.setHunger(oldValue + itemSaturation);
-			pattern = Resources.getPattern("eat");
+			pattern = Responses.get("eat");
 		}
 		else {
 			user.setThirst(oldValue + itemSaturation);
-			pattern = Resources.getPattern("drink");
+			pattern = Responses.get("drink");
 		}
 
 		event.reply(new MessageFormat(pattern).format(new Object[]{ itemAmount, item.getName(), itemSaturation })).queue();

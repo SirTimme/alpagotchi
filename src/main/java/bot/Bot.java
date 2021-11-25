@@ -9,7 +9,15 @@ import net.dv8tion.jda.api.utils.cache.CacheFlag;
 
 import javax.security.auth.login.LoginException;
 
+/**
+ * Main entry point of the bot
+ */
 public class Bot {
+    /**
+     * Starts the bot
+     * @param args Optional args to be passed
+     * @throws LoginException If the bots' token is invalid
+     */
     public static void main(String[] args) throws LoginException {
         JDABuilder.create(
                           Env.get("TOKEN"),

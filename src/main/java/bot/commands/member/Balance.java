@@ -2,7 +2,8 @@ package bot.commands.member;
 
 import bot.commands.interfaces.IStaticUserCommand;
 import bot.models.Entry;
-import bot.utils.Resources;
+import bot.utils.MessageService;
+import bot.utils.Responses;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 
@@ -11,8 +12,10 @@ import java.text.MessageFormat;
 public class Balance implements IStaticUserCommand {
 	@Override
 	public void execute(SlashCommandEvent event, Entry user) {
-		final MessageFormat msg = new MessageFormat(Resources.getPattern("balance"));
-		event.reply(msg.format(new Object[]{ user.getCurrency() })).queue();
+		final MessageFormat msg = new MessageFormat(Responses.get("balance"));
+		final String content = msg.format(new Object[]{ user.getCurrency() });
+
+		MessageService.reply(event, content, false);
 	}
 
 	@Override

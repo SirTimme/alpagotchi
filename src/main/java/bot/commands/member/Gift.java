@@ -15,6 +15,7 @@ import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import static bot.utils.Emote.REDCROSS;
 import static net.dv8tion.jda.api.interactions.commands.OptionType.*;
 
+
 public class Gift implements IDynamicUserCommand {
     private final ItemManager itemMan;
 

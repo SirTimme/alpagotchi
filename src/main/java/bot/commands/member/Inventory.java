@@ -29,7 +29,7 @@ public class Inventory implements IStaticUserCommand {
                 .setFooter("Created by " + dev.getName(), dev.getAvatarUrl())
                 .setTimestamp(Instant.now());
 
-        itemMan.getItems("hunger")
+        itemMan.getItemsByStat("hunger")
                .forEach(item -> embed.addField(
                        ":package: " + item.getName(),
                        "Quantity: **" + user.getItem(item.getName()) + "**",
@@ -42,7 +42,7 @@ public class Inventory implements IStaticUserCommand {
                 false
         );
 
-        itemMan.getItems("thirst").forEach(item -> embed.addField(
+        itemMan.getItemsByStat("thirst").forEach(item -> embed.addField(
                 ":package: " + item.getName(),
                 "Quantity: **" + user.getItem(item.getName()) + "**",
                 true)
