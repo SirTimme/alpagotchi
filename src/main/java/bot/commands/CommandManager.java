@@ -6,18 +6,17 @@ import bot.commands.interfaces.*;
 import bot.commands.member.*;
 import bot.db.IDatabase;
 import bot.models.Entry;
+import bot.models.GuildSettings;
 import bot.shop.ItemManager;
 import bot.utils.CommandType;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 
 import java.util.*;
 
-import static bot.utils.Emote.REDCROSS;
-
-public class SlashCommandManager {
+public class CommandManager {
 	private final Map<String, ISlashCommand> commands = new TreeMap<>();
 
-	public SlashCommandManager() {
+	public CommandManager() {
 		final ItemManager items = new ItemManager();
 
 		commands.put("ping", new Ping());
@@ -25,7 +24,7 @@ public class SlashCommandManager {
 		commands.put("balance", new Balance());
 		commands.put("buy", new Buy(items));
 		commands.put("count", new Count());
-		commands.put("delete", new Delete());
+		commands.put("deletion", new Delete());
 		commands.put("feed", new Feed(items));
 		commands.put("gift", new Gift(items));
 		commands.put("image", new Image());
@@ -44,33 +43,32 @@ public class SlashCommandManager {
 	}
 
 	public void handle(SlashCommandEvent event) {
-		final String eventName = event.getName();
-		final ISlashCommand cmd = getCommand(eventName);
+		final GuildSettings settings = IDatabase.INSTANCE.getGuildSettings(event.getGuild().getIdLong());
+		final Locale locale = settings.getLocale();
+
+		final ISlashCommand cmd = getCommand(event.getName());
 
 		if (cmd.getCommandType() == CommandType.INFO) {
-			((IInfoCommand) getCommand(eventName)).execute(event);
+			((IInfoCommand) cmd).execute(event, locale);
 		}
 		else if (cmd.getCommandType() == CommandType.DEV) {
-			((IDevCommand) getCommand(eventName)).execute(event);
+			((IDevCommand) cmd).execute(event, locale);
 		}
 		else {
 			final Entry user = IDatabase.INSTANCE.getUser(event.getUser().getIdLong());
-
-			if (user == null && !eventName.equals("init")) {
+			if (user == null && !event.getName().equals("init")) {
 				event.reply(REDCROSS + " You don't own an alpaca, use **/init** first")
 					 .setEphemeral(true)
 					 .queue();
 				return;
 			}
-
 			if (cmd.getCommandType() == CommandType.DYNAMIC_USER) {
-				final Entry modifiedUser = ((IDynamicUserCommand) getCommand(eventName)).execute(event, user);
-
+				final Entry modifiedUser = ((IDynamicUserCommand) cmd).execute(event, user, locale);
 				if (modifiedUser != null) {
 					IDatabase.INSTANCE.updateUser(modifiedUser);
 				}
 			} else {
-				((IStaticUserCommand) getCommand(eventName)).execute(event, user);
+				((IStaticUserCommand) cmd).execute(event, user, locale);
 			}
 		}
 	}

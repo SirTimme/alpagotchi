@@ -3,7 +3,6 @@ package bot.commands.member;
 import bot.commands.interfaces.IStaticUserCommand;
 import bot.models.Entry;
 import bot.utils.Env;
-import bot.utils.Language;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.User;

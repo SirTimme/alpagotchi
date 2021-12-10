@@ -2,7 +2,6 @@ package bot.commands.member;
 
 import bot.commands.interfaces.IDynamicUserCommand;
 import bot.models.Entry;
-import bot.utils.Emote;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;

@@ -157,7 +157,7 @@ public class Entry {
 
 	@BsonIgnore
 	public int getItem(String item) {
-		return this.inventory.getItem(item);
+		return this.inventory.getItemByName(item);
 	}
 
 	@BsonIgnore

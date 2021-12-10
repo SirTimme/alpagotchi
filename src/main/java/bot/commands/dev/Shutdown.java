@@ -11,16 +11,16 @@ import java.util.Locale;
 
 public class Shutdown implements IDevCommand {
 	@Override
-	public void execute(SlashCommandEvent event) {
-		final MessageFormat msg = new MessageFormat(Responses.get("shutdown", new Locale("en-us")));
+	public CommandData getCommandData() {
+		return new CommandData("shutdown", "Shutdowns Alpagotchi").setDefaultEnabled(false);
+	}
+
+	@Override
+	public void execute(SlashCommandEvent event, Locale locale) {
+		final MessageFormat msg = new MessageFormat(Responses.get("shutdown", locale));
 		final String content = msg.format(new Object[]{ event.getJDA().getSelfUser().getName() });
 
 		MessageService.reply(event, content, false);
 		event.getJDA().shutdown();
-	}
-
-	@Override
-	public CommandData getCommandData() {
-		return new CommandData("shutdown", "Shutdowns Alpagotchi").setDefaultEnabled(false);
 	}
 }

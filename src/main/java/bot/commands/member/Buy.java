@@ -4,7 +4,7 @@ import bot.commands.interfaces.IDynamicUserCommand;
 import bot.models.Entry;
 import bot.shop.Item;
 import bot.shop.ItemManager;
-import bot.utils.Emote;
+import bot.utils.MessageService;
 import bot.utils.Responses;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.interactions.commands.Command;
@@ -25,20 +25,20 @@ public class Buy implements IDynamicUserCommand {
 	}
 
 	@Override
-	public Entry execute(SlashCommandEvent event, Entry user) {
+	public Entry execute(final SlashCommandEvent event, final Entry user, final Locale locale) {
 		final int amount = (int) event.getOption("amount").getAsLong();
 		if (amount > 10) {
-			event.reply(Emote.REDCROSS + " You can buy max. 10 items at a time").setEphemeral(true).queue();
+			MessageService.reply(event, new MessageFormat(Responses.get("boughtTooManyItems", locale)), true);
 			return null;
 		}
 
 		final String itemChoice = event.getOption("item").getAsString();
-		final Item item = itemMan.getItem(itemChoice);
+		final Item item = itemMan.getItemByName(itemChoice);
 
 		final int price = amount * item.getPrice();
 		final int balance = user.getCurrency();
 		if (balance - price < 0) {
-			final MessageFormat msg = new MessageFormat(Responses.get("balanceInsufficient", new Locale("en-us")));
+			final MessageFormat msg = new MessageFormat(Responses.get("notEnoughFluffies", locale));
 			event.reply(msg.format(new Object[]{})).setEphemeral(true).queue();
 			return null;
 		}
@@ -46,7 +46,7 @@ public class Buy implements IDynamicUserCommand {
 		user.setCurrency(balance - price);
 		user.setItem(item.getName(), user.getItem(item.getName()) + amount);
 
-		final MessageFormat msg = new MessageFormat(Responses.get("buy", new Locale("en-us")));
+		final MessageFormat msg = new MessageFormat(Responses.get("buy", locale));
 		event.reply(msg.format(new Object[]{ amount, item.getName(), price })).queue();
 		return user;
 	}

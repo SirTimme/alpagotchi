@@ -1,7 +1,7 @@
 package bot.commands.member;
 
 import bot.commands.interfaces.IInfoCommand;
-import bot.commands.SlashCommandManager;
+import bot.commands.CommandManager;
 import bot.utils.Env;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.User;
@@ -11,9 +11,9 @@ import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import java.time.Instant;
 
 public class Help implements IInfoCommand {
-    private final SlashCommandManager slashCmdMan;
+    private final CommandManager slashCmdMan;
 
-    public Help(SlashCommandManager slashCmdMan) {
+    public Help(CommandManager slashCmdMan) {
         this.slashCmdMan = slashCmdMan;
     }
 

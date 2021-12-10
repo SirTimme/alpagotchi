@@ -12,8 +12,8 @@ import java.util.Locale;
 
 public class Count implements IDevCommand {
 	@Override
-	public void execute(SlashCommandEvent event) {
-		final MessageFormat msg = new MessageFormat(Responses.get("count", new Locale("en-us")));
+	public void execute(SlashCommandEvent event, final Locale locale) {
+		final MessageFormat msg = new MessageFormat(Responses.get("count", locale));
 		final String content = msg.format(new Object[]{ IDatabase.INSTANCE.getEntries(), event.getJDA().getGuilds().size() });
 
 		MessageService.reply(event, content, false);

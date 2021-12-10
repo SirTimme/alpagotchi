@@ -36,7 +36,7 @@ public class Init implements IStaticUserCommand {
                 )
                 .addField(
                         "__§2 Deletion of the UserID__",
-                        "If you change your mind about storing your UserID,\nuse the `/delete` command to delete your data at any time.",
+                        "If you change your mind about storing your UserID,\nuse the `/deletion` command to deletion your data at any time.",
                         false
                 )
                 .setFooter("Created by " + dev.getName(), dev.getAvatarUrl())

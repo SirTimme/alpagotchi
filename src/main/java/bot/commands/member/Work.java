@@ -2,7 +2,6 @@ package bot.commands.member;
 
 import bot.commands.interfaces.IDynamicUserCommand;
 import bot.models.Entry;
-import bot.utils.Language;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
@@ -16,6 +15,7 @@ import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 import static bot.utils.Emote.REDCROSS;
@@ -36,7 +36,7 @@ public class Work implements IDynamicUserCommand {
     }
 
     @Override
-    public Entry execute(SlashCommandEvent event, Entry user) {
+    public Entry execute(final SlashCommandEvent event, final Entry user, final Locale locale) {
         final long sleep = TimeUnit.MILLISECONDS.toMinutes(user.getSleep() - System.currentTimeMillis());
         if (sleep > 0) {
             event.reply(REDCROSS + " Your alpaca sleeps, it'll wake up in **" + sleep + " " + Language.handle(sleep, "minute", "minutes") + "**")

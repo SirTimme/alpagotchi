@@ -1,25 +1,33 @@
 package bot.buttons;
 
-import bot.buttons.delete.DeleteAccept;
-import bot.buttons.delete.DeleteCancel;
-import bot.buttons.initialize.InitAccept;
-import bot.buttons.initialize.InitCancel;
+import bot.buttons.deletion.DeleteAccept;
+import bot.buttons.deletion.DeleteCancel;
+import bot.buttons.initialization.InitAccept;
+import bot.buttons.initialization.InitCancel;
+import bot.db.IDatabase;
+import bot.models.GuildSettings;
 import net.dv8tion.jda.api.events.interaction.ButtonClickEvent;
 
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 public class ButtonManager {
-    private final Map<String, IButton> buttons = new HashMap<>();
+    private final Map<String, IButton> buttons;
 
     public ButtonManager() {
-        buttons.put("acceptInit", new InitAccept());
-        buttons.put("declineInit", new InitCancel());
-        buttons.put("acceptDelete", new DeleteAccept());
-        buttons.put("cancelDelete", new DeleteCancel());
+        this.buttons = new HashMap<>() {{
+            put("acceptInit", new InitAccept());
+            put("declineInit", new InitCancel());
+            put("acceptDelete", new DeleteAccept());
+            put("cancelDelete", new DeleteCancel());
+        }};
     }
 
     public void handle(ButtonClickEvent event) {
-        buttons.get(event.getComponentId()).execute(event, event.getUser().getIdLong());
+        final GuildSettings settings = IDatabase.INSTANCE.getGuildSettings(event.getGuild().getIdLong());
+        final Locale locale = settings.getLocale();
+
+        this.buttons.get(event.getComponentId()).execute(event, locale);
     }
 }

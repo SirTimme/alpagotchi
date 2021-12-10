@@ -1,7 +1,7 @@
 package bot.commands.dev;
 
 import bot.commands.interfaces.IDevCommand;
-import bot.commands.SlashCommandManager;
+import bot.commands.CommandManager;
 import bot.utils.CommandType;
 import bot.utils.Env;
 import bot.utils.MessageService;
@@ -15,17 +15,22 @@ import java.text.MessageFormat;
 import java.util.Locale;
 
 public class Update implements IDevCommand {
-	private final SlashCommandManager manager;
+	private final CommandManager manager;
 
-	public Update(SlashCommandManager manager) {
+	public Update(CommandManager manager) {
 		this.manager = manager;
 	}
 
 	@Override
-	public void execute(SlashCommandEvent event) {
+	public CommandData getCommandData() {
+		return new CommandData("update", "Refreshes all slashcommands").setDefaultEnabled(false);
+	}
+
+	@Override
+	public void execute(SlashCommandEvent event, Locale locale) {
 		final Guild guild = event.getGuild();
 		if (guild == null) {
-			MessageService.reply(event, new MessageFormat(Responses.get("guildOnly", new Locale("en-us"))), true);
+			MessageService.reply(event, new MessageFormat(Responses.get("guildOnly", locale)), true);
 			return;
 		}
 
@@ -39,20 +44,11 @@ public class Update implements IDevCommand {
 		});
 
 		guild.retrieveCommands()
-			 .queue(commands ->
-					commands.forEach(cmd ->
-							cmd.updatePrivileges(guild, CommandPrivilege.enableUser(Env.get("DEV_ID"))).queue()
-					)
-			 );
+			 .queue(commands -> commands.forEach(cmd -> cmd.updatePrivileges(guild, CommandPrivilege.enableUser(Env.get("DEV_ID"))).queue()));
 
-		final MessageFormat msg = new MessageFormat(Responses.get("update", new Locale("en-us")));
+		final MessageFormat msg = new MessageFormat(Responses.get("update", locale));
 		final String content = msg.format(new Object[]{ manager.getCommands().size() });
 
 		MessageService.reply(event, content, false);
-	}
-
-	@Override
-	public CommandData getCommandData() {
-		return new CommandData("update", "Refreshes all slashcommands").setDefaultEnabled(false);
 	}
 }

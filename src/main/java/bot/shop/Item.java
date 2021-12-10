@@ -10,7 +10,7 @@ public class Item {
 	private final String name;
 
 	/**
-	 * Constructor for initializing a new item
+	 * Constructor for a new item
 	 * @param name The display name of the item
 	 * @param price The cost of the item
 	 * @param saturation The saturation value of the item
