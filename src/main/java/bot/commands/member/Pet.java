@@ -10,7 +10,6 @@ import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import java.util.Arrays;
 import java.util.List;
 
-import static bot.utils.Emote.REDCROSS;
 import static net.dv8tion.jda.api.interactions.commands.OptionType.STRING;
 
 public class Pet implements IDynamicUserCommand {

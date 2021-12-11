@@ -43,14 +43,12 @@ public class Feed implements IDynamicUserCommand {
 		final int userItems = user.getItem(item.getName()) - itemAmount;
 		if (userItems < 0) {
 			event.reply(Emote.REDCROSS + " You don't own that many items").setEphemeral(true).queue();
-
 			return null;
 		}
 		final int oldValue = item.getStat().equals("hunger") ? user.getHunger() : user.getThirst();
 		final int itemSaturation = itemAmount * item.getSaturation();
 		if (oldValue + itemSaturation > 100) {
 			event.reply(Emote.REDCROSS + " You would overfeed your alpaca").setEphemeral(true).queue();
-
 			return null;
 		}
 

@@ -6,8 +6,6 @@ import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.components.selections.SelectionMenu;
 
-import static bot.utils.Emote.REDCROSS;
-
 public class Language implements IDevCommand {
 	@Override
 	public void execute(SlashCommandEvent event) {

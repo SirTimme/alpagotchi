@@ -3,6 +3,7 @@ package bot.commands.member;
 import bot.commands.interfaces.IStaticUserCommand;
 import bot.models.Entry;
 import bot.utils.Env;
+import bot.utils.Responses;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.User;
@@ -19,11 +20,8 @@ import java.io.File;
 import java.io.IOException;
 import java.time.Instant;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
-
-import static bot.utils.Emote.GREENTICK;
-import static bot.utils.Emote.REDCROSS;
 
 public class MyAlpaca implements IStaticUserCommand {
 	private final Map<String, BufferedImage> images = new HashMap<>();
@@ -44,7 +42,7 @@ public class MyAlpaca implements IStaticUserCommand {
 	}
 
 	@Override
-	public void execute(SlashCommandEvent event, Entry user) {
+	public void execute(final SlashCommandEvent event, final Entry user, final Locale locale) {
 		final ByteArrayOutputStream bytes = new ByteArrayOutputStream();
 		try {
 			ImageIO.write(createImage(user), "jpg", bytes);
@@ -57,8 +55,8 @@ public class MyAlpaca implements IStaticUserCommand {
 		final MessageEmbed embed = new EmbedBuilder()
 				.setTitle(user.getNickname())
 				.setDescription("_Have a llamazing day!_")
-				.addField("Work", checkCooldown(user.getWork()), true)
-				.addField("Sleep", checkCooldown(user.getSleep()), true)
+				.addField("Work", getCooldownMsg(user.getWorkAsMinutes(), locale), true)
+				.addField("Sleep", getCooldownMsg(user.getSleepAsMinutes(), locale), true)
 				.setThumbnail(event.getUser().getAvatarUrl())
 				.setFooter("Created by " + dev.getName(), dev.getAvatarUrl())
 				.setTimestamp(Instant.now())
@@ -124,14 +122,7 @@ public class MyAlpaca implements IStaticUserCommand {
 		}
 	}
 
-	private String checkCooldown(long cooldown) {
-		final long minutes = TimeUnit.MILLISECONDS.toMinutes(cooldown - System.currentTimeMillis());
-
-		if (minutes > 0) {
-			return REDCROSS + " " + minutes + " " + Language.handle(minutes, "minute", "minutes");
-		}
-		else {
-			return GREENTICK + " ready";
-		}
+	private String getCooldownMsg(final long minutes, final Locale locale) {
+		return minutes > 0 ? Responses.get("activeCooldown", locale) : Responses.get("inactiveCooldown", locale);
 	}
 }
