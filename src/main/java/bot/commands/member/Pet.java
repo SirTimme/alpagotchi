@@ -9,6 +9,7 @@ import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 
 import static net.dv8tion.jda.api.interactions.commands.OptionType.STRING;
 
@@ -16,7 +17,7 @@ public class Pet implements IDynamicUserCommand {
     private final List<String> spots = Arrays.asList("head", "tail", "leg", "neck", "back");
 
     @Override
-    public Entry execute(SlashCommandEvent event, Entry user) {
+    public Entry execute(final SlashCommandEvent event, final Entry user, final Locale locale) {
         final int joy = user.getJoy();
         if (joy == 100) {
             event.reply(REDCROSS + " The joy of your alpaca is already at the maximum")

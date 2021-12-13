@@ -1,17 +1,22 @@
 package bot.commands.member;
 
 import bot.commands.interfaces.IDevCommand;
+import bot.utils.MessageService;
+import bot.utils.Responses;
 import net.dv8tion.jda.api.entities.Emoji;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.components.selections.SelectionMenu;
 
+import java.text.MessageFormat;
+import java.util.Locale;
+
 public class Language implements IDevCommand {
 	@Override
-	public void execute(SlashCommandEvent event) {
+	public void execute(final SlashCommandEvent event, final Locale locale) {
 		final long ownerID = event.getGuild().getOwnerIdLong();
 		if (event.getUser().getIdLong() != ownerID) {
-			event.reply(REDCROSS + " Only the guild owner can change the bots language").setEphemeral(true).queue();
+			MessageService.reply(event, new MessageFormat(Responses.get("userNotOwner", locale)), true);
 			return;
 		}
 
@@ -21,10 +26,7 @@ public class Language implements IDevCommand {
 				.addOption("German", "lang_german", Emoji.fromMarkdown("\uD83C\uDDE9\uD83C\uDDEA"))
 				.build();
 
-		event.reply("Please select the language you want Alpagotchi to use on this server:")
-			 .setEphemeral(true)
-			 .addActionRow(menu)
-			 .queue();
+		MessageService.reply(event, new MessageFormat(Responses.get("selectLanguage", locale)), true, menu);
 	}
 
 	@Override

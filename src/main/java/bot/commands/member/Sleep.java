@@ -11,7 +11,7 @@ import static net.dv8tion.jda.api.interactions.commands.OptionType.INTEGER;
 public class Sleep implements IDynamicUserCommand {
     @Override
     public Entry execute(SlashCommandEvent event, Entry user) {
-        int energy = user.getEnergy();
+        final int energy = user.getEnergy();
 
         if (energy == 100) {
             event.reply(Emote.REDCROSS + " The energy of your alpaca is already at the maximum")
@@ -41,7 +41,7 @@ public class Sleep implements IDynamicUserCommand {
 
     @Override
     public CommandData getCommandData() {
-        return new CommandData("sleep", "Lets your alpaca sleep for the specified duration to regain energy")
+        return new CommandData("alpacaSleeping", "Lets your alpaca sleep for the specified duration to regain energy")
                 .addOptions(
                         new OptionData(INTEGER, "duration", "The duration in minutes", true)
                 );

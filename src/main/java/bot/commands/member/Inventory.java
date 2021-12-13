@@ -10,16 +10,17 @@ import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 
 import java.time.Instant;
+import java.util.Locale;
 
 public class Inventory implements IStaticUserCommand {
-    private final ItemManager itemMan;
+    private final ItemManager items;
 
-    public Inventory(ItemManager itemMan) {
-        this.itemMan = itemMan;
+    public Inventory(final ItemManager items) {
+        this.items = items;
     }
 
     @Override
-    public void execute(SlashCommandEvent event, Entry user) {
+    public void execute(final SlashCommandEvent event, final Entry user, final Locale locale) {
         final User dev = event.getJDA().getUserById(Env.get("DEV_ID"));
 
         final EmbedBuilder embed = new EmbedBuilder()
@@ -29,8 +30,8 @@ public class Inventory implements IStaticUserCommand {
                 .setFooter("Created by " + dev.getName(), dev.getAvatarUrl())
                 .setTimestamp(Instant.now());
 
-        itemMan.getItemsByStat("hunger")
-               .forEach(item -> embed.addField(
+        items.getItemsByStat("hunger")
+             .forEach(item -> embed.addField(
                        ":package: " + item.getName(),
                        "Quantity: **" + user.getItem(item.getName()) + "**",
                        true)
@@ -42,7 +43,7 @@ public class Inventory implements IStaticUserCommand {
                 false
         );
 
-        itemMan.getItemsByStat("thirst").forEach(item -> embed.addField(
+        items.getItemsByStat("thirst").forEach(item -> embed.addField(
                 ":package: " + item.getName(),
                 "Quantity: **" + user.getItem(item.getName()) + "**",
                 true)

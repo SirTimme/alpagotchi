@@ -18,17 +18,17 @@ import static net.dv8tion.jda.api.interactions.commands.OptionType.INTEGER;
 import static net.dv8tion.jda.api.interactions.commands.OptionType.STRING;
 
 public class Feed implements IDynamicUserCommand {
-	private final ItemManager itemMan;
+	private final ItemManager items;
 
-	public Feed(ItemManager itemMan) {
-		this.itemMan = itemMan;
+	public Feed(final ItemManager items) {
+		this.items = items;
 	}
 
 	@Override
 	public Entry execute(final SlashCommandEvent event, final Entry user, final Locale locale) {
 		final long remainingSleep = user.getSleepAsMinutes();
 		if (remainingSleep > 0) {
-			final MessageFormat msg = new MessageFormat(Responses.get("sleep", locale));
+			final MessageFormat msg = new MessageFormat(Responses.get("alpacaSleeping", locale));
 			MessageService.reply(event, msg.format(new Object[]{ remainingSleep }), true);
 			return null;
 		}
@@ -39,31 +39,28 @@ public class Feed implements IDynamicUserCommand {
 			return null;
 		}
 
-		final Item item = this.itemMan.getItemByName(event.getOption("item").getAsString());
-		final int userItems = user.getItem(item.getName()) - itemAmount;
-		if (userItems < 0) {
-			event.reply(Emote.REDCROSS + " You don't own that many items").setEphemeral(true).queue();
-			return null;
-		}
-		final int oldValue = item.getStat().equals("hunger") ? user.getHunger() : user.getThirst();
-		final int itemSaturation = itemAmount * item.getSaturation();
-		if (oldValue + itemSaturation > 100) {
-			event.reply(Emote.REDCROSS + " You would overfeed your alpaca").setEphemeral(true).queue();
+		final Item item = this.items.getItemByName(event.getOption("item").getAsString());
+		final int newItemAmount = user.getItem(item.getName()) - itemAmount;
+		if (newItemAmount < 0) {
+			MessageService.reply(event, new MessageFormat(Responses.get("notEnoughItems", locale)), true);
 			return null;
 		}
 
-		user.setItem(item.getName(), userItems);
+		final int oldValue = user.getStat(item.getStat());
+		final int saturation = itemAmount * item.getSaturation();
+		if (oldValue + saturation > 100) {
+			MessageService.reply(event, new MessageFormat(Responses.get("alpacaOverfeeded", locale)), true);
+			return null;
+		}
 
-		final String pattern;
-		if (item.getStat().equals("hunger")) {
-			user.setHunger(oldValue + itemSaturation);
-			pattern = Responses.get("eat", locale);
-		}
-		else {
-			user.setThirst(oldValue + itemSaturation);
-			pattern = Responses.get("drink", locale);
-		}
-		event.reply(new MessageFormat(pattern).format(new Object[]{ itemAmount, item.getName(), itemSaturation })).queue();
+		user.setItem(item.getName(), newItemAmount);
+		user.setStat(item.getStat(), oldValue + saturation);
+
+		final MessageFormat msg = new MessageFormat(Responses.get(item.getStat(), locale));
+		final String content = msg.format(new Object[]{ itemAmount, item.getName(), saturation });
+
+		MessageService.reply(event, content, true);
+
 		return user;
 	}
 

@@ -5,6 +5,7 @@ import net.dv8tion.jda.api.events.interaction.ButtonClickEvent;
 import net.dv8tion.jda.api.events.interaction.SelectionMenuEvent;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.interactions.components.Button;
+import net.dv8tion.jda.api.interactions.components.Component;
 
 import java.text.MessageFormat;
 import java.util.Collections;
@@ -39,10 +40,31 @@ public class MessageService {
 	 * @param event The slashcommand event to reply to
 	 * @param embed Sends an embed as a response
 	 * @param ephemeral If the message is sent ephemeral or not
-	 * @param buttons Adds buttons to the message
+	 * @param components Adds slashcommand components to the message
 	 */
-	public static void reply(final SlashCommandEvent event, final MessageEmbed embed, final boolean ephemeral, final Button... buttons) {
-		event.replyEmbeds(embed).setEphemeral(ephemeral).addActionRow(buttons).queue();
+	public static void reply(final SlashCommandEvent event, final MessageEmbed embed, final boolean ephemeral, final Component... components) {
+		event.replyEmbeds(embed).setEphemeral(ephemeral).addActionRow(components).queue();
+	}
+
+	/**
+	 * Convenience method for responding to a slashcommand interaction
+	 * @param event The slashcommand event to reply to
+	 * @param msg The bots' response to the user
+	 * @param ephemeral If the message is sent ephemeral or not
+	 * @param components Adds slashcommand components to the message
+	 */
+	public static void reply(final SlashCommandEvent event, final MessageFormat msg, final boolean ephemeral, final Component... components) {
+		event.reply(msg.format(new Object[]{})).setEphemeral(ephemeral).addActionRow(components).queue();
+	}
+
+	/**
+	 * Convenience method for responding to a slashcommand interaction
+	 * @param event The slashcommand event to reply to
+	 * @param embed Sends an embed as a response
+	 * @param ephemeral If the message is sent ephemeral or not
+	 */
+	public static void reply(final SlashCommandEvent event, final MessageEmbed embed, final boolean ephemeral) {
+		event.replyEmbeds(embed).setEphemeral(ephemeral).queue();
 	}
 
 	/**

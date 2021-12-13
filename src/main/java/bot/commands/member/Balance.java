@@ -13,12 +13,12 @@ import java.util.Locale;
 public class Balance implements IStaticUserCommand {
 	@Override
 	public CommandData getCommandData() {
-		return new CommandData("balance", "Shows your fluffy balance");
+		return new CommandData("currentBalance", "Shows your fluffy balance");
 	}
 
 	@Override
 	public void execute(SlashCommandEvent event, Entry user, Locale locale) {
-		final MessageFormat msg = new MessageFormat(Responses.get("balance", locale));
+		final MessageFormat msg = new MessageFormat(Responses.get("currentBalance", locale));
 		final String content = msg.format(new Object[]{ user.getCurrency() });
 
 		MessageService.reply(event, content, false);

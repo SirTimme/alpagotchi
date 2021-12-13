@@ -81,18 +81,22 @@ public class Entry {
 	}
 
 	@BsonIgnore
-	public void setHunger(int hunger) {
-		this.alpaca.setHunger(hunger);
-	}
-
-	@BsonIgnore
 	public int getThirst() {
 		return this.alpaca.getThirst();
 	}
 
 	@BsonIgnore
-	public void setThirst(int thirst) {
-		this.alpaca.setThirst(thirst);
+	public int getStat(final String stat){
+		 return stat.equals("hunger") ? this.alpaca.getHunger() : this.alpaca.getThirst();
+	}
+
+	@BsonIgnore
+	public void setStat(final String stat, final int newValue){
+		 if (stat.equals("hunger")) {
+			 this.alpaca.setHunger(newValue);
+		 } else {
+			 this.alpaca.setThirst(newValue);
+		 }
 	}
 
 	@BsonIgnore

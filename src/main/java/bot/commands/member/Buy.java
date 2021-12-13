@@ -38,7 +38,7 @@ public class Buy implements IDynamicUserCommand {
 		final int price = amount * item.getPrice();
 		final int balance = user.getCurrency();
 		if (balance - price < 0) {
-			final MessageFormat msg = new MessageFormat(Responses.get("notEnoughFluffies", locale));
+			final MessageFormat msg = new MessageFormat(Responses.get("insufficientBalance", locale));
 			event.reply(msg.format(new Object[]{})).setEphemeral(true).queue();
 			return null;
 		}
@@ -46,14 +46,14 @@ public class Buy implements IDynamicUserCommand {
 		user.setCurrency(balance - price);
 		user.setItem(item.getName(), user.getItem(item.getName()) + amount);
 
-		final MessageFormat msg = new MessageFormat(Responses.get("buy", locale));
+		final MessageFormat msg = new MessageFormat(Responses.get("buySuccessful", locale));
 		event.reply(msg.format(new Object[]{ amount, item.getName(), price })).queue();
 		return user;
 	}
 
 	@Override
 	public CommandData getCommandData() {
-		return new CommandData("buy", "Buys your alpaca items from the shop")
+		return new CommandData("buySuccessful", "Buys your alpaca items from the shop")
 				.addOptions(
 						new OptionData(STRING, "item", "The item to buy", true)
 								.addChoices(

@@ -2,6 +2,8 @@ package bot.commands.member;
 
 import bot.commands.interfaces.IDynamicUserCommand;
 import bot.models.Entry;
+import bot.utils.MessageService;
+import bot.utils.Responses;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
@@ -13,12 +15,11 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.lang.reflect.Type;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
-
-import static bot.utils.Emote.REDCROSS;
 
 public class Work implements IDynamicUserCommand {
     private static final Logger LOGGER = LoggerFactory.getLogger(Work.class);
@@ -28,7 +29,6 @@ public class Work implements IDynamicUserCommand {
         try {
             final BufferedReader reader = new BufferedReader(new FileReader("src/main/resources/data/messages.json"));
             final Type type = new TypeToken<List<String>>() {}.getType();
-
             json = new Gson().fromJson(reader, type);
         } catch (IOException error) {
             LOGGER.error(error.getMessage());
@@ -37,11 +37,10 @@ public class Work implements IDynamicUserCommand {
 
     @Override
     public Entry execute(final SlashCommandEvent event, final Entry user, final Locale locale) {
-        final long sleep = TimeUnit.MILLISECONDS.toMinutes(user.getSleep() - System.currentTimeMillis());
+        final long sleep = user.getSleepAsMinutes();
         if (sleep > 0) {
-            event.reply(REDCROSS + " Your alpaca sleeps, it'll wake up in **" + sleep + " " + Language.handle(sleep, "minute", "minutes") + "**")
-                 .setEphemeral(true)
-                 .queue();
+            final MessageFormat msg = new MessageFormat(Responses.get("alpacaSleeping", locale));
+            MessageService.reply(event, msg.format(new Object[]{ sleep }), true);
             return null;
         }
 
@@ -79,8 +78,7 @@ public class Work implements IDynamicUserCommand {
         user.setJoy(user.getJoy() - joyCost);
         user.setWork(System.currentTimeMillis() + 1000L * 60 * 20);
 
-        event.reply("⛏ " + message + " **Fluffies + " + fluffies + ", Energy - " + energyCost + ", Joy - " + joyCost + "**")
-             .queue();
+        event.reply("⛏ " + message + " **Fluffies + " + fluffies + ", Energy - " + energyCost + ", Joy - " + joyCost + "**").queue();
 
         return user;
     }

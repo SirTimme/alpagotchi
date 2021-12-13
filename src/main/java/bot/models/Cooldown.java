@@ -11,7 +11,7 @@ public class Cooldown {
     private long work;
 
     @BsonCreator
-    public Cooldown(@BsonProperty(value = "sleep") final long sleep,
+    public Cooldown(@BsonProperty(value = "alpacaSleeping") final long sleep,
                     @BsonProperty(value = "work") final long work
     ) {
         this.sleep = sleep;

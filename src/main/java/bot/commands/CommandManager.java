@@ -9,8 +9,11 @@ import bot.models.Entry;
 import bot.models.GuildSettings;
 import bot.shop.ItemManager;
 import bot.utils.CommandType;
+import bot.utils.MessageService;
+import bot.utils.Responses;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 
+import java.text.MessageFormat;
 import java.util.*;
 
 public class CommandManager {
@@ -21,19 +24,19 @@ public class CommandManager {
 
 		commands.put("ping", new Ping());
 		commands.put("init", new Init());
-		commands.put("balance", new Balance());
-		commands.put("buy", new Buy(items));
+		commands.put("currentBalance", new Balance());
+		commands.put("buySuccessful", new Buy(items));
 		commands.put("count", new Count());
 		commands.put("deletion", new Delete());
 		commands.put("feed", new Feed(items));
-		commands.put("gift", new Gift(items));
+		commands.put("gift", new Gift());
 		commands.put("image", new Image());
 		commands.put("work", new Work());
 		commands.put("shutdown", new Shutdown());
 		commands.put("myalpaca", new MyAlpaca());
 		commands.put("nick", new Nick());
 		commands.put("help", new Help(this));
-		commands.put("sleep", new Sleep());
+		commands.put("alpacaSleeping", new Sleep());
 		commands.put("outfit", new Outfit());
 		commands.put("pet", new Pet());
 		commands.put("inventory", new Inventory(items));
@@ -57,9 +60,7 @@ public class CommandManager {
 		else {
 			final Entry user = IDatabase.INSTANCE.getUser(event.getUser().getIdLong());
 			if (user == null && !event.getName().equals("init")) {
-				event.reply(REDCROSS + " You don't own an alpaca, use **/init** first")
-					 .setEphemeral(true)
-					 .queue();
+				MessageService.reply(event, new MessageFormat(Responses.get("alpacaNotOwned", locale)), true);
 				return;
 			}
 			if (cmd.getCommandType() == CommandType.DYNAMIC_USER) {
