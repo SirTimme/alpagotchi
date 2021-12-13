@@ -12,6 +12,7 @@ import bot.utils.CommandType;
 import bot.utils.MessageService;
 import bot.utils.Responses;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 
 import java.text.MessageFormat;
 import java.util.*;
@@ -48,34 +49,39 @@ public class CommandManager {
 	public void handle(SlashCommandEvent event) {
 		final GuildSettings settings = IDatabase.INSTANCE.getGuildSettings(event.getGuild().getIdLong());
 		final Locale locale = settings.getLocale();
-
 		final ISlashCommand cmd = getCommand(event.getName());
 
-		if (cmd.getCommandType() == CommandType.INFO) {
-			((IInfoCommand) cmd).execute(event, locale);
-		}
-		else if (cmd.getCommandType() == CommandType.DEV) {
-			((IDevCommand) cmd).execute(event, locale);
-		}
-		else {
-			final Entry user = IDatabase.INSTANCE.getUser(event.getUser().getIdLong());
-			if (user == null && !event.getName().equals("init")) {
-				MessageService.reply(event, new MessageFormat(Responses.get("alpacaNotOwned", locale)), true);
-				return;
-			}
-			if (cmd.getCommandType() == CommandType.DYNAMIC_USER) {
-				final Entry modifiedUser = ((IDynamicUserCommand) cmd).execute(event, user, locale);
-				if (modifiedUser != null) {
-					IDatabase.INSTANCE.updateUser(modifiedUser);
+		switch (cmd.getCommandType()) {
+			case DEV -> ((IDevCommand) cmd).execute(event, locale);
+			case INFO -> ((IInfoCommand) cmd).execute(event, locale);
+			default -> {
+				final Entry user = IDatabase.INSTANCE.getUser(event.getUser().getIdLong());
+				if (user == null && !event.getName().equals("init")) {
+					MessageService.reply(event, new MessageFormat(Responses.get("alpacaNotOwned", locale)), true);
+					return;
 				}
-			} else {
-				((IStaticUserCommand) cmd).execute(event, user, locale);
+				if (cmd.getCommandType() == CommandType.DYNAMIC_USER) {
+					final Entry modifiedUser = ((IDynamicUserCommand) cmd).execute(event, user, locale);
+					if (modifiedUser != null) {
+						IDatabase.INSTANCE.updateUser(modifiedUser);
+					}
+				} else {
+					((IStaticUserCommand) cmd).execute(event, user, locale);
+				}
 			}
 		}
 	}
 
 	public Collection<ISlashCommand> getCommands() {
 		return commands.values();
+	}
+
+	public List<CommandData> getCommandDataByType(final CommandType... types) {
+		return this.commands.values()
+							.stream()
+							.filter(cmd -> Arrays.asList(types).contains(cmd.getCommandType()))
+							.map(ISlashCommand::getCommandData)
+							.toList();
 	}
 
 	public String getCommandsString() {
