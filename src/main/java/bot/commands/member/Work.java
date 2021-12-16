@@ -19,7 +19,6 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.concurrent.TimeUnit;
 
 public class Work implements IDynamicUserCommand {
     private static final Logger LOGGER = LoggerFactory.getLogger(Work.class);
@@ -44,11 +43,11 @@ public class Work implements IDynamicUserCommand {
             return null;
         }
 
-        final long work = TimeUnit.MILLISECONDS.toMinutes(user.getWork() - System.currentTimeMillis());
+        final long work = user.getWorkAsMinutes();
         if (work > 0) {
-            event.reply(REDCROSS + " Your alpaca has to rest **" + work + " " + Language.handle(work, "minute", "minutes") + "** to work again")
-                 .setEphemeral(true)
-                 .queue();
+            final MessageFormat msg = new MessageFormat(Responses.get("alpacaAlreadyWorked", locale));
+            final String content = msg.format(new Object[]{ work });
+            MessageService.reply(event, content, true);
             return null;
         }
 

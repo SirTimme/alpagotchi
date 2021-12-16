@@ -13,6 +13,7 @@ import net.dv8tion.jda.api.interactions.commands.privileges.CommandPrivilege;
 
 import java.text.MessageFormat;
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static bot.utils.CommandType.*;
@@ -37,10 +38,10 @@ public class Update implements IDevCommand {
 			return;
 		}
 
-		/* event.getJDA()
+		event.getJDA()
 			 .updateCommands()
 			 .addCommands(this.commands.getCommandDataByTypes(STATIC_USER, INFO, DYNAMIC_USER))
-			 .queue(); */
+			 .queue();
 
 		guild.updateCommands()
 			 .addCommands(this.commands.getCommandDataByTypes(DEV))
@@ -48,11 +49,13 @@ public class Update implements IDevCommand {
 
 		final MessageFormat msg = new MessageFormat(Responses.get("update", locale));
 		final String content = msg.format(new Object[]{ this.commands.getCommands().size() });
-
 		MessageService.reply(event, content, false);
 	}
 
 	private Map<String, Collection<? extends CommandPrivilege>> createMap(final List<Command> commands) {
-		return commands.stream().collect(Collectors.toMap(Command::getId, x -> List.of(CommandPrivilege.enableUser(Env.get("DEV_ID")))));
+		final CommandPrivilege privilege = CommandPrivilege.enableUser(Env.get("DEV_ID"));
+		final Function<Command, List<CommandPrivilege>> cmdPrivileges = cmd -> List.of(privilege);
+
+		return commands.stream().collect(Collectors.toMap(Command::getId, cmdPrivileges));
 	}
 }

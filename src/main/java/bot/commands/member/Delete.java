@@ -14,7 +14,7 @@ import java.util.Locale;
 public class Delete implements IStaticUserCommand {
 	@Override
 	public CommandData getCommandData() {
-		return new CommandData("deletion", "Deletes your personal data");
+		return new CommandData("delete", "Deletes your personal data");
 	}
 
 	@Override
