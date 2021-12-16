@@ -33,7 +33,7 @@ public class Buy implements IDynamicUserCommand {
 		}
 
 		final String itemChoice = event.getOption("item").getAsString();
-		final Item item = itemMan.getItemByName(itemChoice);
+		final Item item = this.itemMan.getItemByName(itemChoice);
 
 		final int price = amount * item.getPrice();
 		final int balance = user.getCurrency();

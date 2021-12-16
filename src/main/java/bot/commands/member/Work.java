@@ -29,7 +29,7 @@ public class Work implements IDynamicUserCommand {
         try {
             final BufferedReader reader = new BufferedReader(new FileReader("src/main/resources/data/messages.json"));
             final Type type = new TypeToken<List<String>>() {}.getType();
-            json = new Gson().fromJson(reader, type);
+            this.json = new Gson().fromJson(reader, type);
         } catch (IOException error) {
             LOGGER.error(error.getMessage());
         }
@@ -89,6 +89,6 @@ public class Work implements IDynamicUserCommand {
     }
 
     private String getRandomMessage() {
-        return json.get((int) (Math.random() * json.size()));
+        return this.json.get((int) (Math.random() * this.json.size()));
     }
 }

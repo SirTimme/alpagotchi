@@ -34,7 +34,7 @@ public class MyAlpaca implements IStaticUserCommand {
 			for (File file : folder.listFiles()) {
 				final String name = file.getName().split("\\.")[0];
 
-				images.put(name, ImageIO.read(file));
+				this.images.put(name, ImageIO.read(file));
 			}
 		} catch (IOException error) {
 			LOGGER.error(error.getMessage());
@@ -77,7 +77,7 @@ public class MyAlpaca implements IStaticUserCommand {
 		final int energy = user.getEnergy();
 		final int joy = user.getJoy();
 
-		final BufferedImage background = images.get(user.getOutfit());
+		final BufferedImage background = this.images.get(user.getOutfit());
 		final BufferedImage img = new BufferedImage(background.getWidth(), background.getHeight(), BufferedImage.TYPE_INT_RGB);
 
 		final Graphics graphics = img.createGraphics();
@@ -107,7 +107,7 @@ public class MyAlpaca implements IStaticUserCommand {
 	}
 
 	private Color getValueColor(int value) {
-		return value == 100 ? Color.GREEN : colors[value / 20];
+		return value == 100 ? Color.GREEN : this.colors[value / 20];
 	}
 
 	private int getPosition(int value, String position) {

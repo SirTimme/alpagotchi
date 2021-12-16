@@ -23,27 +23,27 @@ public class CommandManager {
 	public CommandManager() {
 		final ItemManager items = new ItemManager();
 
-		commands.put("ping", new Ping());
-		commands.put("init", new Init());
-		commands.put("currentBalance", new Balance());
-		commands.put("buySuccessful", new Buy(items));
-		commands.put("count", new Count());
-		commands.put("deletion", new Delete());
-		commands.put("feed", new Feed(items));
-		commands.put("gift", new Gift());
-		commands.put("image", new Image());
-		commands.put("work", new Work());
-		commands.put("shutdown", new Shutdown());
-		commands.put("myalpaca", new MyAlpaca());
-		commands.put("nick", new Nick());
-		commands.put("help", new Help(this));
-		commands.put("alpacaSleeping", new Sleep());
-		commands.put("outfit", new Outfit());
-		commands.put("pet", new Pet());
-		commands.put("inventory", new Inventory(items));
-		commands.put("shop", new Shop(items));
-		commands.put("update", new Update(this));
-		commands.put("language", new Language());
+		this.commands.put("ping", new Ping());
+		this.commands.put("init", new Init());
+		this.commands.put("currentBalance", new Balance());
+		this.commands.put("buySuccessful", new Buy(items));
+		this.commands.put("count", new Count());
+		this.commands.put("deletion", new Delete());
+		this.commands.put("feed", new Feed(items));
+		this.commands.put("gift", new Gift());
+		this.commands.put("image", new Image());
+		this.commands.put("work", new Work());
+		this.commands.put("shutdown", new Shutdown());
+		this.commands.put("myalpaca", new MyAlpaca());
+		this.commands.put("nick", new Nick());
+		this.commands.put("help", new Help(this));
+		this.commands.put("alpacaSleeping", new Sleep());
+		this.commands.put("outfit", new Outfit());
+		this.commands.put("pet", new Pet());
+		this.commands.put("inventory", new Inventory(items));
+		this.commands.put("shop", new Shop(items));
+		this.commands.put("update", new Update(this));
+		this.commands.put("language", new Language());
 	}
 
 	public void handle(SlashCommandEvent event) {
@@ -73,10 +73,10 @@ public class CommandManager {
 	}
 
 	public Collection<ISlashCommand> getCommands() {
-		return commands.values();
+		return this.commands.values();
 	}
 
-	public List<CommandData> getCommandDataByType(final CommandType... types) {
+	public List<CommandData> getCommandDataByTypes(final CommandType... types) {
 		return this.commands.values()
 							.stream()
 							.filter(cmd -> Arrays.asList(types).contains(cmd.getCommandType()))
@@ -87,15 +87,15 @@ public class CommandManager {
 	public String getCommandsString() {
 		StringBuilder sb = new StringBuilder();
 
-		commands.keySet()
-				.stream()
-				.filter(cmd -> getCommand(cmd).getCommandType() != CommandType.DEV)
-				.forEach(cmd -> sb.append("`").append(cmd).append("` "));
+		this.commands.keySet()
+					 .stream()
+					 .filter(cmd -> getCommand(cmd).getCommandType() != CommandType.DEV)
+					 .forEach(cmd -> sb.append("`").append(cmd).append("` "));
 
 		return sb.toString();
 	}
 
 	private ISlashCommand getCommand(String eventName) {
-		return commands.get(eventName);
+		return this.commands.get(eventName);
 	}
 }

@@ -47,7 +47,7 @@ public class Inventory {
 	 * @return The items amount
 	 */
 	public int getItemByName(String name) {
-		return items.get(name);
+		return this.items.get(name);
 	}
 
 	/**
@@ -64,6 +64,6 @@ public class Inventory {
 	 * @param newValue The new amount of the item
 	 */
 	public void setItem(String item, int newValue) {
-		items.replace(item, newValue);
+		this.items.replace(item, newValue);
 	}
 }

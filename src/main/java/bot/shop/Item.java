@@ -36,7 +36,7 @@ public class Item {
 	 * @return the price
 	 */
 	public int getPrice() {
-		return price;
+		return this.price;
 	}
 
 	/**
@@ -44,7 +44,7 @@ public class Item {
 	 * @return the saturation value
 	 */
 	public int getSaturation() {
-		return saturation;
+		return this.saturation;
 	}
 
 	/**
@@ -52,6 +52,6 @@ public class Item {
 	 * @return the affecting stat
 	 */
 	public String getStat() {
-		return stat;
+		return this.stat;
 	}
 }

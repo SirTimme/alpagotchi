@@ -11,6 +11,7 @@ import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 
 import java.time.Instant;
 import java.util.Comparator;
+import java.util.Locale;
 
 public class Shop implements IInfoCommand {
     private final ItemManager itemMan;
@@ -20,7 +21,7 @@ public class Shop implements IInfoCommand {
     }
 
     @Override
-    public void execute(SlashCommandEvent event) {
+    public void execute(final SlashCommandEvent event, final Locale locale) {
         final User dev = event.getJDA().getUserById(Env.get("DEV_ID"));
 
         final EmbedBuilder embed = new EmbedBuilder()
@@ -30,22 +31,23 @@ public class Shop implements IInfoCommand {
                 .addField("__**:meat_on_bone: Hunger items**__", "These items are used to fill up the hunger of your alpaca", false)
                 .setTimestamp(Instant.now());
 
-        itemMan.getItemsByStat("hunger")
-               .stream()
-               .sorted(Comparator.comparingInt(Item::getPrice))
-               .forEach(item -> embed.addField(
+        this.itemMan.getItemsByStat("hunger")
+                    .stream()
+                    .sorted(Comparator.comparingInt(Item::getPrice))
+                    .forEach(item -> embed.addField(
                        ":package: " + item.getName(),
                        "Saturation: " + item.getSaturation() + "\nPrice: " + item.getPrice(),
-                       true)
+                       true
+                    )
                );
 
         embed.addBlankField(false)
              .addField("__**:beer: Thirst items**__", "Following items replenish the thirst of your alpaca", false);
 
-        itemMan.getItemsByStat("thirst")
-               .stream()
-               .sorted(Comparator.comparingInt(Item::getPrice))
-               .forEach(item -> embed.addField(
+        this.itemMan.getItemsByStat("thirst")
+                    .stream()
+                    .sorted(Comparator.comparingInt(Item::getPrice))
+                    .forEach(item -> embed.addField(
                        ":package: " + item.getName(),
                        "Saturation: " + item.getSaturation() + "\nPrice: " + item.getPrice(),
                        true)

@@ -37,17 +37,17 @@ public class Update implements IDevCommand {
 			return;
 		}
 
-		event.getJDA()
+		/* event.getJDA()
 			 .updateCommands()
-			 .addCommands(this.commands.getCommandDataByType(STATIC_USER, INFO, DYNAMIC_USER))
-			 .queue();
+			 .addCommands(this.commands.getCommandDataByTypes(STATIC_USER, INFO, DYNAMIC_USER))
+			 .queue(); */
 
 		guild.updateCommands()
-			 .addCommands(this.commands.getCommandDataByType(DEV))
+			 .addCommands(this.commands.getCommandDataByTypes(DEV))
 			 .queue(created -> guild.updateCommandPrivileges(createMap(created)).queue());
 
 		final MessageFormat msg = new MessageFormat(Responses.get("update", locale));
-		final String content = msg.format(new Object[]{ commands.getCommands().size() });
+		final String content = msg.format(new Object[]{ this.commands.getCommands().size() });
 
 		MessageService.reply(event, content, false);
 	}

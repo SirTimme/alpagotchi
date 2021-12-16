@@ -6,13 +6,14 @@ import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 
+import java.util.Locale;
+
 import static net.dv8tion.jda.api.interactions.commands.OptionType.INTEGER;
 
 public class Sleep implements IDynamicUserCommand {
     @Override
-    public Entry execute(SlashCommandEvent event, Entry user) {
+    public Entry execute(final SlashCommandEvent event, final Entry user, final Locale locale) {
         final int energy = user.getEnergy();
-
         if (energy == 100) {
             event.reply(Emote.REDCROSS + " The energy of your alpaca is already at the maximum")
                  .setEphemeral(true)
