@@ -11,6 +11,6 @@ import java.util.Locale;
 public class InitCancel implements IButton {
     @Override
     public void execute(final ButtonClickEvent event, final Locale locale) {
-        MessageService.edit(event, new MessageFormat(Responses.get("initCancelled", locale)));
+        MessageService.editReply(event, new MessageFormat(Responses.get("initCancelled", locale)));
     }
 }

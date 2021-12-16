@@ -11,6 +11,6 @@ import java.util.Locale;
 public class DeleteCancel implements IButton {
     @Override
     public void execute(ButtonClickEvent event, final Locale locale) {
-        MessageService.edit(event, new MessageFormat(Responses.get("dataCancelled", locale)));
+        MessageService.editReply(event, new MessageFormat(Responses.get("dataCancelled", locale)));
     }
 }

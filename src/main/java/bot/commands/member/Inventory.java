@@ -1,9 +1,10 @@
 package bot.commands.member;
 
-import bot.commands.interfaces.IStaticUserCommand;
+import bot.commands.UserCommand;
 import bot.models.Entry;
 import bot.shop.ItemManager;
 import bot.utils.Env;
+import bot.utils.MessageService;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
@@ -12,7 +13,7 @@ import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import java.time.Instant;
 import java.util.Locale;
 
-public class Inventory implements IStaticUserCommand {
+public class Inventory extends UserCommand {
     private final ItemManager items;
 
     public Inventory(final ItemManager items) {
@@ -20,7 +21,7 @@ public class Inventory implements IStaticUserCommand {
     }
 
     @Override
-    public void execute(final SlashCommandEvent event, final Entry user, final Locale locale) {
+    public void execute(final SlashCommandEvent event, final Locale locale, final Entry user) {
         final User dev = event.getJDA().getUserById(Env.get("DEV_ID"));
 
         final EmbedBuilder embed = new EmbedBuilder()
@@ -30,12 +31,11 @@ public class Inventory implements IStaticUserCommand {
                 .setFooter("Created by " + dev.getName(), dev.getAvatarUrl())
                 .setTimestamp(Instant.now());
 
-        this.items.getItemsByStat("hunger")
-                  .forEach(item -> embed.addField(
-                       ":package: " + item.getName(),
-                       "Quantity: **" + user.getItem(item.getName()) + "**",
-                       true)
-               );
+        this.items.getItemsByStat("hunger").forEach(item -> embed.addField(
+                ":package: " + item.getName(),
+                "Quantity: **" + user.getItem(item.getName()) + "**",
+                true)
+        );
 
         embed.addBlankField(false).addField(
                 "__**:beer: Thirst items**__",
@@ -49,7 +49,7 @@ public class Inventory implements IStaticUserCommand {
                 true)
         );
 
-        event.replyEmbeds(embed.build()).queue();
+        MessageService.queueReply(event, embed.build(), false);
     }
 
     @Override

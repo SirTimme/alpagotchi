@@ -1,6 +1,6 @@
 package bot.commands.member;
 
-import bot.commands.interfaces.IStaticUserCommand;
+import bot.commands.UserCommand;
 import bot.models.Entry;
 import bot.utils.Env;
 import bot.utils.MessageService;
@@ -16,17 +16,19 @@ import java.text.MessageFormat;
 import java.time.Instant;
 import java.util.Locale;
 
-public class Init implements IStaticUserCommand {
+public class Init extends UserCommand {
     @Override
-    public void execute(final SlashCommandEvent event, final Entry user, final Locale locale) {
+    public void execute(final SlashCommandEvent event, final Locale locale, final Entry user) {
         if (user != null) {
-            MessageService.reply(event, new MessageFormat(Responses.get("alpacaAlreadyOwned", locale)), true);
+            final MessageFormat msg = new MessageFormat(Responses.get("alpacaAlreadyOwned", locale));
+
+            MessageService.queueReply(event, msg, true);
             return;
         }
 
         final User dev = event.getJDA().getUserById(Env.get("DEV_ID"));
-        final Button accept = Button.success("acceptInit", "Accept");
-        final Button cancel = Button.danger("declineInit", "Decline");
+        final Button btnAccept = Button.success("acceptInit", "Accept");
+        final Button btnCancel = Button.danger("declineInit", "Decline");
 
         final MessageEmbed embed = new EmbedBuilder()
                 .setTitle(Responses.get("userInformation", locale))
@@ -38,7 +40,7 @@ public class Init implements IStaticUserCommand {
                 .setTimestamp(Instant.now())
                 .build();
 
-        MessageService.reply(event, embed, true, accept, cancel);
+        MessageService.queueReply(event, embed, true, btnAccept, btnCancel);
     }
 
     @Override

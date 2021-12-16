@@ -1,8 +1,9 @@
 package bot.commands.member;
 
-import bot.commands.interfaces.IStaticUserCommand;
+import bot.commands.UserCommand;
 import bot.models.Entry;
 import bot.utils.Env;
+import bot.utils.MessageService;
 import bot.utils.Responses;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
@@ -23,7 +24,7 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
-public class MyAlpaca implements IStaticUserCommand {
+public class MyAlpaca extends UserCommand {
 	private final Map<String, BufferedImage> images = new HashMap<>();
 	private static final Logger LOGGER = LoggerFactory.getLogger(MyAlpaca.class);
 	private final Color[] colors = { Color.BLACK, Color.RED, Color.ORANGE, Color.YELLOW, Color.GREEN };
@@ -42,7 +43,7 @@ public class MyAlpaca implements IStaticUserCommand {
 	}
 
 	@Override
-	public void execute(final SlashCommandEvent event, final Entry user, final Locale locale) {
+	public void execute(final SlashCommandEvent event, final Locale locale, final Entry user) {
 		final ByteArrayOutputStream bytes = new ByteArrayOutputStream();
 		try {
 			ImageIO.write(createImage(user), "jpg", bytes);
@@ -63,7 +64,7 @@ public class MyAlpaca implements IStaticUserCommand {
 				.setImage("attachment://alpagotchi.jpg")
 				.build();
 
-		event.replyEmbeds(embed).addFile(bytes.toByteArray(), "alpagotchi.jpg").queue();
+		MessageService.queueReply(event, embed, bytes.toByteArray(),false);
 	}
 
 	@Override

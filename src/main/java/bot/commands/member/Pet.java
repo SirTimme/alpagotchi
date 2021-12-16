@@ -1,6 +1,7 @@
 package bot.commands.member;
 
-import bot.commands.interfaces.IDynamicUserCommand;
+import bot.commands.UserCommand;
+import bot.db.IDatabase;
 import bot.models.Entry;
 import bot.utils.MessageService;
 import bot.utils.Responses;
@@ -16,15 +17,17 @@ import java.util.Locale;
 
 import static net.dv8tion.jda.api.interactions.commands.OptionType.STRING;
 
-public class Pet implements IDynamicUserCommand {
+public class Pet extends UserCommand {
     private final List<String> spots = Arrays.asList("head", "tail", "leg", "neck", "back");
 
     @Override
-    public Entry execute(final SlashCommandEvent event, final Entry user, final Locale locale) {
+    public void execute(final SlashCommandEvent event, final Locale locale, final Entry user) {
         final int joy = user.getJoy();
         if (joy == 100) {
-            MessageService.reply(event, new MessageFormat(Responses.get("joyAtMaximum", locale)), true);
-            return null;
+            final MessageFormat msg = new MessageFormat(Responses.get("joyAtMaximum", locale));
+
+            MessageService.queueReply(event, msg, true);
+            return;
         }
 
         final String favouriteSpot = this.spots.get((int) (Math.random() * 5));
@@ -44,8 +47,7 @@ public class Pet implements IDynamicUserCommand {
         }
 
         user.setJoy(joy + newJoy);
-
-        return user;
+        IDatabase.INSTANCE.updateUser(user);
     }
 
     @Override

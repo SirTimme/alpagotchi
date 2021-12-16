@@ -1,7 +1,8 @@
 package bot.commands.dev;
 
-import bot.commands.interfaces.IDevCommand;
+import bot.commands.DevCommand;
 import bot.commands.CommandManager;
+import bot.models.Entry;
 import bot.utils.Env;
 import bot.utils.MessageService;
 import bot.utils.Responses;
@@ -18,7 +19,7 @@ import java.util.stream.Collectors;
 
 import static bot.utils.CommandType.*;
 
-public class Update implements IDevCommand {
+public class Update extends DevCommand {
 	private final CommandManager commands;
 
 	public Update(CommandManager commands) {
@@ -31,16 +32,16 @@ public class Update implements IDevCommand {
 	}
 
 	@Override
-	public void execute(final SlashCommandEvent event, final Locale locale) {
+	public void execute(final SlashCommandEvent event, final Locale locale, final Entry user) {
 		final Guild guild = event.getGuild();
 		if (guild == null) {
-			MessageService.reply(event, new MessageFormat(Responses.get("guildOnly", locale)), true);
+			MessageService.queueReply(event, new MessageFormat(Responses.get("guildOnly", locale)), true);
 			return;
 		}
 
 		event.getJDA()
 			 .updateCommands()
-			 .addCommands(this.commands.getCommandDataByTypes(STATIC_USER, INFO, DYNAMIC_USER))
+			 .addCommands(this.commands.getCommandDataByTypes(USER, INFO))
 			 .queue();
 
 		guild.updateCommands()
@@ -49,7 +50,8 @@ public class Update implements IDevCommand {
 
 		final MessageFormat msg = new MessageFormat(Responses.get("update", locale));
 		final String content = msg.format(new Object[]{ this.commands.getCommands().size() });
-		MessageService.reply(event, content, false);
+
+		MessageService.queueReply(event, content, false);
 	}
 
 	private Map<String, Collection<? extends CommandPrivilege>> createMap(final List<Command> commands) {

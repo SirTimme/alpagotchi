@@ -10,6 +10,6 @@ import java.util.Locale;
 public class English implements IChoice {
 	@Override
 	public void execute(final SelectionMenuEvent event) {
-		MessageService.edit(event, new MessageFormat(Responses.get("language", new Locale("en"))));
+		MessageService.editReply(event, new MessageFormat(Responses.get("language", new Locale("en"))));
 	}
 }

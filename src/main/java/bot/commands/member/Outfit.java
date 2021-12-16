@@ -1,6 +1,7 @@
 package bot.commands.member;
 
-import bot.commands.interfaces.IDynamicUserCommand;
+import bot.commands.UserCommand;
+import bot.db.IDatabase;
 import bot.models.Entry;
 import bot.utils.MessageService;
 import bot.utils.Responses;
@@ -14,17 +15,18 @@ import java.util.Locale;
 
 import static net.dv8tion.jda.api.interactions.commands.OptionType.STRING;
 
-public class Outfit implements IDynamicUserCommand {
+public class Outfit extends UserCommand {
 	@Override
-	public Entry execute(final SlashCommandEvent event, final Entry user, final Locale locale) {
+	public void execute(final SlashCommandEvent event, final Locale locale, final Entry user) {
 		final String outfit = event.getOption("outfit").getAsString();
+
 		user.setOutfit(outfit);
+		IDatabase.INSTANCE.updateUser(user);
 
 		final MessageFormat msg = new MessageFormat(Responses.get("alpacaOutfit", locale));
 		final String content = msg.format(new Object[]{ outfit });
-		MessageService.reply(event, content, false);
 
-		return user;
+		MessageService.queueReply(event, content, false);
 	}
 
 	@Override

@@ -1,6 +1,7 @@
 package bot.commands.member;
 
-import bot.commands.interfaces.IDynamicUserCommand;
+import bot.commands.UserCommand;
+import bot.db.IDatabase;
 import bot.models.Entry;
 import bot.utils.MessageService;
 import bot.utils.Responses;
@@ -13,22 +14,22 @@ import java.util.Locale;
 
 import static net.dv8tion.jda.api.interactions.commands.OptionType.STRING;
 
-public class Nick implements IDynamicUserCommand {
+public class Nick extends UserCommand {
 	@Override
-	public Entry execute(final SlashCommandEvent event, final Entry user, final Locale locale) {
+	public void execute(final SlashCommandEvent event, final Locale locale, final Entry user) {
 		final String nickname = event.getOption("nickname").getAsString();
 		if (nickname.length() > 256) {
-			MessageService.reply(event, new MessageFormat(Responses.get("nicknameTooLong", locale)), true);
-			return null;
+			MessageService.queueReply(event, new MessageFormat(Responses.get("nicknameTooLong", locale)), true);
+			return;
 		}
 
 		user.setNickname(nickname);
+		IDatabase.INSTANCE.updateUser(user);
 
 		final MessageFormat msg = new MessageFormat(Responses.get("nicknameSuccessful", locale));
 		final String content = msg.format(new Object[]{ nickname });
-		MessageService.reply(event, content, false);
 
-		return user;
+		MessageService.queueReply(event, content, false);
 	}
 
 	@Override

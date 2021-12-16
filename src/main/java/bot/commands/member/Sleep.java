@@ -1,6 +1,7 @@
 package bot.commands.member;
 
-import bot.commands.interfaces.IDynamicUserCommand;
+import bot.commands.UserCommand;
+import bot.db.IDatabase;
 import bot.models.Entry;
 import bot.utils.MessageService;
 import bot.utils.Responses;
@@ -13,14 +14,15 @@ import java.util.Locale;
 
 import static net.dv8tion.jda.api.interactions.commands.OptionType.INTEGER;
 
-public class Sleep implements IDynamicUserCommand {
+public class Sleep extends UserCommand {
     @Override
-    public Entry execute(final SlashCommandEvent event, final Entry user, final Locale locale) {
+    public void execute(final SlashCommandEvent event, final Locale locale, final Entry user) {
         final int energy = user.getEnergy();
         if (energy == 100) {
             final MessageFormat msg = new MessageFormat(Responses.get("joyAtMaximum", locale));
-            MessageService.reply(event, msg, true);
-            return null;
+
+            MessageService.queueReply(event, msg, true);
+            return;
         }
 
         final int duration = (int) event.getOption("duration").getAsLong();
@@ -28,18 +30,17 @@ public class Sleep implements IDynamicUserCommand {
             event.reply("Please enter a number between 1 - 100")
                  .setEphemeral(true)
                  .queue();
-            return null;
+            return;
         }
 
         final int newEnergy = energy + duration > 100 ? 100 - energy : duration;
 
         user.setEnergy(energy + newEnergy);
         user.setSleep(System.currentTimeMillis() + 1000L * 60 * newEnergy);
+        IDatabase.INSTANCE.updateUser(user);
 
         event.reply("\uD83D\uDCA4 Your alpaca goes to bed for **" + newEnergy + "** minutes and rests well **Energy + " + newEnergy + "**")
              .queue();
-
-        return user;
     }
 
     @Override

@@ -1,6 +1,7 @@
 package bot.commands.member;
 
-import bot.commands.interfaces.IDevCommand;
+import bot.commands.DevCommand;
+import bot.models.Entry;
 import bot.utils.MessageService;
 import bot.utils.Responses;
 import net.dv8tion.jda.api.entities.Emoji;
@@ -11,12 +12,14 @@ import net.dv8tion.jda.api.interactions.components.selections.SelectionMenu;
 import java.text.MessageFormat;
 import java.util.Locale;
 
-public class Language implements IDevCommand {
+public class Language extends DevCommand {
 	@Override
-	public void execute(final SlashCommandEvent event, final Locale locale) {
+	public void execute(final SlashCommandEvent event, final Locale locale, final Entry user) {
 		final long ownerID = event.getGuild().getOwnerIdLong();
 		if (event.getUser().getIdLong() != ownerID) {
-			MessageService.reply(event, new MessageFormat(Responses.get("userNotOwner", locale)), true);
+			final MessageFormat msg = new MessageFormat(Responses.get("userNotOwner", locale));
+
+			MessageService.queueReply(event, msg, true);
 			return;
 		}
 
@@ -26,7 +29,9 @@ public class Language implements IDevCommand {
 				.addOption("German", "lang_german", Emoji.fromMarkdown("\uD83C\uDDE9\uD83C\uDDEA"))
 				.build();
 
-		MessageService.reply(event, new MessageFormat(Responses.get("selectLanguage", locale)), true, menu);
+		final MessageFormat msg = new MessageFormat(Responses.get("selectLanguage", locale));
+
+		MessageService.queueReply(event, msg, true, menu);
 	}
 
 	@Override

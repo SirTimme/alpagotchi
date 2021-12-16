@@ -1,6 +1,6 @@
 package bot.commands.member;
 
-import bot.commands.interfaces.IStaticUserCommand;
+import bot.commands.UserCommand;
 import bot.models.Entry;
 import bot.utils.MessageService;
 import bot.utils.Responses;
@@ -10,17 +10,17 @@ import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import java.text.MessageFormat;
 import java.util.Locale;
 
-public class Balance implements IStaticUserCommand {
+public class Balance extends UserCommand {
 	@Override
 	public CommandData getCommandData() {
-		return new CommandData("currentBalance", "Shows your fluffy balance");
+		return new CommandData("balance", "Shows your fluffy balance");
 	}
 
 	@Override
-	public void execute(SlashCommandEvent event, Entry user, Locale locale) {
+	public void execute(final SlashCommandEvent event, final Locale locale, final Entry user) {
 		final MessageFormat msg = new MessageFormat(Responses.get("currentBalance", locale));
 		final String content = msg.format(new Object[]{ user.getCurrency() });
 
-		MessageService.reply(event, content, false);
+		MessageService.queueReply(event, content, false);
 	}
 }

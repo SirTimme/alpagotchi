@@ -13,6 +13,6 @@ public class DeleteAccept implements IButton {
     @Override
     public void execute(final ButtonClickEvent event, final Locale locale) {
         IDatabase.INSTANCE.deleteUser(event.getUser().getIdLong());
-        MessageService.edit(event, new MessageFormat(Responses.get("dataSuccess", locale)));
+        MessageService.editReply(event, new MessageFormat(Responses.get("dataSuccess", locale)));
     }
 }

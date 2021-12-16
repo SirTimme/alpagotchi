@@ -1,6 +1,7 @@
 package bot.commands.member;
 
-import bot.commands.interfaces.IDynamicUserCommand;
+import bot.commands.UserCommand;
+import bot.db.IDatabase;
 import bot.models.Entry;
 import bot.shop.Item;
 import bot.shop.ItemManager;
@@ -17,43 +18,45 @@ import java.util.Locale;
 import static net.dv8tion.jda.api.interactions.commands.OptionType.INTEGER;
 import static net.dv8tion.jda.api.interactions.commands.OptionType.STRING;
 
-public class Buy implements IDynamicUserCommand {
-	private final ItemManager itemMan;
+public class Buy extends UserCommand {
+	private final ItemManager items;
 
-	public Buy(ItemManager itemMan) {
-		this.itemMan = itemMan;
+	public Buy(ItemManager items) {
+		this.items = items;
 	}
 
 	@Override
-	public Entry execute(final SlashCommandEvent event, final Entry user, final Locale locale) {
+	public void execute(final SlashCommandEvent event, final Locale locale, final Entry user) {
 		final int amount = (int) event.getOption("amount").getAsLong();
 		if (amount > 10) {
-			MessageService.reply(event, new MessageFormat(Responses.get("boughtTooManyItems", locale)), true);
-			return null;
+			MessageService.queueReply(event, new MessageFormat(Responses.get("boughtTooManyItems", locale)), true);
+			return;
 		}
 
-		final String itemChoice = event.getOption("item").getAsString();
-		final Item item = this.itemMan.getItemByName(itemChoice);
+		final Item item = this.items.getItemByName(event.getOption("item").getAsString());
 
 		final int price = amount * item.getPrice();
 		final int balance = user.getCurrency();
 		if (balance - price < 0) {
 			final MessageFormat msg = new MessageFormat(Responses.get("insufficientBalance", locale));
 			event.reply(msg.format(new Object[]{})).setEphemeral(true).queue();
-			return null;
+			return;
 		}
 
 		user.setCurrency(balance - price);
 		user.setItem(item.getName(), user.getItem(item.getName()) + amount);
 
+		IDatabase.INSTANCE.updateUser(user);
+
 		final MessageFormat msg = new MessageFormat(Responses.get("buySuccessful", locale));
-		event.reply(msg.format(new Object[]{ amount, item.getName(), price })).queue();
-		return user;
+		final String content = msg.format(new Object[]{ amount, item.getName(), price });
+
+		MessageService.queueReply(event, content, false);
 	}
 
 	@Override
 	public CommandData getCommandData() {
-		return new CommandData("buySuccessful", "Buys your alpaca items from the shop")
+		return new CommandData("buy", "Buys your alpaca items from the shop")
 				.addOptions(
 						new OptionData(STRING, "item", "The item to buy", true)
 								.addChoices(

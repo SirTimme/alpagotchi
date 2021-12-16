@@ -1,9 +1,11 @@
 package bot.commands.member;
 
-import bot.commands.interfaces.IInfoCommand;
+import bot.commands.InfoCommand;
+import bot.models.Entry;
 import bot.shop.Item;
 import bot.shop.ItemManager;
 import bot.utils.Env;
+import bot.utils.MessageService;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
@@ -13,15 +15,15 @@ import java.time.Instant;
 import java.util.Comparator;
 import java.util.Locale;
 
-public class Shop implements IInfoCommand {
-    private final ItemManager itemMan;
+public class Shop extends InfoCommand {
+    private final ItemManager items;
 
-    public Shop(ItemManager itemMan) {
-        this.itemMan = itemMan;
+    public Shop(ItemManager items) {
+        this.items = items;
     }
 
     @Override
-    public void execute(final SlashCommandEvent event, final Locale locale) {
+    public void execute(final SlashCommandEvent event, final Locale locale, final Entry user) {
         final User dev = event.getJDA().getUserById(Env.get("DEV_ID"));
 
         final EmbedBuilder embed = new EmbedBuilder()
@@ -31,10 +33,10 @@ public class Shop implements IInfoCommand {
                 .addField("__**:meat_on_bone: Hunger items**__", "These items are used to fill up the hunger of your alpaca", false)
                 .setTimestamp(Instant.now());
 
-        this.itemMan.getItemsByStat("hunger")
-                    .stream()
-                    .sorted(Comparator.comparingInt(Item::getPrice))
-                    .forEach(item -> embed.addField(
+        this.items.getItemsByStat("hunger")
+                  .stream()
+                  .sorted(Comparator.comparingInt(Item::getPrice))
+                  .forEach(item -> embed.addField(
                        ":package: " + item.getName(),
                        "Saturation: " + item.getSaturation() + "\nPrice: " + item.getPrice(),
                        true
@@ -44,16 +46,16 @@ public class Shop implements IInfoCommand {
         embed.addBlankField(false)
              .addField("__**:beer: Thirst items**__", "Following items replenish the thirst of your alpaca", false);
 
-        this.itemMan.getItemsByStat("thirst")
-                    .stream()
-                    .sorted(Comparator.comparingInt(Item::getPrice))
-                    .forEach(item -> embed.addField(
+        this.items.getItemsByStat("thirst")
+                  .stream()
+                  .sorted(Comparator.comparingInt(Item::getPrice))
+                  .forEach(item -> embed.addField(
                        ":package: " + item.getName(),
                        "Saturation: " + item.getSaturation() + "\nPrice: " + item.getPrice(),
                        true)
                );
 
-        event.replyEmbeds(embed.build()).queue();
+        MessageService.queueReply(event, embed.build(), false);
     }
 
     @Override

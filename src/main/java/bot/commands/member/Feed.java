@@ -1,6 +1,7 @@
 package bot.commands.member;
 
-import bot.commands.interfaces.IDynamicUserCommand;
+import bot.commands.UserCommand;
+import bot.db.IDatabase;
 import bot.models.Entry;
 import bot.shop.Item;
 import bot.shop.ItemManager;
@@ -17,7 +18,7 @@ import java.util.Locale;
 import static net.dv8tion.jda.api.interactions.commands.OptionType.INTEGER;
 import static net.dv8tion.jda.api.interactions.commands.OptionType.STRING;
 
-public class Feed implements IDynamicUserCommand {
+public class Feed extends UserCommand {
 	private final ItemManager items;
 
 	public Feed(final ItemManager items) {
@@ -25,43 +26,51 @@ public class Feed implements IDynamicUserCommand {
 	}
 
 	@Override
-	public Entry execute(final SlashCommandEvent event, final Entry user, final Locale locale) {
+	public void execute(final SlashCommandEvent event, final Locale locale, final Entry user) {
 		final long remainingSleep = user.getSleepAsMinutes();
 		if (remainingSleep > 0) {
 			final MessageFormat msg = new MessageFormat(Responses.get("alpacaSleeping", locale));
-			MessageService.reply(event, msg.format(new Object[]{ remainingSleep }), true);
-			return null;
+			final String content = msg.format(new Object[]{ remainingSleep });
+
+			MessageService.queueReply(event, content, true);
+			return;
 		}
 
 		final int itemAmount = (int) event.getOption("amount").getAsLong();
 		if (itemAmount > 5) {
-			MessageService.reply(event, new MessageFormat(Responses.get("fedTooManyItems", locale)), true);
-			return null;
+			final MessageFormat msg = new MessageFormat(Responses.get("fedTooManyItems", locale));
+
+			MessageService.queueReply(event, msg, true);
+			return;
 		}
 
 		final Item item = this.items.getItemByName(event.getOption("item").getAsString());
 		final int newItemAmount = user.getItem(item.getName()) - itemAmount;
 		if (newItemAmount < 0) {
-			MessageService.reply(event, new MessageFormat(Responses.get("notEnoughItems", locale)), true);
-			return null;
+			final MessageFormat msg = new MessageFormat(Responses.get("notEnoughItems", locale));
+
+			MessageService.queueReply(event, msg, true);
+			return;
 		}
 
 		final int oldValue = user.getStat(item.getStat());
 		final int saturation = itemAmount * item.getSaturation();
 		if (oldValue + saturation > 100) {
-			MessageService.reply(event, new MessageFormat(Responses.get("alpacaOverfeeded", locale)), true);
-			return null;
+			final MessageFormat msg = new MessageFormat(Responses.get("alpacaOverfeeded", locale));
+
+			MessageService.queueReply(event, msg, true);
+			return;
 		}
 
 		user.setItem(item.getName(), newItemAmount);
 		user.setStat(item.getStat(), oldValue + saturation);
 
+		IDatabase.INSTANCE.updateUser(user);
+
 		final MessageFormat msg = new MessageFormat(Responses.get(item.getStat(), locale));
 		final String content = msg.format(new Object[]{ itemAmount, item.getName(), saturation });
 
-		MessageService.reply(event, content, true);
-
-		return user;
+		MessageService.queueReply(event, content, true);
 	}
 
 	@Override
