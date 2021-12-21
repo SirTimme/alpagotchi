@@ -27,7 +27,7 @@ public class Feed extends UserCommand {
 
 	@Override
 	public void execute(final SlashCommandEvent event, final Locale locale, final Entry user) {
-		final long remainingSleep = user.getSleepAsMinutes();
+		final long remainingSleep = user.getSleep();
 		if (remainingSleep > 0) {
 			final MessageFormat msg = new MessageFormat(Responses.get("alpacaSleeping", locale));
 			final String content = msg.format(new Object[]{ remainingSleep });

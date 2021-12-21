@@ -125,11 +125,6 @@ public class Entry {
 	}
 
 	@BsonIgnore
-	public long getWorkAsMinutes() {
-		 return this.cooldown.getWorkAsMinutes();
-	}
-
-	@BsonIgnore
 	public void setWork(long work) {
 		this.cooldown.setWork(work);
 	}
@@ -137,11 +132,6 @@ public class Entry {
 	@BsonIgnore
 	public long getSleep() {
 		return this.cooldown.getSleep();
-	}
-
-	@BsonIgnore
-	public long getSleepAsMinutes() {
-		 return this.cooldown.getSleepAsMinutes();
 	}
 
 	@BsonIgnore

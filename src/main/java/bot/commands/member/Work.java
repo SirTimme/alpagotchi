@@ -37,7 +37,7 @@ public class Work extends UserCommand {
 
     @Override
     public void execute(final SlashCommandEvent event, final Locale locale, final Entry user) {
-        final long sleep = user.getSleepAsMinutes();
+        final long sleep = user.getSleep();
         if (sleep > 0) {
             final MessageFormat msg = new MessageFormat(Responses.get("alpacaSleeping", locale));
             final String content = msg.format(new Object[]{ sleep });
@@ -46,7 +46,7 @@ public class Work extends UserCommand {
             return;
         }
 
-        final long work = user.getWorkAsMinutes();
+        final long work = user.getWork();
         if (work > 0) {
             final MessageFormat msg = new MessageFormat(Responses.get("alpacaAlreadyWorked", locale));
             final String content = msg.format(new Object[]{ work });

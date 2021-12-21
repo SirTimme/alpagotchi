@@ -24,8 +24,8 @@ public class CommandManager {
 
         this.commands.put("ping", new Ping());
         this.commands.put("init", new Init());
-        this.commands.put("currentBalance", new Balance());
-        this.commands.put("buySuccessful", new Buy(items));
+        this.commands.put("balance", new Balance());
+        this.commands.put("buy", new Buy(items));
         this.commands.put("count", new Count());
         this.commands.put("deletion", new Delete());
         this.commands.put("feed", new Feed(items));
@@ -36,7 +36,7 @@ public class CommandManager {
         this.commands.put("myalpaca", new MyAlpaca());
         this.commands.put("nick", new Nick());
         this.commands.put("help", new Help(this));
-        this.commands.put("alpacaSleeping", new Sleep());
+        this.commands.put("sleep", new Sleep());
         this.commands.put("outfit", new Outfit());
         this.commands.put("pet", new Pet());
         this.commands.put("inventory", new Inventory(items));
@@ -53,7 +53,9 @@ public class CommandManager {
         final Entry user = IDatabase.INSTANCE.getUser(event.getUser().getIdLong());
 
         if (cmd instanceof UserCommand && user == null) {
-            MessageService.queueReply(event, new MessageFormat(Responses.get("alpacaNotOwned", locale)), true);
+            final MessageFormat msg = new MessageFormat(Responses.get("alpacaNotOwned", locale));
+
+            MessageService.queueReply(event, msg, true);
             return;
         }
 
