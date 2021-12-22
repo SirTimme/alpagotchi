@@ -1,8 +1,9 @@
 package bot.commands.member;
 
-import bot.commands.UserCommand;
+import bot.commands.SlashCommand;
 import bot.models.Entry;
 import bot.shop.ItemManager;
+import bot.utils.CommandType;
 import bot.utils.Env;
 import bot.utils.MessageService;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -13,7 +14,7 @@ import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import java.time.Instant;
 import java.util.Locale;
 
-public class Inventory extends UserCommand {
+public class Inventory extends SlashCommand {
     private final ItemManager items;
 
     public Inventory(final ItemManager items) {
@@ -55,5 +56,10 @@ public class Inventory extends UserCommand {
     @Override
     public CommandData getCommandData() {
         return new CommandData("inventory", "Shows your items for your alpaca");
+    }
+
+    @Override
+    protected CommandType getCommandType() {
+        return CommandType.INFO;
     }
 }

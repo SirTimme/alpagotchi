@@ -1,8 +1,9 @@
 package bot.commands.member;
 
-import bot.commands.UserCommand;
+import bot.commands.SlashCommand;
 import bot.db.IDatabase;
 import bot.models.Entry;
+import bot.utils.CommandType;
 import bot.utils.MessageService;
 import bot.utils.Responses;
 import net.dv8tion.jda.api.entities.User;
@@ -17,7 +18,7 @@ import java.util.Locale;
 import static net.dv8tion.jda.api.interactions.commands.OptionType.*;
 
 
-public class Gift extends UserCommand {
+public class Gift extends SlashCommand {
 	@Override
 	public void execute(final SlashCommandEvent event, final Locale locale, final Entry user) {
 		final User selectedUser = event.getOption("user").getAsUser();
@@ -76,5 +77,10 @@ public class Gift extends UserCommand {
 								),
 						new OptionData(INTEGER, "amount", "The amount of gifted items", true)
 				);
+	}
+
+	@Override
+	protected CommandType getCommandType() {
+		return CommandType.USER;
 	}
 }

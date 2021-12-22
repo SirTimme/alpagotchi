@@ -1,9 +1,10 @@
 package bot.commands.member;
 
-import bot.commands.InfoCommand;
+import bot.commands.SlashCommand;
 import bot.models.Entry;
 import bot.shop.Item;
 import bot.shop.ItemManager;
+import bot.utils.CommandType;
 import bot.utils.Env;
 import bot.utils.MessageService;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -15,7 +16,7 @@ import java.time.Instant;
 import java.util.Comparator;
 import java.util.Locale;
 
-public class Shop extends InfoCommand {
+public class Shop extends SlashCommand {
     private final ItemManager items;
 
     public Shop(ItemManager items) {
@@ -61,5 +62,10 @@ public class Shop extends InfoCommand {
     @Override
     public CommandData getCommandData() {
         return new CommandData("shop", "Shows the shop with all the items to buy");
+    }
+
+    @Override
+    protected CommandType getCommandType() {
+        return CommandType.INFO;
     }
 }

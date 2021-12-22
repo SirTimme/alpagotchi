@@ -1,7 +1,8 @@
 package bot.commands.member;
 
-import bot.commands.InfoCommand;
+import bot.commands.SlashCommand;
 import bot.models.Entry;
+import bot.utils.CommandType;
 import bot.utils.Env;
 import bot.utils.MessageService;
 import bot.utils.Responses;
@@ -30,7 +31,7 @@ import java.util.Locale;
 
 import static net.dv8tion.jda.api.interactions.commands.OptionType.STRING;
 
-public class Image extends InfoCommand {
+public class Image extends SlashCommand {
     private static final Logger LOGGER = LoggerFactory.getLogger(Image.class);
 
     @Override
@@ -85,6 +86,11 @@ public class Image extends InfoCommand {
                 .addOptions(
                         new OptionData(STRING, "query", "The query you want to search", true)
                 );
+    }
+
+    @Override
+    protected CommandType getCommandType() {
+        return CommandType.INFO;
     }
 
     private JsonObject getImages(final String query) {

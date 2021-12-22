@@ -52,7 +52,7 @@ public class CommandManager {
         final SlashCommand cmd = getCommand(event.getName());
         final Entry user = IDatabase.INSTANCE.getUser(event.getUser().getIdLong());
 
-        if (cmd instanceof UserCommand && user == null) {
+        if (cmd.getCommandType() == CommandType.USER && user == null) {
             final MessageFormat msg = new MessageFormat(Responses.get("alpacaNotOwned", locale));
 
             MessageService.queueReply(event, msg, true);

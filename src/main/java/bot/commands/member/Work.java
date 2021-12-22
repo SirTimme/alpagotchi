@@ -1,8 +1,9 @@
 package bot.commands.member;
 
-import bot.commands.UserCommand;
+import bot.commands.SlashCommand;
 import bot.db.IDatabase;
 import bot.models.Entry;
+import bot.utils.CommandType;
 import bot.utils.MessageService;
 import bot.utils.Responses;
 import com.google.gson.Gson;
@@ -21,7 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-public class Work extends UserCommand {
+public class Work extends SlashCommand {
     private static final Logger LOGGER = LoggerFactory.getLogger(Work.class);
     private ArrayList<String> json;
 
@@ -89,6 +90,11 @@ public class Work extends UserCommand {
     @Override
     public CommandData getCommandData() {
         return new CommandData("work", "Lets your alpaca work for fluffies");
+    }
+
+    @Override
+    protected CommandType getCommandType() {
+        return CommandType.USER;
     }
 
     private String getRandomMessage() {

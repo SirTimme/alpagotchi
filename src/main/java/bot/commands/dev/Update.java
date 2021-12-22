@@ -1,8 +1,9 @@
 package bot.commands.dev;
 
-import bot.commands.DevCommand;
 import bot.commands.CommandManager;
+import bot.commands.SlashCommand;
 import bot.models.Entry;
+import bot.utils.CommandType;
 import bot.utils.Env;
 import bot.utils.MessageService;
 import bot.utils.Responses;
@@ -19,7 +20,7 @@ import java.util.stream.Collectors;
 
 import static bot.utils.CommandType.*;
 
-public class Update extends DevCommand {
+public class Update extends SlashCommand {
 	private final CommandManager commands;
 
 	public Update(CommandManager commands) {
@@ -29,6 +30,11 @@ public class Update extends DevCommand {
 	@Override
 	public CommandData getCommandData() {
 		return new CommandData("update", "Refreshes all slashcommands").setDefaultEnabled(false);
+	}
+
+	@Override
+	protected CommandType getCommandType() {
+		return DEV;
 	}
 
 	@Override

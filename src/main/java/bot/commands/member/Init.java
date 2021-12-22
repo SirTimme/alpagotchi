@@ -1,7 +1,8 @@
 package bot.commands.member;
 
-import bot.commands.UserCommand;
+import bot.commands.SlashCommand;
 import bot.models.Entry;
+import bot.utils.CommandType;
 import bot.utils.Env;
 import bot.utils.MessageService;
 import bot.utils.Responses;
@@ -16,7 +17,7 @@ import java.text.MessageFormat;
 import java.time.Instant;
 import java.util.Locale;
 
-public class Init extends UserCommand {
+public class Init extends SlashCommand {
     @Override
     public void execute(final SlashCommandEvent event, final Locale locale, final Entry user) {
         if (user != null) {
@@ -46,5 +47,10 @@ public class Init extends UserCommand {
     @Override
     public CommandData getCommandData() {
         return new CommandData("init", "Initializes a new alpaca");
+    }
+
+    @Override
+    protected CommandType getCommandType() {
+        return CommandType.USER;
     }
 }

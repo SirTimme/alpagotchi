@@ -1,7 +1,8 @@
 package bot.commands.member;
 
-import bot.commands.UserCommand;
+import bot.commands.SlashCommand;
 import bot.models.Entry;
+import bot.utils.CommandType;
 import bot.utils.Env;
 import bot.utils.MessageService;
 import bot.utils.Responses;
@@ -24,7 +25,7 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
-public class MyAlpaca extends UserCommand {
+public class MyAlpaca extends SlashCommand {
 	private final Map<String, BufferedImage> images = new HashMap<>();
 	private static final Logger LOGGER = LoggerFactory.getLogger(MyAlpaca.class);
 	private final Color[] colors = { Color.BLACK, Color.RED, Color.ORANGE, Color.YELLOW, Color.GREEN };
@@ -70,6 +71,11 @@ public class MyAlpaca extends UserCommand {
 	@Override
 	public CommandData getCommandData() {
 		return new CommandData("myalpaca", "Shows your alpaca with its stats");
+	}
+
+	@Override
+	protected CommandType getCommandType() {
+		return CommandType.USER;
 	}
 
 	private BufferedImage createImage(Entry user) {

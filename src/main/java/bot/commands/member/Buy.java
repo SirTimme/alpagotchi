@@ -1,10 +1,11 @@
 package bot.commands.member;
 
-import bot.commands.UserCommand;
+import bot.commands.SlashCommand;
 import bot.db.IDatabase;
 import bot.models.Entry;
 import bot.shop.Item;
 import bot.shop.ItemManager;
+import bot.utils.CommandType;
 import bot.utils.MessageService;
 import bot.utils.Responses;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
@@ -18,7 +19,7 @@ import java.util.Locale;
 import static net.dv8tion.jda.api.interactions.commands.OptionType.INTEGER;
 import static net.dv8tion.jda.api.interactions.commands.OptionType.STRING;
 
-public class Buy extends UserCommand {
+public class Buy extends SlashCommand {
 	private final ItemManager items;
 
 	public Buy(ItemManager items) {
@@ -69,5 +70,10 @@ public class Buy extends UserCommand {
 								),
 						new OptionData(INTEGER, "amount", "The amount of items", true)
 				);
+	}
+
+	@Override
+	protected CommandType getCommandType() {
+		return CommandType.USER;
 	}
 }

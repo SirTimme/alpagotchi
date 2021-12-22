@@ -1,8 +1,9 @@
 package bot.commands.member;
 
-import bot.commands.InfoCommand;
 import bot.commands.CommandManager;
+import bot.commands.SlashCommand;
 import bot.models.Entry;
+import bot.utils.CommandType;
 import bot.utils.Env;
 import bot.utils.MessageService;
 import bot.utils.Responses;
@@ -15,7 +16,7 @@ import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import java.time.Instant;
 import java.util.Locale;
 
-public class Help extends InfoCommand {
+public class Help extends SlashCommand {
     private final CommandManager commands;
 
     public Help(final CommandManager commands) {
@@ -40,5 +41,10 @@ public class Help extends InfoCommand {
     @Override
     public CommandData getCommandData() {
         return new CommandData("help", "Shows all commands of Alpagotchi");
+    }
+
+    @Override
+    protected CommandType getCommandType() {
+        return CommandType.INFO;
     }
 }

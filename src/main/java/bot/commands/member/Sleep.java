@@ -1,8 +1,9 @@
 package bot.commands.member;
 
-import bot.commands.UserCommand;
+import bot.commands.SlashCommand;
 import bot.db.IDatabase;
 import bot.models.Entry;
+import bot.utils.CommandType;
 import bot.utils.MessageService;
 import bot.utils.Responses;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
@@ -14,7 +15,7 @@ import java.util.Locale;
 
 import static net.dv8tion.jda.api.interactions.commands.OptionType.INTEGER;
 
-public class Sleep extends UserCommand {
+public class Sleep extends SlashCommand {
     @Override
     public void execute(final SlashCommandEvent event, final Locale locale, final Entry user) {
         final int energy = user.getEnergy();
@@ -46,8 +47,11 @@ public class Sleep extends UserCommand {
     @Override
     public CommandData getCommandData() {
         return new CommandData("sleep", "Lets your alpaca sleep for the specified duration to regain energy")
-                .addOptions(
-                        new OptionData(INTEGER, "duration", "The duration in minutes", true)
-                );
+                .addOptions(new OptionData(INTEGER, "duration", "The duration in minutes", true));
+    }
+
+    @Override
+    protected CommandType getCommandType() {
+        return CommandType.USER;
     }
 }
