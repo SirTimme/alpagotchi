@@ -1,8 +1,11 @@
 package bot.commands.member;
 
-import bot.commands.IDynamicUserCommand;
+import bot.commands.SlashCommand;
+import bot.db.IDatabase;
 import bot.models.Entry;
-import bot.utils.Language;
+import bot.utils.CommandType;
+import bot.utils.MessageService;
+import bot.utils.Responses;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
@@ -14,13 +17,12 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.lang.reflect.Type;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
+import java.util.Locale;
 
-import static bot.utils.Emote.REDCROSS;
-
-public class Work implements IDynamicUserCommand {
+public class Work extends SlashCommand {
     private static final Logger LOGGER = LoggerFactory.getLogger(Work.class);
     private ArrayList<String> json;
 
@@ -28,29 +30,30 @@ public class Work implements IDynamicUserCommand {
         try {
             final BufferedReader reader = new BufferedReader(new FileReader("src/main/resources/data/messages.json"));
             final Type type = new TypeToken<List<String>>() {}.getType();
-
-            json = new Gson().fromJson(reader, type);
+            this.json = new Gson().fromJson(reader, type);
         } catch (IOException error) {
             LOGGER.error(error.getMessage());
         }
     }
 
     @Override
-    public Entry execute(SlashCommandEvent event, Entry user) {
-        final long sleep = TimeUnit.MILLISECONDS.toMinutes(user.getSleep() - System.currentTimeMillis());
+    public void execute(final SlashCommandEvent event, final Locale locale, final Entry user) {
+        final long sleep = user.getSleep();
         if (sleep > 0) {
-            event.reply(REDCROSS + " Your alpaca sleeps, it'll wake up in **" + sleep + " " + Language.handle(sleep, "minute", "minutes") + "**")
-                 .setEphemeral(true)
-                 .queue();
-            return null;
+            final MessageFormat msg = new MessageFormat(Responses.get("alpacaSleeping", locale));
+            final String content = msg.format(new Object[]{ sleep });
+
+            MessageService.queueReply(event, content, true);
+            return;
         }
 
-        final long work = TimeUnit.MILLISECONDS.toMinutes(user.getWork() - System.currentTimeMillis());
+        final long work = user.getWork();
         if (work > 0) {
-            event.reply(REDCROSS + " Your alpaca has to rest **" + work + " " + Language.handle(work, "minute", "minutes") + "** to work again")
-                 .setEphemeral(true)
-                 .queue();
-            return null;
+            final MessageFormat msg = new MessageFormat(Responses.get("alpacaAlreadyWorked", locale));
+            final String content = msg.format(new Object[]{ work });
+
+            MessageService.queueReply(event, content, true);
+            return;
         }
 
         final int energy = user.getEnergy();
@@ -58,7 +61,7 @@ public class Work implements IDynamicUserCommand {
             event.reply("\uD83E\uDD71 Your alpaca is too tired to work, let it rest first with **/sleep**")
                  .setEphemeral(true)
                  .queue();
-            return null;
+            return;
         }
 
         final int joy = user.getJoy();
@@ -66,7 +69,7 @@ public class Work implements IDynamicUserCommand {
             event.reply(":pensive: Your alpaca is too sad to work, give him some love with **/pet**")
                  .setEphemeral(true)
                  .queue();
-            return null;
+            return;
         }
 
         final String message = getRandomMessage();
@@ -79,10 +82,9 @@ public class Work implements IDynamicUserCommand {
         user.setJoy(user.getJoy() - joyCost);
         user.setWork(System.currentTimeMillis() + 1000L * 60 * 20);
 
-        event.reply("⛏ " + message + " **Fluffies + " + fluffies + ", Energy - " + energyCost + ", Joy - " + joyCost + "**")
-             .queue();
+        IDatabase.INSTANCE.updateUser(user);
 
-        return user;
+        event.reply("⛏ " + message + " **Fluffies + " + fluffies + ", Energy - " + energyCost + ", Joy - " + joyCost + "**").queue();
     }
 
     @Override
@@ -90,7 +92,12 @@ public class Work implements IDynamicUserCommand {
         return new CommandData("work", "Lets your alpaca work for fluffies");
     }
 
+    @Override
+    protected CommandType getCommandType() {
+        return CommandType.USER;
+    }
+
     private String getRandomMessage() {
-        return json.get((int) (Math.random() * json.size()));
+        return this.json.get((int) (Math.random() * this.json.size()));
     }
 }

@@ -1,97 +1,92 @@
 package bot.commands.member;
 
-import bot.commands.IDynamicUserCommand;
+import bot.commands.SlashCommand;
+import bot.db.IDatabase;
 import bot.models.Entry;
 import bot.shop.Item;
 import bot.shop.ItemManager;
-import bot.utils.Emote;
-import bot.utils.Language;
+import bot.utils.CommandType;
+import bot.utils.MessageService;
+import bot.utils.Responses;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.interactions.commands.Command;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 
-import java.util.concurrent.TimeUnit;
+import java.text.MessageFormat;
+import java.util.Locale;
 
-import static bot.utils.Language.PLURAL;
-import static bot.utils.Language.SINGULAR;
 import static net.dv8tion.jda.api.interactions.commands.OptionType.INTEGER;
 import static net.dv8tion.jda.api.interactions.commands.OptionType.STRING;
 
-public class Feed implements IDynamicUserCommand {
-    private final ItemManager itemMan;
+public class Feed extends SlashCommand {
+	private final ItemManager items;
 
-    public Feed(ItemManager itemMan) {
-        this.itemMan = itemMan;
-    }
+	public Feed(final ItemManager items) {
+		this.items = items;
+	}
 
-    @Override
-    public Entry execute(SlashCommandEvent event, Entry user) {
-        final long sleep = TimeUnit.MILLISECONDS.toMinutes(user.getSleep() - System.currentTimeMillis());
-        if (sleep > 0) {
-            event.reply(Emote.REDCROSS + " Your alpaca sleeps, it'll wake up in **" + sleep + " " + Language.handle(sleep, "minute", "minutes") + "**")
-                 .setEphemeral(true)
-                 .queue();
-            return null;
-        }
+	@Override
+	public void execute(final SlashCommandEvent event, final Locale locale, final Entry user) {
+		final long remainingSleep = user.getSleep();
+		if (remainingSleep > 0) {
+			final MessageFormat msg = new MessageFormat(Responses.get("alpacaSleeping", locale));
+			final String content = msg.format(new Object[]{ remainingSleep });
 
-        final int amount = (int) event.getOption("amount").getAsLong();
-        if (amount > 5) {
-            event.reply(Emote.REDCROSS + " You can only feed max. 5 items at a time")
-                 .setEphemeral(true)
-                 .queue();
-            return null;
-        }
+			MessageService.queueReply(event, content, true);
+			return;
+		}
 
-        final String itemChoice = event.getOption("item").getAsString();
-        final Item item = this.itemMan.getItem(itemChoice);
-        final int userItems = user.getItem(item.getName(SINGULAR)) - amount;
+		final int itemAmount = (int) event.getOption("amount").getAsLong();
+		if (itemAmount > 5) {
+			MessageService.queueReply(event, new MessageFormat(Responses.get("fedTooManyItems", locale)), true);
+			return;
+		}
 
-        if (userItems < 0) {
-            event.reply(Emote.REDCROSS + " You don't own that many items")
-                 .setEphemeral(true)
-                 .queue();
-            return null;
-        }
+		final Item item = this.items.getItemByName(event.getOption("item").getAsString());
+		final int newItemAmount = user.getItem(item.getName()) - itemAmount;
+		if (newItemAmount < 0) {
+			MessageService.queueReply(event, new MessageFormat(Responses.get("notEnoughItems", locale)), true);
+			return;
+		}
 
-        final int oldValue = item.getStat().equals("hunger") ? user.getHunger() : user.getThirst();
-        final int saturation = amount * item.getSaturation();
-        if (oldValue + saturation > 100) {
-            event.reply(Emote.REDCROSS + " You would overfeed your alpaca")
-                 .setEphemeral(true)
-                 .queue();
-            return null;
-        }
+		final int oldValue = user.getStat(item.getStat());
+		final int saturation = itemAmount * item.getSaturation();
+		if (oldValue + saturation > 100) {
+			MessageService.queueReply(event, new MessageFormat(Responses.get("alpacaOverfeeded", locale)), true);
+			return;
+		}
 
-        user.setItem(item.getName(SINGULAR), userItems);
+		user.setItem(item.getName(), newItemAmount);
+		user.setStat(item.getStat(), oldValue + saturation);
 
-        if (item.getStat().equals("hunger")) {
-            user.setHunger(oldValue + saturation);
-            event.reply(":meat_on_bone: Your alpaca eats the **" + Language.handle(amount, item.getName(SINGULAR), item.getName(PLURAL)) + "** in one bite **Hunger + " + saturation + "**")
-                 .queue();
-        } else {
-            user.setThirst(oldValue + saturation);
-            event.reply(":beer: Your alpaca drinks the **" + Language.handle(amount, item.getName(SINGULAR), item.getName(PLURAL)) + "** empty **Thirst + " + saturation + "**")
-                 .queue();
-        }
+		IDatabase.INSTANCE.updateUser(user);
 
-        return user;
-    }
+		final MessageFormat msg = new MessageFormat(Responses.get(item.getStat(), locale));
+		final String content = msg.format(new Object[]{ itemAmount, item.getName(), saturation });
 
-    @Override
-    public CommandData getCommandData() {
-        return new CommandData("feed", "Feeds your alpaca items")
-                .addOptions(
-                        new OptionData(STRING, "item", "The item to feed", true)
-                                .addChoices(
-                                        new Command.Choice("salad", "salad"),
-                                        new Command.Choice("taco", "taco"),
-                                        new Command.Choice("steak", "steak"),
-                                        new Command.Choice("water", "water"),
-                                        new Command.Choice("lemonade", "lemonade"),
-                                        new Command.Choice("cacao", "cacao")
-                                ),
-                        new OptionData(INTEGER, "amount", "The amount of items", true)
-                );
-    }
+		MessageService.queueReply(event, content, true);
+	}
+
+	@Override
+	public CommandData getCommandData() {
+		return new CommandData("feed", "Feeds your alpaca items")
+				.addOptions(
+						new OptionData(STRING, "item", "The item to feed", true)
+								.addChoices(
+										new Command.Choice("salad", "salad"),
+										new Command.Choice("taco", "taco"),
+										new Command.Choice("steak", "steak"),
+										new Command.Choice("water", "water"),
+										new Command.Choice("lemonade", "lemonade"),
+										new Command.Choice("cacao", "cacao")
+								),
+						new OptionData(INTEGER, "amount", "The amount of items", true)
+				);
+	}
+
+	@Override
+	protected CommandType getCommandType() {
+		return CommandType.USER;
+	}
 }

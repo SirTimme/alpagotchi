@@ -12,31 +12,50 @@ import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
-import static bot.utils.Language.SINGULAR;
-
+/**
+ * Manages the items of the shop
+ */
 public class ItemManager {
-    private static final Logger LOGGER = LoggerFactory.getLogger(ItemManager.class);
-    private ArrayList<Item> items = new ArrayList<>();
+    private static final Logger LOGGER = LoggerFactory.getLogger(ItemManager.class); // Logs errors
+    private ArrayList<Item> items; // contains all buyable items
 
+    /**
+     * Default constructor and reads item data from json file
+     */
     public ItemManager() {
         try {
             final BufferedReader reader = new BufferedReader(new FileReader("src/main/resources/data/items.json"));
             final Type type = new TypeToken<ArrayList<Item>>() {}.getType();
 
-            items = new Gson().fromJson(reader, type);
+            this.items = new Gson().fromJson(reader, type);
         } catch (IOException error) {
             LOGGER.error(error.getMessage());
+            this.items = new ArrayList<>();
         }
     }
 
-    public List<Item> getItems(String stat) {
-        return items.stream().filter(entry -> entry.getStat().equals(stat)).collect(Collectors.toList());
+    /**
+     * Retrieves items by stat
+     * @param stat Determines if hunger- or thirstitems are getting returned
+     * @return The items belonging to the stat
+     */
+    public List<Item> getItemsByStat(final String stat) {
+        return this.items.stream()
+                         .filter(entry -> entry.getStat().equals(stat))
+                         .toList();
     }
 
+    /**
+     * Retrieves an item by name
+     * @param search The name of the item
+     * @return The corresponding item object or null
+     */
     @Nullable
-    public Item getItem(String search) {
-        return items.stream().filter(item -> item.getName(SINGULAR).equals(search)).findAny().orElse(null);
+    public Item getItemByName(final String search) {
+        return this.items.stream()
+                         .filter(item -> item.getName().equals(search))
+                         .findAny()
+                         .orElse(null);
     }
 }

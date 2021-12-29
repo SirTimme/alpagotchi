@@ -1,54 +1,36 @@
 [
   {
-    "names": [
-      "salad",
-      "salads"
-    ],
+    "name": "salad",
     "price": 10,
     "saturation": 10,
     "stat": "hunger"
   },
   {
-    "names": [
-      "taco",
-      "tacos"
-    ],
+    "name": "taco",
     "price": 25,
     "saturation": 25,
     "stat": "hunger"
   },
   {
-    "names": [
-      "steak",
-      "steaks"
-    ],
+    "name": "steak",
     "price": 40,
     "saturation": 40,
     "stat": "hunger"
   },
   {
-    "names": [
-      "water",
-      "waters"
-    ],
+    "name": "water",
     "price": 10,
     "saturation": 10,
     "stat": "thirst"
   },
   {
-    "names": [
-      "lemonade",
-      "lemonades"
-    ],
+    "name" : "lemonade",
     "price": 25,
     "saturation": 25,
     "stat": "thirst"
   },
   {
-    "names": [
-      "cacao",
-      "cacaos"
-    ],
+    "name": "cacao",
     "price": 40,
     "saturation": 40,
     "stat": "thirst"
