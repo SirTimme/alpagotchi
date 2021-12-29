@@ -3,6 +3,8 @@ package bot.models;
 import org.bson.codecs.pojo.annotations.BsonCreator;
 import org.bson.codecs.pojo.annotations.BsonProperty;
 
+import java.util.concurrent.TimeUnit;
+
 public class Cooldown {
     private long sleep;
     private long work;
@@ -16,7 +18,7 @@ public class Cooldown {
     }
 
     public long getSleep() {
-        return this.sleep;
+        return TimeUnit.MILLISECONDS.toMinutes(this.sleep - System.currentTimeMillis());
     }
 
     public void setSleep(long sleep) {
@@ -24,7 +26,7 @@ public class Cooldown {
     }
 
     public long getWork() {
-        return this.work;
+        return TimeUnit.MILLISECONDS.toMinutes(this.work - System.currentTimeMillis());
     }
 
     public void setWork(long work) {

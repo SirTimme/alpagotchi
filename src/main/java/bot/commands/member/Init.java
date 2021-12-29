@@ -1,58 +1,56 @@
 package bot.commands.member;
 
-import bot.commands.IStaticUserCommand;
+import bot.commands.SlashCommand;
 import bot.models.Entry;
+import bot.utils.CommandType;
 import bot.utils.Env;
+import bot.utils.MessageService;
+import bot.utils.Responses;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.components.Button;
 
+import java.text.MessageFormat;
 import java.time.Instant;
+import java.util.Locale;
+import java.util.function.Consumer;
 
-import static bot.utils.Emote.REDCROSS;
-
-public class Init implements IStaticUserCommand {
+public class Init extends SlashCommand {
     @Override
-    public void execute(SlashCommandEvent event, Entry user) {
+    public void execute(final SlashCommandEvent event, final Locale locale, final Entry user) {
         if (user != null) {
-            event.reply(REDCROSS + " You already own an alpaca")
-                 .setEphemeral(true)
-                 .queue();
+            MessageService.queueReply(event, new MessageFormat(Responses.get("alpacaAlreadyOwned", locale)), true);
             return;
         }
 
-        final User dev = event.getJDA().getUserById(Env.get("DEV_ID"));
+        final Button btnAccept = Button.success("acceptInit", "Accept");
+        final Button btnCancel = Button.danger("declineInit", "Decline");
 
-        final EmbedBuilder embed = new EmbedBuilder()
-                .setTitle("User information")
-                .setDescription("Im glad, that Alpagotchi interests you.\nHere are two important points before you can start:")
-                .setThumbnail(event.getJDA().getSelfUser().getAvatarUrl())
-                .addField(
-                        "__§1 Storage of the UserID__",
-                        "Alpagotchi stores your personal Discord UserID in order to work, but this is public information and can be accessed by everyone.",
-                        false
-                )
-                .addField(
-                        "__§2 Deletion of the UserID__",
-                        "If you change your mind about storing your UserID,\nuse the `/delete` command to delete your data at any time.",
-                        false
-                )
-                .setFooter("Created by " + dev.getName(), dev.getAvatarUrl())
-                .setTimestamp(Instant.now());
+        event.getJDA().retrieveUserById(Env.get("DEV_ID")).queue(dev -> {
+            final MessageEmbed embed = new EmbedBuilder()
+                    .setTitle(Responses.get("userInformation", locale))
+                    .setDescription(Responses.get("initIntro", locale))
+                    .setThumbnail(event.getJDA().getSelfUser().getAvatarUrl())
+                    .addField(Responses.get("headerStorageId", locale), Responses.get("bodyStorageId", locale),false)
+                    .addField(Responses.get("headerDeletionId", locale), Responses.get("bodyDeletionId", locale),false)
+                    .setFooter("Created by " + dev.getName(), dev.getAvatarUrl())
+                    .setTimestamp(Instant.now())
+                    .build();
 
-        event.replyEmbeds(embed.build())
-             .addActionRow(
-                     Button.success("acceptInit", "Accept"),
-                     Button.danger("declineInit", "Decline")
-             )
-             .setEphemeral(true)
-             .queue();
+            MessageService.queueReply(event, embed, true, btnAccept, btnCancel);
+        });
     }
 
     @Override
     public CommandData getCommandData() {
         return new CommandData("init", "Initializes a new alpaca");
+    }
+
+    @Override
+    protected CommandType getCommandType() {
+        return CommandType.INIT;
     }
 }

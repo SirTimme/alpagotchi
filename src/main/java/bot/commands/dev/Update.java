@@ -1,63 +1,69 @@
 package bot.commands.dev;
 
-import bot.commands.IInfoCommand;
-import bot.commands.SlashCommandManager;
+import bot.commands.CommandManager;
+import bot.commands.SlashCommand;
+import bot.models.Entry;
+import bot.utils.CommandType;
 import bot.utils.Env;
+import bot.utils.MessageService;
+import bot.utils.Responses;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.interactions.commands.Command;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.privileges.CommandPrivilege;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.text.MessageFormat;
+import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
-import static bot.utils.Emote.GREENTICK;
-import static bot.utils.Emote.REDCROSS;
+import static bot.utils.CommandType.*;
 
-public class Update implements IInfoCommand {
-    private final SlashCommandManager slashCmdMan;
-    private final static Set<String> DEV_COMMANDS = Set.of("shutdown", "update", "count");
+public class Update extends SlashCommand {
+	private final CommandManager commands;
 
-    public Update(SlashCommandManager slashCmdMan) {
-        this.slashCmdMan = slashCmdMan;
-    }
+	public Update(CommandManager commands) {
+		this.commands = commands;
+	}
 
-    @Override
-    public void execute(SlashCommandEvent event) {
-        final Guild guild = event.getGuild();
-        if (guild == null) {
-            event.reply(REDCROSS + " You need to execute this command in a guild!")
-                 .setEphemeral(true)
-                 .queue();
-            return;
-        }
+	@Override
+	public CommandData getCommandData() {
+		return new CommandData("update", "Refreshes all slashcommands").setDefaultEnabled(false);
+	}
 
-        slashCmdMan.getCommands().forEach(cmd -> {
-            final CommandData cmdData = cmd.getCommandData();
+	@Override
+	protected CommandType getCommandType() {
+		return DEV;
+	}
 
-            if (DEV_COMMANDS.contains(cmdData.getName())) {
-                guild.upsertCommand(cmdData).queue();
-            } else {
-                event.getJDA().upsertCommand(cmdData).queue();
-            }
-        });
+	@Override
+	public void execute(final SlashCommandEvent event, final Locale locale, final Entry user) {
+		final Guild guild = event.getGuild();
+		if (guild == null) {
+			MessageService.queueReply(event, new MessageFormat(Responses.get("guildOnly", locale)), true);
+			return;
+		}
 
-        List<Command> commands = new ArrayList<>();
-        guild.retrieveCommands().queue(commands::addAll);
+		event.getJDA()
+			 .updateCommands()
+			 .addCommands(this.commands.getCommandDataByTypes(USER, INFO, INIT))
+			 .queue();
 
-        for (Command cmd : commands) {
-            if (DEV_COMMANDS.contains(cmd.getName())) {
-                guild.updateCommandPrivilegesById(cmd.getIdLong(), CommandPrivilege.enableUser(Env.get("DEV_ID"))).queue();
-            }
-        }
+		guild.updateCommands()
+			 .addCommands(this.commands.getCommandDataByTypes(DEV))
+			 .queue(created -> guild.updateCommandPrivileges(createMap(created)).queue());
 
-        event.reply(GREENTICK + " Successfully refreshed all slash commands").queue();
-    }
+		final MessageFormat msg = new MessageFormat(Responses.get("update", locale));
+		final String content = msg.format(new Object[]{ this.commands.getCommands().size() });
 
-    @Override
-    public CommandData getCommandData() {
-        return new CommandData("update", "Refreshes all slashcommands").setDefaultEnabled(false);
-    }
+		MessageService.queueReply(event, content, false);
+	}
+
+	private Map<String, Collection<? extends CommandPrivilege>> createMap(final List<Command> commands) {
+		final CommandPrivilege privilege = CommandPrivilege.enableUser(Env.get("DEV_ID"));
+		final Function<Command, List<CommandPrivilege>> cmdPrivileges = cmd -> List.of(privilege);
+
+		return commands.stream().collect(Collectors.toMap(Command::getId, cmdPrivileges));
+	}
 }

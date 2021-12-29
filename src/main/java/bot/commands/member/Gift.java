@@ -1,93 +1,82 @@
 package bot.commands.member;
 
-import bot.commands.IDynamicUserCommand;
-import bot.commands.IStaticUserCommand;
+import bot.commands.SlashCommand;
 import bot.db.IDatabase;
 import bot.models.Entry;
-import bot.shop.Item;
-import bot.shop.ItemManager;
-import bot.utils.Language;
+import bot.utils.CommandType;
+import bot.utils.MessageService;
+import bot.utils.Responses;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.interactions.commands.Command;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 
-import static bot.utils.Emote.REDCROSS;
-import static bot.utils.Language.PLURAL;
-import static bot.utils.Language.SINGULAR;
+import java.text.MessageFormat;
+import java.util.Locale;
+
 import static net.dv8tion.jda.api.interactions.commands.OptionType.*;
 
-public class Gift implements IDynamicUserCommand {
-    private final ItemManager itemMan;
 
-    public Gift(ItemManager itemMan) {
-        this.itemMan = itemMan;
-    }
+public class Gift extends SlashCommand {
+	@Override
+	public void execute(final SlashCommandEvent event, final Locale locale, final Entry user) {
+		final User selectedUser = event.getOption("user").getAsUser();
+		if (selectedUser.getIdLong() == user.getMemberID()) {
+			MessageService.queueReply(event, new MessageFormat(Responses.get("giftedYourself", locale)), true);
+			return;
+		}
 
-    @Override
-    public Entry execute(SlashCommandEvent event, Entry user) {
-        final User userChoice = event.getOption("user").getAsUser();
-        if (userChoice.getIdLong() == user.getMemberID()) {
-            event.reply(REDCROSS + " You can't gift yourself items")
-                 .setEphemeral(true)
-                 .queue();
-            return null;
-        }
+		final Entry selectedDBUser = IDatabase.INSTANCE.getUser(selectedUser.getIdLong());
+		if (selectedDBUser == null) {
+			MessageService.queueReply(event, new MessageFormat(Responses.get("giftedUserNotInitialized", locale)), true);
+			return;
+		}
 
-        final Entry giftedUserDBUser = IDatabase.INSTANCE.getUser(userChoice.getIdLong());
-        if (giftedUserDBUser == null) {
-            event.reply(REDCROSS + " The mentioned user doesn't own an alpaca, he's to use **/init** first")
-                 .setEphemeral(true)
-                 .queue();
-            return null;
-        }
+		final int amount = (int) event.getOption("amount").getAsLong();
+		if (amount > 5) {
+			MessageService.queueReply(event, new MessageFormat(Responses.get("giftedTooManyItems", locale)), true);
+			return;
+		}
 
-        final int amount = (int) event.getOption("amount").getAsLong();
+		final String selectedItem = event.getOption("item").getAsString();
+		if (user.getItem(selectedItem) - amount < 0) {
+			MessageService.queueReply(event, new MessageFormat(Responses.get("notEnoughItems", locale)), true);
+			return;
+		}
 
-        if (amount > 5) {
-            event.reply(REDCROSS + " You can gift max. 5 items at a time")
-                 .setEphemeral(true)
-                 .queue();
-            return null;
-        }
+		user.setItem(selectedItem, user.getItem(selectedItem) - amount);
+		selectedDBUser.setItem(selectedItem, selectedDBUser.getItem(selectedItem) + amount);
 
-        final String itemChoice = event.getOption("item").getAsString();
-        final Item item = itemMan.getItem(itemChoice);
+		IDatabase.INSTANCE.updateUser(selectedDBUser);
+		IDatabase.INSTANCE.updateUser(user);
 
-        if (user.getItem(item.getName(SINGULAR)) - amount < 0) {
-            event.reply(REDCROSS + " You don't own that many items to gift")
-                 .setEphemeral(true)
-                 .queue();
-            return null;
-        }
+		final MessageFormat msg = new MessageFormat(Responses.get("giftSuccessful", locale));
+		final String content = msg.format(new Object[]{ amount, selectedItem, selectedUser.getName() });
 
-        user.setItem(item.getName(SINGULAR), user.getItem(item.getName(SINGULAR)) - amount);
-        giftedUserDBUser.setItem(item.getName(SINGULAR), giftedUserDBUser.getItem(item.getName(SINGULAR)) + amount);
+		MessageService.queueReply(event, content, false);
+	}
 
-        IDatabase.INSTANCE.updateUser(giftedUserDBUser);
+	@Override
+	public CommandData getCommandData() {
+		return new CommandData("gift", "Gifts another user items")
+				.addOptions(
+						new OptionData(USER, "user", "The user you want to gift to", true),
+						new OptionData(STRING, "item", "The item to gift", true)
+								.addChoices(
+										new Command.Choice("salad", "salad"),
+										new Command.Choice("taco", "taco"),
+										new Command.Choice("steak", "steak"),
+										new Command.Choice("water", "water"),
+										new Command.Choice("lemonade", "lemonade"),
+										new Command.Choice("cacao", "cacao")
+								),
+						new OptionData(INTEGER, "amount", "The amount of gifted items", true)
+				);
+	}
 
-        event.reply("\uD83C\uDF81 You successfully gifted **" + amount + " " + Language.handle(amount, item.getName(SINGULAR), item.getName(PLURAL)) + "** to **" + userChoice.getName() + "**")
-             .queue();
-
-        return user;
-    }
-
-    @Override
-    public CommandData getCommandData() {
-        return new CommandData("gift", "Gifts another user items")
-                .addOptions(
-                        new OptionData(USER, "user", "The user you want to gift to", true),
-                        new OptionData(STRING, "item", "The item to gift", true)
-                                .addChoices(
-                                        new Command.Choice("salad", "salad"),
-                                        new Command.Choice("taco", "taco"),
-                                        new Command.Choice("steak", "steak"),
-                                        new Command.Choice("water", "water"),
-                                        new Command.Choice("lemonade", "lemonade"),
-                                        new Command.Choice("cacao", "cacao")
-                                ),
-                        new OptionData(INTEGER, "amount", "The amount of gifted items", true)
-                );
-    }
+	@Override
+	protected CommandType getCommandType() {
+		return CommandType.USER;
+	}
 }
