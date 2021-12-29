@@ -1,4 +1,4 @@
-package bot.buttons.deletion;
+package bot.buttons;
 
 import bot.buttons.IButton;
 import bot.utils.MessageService;

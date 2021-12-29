@@ -39,27 +39,21 @@ public class Feed extends SlashCommand {
 
 		final int itemAmount = (int) event.getOption("amount").getAsLong();
 		if (itemAmount > 5) {
-			final MessageFormat msg = new MessageFormat(Responses.get("fedTooManyItems", locale));
-
-			MessageService.queueReply(event, msg, true);
+			MessageService.queueReply(event, new MessageFormat(Responses.get("fedTooManyItems", locale)), true);
 			return;
 		}
 
 		final Item item = this.items.getItemByName(event.getOption("item").getAsString());
 		final int newItemAmount = user.getItem(item.getName()) - itemAmount;
 		if (newItemAmount < 0) {
-			final MessageFormat msg = new MessageFormat(Responses.get("notEnoughItems", locale));
-
-			MessageService.queueReply(event, msg, true);
+			MessageService.queueReply(event, new MessageFormat(Responses.get("notEnoughItems", locale)), true);
 			return;
 		}
 
 		final int oldValue = user.getStat(item.getStat());
 		final int saturation = itemAmount * item.getSaturation();
 		if (oldValue + saturation > 100) {
-			final MessageFormat msg = new MessageFormat(Responses.get("alpacaOverfeeded", locale));
-
-			MessageService.queueReply(event, msg, true);
+			MessageService.queueReply(event, new MessageFormat(Responses.get("alpacaOverfeeded", locale)), true);
 			return;
 		}
 

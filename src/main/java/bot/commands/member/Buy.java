@@ -39,8 +39,7 @@ public class Buy extends SlashCommand {
 		final int price = amount * item.getPrice();
 		final int balance = user.getCurrency();
 		if (balance - price < 0) {
-			final MessageFormat msg = new MessageFormat(Responses.get("insufficientBalance", locale));
-			event.reply(msg.format(new Object[]{})).setEphemeral(true).queue();
+			MessageService.queueReply(event, new MessageFormat(Responses.get("insufficientBalance", locale)), true);
 			return;
 		}
 

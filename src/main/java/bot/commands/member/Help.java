@@ -15,6 +15,7 @@ import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 
 import java.time.Instant;
 import java.util.Locale;
+import java.util.function.Consumer;
 
 public class Help extends SlashCommand {
     private final CommandManager commands;
@@ -25,17 +26,18 @@ public class Help extends SlashCommand {
 
     @Override
     public void execute(final SlashCommandEvent event, final Locale locale, final Entry user) {
-        final User dev = event.getJDA().getUserById(Env.get("DEV_ID"));
-        final MessageEmbed embed = new EmbedBuilder()
-                .setTitle(Responses.get("headerHelpEmbed", locale))
-                .setThumbnail("https://cdn.discordapp.com/attachments/795637300661977132/836542447186214942/avatar.png")
-                .addField("Commands", this.commands.getCommandsAsString(), true)
-                .addField("Need further help or found a bug?", "Join the [Alpagotchi Support](https://discord.gg/DXtYyzGhXR) server!", false)
-                .setFooter("Created by " + dev.getName(), dev.getAvatarUrl())
-                .setTimestamp(Instant.now())
-                .build();
+        event.getJDA().retrieveUserById(Env.get("DEV_ID")).queue(dev -> {
+            final MessageEmbed embed = new EmbedBuilder()
+                    .setTitle(Responses.get("headerHelpEmbed", locale))
+                    .setThumbnail("https://cdn.discordapp.com/attachments/795637300661977132/836542447186214942/avatar.png")
+                    .addField("Commands", this.commands.getCommandsAsString(), true)
+                    .addField("Need further help or found a bug?", "Join the [Alpagotchi Support](https://discord.gg/DXtYyzGhXR) server!", false)
+                    .setFooter("Created by " + dev.getName(), dev.getAvatarUrl())
+                    .setTimestamp(Instant.now())
+                    .build();
 
-        MessageService.queueReply(event, embed, false);
+            MessageService.queueReply(event, embed, false);
+        });
     }
 
     @Override

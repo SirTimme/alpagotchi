@@ -1,7 +1,11 @@
 package bot.utils;
 
+import bot.db.IDatabase;
+import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.MessageEmbed;
+import net.dv8tion.jda.api.events.GenericEvent;
 import net.dv8tion.jda.api.events.interaction.ButtonClickEvent;
+import net.dv8tion.jda.api.events.interaction.GenericInteractionCreateEvent;
 import net.dv8tion.jda.api.events.interaction.SelectionMenuEvent;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.interactions.components.Button;
@@ -9,6 +13,7 @@ import net.dv8tion.jda.api.interactions.components.Component;
 
 import java.text.MessageFormat;
 import java.util.Collections;
+import java.util.Locale;
 
 /**
  * Static class providing convenience methods for replying to a slashcommand
@@ -129,6 +134,10 @@ public class MessageService {
              .setActionRows(Collections.emptyList())
              .setEmbeds(Collections.emptyList())
              .queue();
+    }
+
+    public static Locale getLocale(final GenericInteractionCreateEvent event) {
+        return event.getGuild() == null ? Locale.ENGLISH : IDatabase.INSTANCE.getGuildSettings(event.getGuild().getIdLong()).getLocale();
     }
 }
 

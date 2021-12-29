@@ -13,6 +13,7 @@ import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 
 import java.time.Instant;
 import java.util.Locale;
+import java.util.function.Consumer;
 
 public class Inventory extends SlashCommand {
     private final ItemManager items;
@@ -23,34 +24,34 @@ public class Inventory extends SlashCommand {
 
     @Override
     public void execute(final SlashCommandEvent event, final Locale locale, final Entry user) {
-        final User dev = event.getJDA().getUserById(Env.get("DEV_ID"));
+        event.getJDA().retrieveUserById(Env.get("DEV_ID")).queue(dev -> {
+            final EmbedBuilder embed = new EmbedBuilder()
+                    .setTitle("Inventory")
+                    .setThumbnail("https://cdn.discordapp.com/attachments/795637300661977132/839074173459365908/inventory.png")
+                    .addField("__**:meat_on_bone: Hunger items**__", "These items are used to fill up the hunger of your alpaca", false)
+                    .setFooter("Created by " + dev.getName(), dev.getAvatarUrl())
+                    .setTimestamp(Instant.now());
 
-        final EmbedBuilder embed = new EmbedBuilder()
-                .setTitle("Inventory")
-                .setThumbnail("https://cdn.discordapp.com/attachments/795637300661977132/839074173459365908/inventory.png")
-                .addField("__**:meat_on_bone: Hunger items**__", "These items are used to fill up the hunger of your alpaca", false)
-                .setFooter("Created by " + dev.getName(), dev.getAvatarUrl())
-                .setTimestamp(Instant.now());
+            this.items.getItemsByStat("hunger").forEach(item -> embed.addField(
+                    ":package: " + item.getName(),
+                    "Quantity: **" + user.getItem(item.getName()) + "**",
+                    true)
+            );
 
-        this.items.getItemsByStat("hunger").forEach(item -> embed.addField(
-                ":package: " + item.getName(),
-                "Quantity: **" + user.getItem(item.getName()) + "**",
-                true)
-        );
+            embed.addBlankField(false).addField(
+                    "__**:beer: Thirst items**__",
+                    "Following items replenish the thirst of your alpaca",
+                    false
+            );
 
-        embed.addBlankField(false).addField(
-                "__**:beer: Thirst items**__",
-                "Following items replenish the thirst of your alpaca",
-                false
-        );
+            this.items.getItemsByStat("thirst").forEach(item -> embed.addField(
+                    ":package: " + item.getName(),
+                    "Quantity: **" + user.getItem(item.getName()) + "**",
+                    true)
+            );
 
-        this.items.getItemsByStat("thirst").forEach(item -> embed.addField(
-                ":package: " + item.getName(),
-                "Quantity: **" + user.getItem(item.getName()) + "**",
-                true)
-        );
-
-        MessageService.queueReply(event, embed.build(), false);
+            MessageService.queueReply(event, embed.build(), false);
+        });
     }
 
     @Override

@@ -23,17 +23,13 @@ public class Gift extends SlashCommand {
 	public void execute(final SlashCommandEvent event, final Locale locale, final Entry user) {
 		final User selectedUser = event.getOption("user").getAsUser();
 		if (selectedUser.getIdLong() == user.getMemberID()) {
-			final MessageFormat msg = new MessageFormat(Responses.get("giftedYourself", locale));
-
-			MessageService.queueReply(event, msg, true);
+			MessageService.queueReply(event, new MessageFormat(Responses.get("giftedYourself", locale)), true);
 			return;
 		}
 
 		final Entry selectedDBUser = IDatabase.INSTANCE.getUser(selectedUser.getIdLong());
 		if (selectedDBUser == null) {
-			final MessageFormat msg = new MessageFormat(Responses.get("giftedUserNotInitialized", locale));
-
-			MessageService.queueReply(event, msg, true);
+			MessageService.queueReply(event, new MessageFormat(Responses.get("giftedUserNotInitialized", locale)), true);
 			return;
 		}
 

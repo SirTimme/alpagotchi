@@ -1,4 +1,4 @@
-package bot.buttons.initialization;
+package bot.buttons;
 
 import bot.buttons.IButton;
 import bot.db.IDatabase;
@@ -9,10 +9,11 @@ import net.dv8tion.jda.api.events.interaction.ButtonClickEvent;
 import java.text.MessageFormat;
 import java.util.Locale;
 
-public class InitAccept implements IButton {
+public class DeleteAccept implements IButton {
     @Override
     public void execute(final ButtonClickEvent event, final Locale locale) {
-        IDatabase.INSTANCE.createUser(event.getUser().getIdLong());
-        MessageService.editReply(event, new MessageFormat(Responses.get("initSuccess", locale)));
+        IDatabase.INSTANCE.deleteUser(event.getUser().getIdLong());
+
+        MessageService.editReply(event, new MessageFormat(Responses.get("dataSuccess", locale)));
     }
 }

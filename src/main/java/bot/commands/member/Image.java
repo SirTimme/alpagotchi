@@ -28,6 +28,7 @@ import java.net.http.HttpResponse;
 import java.text.MessageFormat;
 import java.time.Instant;
 import java.util.Locale;
+import java.util.function.Consumer;
 
 import static net.dv8tion.jda.api.interactions.commands.OptionType.STRING;
 
@@ -38,17 +39,13 @@ public class Image extends SlashCommand {
     public void execute(final SlashCommandEvent event, final Locale locale, final Entry user) {
         final String query = event.getOption("query").getAsString();
         if (query.length() > 100) {
-            final MessageFormat msg = new MessageFormat(Responses.get("queryTooLong", locale));
-
-            MessageService.queueReply(event, msg, true);
+            MessageService.queueReply(event, new MessageFormat(Responses.get("queryTooLong", locale)), true);
             return;
         }
 
         final JsonObject response = getImages(query);
         if (response == null) {
-            final MessageFormat msg = new MessageFormat(Responses.get("apiError", locale));
-
-            MessageService.queueReply(event, msg, true);
+            MessageService.queueReply(event, new MessageFormat(Responses.get("apiError", locale)), true);
             return;
         }
 
@@ -63,21 +60,22 @@ public class Image extends SlashCommand {
 
         final JsonObject randomImg = images.get((int) (Math.random() * images.size())).getAsJsonObject();
         final String imageUrl = randomImg.get("largeImageURL").getAsString();
-        final User dev = event.getJDA().getUserById(Env.get("DEV_ID"));
 
-        final MessageEmbed embed = new EmbedBuilder()
-                .setTitle("Result")
-                .setDescription("_**" + response.get("totalHits").getAsString() + "** Hits for " + query + "._")
-                .addField("Views", randomImg.get("views").getAsString(), true)
-                .addField("Likes", randomImg.get("likes").getAsString(), true)
-                .addField("Source", "[Direct Link](" + imageUrl + ")", true)
-                .setImage(imageUrl)
-                .setThumbnail("https://cdn.discordapp.com/attachments/840135073835122699/842742541148880896/internet.png")
-                .setFooter("Created by" + dev.getName(), dev.getAvatarUrl())
-                .setTimestamp(Instant.now())
-                .build();
+        event.getJDA().retrieveUserById(Env.get("DEV_ID")).queue(dev -> {
+            final MessageEmbed embed = new EmbedBuilder()
+                    .setTitle("Result")
+                    .setDescription("_**" + response.get("totalHits").getAsString() + "** Hits for " + query + "._")
+                    .addField("Views", randomImg.get("views").getAsString(), true)
+                    .addField("Likes", randomImg.get("likes").getAsString(), true)
+                    .addField("Source", "[Direct Link](" + imageUrl + ")", true)
+                    .setImage(imageUrl)
+                    .setThumbnail("https://cdn.discordapp.com/attachments/840135073835122699/842742541148880896/internet.png")
+                    .setFooter("Created by" + dev.getName(), dev.getAvatarUrl())
+                    .setTimestamp(Instant.now())
+                    .build();
 
-        MessageService.queueReply(event, embed, false);
+            MessageService.queueReply(event, embed, false);
+        });
     }
 
     @Override

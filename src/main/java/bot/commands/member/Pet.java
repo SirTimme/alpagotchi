@@ -25,9 +25,7 @@ public class Pet extends SlashCommand {
     public void execute(final SlashCommandEvent event, final Locale locale, final Entry user) {
         final int joy = user.getJoy();
         if (joy == 100) {
-            final MessageFormat msg = new MessageFormat(Responses.get("joyAtMaximum", locale));
-
-            MessageService.queueReply(event, msg, true);
+            MessageService.queueReply(event, new MessageFormat(Responses.get("joyAtMaximum", locale)), true);
             return;
         }
 

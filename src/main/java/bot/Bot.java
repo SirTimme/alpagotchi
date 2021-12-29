@@ -21,8 +21,7 @@ public class Bot {
     public static void main(String[] args) throws LoginException {
         JDABuilder.create(
                           Env.get("TOKEN"),
-                          GatewayIntent.GUILD_MESSAGES,
-                          GatewayIntent.GUILD_MEMBERS
+                          GatewayIntent.GUILD_MESSAGES
         )
                   .disableCache(
                           CacheFlag.ACTIVITY,

@@ -20,17 +20,13 @@ public class Sleep extends SlashCommand {
     public void execute(final SlashCommandEvent event, final Locale locale, final Entry user) {
         final int energy = user.getEnergy();
         if (energy == 100) {
-            final MessageFormat msg = new MessageFormat(Responses.get("joyAtMaximum", locale));
-
-            MessageService.queueReply(event, msg, true);
+            MessageService.queueReply(event, new MessageFormat(Responses.get("joyAtMaximum", locale)), true);
             return;
         }
 
         final int duration = (int) event.getOption("duration").getAsLong();
         if (duration < 1 || duration > 100) {
-            event.reply("Please enter a number between 1 - 100")
-                 .setEphemeral(true)
-                 .queue();
+            MessageService.queueReply(event, new MessageFormat("nonValidNumber", locale), true);
             return;
         }
 

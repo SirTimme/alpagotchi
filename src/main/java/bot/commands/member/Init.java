@@ -16,32 +16,32 @@ import net.dv8tion.jda.api.interactions.components.Button;
 import java.text.MessageFormat;
 import java.time.Instant;
 import java.util.Locale;
+import java.util.function.Consumer;
 
 public class Init extends SlashCommand {
     @Override
     public void execute(final SlashCommandEvent event, final Locale locale, final Entry user) {
         if (user != null) {
-            final MessageFormat msg = new MessageFormat(Responses.get("alpacaAlreadyOwned", locale));
-
-            MessageService.queueReply(event, msg, true);
+            MessageService.queueReply(event, new MessageFormat(Responses.get("alpacaAlreadyOwned", locale)), true);
             return;
         }
 
-        final User dev = event.getJDA().getUserById(Env.get("DEV_ID"));
         final Button btnAccept = Button.success("acceptInit", "Accept");
         final Button btnCancel = Button.danger("declineInit", "Decline");
 
-        final MessageEmbed embed = new EmbedBuilder()
-                .setTitle(Responses.get("userInformation", locale))
-                .setDescription(Responses.get("initIntro", locale))
-                .setThumbnail(event.getJDA().getSelfUser().getAvatarUrl())
-                .addField(Responses.get("headerStorageId", locale), Responses.get("bodyStorageId", locale),false)
-                .addField(Responses.get("headerDeletionId", locale), Responses.get("bodyDeletionId", locale),false)
-                .setFooter("Created by " + dev.getName(), dev.getAvatarUrl())
-                .setTimestamp(Instant.now())
-                .build();
+        event.getJDA().retrieveUserById(Env.get("DEV_ID")).queue(dev -> {
+            final MessageEmbed embed = new EmbedBuilder()
+                    .setTitle(Responses.get("userInformation", locale))
+                    .setDescription(Responses.get("initIntro", locale))
+                    .setThumbnail(event.getJDA().getSelfUser().getAvatarUrl())
+                    .addField(Responses.get("headerStorageId", locale), Responses.get("bodyStorageId", locale),false)
+                    .addField(Responses.get("headerDeletionId", locale), Responses.get("bodyDeletionId", locale),false)
+                    .setFooter("Created by " + dev.getName(), dev.getAvatarUrl())
+                    .setTimestamp(Instant.now())
+                    .build();
 
-        MessageService.queueReply(event, embed, true, btnAccept, btnCancel);
+            MessageService.queueReply(event, embed, true, btnAccept, btnCancel);
+        });
     }
 
     @Override
@@ -51,6 +51,6 @@ public class Init extends SlashCommand {
 
     @Override
     protected CommandType getCommandType() {
-        return CommandType.USER;
+        return CommandType.INIT;
     }
 }

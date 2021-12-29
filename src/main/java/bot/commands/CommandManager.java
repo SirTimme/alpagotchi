@@ -10,6 +10,7 @@ import bot.shop.ItemManager;
 import bot.utils.CommandType;
 import bot.utils.MessageService;
 import bot.utils.Responses;
+import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 
@@ -27,7 +28,7 @@ public class CommandManager {
         this.commands.put("balance", new Balance());
         this.commands.put("buy", new Buy(items));
         this.commands.put("count", new Count());
-        this.commands.put("deletion", new Delete());
+        this.commands.put("delete", new Delete());
         this.commands.put("feed", new Feed(items));
         this.commands.put("gift", new Gift());
         this.commands.put("image", new Image());
@@ -46,16 +47,12 @@ public class CommandManager {
     }
 
     public void handle(final SlashCommandEvent event) {
-        final GuildSettings settings = IDatabase.INSTANCE.getGuildSettings(event.getGuild().getIdLong());
-        final Locale locale = settings.getLocale();
-
+        final Locale locale = MessageService.getLocale(event);
         final SlashCommand cmd = getCommand(event.getName());
         final Entry user = IDatabase.INSTANCE.getUser(event.getUser().getIdLong());
 
         if (cmd.getCommandType() == CommandType.USER && user == null) {
-            final MessageFormat msg = new MessageFormat(Responses.get("alpacaNotOwned", locale));
-
-            MessageService.queueReply(event, msg, true);
+            MessageService.queueReply(event, new MessageFormat(Responses.get("alpacaNotOwned", locale)), true);
             return;
         }
 

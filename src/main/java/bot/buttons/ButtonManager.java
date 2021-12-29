@@ -1,15 +1,9 @@
 package bot.buttons;
 
-import bot.buttons.deletion.DeleteAccept;
-import bot.buttons.deletion.DeleteCancel;
-import bot.buttons.initialization.InitAccept;
-import bot.buttons.initialization.InitCancel;
-import bot.db.IDatabase;
-import bot.models.GuildSettings;
+import bot.utils.MessageService;
 import net.dv8tion.jda.api.events.interaction.ButtonClickEvent;
 
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
 
 public class ButtonManager {
@@ -24,10 +18,7 @@ public class ButtonManager {
         }};
     }
 
-    public void handle(ButtonClickEvent event) {
-        final GuildSettings settings = IDatabase.INSTANCE.getGuildSettings(event.getGuild().getIdLong());
-        final Locale locale = settings.getLocale();
-
-        this.buttons.get(event.getComponentId()).execute(event, locale);
+    public void handle(final ButtonClickEvent event) {
+        this.buttons.get(event.getComponentId()).execute(event, MessageService.getLocale(event));
     }
 }

@@ -47,7 +47,7 @@ public class Update extends SlashCommand {
 
 		event.getJDA()
 			 .updateCommands()
-			 .addCommands(this.commands.getCommandDataByTypes(USER, INFO))
+			 .addCommands(this.commands.getCommandDataByTypes(USER, INFO, INIT))
 			 .queue();
 
 		guild.updateCommands()
