@@ -1,6 +1,6 @@
 package bot.commands.member;
 
-import bot.commands.SlashCommand;
+import bot.commands.ISlashCommand;
 import bot.models.Entry;
 import bot.utils.CommandType;
 import bot.utils.MessageService;
@@ -11,14 +11,14 @@ import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import java.text.MessageFormat;
 import java.util.Locale;
 
-public class Balance extends SlashCommand {
+public class Balance implements ISlashCommand {
 	@Override
 	public CommandData getCommandData() {
 		return new CommandData("balance", "Shows your fluffy balance");
 	}
 
 	@Override
-	protected CommandType getCommandType() {
+	public CommandType getCommandType() {
 		return CommandType.USER;
 	}
 

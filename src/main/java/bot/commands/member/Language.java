@@ -1,6 +1,6 @@
 package bot.commands.member;
 
-import bot.commands.SlashCommand;
+import bot.commands.ISlashCommand;
 import bot.models.Entry;
 import bot.utils.CommandType;
 import bot.utils.MessageService;
@@ -14,7 +14,7 @@ import net.dv8tion.jda.api.interactions.components.selections.SelectionMenu;
 import java.text.MessageFormat;
 import java.util.Locale;
 
-public class Language extends SlashCommand {
+public class Language implements ISlashCommand {
 	@Override
 	public void execute(final SlashCommandEvent event, final Locale locale, final Entry user) {
 		final Guild guild = event.getGuild();
@@ -29,13 +29,13 @@ public class Language extends SlashCommand {
 			return;
 		}
 
-		final SelectionMenu menu = SelectionMenu.create("menu:language")
+		final SelectionMenu menu = SelectionMenu.create("selectLanguage")
 				.setPlaceholder("Available languages")
-				.addOption("English", "lang_english", Emoji.fromMarkdown("\uD83C\uDDFA\uD83C\uDDF8"))
-				.addOption("German", "lang_german", Emoji.fromMarkdown("\uD83C\uDDE9\uD83C\uDDEA"))
+				.addOption("English", "selectEnglish", Emoji.fromMarkdown("\uD83C\uDDFA\uD83C\uDDF8"))
+				.addOption("German", "selectGerman", Emoji.fromMarkdown("\uD83C\uDDE9\uD83C\uDDEA"))
 				.build();
 
-		MessageService.queueReply(event, new MessageFormat(Responses.get("selectLanguage", locale)), true, menu);
+		MessageService.queueComponentReply(event, new MessageFormat(Responses.get("selectLanguage", locale)), true, menu);
 	}
 
 	@Override
@@ -44,7 +44,7 @@ public class Language extends SlashCommand {
 	}
 
 	@Override
-	protected CommandType getCommandType() {
+	public CommandType getCommandType() {
 		return CommandType.INFO;
 	}
 }

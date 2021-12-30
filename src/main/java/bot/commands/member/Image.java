@@ -1,6 +1,6 @@
 package bot.commands.member;
 
-import bot.commands.SlashCommand;
+import bot.commands.ISlashCommand;
 import bot.models.Entry;
 import bot.utils.CommandType;
 import bot.utils.Env;
@@ -11,7 +11,6 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
-import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
@@ -28,11 +27,10 @@ import java.net.http.HttpResponse;
 import java.text.MessageFormat;
 import java.time.Instant;
 import java.util.Locale;
-import java.util.function.Consumer;
 
 import static net.dv8tion.jda.api.interactions.commands.OptionType.STRING;
 
-public class Image extends SlashCommand {
+public class Image implements ISlashCommand {
     private static final Logger LOGGER = LoggerFactory.getLogger(Image.class);
 
     @Override
@@ -74,7 +72,7 @@ public class Image extends SlashCommand {
                     .setTimestamp(Instant.now())
                     .build();
 
-            MessageService.queueReply(event, embed, false);
+            MessageService.queueEmbedReply(event, embed, false);
         });
     }
 
@@ -87,7 +85,7 @@ public class Image extends SlashCommand {
     }
 
     @Override
-    protected CommandType getCommandType() {
+    public CommandType getCommandType() {
         return CommandType.INFO;
     }
 

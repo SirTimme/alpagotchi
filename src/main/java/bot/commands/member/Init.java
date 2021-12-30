@@ -1,6 +1,6 @@
 package bot.commands.member;
 
-import bot.commands.SlashCommand;
+import bot.commands.ISlashCommand;
 import bot.models.Entry;
 import bot.utils.CommandType;
 import bot.utils.Env;
@@ -8,7 +8,6 @@ import bot.utils.MessageService;
 import bot.utils.Responses;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
-import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.components.Button;
@@ -16,9 +15,8 @@ import net.dv8tion.jda.api.interactions.components.Button;
 import java.text.MessageFormat;
 import java.time.Instant;
 import java.util.Locale;
-import java.util.function.Consumer;
 
-public class Init extends SlashCommand {
+public class Init implements ISlashCommand {
     @Override
     public void execute(final SlashCommandEvent event, final Locale locale, final Entry user) {
         if (user != null) {
@@ -26,8 +24,8 @@ public class Init extends SlashCommand {
             return;
         }
 
-        final Button btnAccept = Button.success("acceptInit", "Accept");
-        final Button btnCancel = Button.danger("declineInit", "Decline");
+        final Button btnAccept = Button.success("btnInitAccept", "Accept");
+        final Button btnCancel = Button.danger("btnInitCancel", "Decline");
 
         event.getJDA().retrieveUserById(Env.get("DEV_ID")).queue(dev -> {
             final MessageEmbed embed = new EmbedBuilder()
@@ -40,7 +38,7 @@ public class Init extends SlashCommand {
                     .setTimestamp(Instant.now())
                     .build();
 
-            MessageService.queueReply(event, embed, true, btnAccept, btnCancel);
+            MessageService.queueComponentReply(event, embed, true, btnAccept, btnCancel);
         });
     }
 
@@ -50,7 +48,7 @@ public class Init extends SlashCommand {
     }
 
     @Override
-    protected CommandType getCommandType() {
+    public CommandType getCommandType() {
         return CommandType.INIT;
     }
 }

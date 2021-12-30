@@ -1,6 +1,6 @@
 package bot.commands.member;
 
-import bot.commands.SlashCommand;
+import bot.commands.ISlashCommand;
 import bot.db.IDatabase;
 import bot.models.Entry;
 import bot.utils.CommandType;
@@ -18,7 +18,7 @@ import java.util.Locale;
 
 import static net.dv8tion.jda.api.interactions.commands.OptionType.STRING;
 
-public class Pet extends SlashCommand {
+public class Pet implements ISlashCommand {
     private final List<String> spots = Arrays.asList("head", "tail", "leg", "neck", "back");
 
     @Override
@@ -64,7 +64,7 @@ public class Pet extends SlashCommand {
     }
 
     @Override
-    protected CommandType getCommandType() {
+    public CommandType getCommandType() {
         return CommandType.USER;
     }
 }

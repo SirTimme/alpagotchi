@@ -1,21 +1,19 @@
 package bot.commands.member;
 
-import bot.commands.SlashCommand;
+import bot.commands.ISlashCommand;
 import bot.models.Entry;
 import bot.shop.ItemManager;
 import bot.utils.CommandType;
 import bot.utils.Env;
 import bot.utils.MessageService;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 
 import java.time.Instant;
 import java.util.Locale;
-import java.util.function.Consumer;
 
-public class Inventory extends SlashCommand {
+public class Inventory implements ISlashCommand {
     private final ItemManager items;
 
     public Inventory(final ItemManager items) {
@@ -50,7 +48,7 @@ public class Inventory extends SlashCommand {
                     true)
             );
 
-            MessageService.queueReply(event, embed.build(), false);
+            MessageService.queueEmbedReply(event, embed.build(), false);
         });
     }
 
@@ -60,7 +58,7 @@ public class Inventory extends SlashCommand {
     }
 
     @Override
-    protected CommandType getCommandType() {
+    public CommandType getCommandType() {
         return CommandType.INFO;
     }
 }

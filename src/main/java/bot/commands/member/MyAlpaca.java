@@ -1,6 +1,6 @@
 package bot.commands.member;
 
-import bot.commands.SlashCommand;
+import bot.commands.ISlashCommand;
 import bot.models.Entry;
 import bot.utils.CommandType;
 import bot.utils.Env;
@@ -8,7 +8,6 @@ import bot.utils.MessageService;
 import bot.utils.Responses;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
-import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import org.slf4j.Logger;
@@ -25,7 +24,7 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
-public class MyAlpaca extends SlashCommand {
+public class MyAlpaca implements ISlashCommand {
     private final Map<String, BufferedImage> images = new HashMap<>();
     private static final Logger LOGGER = LoggerFactory.getLogger(MyAlpaca.class);
     private final Color[] colors = {Color.BLACK, Color.RED, Color.ORANGE, Color.YELLOW, Color.GREEN};
@@ -64,7 +63,7 @@ public class MyAlpaca extends SlashCommand {
                     .setImage("attachment://alpagotchi.jpg")
                     .build();
 
-            MessageService.queueReply(event, embed, bytes.toByteArray(), false);
+            MessageService.queueImageReply(event, embed, bytes.toByteArray(), false);
         });
     }
 
@@ -74,7 +73,7 @@ public class MyAlpaca extends SlashCommand {
     }
 
     @Override
-    protected CommandType getCommandType() {
+    public CommandType getCommandType() {
         return CommandType.USER;
     }
 

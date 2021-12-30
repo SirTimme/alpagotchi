@@ -1,6 +1,6 @@
 package bot.commands.member;
 
-import bot.commands.SlashCommand;
+import bot.commands.ISlashCommand;
 import bot.models.Entry;
 import bot.utils.CommandType;
 import bot.utils.MessageService;
@@ -12,23 +12,23 @@ import net.dv8tion.jda.api.interactions.components.Button;
 import java.text.MessageFormat;
 import java.util.Locale;
 
-public class Delete extends SlashCommand {
+public class Delete implements ISlashCommand {
     @Override
     public CommandData getCommandData() {
         return new CommandData("delete", "Deletes your personal data");
     }
 
     @Override
-    protected CommandType getCommandType() {
+    public CommandType getCommandType() {
         return CommandType.INFO;
     }
 
     @Override
     public void execute(final SlashCommandEvent event, final Locale locale, final Entry user) {
         final MessageFormat msg = new MessageFormat(Responses.get("dataDeletion", locale));
-        final Button success = Button.success("acceptDelete", "Accept");
-        final Button cancel = Button.danger("cancelDelete", "Cancel");
+        final Button btnSuccess = Button.success("btnDeleteAccept", "Accept");
+        final Button btnCancel = Button.danger("btnDeleteCancel", "Cancel");
 
-        MessageService.queueReply(event, msg, true, success, cancel);
+        MessageService.queueComponentReply(event, msg, true, btnSuccess, btnCancel);
     }
 }

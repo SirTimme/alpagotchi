@@ -1,6 +1,6 @@
 package bot.commands.member;
 
-import bot.commands.SlashCommand;
+import bot.commands.ISlashCommand;
 import bot.db.IDatabase;
 import bot.models.Entry;
 import bot.shop.Item;
@@ -19,7 +19,7 @@ import java.util.Locale;
 import static net.dv8tion.jda.api.interactions.commands.OptionType.INTEGER;
 import static net.dv8tion.jda.api.interactions.commands.OptionType.STRING;
 
-public class Feed extends SlashCommand {
+public class Feed implements ISlashCommand {
 	private final ItemManager items;
 
 	public Feed(final ItemManager items) {
@@ -65,7 +65,7 @@ public class Feed extends SlashCommand {
 		final MessageFormat msg = new MessageFormat(Responses.get(item.getStat(), locale));
 		final String content = msg.format(new Object[]{ itemAmount, item.getName(), saturation });
 
-		MessageService.queueReply(event, content, true);
+		MessageService.queueReply(event, content, false);
 	}
 
 	@Override
@@ -86,7 +86,7 @@ public class Feed extends SlashCommand {
 	}
 
 	@Override
-	protected CommandType getCommandType() {
+	public CommandType getCommandType() {
 		return CommandType.USER;
 	}
 }

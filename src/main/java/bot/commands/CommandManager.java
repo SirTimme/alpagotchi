@@ -5,12 +5,10 @@ import bot.commands.dev.Count;
 import bot.commands.member.*;
 import bot.db.IDatabase;
 import bot.models.Entry;
-import bot.models.GuildSettings;
 import bot.shop.ItemManager;
 import bot.utils.CommandType;
 import bot.utils.MessageService;
 import bot.utils.Responses;
-import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 
@@ -18,7 +16,7 @@ import java.text.MessageFormat;
 import java.util.*;
 
 public class CommandManager {
-    private final Map<String, SlashCommand> commands = new TreeMap<>();
+    private final Map<String, ISlashCommand> commands = new TreeMap<>();
 
     public CommandManager() {
         final ItemManager items = new ItemManager();
@@ -48,7 +46,7 @@ public class CommandManager {
 
     public void handle(final SlashCommandEvent event) {
         final Locale locale = MessageService.getLocale(event);
-        final SlashCommand cmd = getCommand(event.getName());
+        final ISlashCommand cmd = getCommand(event.getName());
         final Entry user = IDatabase.INSTANCE.getUser(event.getUser().getIdLong());
 
         if (cmd.getCommandType() == CommandType.USER && user == null) {
@@ -59,7 +57,7 @@ public class CommandManager {
         cmd.execute(event, locale, user);
     }
 
-    public Collection<? extends SlashCommand> getCommands() {
+    public Collection<? extends ISlashCommand> getCommands() {
         return this.commands.values();
     }
 
@@ -67,7 +65,7 @@ public class CommandManager {
         return this.commands.values()
                             .stream()
                             .filter(cmd -> Arrays.asList(types).contains(cmd.getCommandType()))
-                            .map(SlashCommand::getCommandData)
+                            .map(ISlashCommand::getCommandData)
                             .toList();
     }
 
@@ -82,7 +80,7 @@ public class CommandManager {
         return sb.toString();
     }
 
-    private SlashCommand getCommand(final String name) {
+    private ISlashCommand getCommand(final String name) {
         return this.commands.get(name);
     }
 }

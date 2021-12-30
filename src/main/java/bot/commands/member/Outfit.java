@@ -1,6 +1,6 @@
 package bot.commands.member;
 
-import bot.commands.SlashCommand;
+import bot.commands.ISlashCommand;
 import bot.db.IDatabase;
 import bot.models.Entry;
 import bot.utils.CommandType;
@@ -16,7 +16,7 @@ import java.util.Locale;
 
 import static net.dv8tion.jda.api.interactions.commands.OptionType.STRING;
 
-public class Outfit extends SlashCommand {
+public class Outfit implements ISlashCommand {
 	@Override
 	public void execute(final SlashCommandEvent event, final Locale locale, final Entry user) {
 		final String outfit = event.getOption("outfit").getAsString();
@@ -44,7 +44,7 @@ public class Outfit extends SlashCommand {
 	}
 
 	@Override
-	protected CommandType getCommandType() {
+	public CommandType getCommandType() {
 		return CommandType.USER;
 	}
 }

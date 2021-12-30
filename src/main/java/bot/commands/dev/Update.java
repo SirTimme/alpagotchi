@@ -1,7 +1,7 @@
 package bot.commands.dev;
 
 import bot.commands.CommandManager;
-import bot.commands.SlashCommand;
+import bot.commands.ISlashCommand;
 import bot.models.Entry;
 import bot.utils.CommandType;
 import bot.utils.Env;
@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 
 import static bot.utils.CommandType.*;
 
-public class Update extends SlashCommand {
+public class Update implements ISlashCommand {
 	private final CommandManager commands;
 
 	public Update(CommandManager commands) {
@@ -33,7 +33,7 @@ public class Update extends SlashCommand {
 	}
 
 	@Override
-	protected CommandType getCommandType() {
+	public CommandType getCommandType() {
 		return DEV;
 	}
 

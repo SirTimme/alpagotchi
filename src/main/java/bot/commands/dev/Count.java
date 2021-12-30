@@ -1,6 +1,6 @@
 package bot.commands.dev;
 
-import bot.commands.SlashCommand;
+import bot.commands.ISlashCommand;
 import bot.db.IDatabase;
 import bot.models.Entry;
 import bot.utils.CommandType;
@@ -12,7 +12,7 @@ import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import java.text.MessageFormat;
 import java.util.Locale;
 
-public class Count extends SlashCommand {
+public class Count implements ISlashCommand {
 	@Override
 	public void execute(SlashCommandEvent event, final Locale locale, final Entry user) {
 		final MessageFormat msg = new MessageFormat(Responses.get("count", locale));
@@ -27,7 +27,7 @@ public class Count extends SlashCommand {
 	}
 
 	@Override
-	protected CommandType getCommandType() {
+	public CommandType getCommandType() {
 		return CommandType.DEV;
 	}
 }

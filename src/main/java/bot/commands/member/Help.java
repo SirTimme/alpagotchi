@@ -1,7 +1,7 @@
 package bot.commands.member;
 
 import bot.commands.CommandManager;
-import bot.commands.SlashCommand;
+import bot.commands.ISlashCommand;
 import bot.models.Entry;
 import bot.utils.CommandType;
 import bot.utils.Env;
@@ -9,15 +9,13 @@ import bot.utils.MessageService;
 import bot.utils.Responses;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
-import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 
 import java.time.Instant;
 import java.util.Locale;
-import java.util.function.Consumer;
 
-public class Help extends SlashCommand {
+public class Help implements ISlashCommand {
     private final CommandManager commands;
 
     public Help(final CommandManager commands) {
@@ -36,7 +34,7 @@ public class Help extends SlashCommand {
                     .setTimestamp(Instant.now())
                     .build();
 
-            MessageService.queueReply(event, embed, false);
+            MessageService.queueEmbedReply(event, embed, false);
         });
     }
 
@@ -46,7 +44,7 @@ public class Help extends SlashCommand {
     }
 
     @Override
-    protected CommandType getCommandType() {
+    public CommandType getCommandType() {
         return CommandType.INFO;
     }
 }
