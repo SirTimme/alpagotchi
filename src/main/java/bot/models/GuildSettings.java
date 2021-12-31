@@ -52,12 +52,8 @@ public class GuildSettings {
 		return this.language;
 	}
 
-	/**
-	 * Sets the locale of a guild
-	 * @param locale The new locale
-	 */
-	public void setLocale(final Locale locale) {
-		this.language = locale.toLanguageTag();
+	public void setLanguage(final String language) {
+		this.language = language;
 	}
 
 	/**
@@ -67,5 +63,14 @@ public class GuildSettings {
 	@BsonIgnore
 	public Locale getLocale() {
 		return Locale.forLanguageTag(this.language);
+	}
+
+	/**
+	 * Sets the locale of a guild
+	 * @param locale The new locale
+	 */
+	@BsonIgnore
+	public void setLocale(final Locale locale) {
+		this.language = locale.toLanguageTag();
 	}
 }
