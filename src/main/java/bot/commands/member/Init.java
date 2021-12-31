@@ -1,6 +1,9 @@
 package bot.commands.member;
 
 import bot.commands.ISlashCommand;
+import bot.components.buttons.BtnInitAccept;
+import bot.components.buttons.BtnInitCancel;
+import bot.components.buttons.ButtonManager;
 import bot.models.Entry;
 import bot.utils.CommandType;
 import bot.utils.Env;
@@ -15,6 +18,7 @@ import net.dv8tion.jda.api.interactions.components.Button;
 import java.text.MessageFormat;
 import java.time.Instant;
 import java.util.Locale;
+import java.util.UUID;
 
 public class Init implements ISlashCommand {
     @Override
@@ -24,8 +28,11 @@ public class Init implements ISlashCommand {
             return;
         }
 
-        final Button btnAccept = Button.success("btnInitAccept", "Accept");
-        final Button btnCancel = Button.danger("btnInitCancel", "Decline");
+        final Button btnAccept = Button.success(UUID.randomUUID().toString(), "Accept");
+        final Button btnCancel = Button.danger(UUID.randomUUID().toString(), "Decline");
+
+        ButtonManager.addButton(btnAccept.getId(), new BtnInitAccept());
+        ButtonManager.addButton(btnCancel.getId(), new BtnInitCancel());
 
         event.getJDA().retrieveUserById(Env.get("DEV_ID")).queue(dev -> {
             final MessageEmbed embed = new EmbedBuilder()

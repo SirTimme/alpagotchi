@@ -1,6 +1,8 @@
 package bot.commands.member;
 
 import bot.commands.ISlashCommand;
+import bot.components.menus.MenuLanguage;
+import bot.components.menus.MenuManager;
 import bot.models.Entry;
 import bot.utils.CommandType;
 import bot.utils.MessageService;
@@ -13,6 +15,7 @@ import net.dv8tion.jda.api.interactions.components.selections.SelectionMenu;
 
 import java.text.MessageFormat;
 import java.util.Locale;
+import java.util.UUID;
 
 public class Language implements ISlashCommand {
 	@Override
@@ -29,13 +32,15 @@ public class Language implements ISlashCommand {
 			return;
 		}
 
-		final SelectionMenu menu = SelectionMenu.create("selectLanguage")
+		final SelectionMenu menuLanguage = SelectionMenu.create(UUID.randomUUID().toString())
 				.setPlaceholder("Available languages")
-				.addOption("English", "selectEnglish", Emoji.fromMarkdown("\uD83C\uDDFA\uD83C\uDDF8"))
-				.addOption("German", "selectGerman", Emoji.fromMarkdown("\uD83C\uDDE9\uD83C\uDDEA"))
+				.addOption("English", "en", Emoji.fromMarkdown("\uD83C\uDDFA\uD83C\uDDF8"))
+				.addOption("German", "de", Emoji.fromMarkdown("\uD83C\uDDE9\uD83C\uDDEA"))
 				.build();
 
-		MessageService.queueComponentReply(event, new MessageFormat(Responses.get("selectLanguage", locale)), true, menu);
+		MenuManager.addMenu(menuLanguage.getId(), new MenuLanguage());
+
+		MessageService.queueComponentReply(event, new MessageFormat(Responses.get("selectLanguage", locale)), true, menuLanguage);
 	}
 
 	@Override
