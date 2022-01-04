@@ -15,7 +15,7 @@ public class MenuLanguage implements IMenu {
         final GuildSettings settings = IDatabase.INSTANCE.getGuildSettings(event.getGuild().getIdLong());
         settings.setLanguage(event.getValues().get(0));
 
-        IDatabase.INSTANCE.setGuildSettings(settings);
+        IDatabase.INSTANCE.updateGuildSettings(settings);
 
         MessageService.editReply(event, new MessageFormat(Responses.get("language", settings.getLocale())));
     }

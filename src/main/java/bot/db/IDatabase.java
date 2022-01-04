@@ -3,10 +3,8 @@ package bot.db;
 import bot.models.Entry;
 import bot.models.GuildSettings;
 
-import java.util.Locale;
-
 public interface IDatabase {
-	IDatabase INSTANCE = new MongoDB();
+	IDatabase INSTANCE = new Database();
 
 	Entry getUser(final long memberID);
 
@@ -18,7 +16,7 @@ public interface IDatabase {
 
 	GuildSettings getGuildSettings(final long guildID);
 
-	void setGuildSettings(final GuildSettings settings);
+	void updateGuildSettings(final GuildSettings settings);
 
 	long getEntries();
 }

@@ -13,11 +13,11 @@ import static com.mongodb.client.model.Filters.*;
 import static org.bson.codecs.configuration.CodecRegistries.fromProviders;
 import static org.bson.codecs.configuration.CodecRegistries.fromRegistries;
 
-public class MongoDB implements IDatabase {
+public class Database implements IDatabase {
     private final MongoCollection<Entry> entries;
     private final MongoCollection<GuildSettings> guilds;
 
-    public MongoDB() {
+    public Database() {
         final CodecRegistry pojoRegistry = fromProviders(PojoCodecProvider.builder().automatic(true).build());
         final CodecRegistry codecRegistry = fromRegistries(MongoClientSettings.getDefaultCodecRegistry(), pojoRegistry);
 
@@ -58,17 +58,15 @@ public class MongoDB implements IDatabase {
         GuildSettings settings = this.guilds.find(eq("_id", guildID)).first();
 
         if (settings == null) {
-            final GuildSettings newSettings = new GuildSettings(guildID);
-            this.guilds.insertOne(newSettings);
-
-            return newSettings;
+            settings = new GuildSettings(guildID);
+            this.guilds.insertOne(settings);
         }
 
         return settings;
     }
 
     @Override
-    public void setGuildSettings(final GuildSettings settings) {
+    public void updateGuildSettings(final GuildSettings settings) {
         this.guilds.replaceOne(eq("_id", settings.getGuildID()), settings);
     }
 
