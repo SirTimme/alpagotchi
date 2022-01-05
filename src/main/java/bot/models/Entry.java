@@ -121,7 +121,7 @@ public class Entry {
 
 	@BsonIgnore
 	public long getWork() {
-		return this.cooldown.getWork();
+		return this.cooldown.getWorkMins();
 	}
 
 	@BsonIgnore
@@ -131,7 +131,7 @@ public class Entry {
 
 	@BsonIgnore
 	public long getSleep() {
-		return this.cooldown.getSleep();
+		return this.cooldown.getSleepMins();
 	}
 
 	@BsonIgnore
