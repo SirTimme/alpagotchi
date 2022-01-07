@@ -36,8 +36,10 @@ public class Sleep implements ISlashCommand {
         user.setSleep(System.currentTimeMillis() + 1000L * 60 * newEnergy);
         IDatabase.INSTANCE.updateUser(user);
 
-        event.reply("\uD83D\uDCA4 Your alpaca goes to bed for **" + newEnergy + "** minutes and rests well **Energy + " + newEnergy + "**")
-             .queue();
+        final MessageFormat msg = new MessageFormat(Responses.get("sleep", locale));
+        final String content = msg.format(new Object[]{ newEnergy });
+
+        MessageService.queueReply(event, content, false);
     }
 
     @Override

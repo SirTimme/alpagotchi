@@ -133,7 +133,8 @@ public class MyAlpaca implements ISlashCommand {
 
     private String getCooldownMsg(final long minutes, final Locale locale) {
         if (minutes > 0) {
-            return new MessageFormat(Responses.get("activeCooldown", locale)).format(new Object[]{ minutes });
+            final MessageFormat msg = new MessageFormat(Responses.get("activeCooldown", locale));
+            return msg.format(new Object[]{ minutes });
         }
         return Responses.get("inactiveCooldown", locale);
     }

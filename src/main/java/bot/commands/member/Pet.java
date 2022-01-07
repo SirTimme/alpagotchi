@@ -31,22 +31,15 @@ public class Pet implements ISlashCommand {
 
         final String favouriteSpot = this.spots.get((int) (Math.random() * 5));
         final String spot = event.getOption("spot").getAsString();
+        final boolean isFavourite = spot.equals(favouriteSpot);
 
-        int newJoy;
-        if (spot.equals(favouriteSpot)) {
-            final int randomJoy = (int) (Math.random() * 13 + 5);
-            newJoy = randomJoy + joy > 100 ? 100 - joy : randomJoy;
+        final int value = calculateJoy(joy, isFavourite);
+        final String msg = getMessage(value, isFavourite, locale);
 
-            event.reply("\uD83E\uDD99 You found the favourite spot of your alpaca **Joy + " + newJoy + "**").queue();
-        } else {
-            final int randomJoy = (int) (Math.random() * 9 + 3);
-            newJoy = randomJoy + joy > 100 ? 100 - joy : randomJoy;
-
-            event.reply("\uD83E\uDD99 Your alpaca enjoyed the petting, but it wasn't his favourite spot **Joy + " + newJoy + "**").queue();
-        }
-
-        user.setJoy(joy + newJoy);
+        user.setJoy(joy + value);
         IDatabase.INSTANCE.updateUser(user);
+
+        MessageService.queueReply(event, msg, false);
     }
 
     @Override
@@ -66,5 +59,15 @@ public class Pet implements ISlashCommand {
     @Override
     public CommandType getCommandType() {
         return CommandType.USER;
+    }
+
+    private String getMessage(final int joy, final boolean isFavourite, final Locale locale) {
+        final String key = isFavourite ? "favouriteSpot" : "normalSpot";
+        return new MessageFormat(Responses.get(key, locale)).format(new Object[]{ joy });
+    }
+
+    private int calculateJoy(final int joy, final boolean isFavourite) {
+        final int value = isFavourite ? (int) (Math.random() * 13 + 5) : (int) (Math.random() * 9 + 3);
+        return joy + value > 100 ? 100 - joy : value;
     }
 }
