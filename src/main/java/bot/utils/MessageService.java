@@ -78,7 +78,7 @@ public class MessageService {
      * @param ephemeral If the message is sent ephemeral or not
      */
     public static void queueImageReply(final SlashCommandEvent event, final MessageEmbed embed, final byte[] imgData, final boolean ephemeral) {
-        event.replyEmbeds(embed).addFile(imgData, "alpagotchi.jpg").setEphemeral(ephemeral).queue();
+        event.replyEmbeds(embed).addFile(imgData, "alpagotchi.png").setEphemeral(ephemeral).queue();
     }
 
     /**

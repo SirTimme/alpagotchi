@@ -48,7 +48,7 @@ public class MyAlpaca implements ISlashCommand {
     public void execute(final SlashCommandEvent event, final Locale locale, final Entry user) {
         final ByteArrayOutputStream bytes = new ByteArrayOutputStream();
         try {
-            ImageIO.write(createImage(user), "jpg", bytes);
+            ImageIO.write(createImage(user), "png", bytes);
         }
         catch (IOException error) {
             LOGGER.error(error.getMessage());
@@ -63,7 +63,7 @@ public class MyAlpaca implements ISlashCommand {
                     .setThumbnail(event.getUser().getAvatarUrl())
                     .setFooter("Created by " + dev.getName(), dev.getAvatarUrl())
                     .setTimestamp(Instant.now())
-                    .setImage("attachment://alpagotchi.jpg")
+                    .setImage("attachment://alpagotchi.png")
                     .build();
 
             MessageService.queueImageReply(event, embed, bytes.toByteArray(), false);
