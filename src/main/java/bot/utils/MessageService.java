@@ -3,11 +3,14 @@ package bot.utils;
 import bot.db.IDatabase;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.interaction.*;
+import net.dv8tion.jda.api.exceptions.ErrorHandler;
 import net.dv8tion.jda.api.interactions.components.Component;
 
 import java.text.MessageFormat;
 import java.util.Collections;
 import java.util.Locale;
+
+import static net.dv8tion.jda.api.requests.ErrorResponse.*;
 
 /**
  * Static class providing convenience methods for replying to a slashcommand
@@ -21,7 +24,7 @@ public class MessageService {
      * @param ephemeral If the message is sent ephemeral or not
      */
     public static void queueReply(final SlashCommandEvent event, final String msg, final boolean ephemeral) {
-        event.reply(msg).setEphemeral(ephemeral).queue();
+        event.reply(msg).setEphemeral(ephemeral).queue(null, getHandler(event));
     }
 
     /**
@@ -32,7 +35,7 @@ public class MessageService {
      * @param ephemeral If the message is sent ephemeral or not
      */
     public static void queueReply(final SlashCommandEvent event, final MessageFormat msg, final boolean ephemeral) {
-        event.reply(msg.format(new Object[]{})).setEphemeral(ephemeral).queue();
+        event.reply(msg.format(new Object[]{})).setEphemeral(ephemeral).queue(null, getHandler(event));
     }
 
     /**
@@ -44,7 +47,7 @@ public class MessageService {
      * @param components Adds slashcommand components to the message
      */
     public static void queueComponentReply(final SlashCommandEvent event, final MessageEmbed embed, final boolean ephemeral, final Component... components) {
-        event.replyEmbeds(embed).setEphemeral(ephemeral).addActionRow(components).queue();
+        event.replyEmbeds(embed).setEphemeral(ephemeral).addActionRow(components).queue(null, getHandler(event));
     }
 
     /**
@@ -56,7 +59,7 @@ public class MessageService {
      * @param components Adds slashcommand components to the message
      */
     public static void queueComponentReply(final SlashCommandEvent event, final MessageFormat msg, final boolean ephemeral, final Component... components) {
-        event.reply(msg.format(new Object[]{})).setEphemeral(ephemeral).addActionRow(components).queue();
+        event.reply(msg.format(new Object[]{})).setEphemeral(ephemeral).addActionRow(components).queue(null, getHandler(event));
     }
 
     /**
@@ -67,7 +70,7 @@ public class MessageService {
      * @param ephemeral If the message is sent ephemeral or not
      */
     public static void queueEmbedReply(final SlashCommandEvent event, final MessageEmbed embed, final boolean ephemeral) {
-        event.replyEmbeds(embed).setEphemeral(ephemeral).queue();
+        event.replyEmbeds(embed).setEphemeral(ephemeral).queue(null, getHandler(event));
     }
 
     /**
@@ -78,7 +81,7 @@ public class MessageService {
      * @param ephemeral If the message is sent ephemeral or not
      */
     public static void queueImageReply(final SlashCommandEvent event, final MessageEmbed embed, final byte[] imgData, final boolean ephemeral) {
-        event.replyEmbeds(embed).addFile(imgData, "alpagotchi.png").setEphemeral(ephemeral).queue();
+        event.replyEmbeds(embed).addFile(imgData, "alpagotchi.png").setEphemeral(ephemeral).queue(null, getHandler(event));
     }
 
     /**
@@ -106,7 +109,19 @@ public class MessageService {
     }
 
     public static Locale getLocale(final GenericInteractionCreateEvent event) {
-        return event.getGuild() == null ? Locale.ENGLISH : IDatabase.INSTANCE.getGuildSettings(event.getGuild().getIdLong()).getLocale();
+        return event.getGuild() == null
+                ? Locale.ENGLISH
+                : IDatabase.INSTANCE.getGuildSettings(event.getGuild().getIdLong()).getLocale();
+    }
+
+    private static ErrorHandler getHandler(final SlashCommandEvent event) {
+        return new ErrorHandler()
+                .handle(
+                        UNKNOWN_INTEGRATION,
+                        ex -> event.getChannel()
+                                   .sendMessage(Responses.get("commandTimeout", Locale.ENGLISH))
+                                   .queue()
+                );
     }
 }
 
