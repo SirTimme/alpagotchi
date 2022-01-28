@@ -33,4 +33,4 @@ Alpagotchi works only with slashcommands! Simply enter `/` in your bar to execut
 | outfit [outfit] | Change the appearance of your alpaca |
 | delete | Deletes all of your stored data |
 | init | Initialize your alpaca in the database |
-| image [query] | Searches a random image based on the query with pixabay |
+| language | Sets the bots' language within a guild |
