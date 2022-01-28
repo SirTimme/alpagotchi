@@ -4,8 +4,6 @@ import bot.events.EventHandler;
 import bot.utils.Env;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
-import net.dv8tion.jda.api.requests.GatewayIntent;
-import net.dv8tion.jda.api.utils.cache.CacheFlag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,16 +22,7 @@ public class Bot {
      */
     public static void main(String[] args) {
         try {
-            JDABuilder.create(Env.get("TOKEN"), GatewayIntent.GUILD_MESSAGES)
-                      .disableCache(
-                              CacheFlag.ACTIVITY,
-                              CacheFlag.VOICE_STATE,
-                              CacheFlag.EMOTE,
-                              CacheFlag.CLIENT_STATUS,
-                              CacheFlag.ONLINE_STATUS,
-                              CacheFlag.MEMBER_OVERRIDES,
-                              CacheFlag.ROLE_TAGS
-                      )
+            JDABuilder.createLight(Env.get("TOKEN"))
                       .addEventListeners(new EventHandler())
                       .setActivity(Activity.playing("/help | \uD83E\uDD99 Alpacas"))
                       .build();
