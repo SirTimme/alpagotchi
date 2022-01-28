@@ -117,7 +117,7 @@ public class MessageService {
     private static ErrorHandler getHandler(final SlashCommandEvent event) {
         return new ErrorHandler()
                 .handle(
-                        UNKNOWN_INTEGRATION,
+                        UNKNOWN_INTERACTION,
                         ex -> event.getChannel()
                                    .sendMessage(Responses.get("commandTimeout", Locale.ENGLISH))
                                    .queue()
