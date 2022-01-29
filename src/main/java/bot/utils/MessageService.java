@@ -4,11 +4,13 @@ import bot.db.IDatabase;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.interaction.*;
 import net.dv8tion.jda.api.exceptions.ErrorHandler;
+import net.dv8tion.jda.api.exceptions.ErrorResponseException;
 import net.dv8tion.jda.api.interactions.components.Component;
 
 import java.text.MessageFormat;
 import java.util.Collections;
 import java.util.Locale;
+import java.util.function.Consumer;
 
 import static net.dv8tion.jda.api.requests.ErrorResponse.*;
 
@@ -115,13 +117,11 @@ public class MessageService {
     }
 
     private static ErrorHandler getHandler(final SlashCommandEvent event) {
-        return new ErrorHandler()
-                .handle(
-                        UNKNOWN_INTERACTION,
-                        ex -> event.getChannel()
-                                   .sendMessage(Responses.get("commandTimeout", Locale.ENGLISH))
-                                   .queue()
-                );
+        final Consumer<ErrorResponseException> action = ex -> {
+            event.getChannel().sendMessage(Responses.get("commandTimeout", getLocale(event))).queue();
+        };
+
+        return new ErrorHandler().handle(UNKNOWN_INTERACTION, action);
     }
 }
 

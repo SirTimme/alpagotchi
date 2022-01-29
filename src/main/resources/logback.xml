@@ -1,7 +1,7 @@
 <configuration packagingData="true">
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
-            <pattern>%date{ISO8601} %highlight(%-5level) %cyan(%-25(%logger{20}) %msg %n)</pattern>
+            <pattern>%d{yyyy-MM-dd} | %d{HH:mm:ss.SSS} | %highlight(%-6level) | %boldCyan(%-30.30thread) | %boldYellow(%-30.30logger{30}) | %green(%m%n)</pattern>
         </encoder>
     </appender>
 
