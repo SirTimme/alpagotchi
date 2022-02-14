@@ -9,17 +9,9 @@ import org.slf4j.LoggerFactory;
 
 import javax.security.auth.login.LoginException;
 
-/**
- * Main entry point of the bot
- */
 public class Bot {
     private final static Logger LOGGER = LoggerFactory.getLogger(Bot.class);
 
-    /**
-     * Starts the bot
-     *
-     * @param args Optional args to be passed
-     */
     public static void main(String[] args) {
         try {
             JDABuilder.createLight(Env.get("TOKEN"))

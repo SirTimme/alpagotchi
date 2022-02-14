@@ -14,95 +14,35 @@ import java.util.function.Consumer;
 
 import static net.dv8tion.jda.api.requests.ErrorResponse.*;
 
-/**
- * Static class providing convenience methods for replying to a slashcommand
- */
 public class MessageService {
-    /**
-     * Convenience method for responding to a slashcommand interaction
-     *
-     * @param event     The slashcommand event to reply to
-     * @param msg       The bots' response to the user
-     * @param ephemeral If the message is sent ephemeral or not
-     */
     public static void queueReply(final SlashCommandEvent event, final String msg, final boolean ephemeral) {
         event.reply(msg).setEphemeral(ephemeral).queue(null, getHandler(event));
     }
 
-    /**
-     * Convenience method for responding to a slashcommand interaction
-     *
-     * @param event     The slashcommand event to reply to
-     * @param msg       The bots' response to the user
-     * @param ephemeral If the message is sent ephemeral or not
-     */
     public static void queueReply(final SlashCommandEvent event, final MessageFormat msg, final boolean ephemeral) {
         event.reply(msg.format(new Object[]{})).setEphemeral(ephemeral).queue(null, getHandler(event));
     }
 
-    /**
-     * Convenience method for responding to a slashcommand interaction
-     *
-     * @param event      The slashcommand event to reply to
-     * @param embed      Sends an embed as a response
-     * @param ephemeral  If the message is sent ephemeral or not
-     * @param components Adds slashcommand components to the message
-     */
     public static void queueComponentReply(final SlashCommandEvent event, final MessageEmbed embed, final boolean ephemeral, final Component... components) {
         event.replyEmbeds(embed).setEphemeral(ephemeral).addActionRow(components).queue(null, getHandler(event));
     }
 
-    /**
-     * Convenience method for responding to a slashcommand interaction
-     *
-     * @param event      The slashcommand event to reply to
-     * @param msg        The bots' response to the user
-     * @param ephemeral  If the message is sent ephemeral or not
-     * @param components Adds slashcommand components to the message
-     */
     public static void queueComponentReply(final SlashCommandEvent event, final MessageFormat msg, final boolean ephemeral, final Component... components) {
         event.reply(msg.format(new Object[]{})).setEphemeral(ephemeral).addActionRow(components).queue(null, getHandler(event));
     }
 
-    /**
-     * Convenience method for responding to a slashcommand interaction
-     *
-     * @param event     The slashcommand event to reply to
-     * @param embed     Sends an embed as a response
-     * @param ephemeral If the message is sent ephemeral or not
-     */
     public static void queueEmbedReply(final SlashCommandEvent event, final MessageEmbed embed, final boolean ephemeral) {
         event.replyEmbeds(embed).setEphemeral(ephemeral).queue(null, getHandler(event));
     }
 
-    /**
-     * Convenience method for responding to a slashcommand interaction
-     *
-     * @param event     The slashcommand event to reply to
-     * @param embed     Sends an embed as a response
-     * @param ephemeral If the message is sent ephemeral or not
-     */
     public static void queueImageReply(final SlashCommandEvent event, final MessageEmbed embed, final byte[] imgData, final boolean ephemeral) {
         event.replyEmbeds(embed).addFile(imgData, "alpagotchi.png").setEphemeral(ephemeral).queue(null, getHandler(event));
     }
 
-    /**
-     * Convenience method for responding to a slashcommand interaction while blocking until responding
-     *
-     * @param event     The slashcommand event to reply to
-     * @param msg     The bots' response to the user
-     * @param ephemeral If the message is sent ephemeral or not
-     */
     public static void completeReply(final SlashCommandEvent event, final String msg, final boolean ephemeral) {
         event.reply(msg).setEphemeral(ephemeral).complete();
     }
 
-    /**
-     * Convenience method for editing a existing message
-     *
-     * @param event Data about the selected choice
-     * @param msg   The bots' response
-     */
     public static void editReply(final GenericComponentInteractionCreateEvent event, final MessageFormat msg) {
         event.editMessage(msg.format(new Object[]{}))
              .setActionRows(Collections.emptyList())
