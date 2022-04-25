@@ -33,13 +33,13 @@ public class MyAlpaca implements ISlashCommand {
     public MyAlpaca() {
         final File folder = new File("src/main/resources/outfits");
         try {
-            for (File file : folder.listFiles()) {
+            for (final File file : folder.listFiles()) {
                 final String name = file.getName().split("\\.")[0];
 
                 this.images.put(name, ImageIO.read(file));
             }
         }
-        catch (IOException error) {
+        catch (final IOException error) {
             LOGGER.error(error.getMessage());
         }
     }
@@ -50,7 +50,7 @@ public class MyAlpaca implements ISlashCommand {
         try {
             ImageIO.write(createImage(user), "png", bytes);
         }
-        catch (IOException error) {
+        catch (final IOException error) {
             LOGGER.error(error.getMessage());
         }
 
@@ -80,7 +80,7 @@ public class MyAlpaca implements ISlashCommand {
         return CommandType.USER;
     }
 
-    private BufferedImage createImage(Entry user) {
+    private BufferedImage createImage(final Entry user) {
         final int hunger = user.getHunger();
         final int thirst = user.getThirst();
         final int energy = user.getEnergy();
@@ -117,11 +117,11 @@ public class MyAlpaca implements ISlashCommand {
         return img;
     }
 
-    private Color getValueColor(int value) {
+    private Color getValueColor(final int value) {
         return value == 100 ? Color.GREEN : this.colors[value / 20];
     }
 
-    private int getPosition(int value, String position) {
+    private int getPosition(final int value, final String position) {
         if (value == 100) {
             return position.equalsIgnoreCase("front") ? 145 : 534;
         } else if (value >= 10) {

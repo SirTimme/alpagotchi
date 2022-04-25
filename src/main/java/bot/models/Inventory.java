@@ -25,15 +25,15 @@ public class Inventory {
 		return this.items;
 	}
 
-	public int getItemByName(String name) {
+	public int getItemByName(final String name) {
 		return this.items.get(name);
 	}
 
-	public void setCurrency(int currency) {
+	public void setCurrency(final int currency) {
 		this.currency = currency;
 	}
 
-	public void setItem(String item, int newValue) {
+	public void setItem(final String item, final int newValue) {
 		this.items.replace(item, newValue);
 	}
 }

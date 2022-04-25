@@ -21,7 +21,8 @@ import static net.dv8tion.jda.api.interactions.commands.OptionType.*;
 public class Gift implements ISlashCommand {
 	@Override
 	public void execute(final SlashCommandEvent event, final Locale locale, final Entry user) {
-		final User selectedUser = event.getOption("user").getAsUser();
+		final var selectedUser = event.getOption("user").getAsUser();
+
 		if (selectedUser.getIdLong() == user.getMemberID()) {
 			MessageService.queueReply(event, new MessageFormat(Responses.get("giftedYourself", locale)), true);
 			return;

@@ -28,32 +28,45 @@ public class Feed implements ISlashCommand {
 
 	@Override
 	public void execute(final SlashCommandEvent event, final Locale locale, final Entry user) {
-		final long remainingSleep = user.getSleep();
+		final var remainingSleep = user.getSleep();
+
 		if (remainingSleep > 0) {
-			final MessageFormat msg = new MessageFormat(Responses.get("alpacaSleeping", locale));
-			final String content = msg.format(new Object[]{ remainingSleep });
+			final var format = new MessageFormat(Responses.get("alpacaSleeping", locale));
+			final var msg = format.format(new Object[]{ remainingSleep });
 
-			MessageService.queueReply(event, content, true);
+			event.reply(msg).setEphemeral(true).queue();
 			return;
 		}
 
-		final int itemAmount = (int) event.getOption("amount").getAsLong();
+		final var itemAmount = (int) event.getOption("amount").getAsLong();
+
 		if (itemAmount > 5) {
-			MessageService.queueReply(event, new MessageFormat(Responses.get("fedTooManyItems", locale)), true);
+			final var format = new MessageFormat(Responses.get("fedTooManyItems", locale));
+			final var msg = format.format(new Object[]{ });
+
+			event.reply(msg).setEphemeral(true).queue();
 			return;
 		}
 
-		final Item item = this.items.getItemByName(event.getOption("item").getAsString());
-		final int newItemAmount = user.getItem(item.getName()) - itemAmount;
+		final var item = this.items.getItemByName(event.getOption("item").getAsString());
+		final var newItemAmount = user.getItem(item.getName()) - itemAmount;
+
 		if (newItemAmount < 0) {
-			MessageService.queueReply(event, new MessageFormat(Responses.get("notEnoughItems", locale)), true);
+			final var format = new MessageFormat(Responses.get("fedTooManyItems", locale));
+			final var msg = format.format(new Object[]{ });
+
+			event.reply(msg).setEphemeral(true).queue();
 			return;
 		}
 
-		final int oldValue = user.getStat(item.getStat());
-		final int saturation = itemAmount * item.getSaturation();
+		final var oldValue = user.getStat(item.getStat());
+		final var saturation = itemAmount * item.getSaturation();
+
 		if (oldValue + saturation > 100) {
-			MessageService.queueReply(event, new MessageFormat(Responses.get("alpacaOverfeeded", locale)), true);
+			final var format = new MessageFormat(Responses.get("alpacaOverfeeded", locale));
+			final var msg = format.format(new Object[]{ });
+
+			event.reply(msg).setEphemeral(true).queue();
 			return;
 		}
 
@@ -62,10 +75,10 @@ public class Feed implements ISlashCommand {
 
 		IDatabase.INSTANCE.updateUser(user);
 
-		final MessageFormat msg = new MessageFormat(Responses.get(item.getStat(), locale));
-		final String content = msg.format(new Object[]{ itemAmount, item.getName(), saturation });
+		final var format = new MessageFormat(Responses.get(item.getStat(), locale));
+		final var msg = format.format(new Object[]{ itemAmount, item.getName(), saturation });
 
-		MessageService.queueReply(event, content, false);
+		event.reply(msg).queue();
 	}
 
 	@Override

@@ -23,7 +23,7 @@ public class ItemManager {
             final Type type = new TypeToken<ArrayList<Item>>() {}.getType();
 
             this.items = new Gson().fromJson(reader, type);
-        } catch (IOException error) {
+        } catch (final IOException error) {
             LOGGER.error(error.getMessage());
             this.items = new ArrayList<>();
         }

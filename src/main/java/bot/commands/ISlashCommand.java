@@ -8,9 +8,9 @@ import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import java.util.Locale;
 
 public interface ISlashCommand {
+    void execute(final SlashCommandEvent event, final Locale locale, final Entry user);
+
     CommandData getCommandData();
 
     CommandType getCommandType();
-
-    void execute(final SlashCommandEvent event, final Locale locale, final Entry user);
 }

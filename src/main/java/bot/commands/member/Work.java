@@ -31,7 +31,7 @@ public class Work implements ISlashCommand {
             final BufferedReader reader = new BufferedReader(new FileReader("src/main/resources/data/messages.json"));
             final Type type = new TypeToken<List<String>>() {}.getType();
             this.json = new Gson().fromJson(reader, type);
-        } catch (IOException error) {
+        } catch (final IOException error) {
             LOGGER.error(error.getMessage());
         }
     }

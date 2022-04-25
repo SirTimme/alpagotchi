@@ -97,7 +97,7 @@ public class Image implements ISlashCommand {
 
             return new Gson().fromJson(response.body(), JsonObject.class);
         }
-        catch (URISyntaxException | IOException | InterruptedException error) {
+        catch (final URISyntaxException | IOException | InterruptedException error) {
             LOGGER.error(error.getMessage());
         }
 

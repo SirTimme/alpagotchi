@@ -24,9 +24,9 @@ public class Balance implements ISlashCommand {
 
 	@Override
 	public void execute(final SlashCommandEvent event, final Locale locale, final Entry user) {
-		final MessageFormat msg = new MessageFormat(Responses.get("currentBalance", locale));
-		final String content = msg.format(new Object[]{ user.getCurrency() });
+		final var msg = new MessageFormat(Responses.get("currentBalance", locale));
+		final var content = msg.format(new Object[]{ user.getCurrency() });
 
-		MessageService.queueReply(event, content, false);
+		event.reply(content).queue();
 	}
 }

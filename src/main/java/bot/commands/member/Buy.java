@@ -3,10 +3,8 @@ package bot.commands.member;
 import bot.commands.ISlashCommand;
 import bot.db.IDatabase;
 import bot.models.Entry;
-import bot.shop.Item;
 import bot.shop.ItemManager;
 import bot.utils.CommandType;
-import bot.utils.MessageService;
 import bot.utils.Responses;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.interactions.commands.Command;
@@ -22,24 +20,32 @@ import static net.dv8tion.jda.api.interactions.commands.OptionType.STRING;
 public class Buy implements ISlashCommand {
 	private final ItemManager items;
 
-	public Buy(ItemManager items) {
+	public Buy(final ItemManager items) {
 		this.items = items;
 	}
 
 	@Override
 	public void execute(final SlashCommandEvent event, final Locale locale, final Entry user) {
-		final int amount = (int) event.getOption("amount").getAsLong();
+		final var amount = (int) event.getOption("amount").getAsLong();
+
 		if (amount > 10) {
-			MessageService.queueReply(event, new MessageFormat(Responses.get("boughtTooManyItems", locale)), true);
+			final var format = new MessageFormat(Responses.get("boughtTooManyItems", locale));
+			final var msg = format.format(new Object[] {});
+
+			event.reply(msg).setEphemeral(true).queue();
 			return;
 		}
 
-		final Item item = this.items.getItemByName(event.getOption("item").getAsString());
+		final var item = this.items.getItemByName(event.getOption("item").getAsString());
 
-		final int price = amount * item.getPrice();
-		final int balance = user.getCurrency();
+		final var price = amount * item.getPrice();
+		final var balance = user.getCurrency();
+
 		if (balance - price < 0) {
-			MessageService.queueReply(event, new MessageFormat(Responses.get("insufficientBalance", locale)), true);
+			final var format = new MessageFormat(Responses.get("insufficientBalance", locale));
+			final var msg = format.format(new Object[] {});
+
+			event.reply(msg).setEphemeral(true).queue();
 			return;
 		}
 
@@ -48,10 +54,10 @@ public class Buy implements ISlashCommand {
 
 		IDatabase.INSTANCE.updateUser(user);
 
-		final MessageFormat msg = new MessageFormat(Responses.get("buySuccessful", locale));
-		final String content = msg.format(new Object[]{ amount, item.getName(), price });
+		final var format = new MessageFormat(Responses.get("buySuccessful", locale));
+		final var msg = format.format(new Object[]{ amount, item.getName(), price });
 
-		MessageService.queueReply(event, content, false);
+		event.reply(msg).queue();
 	}
 
 	@Override

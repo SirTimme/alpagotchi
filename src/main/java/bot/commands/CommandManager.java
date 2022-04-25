@@ -70,7 +70,7 @@ public class CommandManager {
     }
 
     public String getCommandsAsString() {
-        StringBuilder sb = new StringBuilder();
+        final StringBuilder sb = new StringBuilder();
 
         this.commands.keySet()
                      .stream()

@@ -51,27 +51,27 @@ public class Alpaca {
         return this.joy;
     }
 
-    public void setOutfit(String outfit) {
+    public void setOutfit(final String outfit) {
         this.outfit = outfit;
     }
 
-    public void setNickname(String nickname) {
+    public void setNickname(final String nickname) {
         this.nickname = nickname;
     }
 
-    public void setHunger(int hunger) {
+    public void setHunger(final int hunger) {
         this.hunger = hunger;
     }
 
-    public void setThirst(int thirst) {
+    public void setThirst(final int thirst) {
         this.thirst = thirst;
     }
 
-    public void setEnergy(int energy) {
+    public void setEnergy(final int energy) {
         this.energy = energy;
     }
 
-    public void setJoy(int joy) {
+    public void setJoy(final int joy) {
         this.joy = joy;
     }
 }

@@ -18,7 +18,7 @@ import java.util.Locale;
 public class Shop implements ISlashCommand {
     private final ItemManager items;
 
-    public Shop(ItemManager items) {
+    public Shop(final ItemManager items) {
         this.items = items;
     }
 

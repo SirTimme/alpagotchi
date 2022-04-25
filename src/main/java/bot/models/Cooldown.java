@@ -27,7 +27,7 @@ public class Cooldown {
         return this.sleep;
     }
 
-    public void setSleep(long sleep) {
+    public void setSleep(final long sleep) {
         this.sleep = sleep;
     }
 
@@ -40,7 +40,7 @@ public class Cooldown {
         return this.work;
     }
 
-    public void setWork(long work) {
+    public void setWork(final long work) {
         this.work = work;
     }
 }

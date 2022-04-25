@@ -61,7 +61,7 @@ public class Entry {
 	}
 
 	@BsonIgnore
-	public void setNickname(String nickname) {
+	public void setNickname(final String nickname) {
 		this.alpaca.setNickname(nickname);
 	}
 
@@ -71,7 +71,7 @@ public class Entry {
 	}
 
 	@BsonIgnore
-	public void setOutfit(String outfit) {
+	public void setOutfit(final String outfit) {
 		this.alpaca.setOutfit(outfit);
 	}
 
@@ -105,7 +105,7 @@ public class Entry {
 	}
 
 	@BsonIgnore
-	public void setEnergy(int energy) {
+	public void setEnergy(final int energy) {
 		this.alpaca.setEnergy(energy);
 	}
 
@@ -115,7 +115,7 @@ public class Entry {
 	}
 
 	@BsonIgnore
-	public void setJoy(int joy) {
+	public void setJoy(final int joy) {
 		this.alpaca.setJoy(joy);
 	}
 
@@ -125,7 +125,7 @@ public class Entry {
 	}
 
 	@BsonIgnore
-	public void setWork(long work) {
+	public void setWork(final long work) {
 		this.cooldown.setWork(work);
 	}
 
@@ -135,7 +135,7 @@ public class Entry {
 	}
 
 	@BsonIgnore
-	public void setSleep(long sleep) {
+	public void setSleep(final long sleep) {
 		this.cooldown.setSleep(sleep);
 	}
 
@@ -145,17 +145,17 @@ public class Entry {
 	}
 
 	@BsonIgnore
-	public void setCurrency(int currency) {
+	public void setCurrency(final int currency) {
 		this.inventory.setCurrency(currency);
 	}
 
 	@BsonIgnore
-	public int getItem(String item) {
+	public int getItem(final String item) {
 		return this.inventory.getItemByName(item);
 	}
 
 	@BsonIgnore
-	public void setItem(String name, int amount) {
+	public void setItem(final String name, final int amount) {
 		this.inventory.setItem(name, amount);
 	}
 }
