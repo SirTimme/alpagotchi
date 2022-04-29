@@ -25,7 +25,7 @@ public class Help implements ISlashCommand {
     @Override
     public void execute(final SlashCommandEvent event, final Locale locale, final Entry user) {
         event.getJDA().retrieveUserById(Env.get("DEV_ID")).queue(dev -> {
-            final MessageEmbed embed = new EmbedBuilder()
+            final var embed = new EmbedBuilder()
                     .setTitle(Responses.get("headerHelpEmbed", locale))
                     .setThumbnail("https://cdn.discordapp.com/attachments/795637300661977132/836542447186214942/avatar.png")
                     .addField("Commands", this.commands.getCommandsAsString(), true)
@@ -34,7 +34,7 @@ public class Help implements ISlashCommand {
                     .setTimestamp(Instant.now())
                     .build();
 
-            MessageService.queueEmbedReply(event, embed, false);
+            event.replyEmbeds(embed).queue();
         });
     }
 

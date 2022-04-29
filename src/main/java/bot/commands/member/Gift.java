@@ -4,9 +4,7 @@ import bot.commands.ISlashCommand;
 import bot.db.IDatabase;
 import bot.models.Entry;
 import bot.utils.CommandType;
-import bot.utils.MessageService;
 import bot.utils.Responses;
-import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.interactions.commands.Command;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
@@ -17,32 +15,46 @@ import java.util.Locale;
 
 import static net.dv8tion.jda.api.interactions.commands.OptionType.*;
 
-
 public class Gift implements ISlashCommand {
 	@Override
 	public void execute(final SlashCommandEvent event, final Locale locale, final Entry user) {
 		final var selectedUser = event.getOption("user").getAsUser();
 
 		if (selectedUser.getIdLong() == user.getMemberID()) {
-			MessageService.queueReply(event, new MessageFormat(Responses.get("giftedYourself", locale)), true);
+			final var format = new MessageFormat(Responses.get("giftedYourself", locale));
+			final var msg = format.format(new Object[] {});
+
+			event.reply(msg).setEphemeral(true).queue();
 			return;
 		}
 
-		final Entry selectedDBUser = IDatabase.INSTANCE.getUser(selectedUser.getIdLong());
+		final var selectedDBUser = IDatabase.INSTANCE.getUser(selectedUser.getIdLong());
+
 		if (selectedDBUser == null) {
-			MessageService.queueReply(event, new MessageFormat(Responses.get("giftedUserNotInitialized", locale)), true);
+			final var format = new MessageFormat(Responses.get("giftedUserNotInitialized", locale));
+			final var msg = format.format(new Object[] {});
+
+			event.reply(msg).setEphemeral(true).queue();
 			return;
 		}
 
-		final int amount = (int) event.getOption("amount").getAsLong();
+		final var amount = (int) event.getOption("amount").getAsLong();
+
 		if (amount > 5) {
-			MessageService.queueReply(event, new MessageFormat(Responses.get("giftedTooManyItems", locale)), true);
+			final var format = new MessageFormat(Responses.get("giftedTooManyItems", locale));
+			final var msg = format.format(new Object[] {});
+
+			event.reply(msg).setEphemeral(true).queue();
 			return;
 		}
 
 		final String selectedItem = event.getOption("item").getAsString();
+
 		if (user.getItem(selectedItem) - amount < 0) {
-			MessageService.queueReply(event, new MessageFormat(Responses.get("notEnoughItems", locale)), true);
+			final var format = new MessageFormat(Responses.get("notEnoughItems", locale));
+			final var msg = format.format(new Object[] {});
+
+			event.reply(msg).setEphemeral(true).queue();
 			return;
 		}
 
@@ -52,10 +64,10 @@ public class Gift implements ISlashCommand {
 		IDatabase.INSTANCE.updateUser(selectedDBUser);
 		IDatabase.INSTANCE.updateUser(user);
 
-		final MessageFormat msg = new MessageFormat(Responses.get("giftSuccessful", locale));
-		final String content = msg.format(new Object[]{ amount, selectedItem, selectedUser.getName() });
+		final MessageFormat format = new MessageFormat(Responses.get("giftSuccessful", locale));
+		final String msg = format.format(new Object[]{ amount, selectedItem, selectedUser.getName() });
 
-		MessageService.queueReply(event, content, false);
+		event.reply(msg).queue();
 	}
 
 	@Override

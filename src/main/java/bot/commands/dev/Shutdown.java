@@ -29,5 +29,4 @@ public class Shutdown implements ISlashCommand {
 	public CommandType getCommandType() {
 		return CommandType.DEV;
 	}
-
 }

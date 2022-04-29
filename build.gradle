@@ -5,7 +5,7 @@ plugins {
 }
 
 mainClassName = 'bot.Bot'
-sourceCompatibility = 16
+sourceCompatibility = 17
 
 repositories {
     mavenCentral()
