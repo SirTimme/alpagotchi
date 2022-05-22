@@ -7,7 +7,6 @@ import bot.db.IDatabase;
 import bot.models.Entry;
 import bot.shop.ItemManager;
 import bot.utils.CommandType;
-import bot.utils.MessageService;
 import bot.utils.Responses;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
@@ -45,12 +44,15 @@ public class CommandManager {
     }
 
     public void handle(final SlashCommandEvent event) {
-        final Locale locale = MessageService.getLocale(event);
+        final Locale locale = getLocale(event);
         final ISlashCommand cmd = getCommand(event.getName());
         final Entry user = IDatabase.INSTANCE.getUser(event.getUser().getIdLong());
 
         if (cmd.getCommandType() == CommandType.USER && user == null) {
-            MessageService.queueReply(event, new MessageFormat(Responses.get("alpacaNotOwned", locale)), true);
+            final var format = new MessageFormat(Responses.get("alpacaNotOwned", locale));
+            final var msg = format.format(new Object[]{});
+
+            event.reply(msg).setEphemeral(true).queue();
             return;
         }
 
@@ -82,5 +84,11 @@ public class CommandManager {
 
     private ISlashCommand getCommand(final String name) {
         return this.commands.get(name);
+    }
+
+    private Locale getLocale(final SlashCommandEvent event) {
+        return event.getGuild() == null
+                ? Locale.ENGLISH
+                : IDatabase.INSTANCE.getGuildSettings(event.getGuild().getIdLong()).getLocale();
     }
 }
