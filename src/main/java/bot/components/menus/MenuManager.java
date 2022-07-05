@@ -1,6 +1,5 @@
 package bot.components.menus;
 
-import bot.utils.MessageService;
 import net.dv8tion.jda.api.events.interaction.SelectionMenuEvent;
 
 import java.util.HashMap;

@@ -7,6 +7,7 @@ import bot.shop.ItemManager;
 import bot.utils.CommandType;
 import bot.utils.Responses;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.Command;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
@@ -25,7 +26,7 @@ public class Buy implements ISlashCommand {
 	}
 
 	@Override
-	public void execute(final SlashCommandEvent event, final Locale locale, final Entry user) {
+	public void execute(final SlashCommandInteractionEvent event, final Locale locale, final Entry user) {
 		final var amount = (int) event.getOption("amount").getAsLong();
 
 		if (amount > 10) {

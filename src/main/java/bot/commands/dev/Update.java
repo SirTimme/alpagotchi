@@ -7,15 +7,13 @@ import bot.utils.CommandType;
 import bot.utils.Env;
 import bot.utils.Responses;
 import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
-import net.dv8tion.jda.api.interactions.commands.Command;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.interactions.commands.DefaultMemberPermissions;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
-import net.dv8tion.jda.api.interactions.commands.privileges.CommandPrivilege;
+import net.dv8tion.jda.api.interactions.commands.build.Commands;
 
 import java.text.MessageFormat;
 import java.util.*;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 import static bot.utils.CommandType.*;
 
@@ -27,8 +25,8 @@ public class Update implements ISlashCommand {
 	}
 
 	@Override
-	public void execute(final SlashCommandEvent event, final Locale locale, final Entry user) {
-		final Guild guild = event.getGuild();
+	public void execute(final SlashCommandInteractionEvent event, final Locale locale, final Entry user) {
+		final Guild guild = event.getJDA().getGuildById(Env.get("DEV_GUILD"));
 		if (guild == null) {
 			final var format = new MessageFormat(Responses.get("guildOnly", locale));
 			final var msg = format.format(new Object[] {});
@@ -44,7 +42,7 @@ public class Update implements ISlashCommand {
 
 		guild.updateCommands()
 			 .addCommands(this.commands.getCommandDataByTypes(DEV))
-			 .queue(created -> guild.updateCommandPrivileges(createMap(created)).queue());
+			 .queue();
 
 		final var format = new MessageFormat(Responses.get("update", locale));
 		final var msg = format.format(new Object[]{ this.commands.getCommands().size() });
@@ -54,18 +52,12 @@ public class Update implements ISlashCommand {
 
 	@Override
 	public CommandData getCommandData() {
-		return new CommandData("update", "Refreshes all slashcommands").setDefaultEnabled(false);
+		return Commands.slash("update", "Refreshes all slashcommands")
+					   .setDefaultPermissions(DefaultMemberPermissions.DISABLED);
 	}
 
 	@Override
 	public CommandType getCommandType() {
 		return DEV;
-	}
-
-	private Map<String, Collection<? extends CommandPrivilege>> createMap(final List<Command> commands) {
-		final CommandPrivilege privilege = CommandPrivilege.enableUser(Env.get("DEV_ID"));
-		final Function<Command, List<CommandPrivilege>> cmdPrivileges = cmd -> List.of(privilege);
-
-		return commands.stream().collect(Collectors.toMap(Command::getId, cmdPrivileges));
 	}
 }

@@ -1,6 +1,5 @@
 package bot.components.buttons;
 
-import bot.utils.MessageService;
 import net.dv8tion.jda.api.events.interaction.ButtonClickEvent;
 import net.dv8tion.jda.api.interactions.components.Button;
 

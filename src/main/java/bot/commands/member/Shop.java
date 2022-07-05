@@ -6,9 +6,9 @@ import bot.shop.Item;
 import bot.shop.ItemManager;
 import bot.utils.CommandType;
 import bot.utils.Env;
-import bot.utils.MessageService;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 
 import java.time.Instant;
@@ -23,7 +23,7 @@ public class Shop implements ISlashCommand {
     }
 
     @Override
-    public void execute(final SlashCommandEvent event, final Locale locale, final Entry user) {
+    public void execute(final SlashCommandInteractionEvent event, final Locale locale, final Entry user) {
         event.getJDA().retrieveUserById(Env.get("DEV_ID")).queue(dev -> {
             final EmbedBuilder embed = new EmbedBuilder()
                     .setTitle("Shop")

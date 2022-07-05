@@ -4,9 +4,9 @@ import bot.commands.ISlashCommand;
 import bot.db.IDatabase;
 import bot.models.Entry;
 import bot.utils.CommandType;
-import bot.utils.MessageService;
 import bot.utils.Responses;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 
@@ -17,7 +17,7 @@ import static net.dv8tion.jda.api.interactions.commands.OptionType.INTEGER;
 
 public class Sleep implements ISlashCommand {
     @Override
-    public void execute(final SlashCommandEvent event, final Locale locale, final Entry user) {
+    public void execute(final SlashCommandInteractionEvent event, final Locale locale, final Entry user) {
         final int energy = user.getEnergy();
         if (energy == 100) {
             MessageService.queueReply(event, new MessageFormat(Responses.get("joyAtMaximum", locale)), true);

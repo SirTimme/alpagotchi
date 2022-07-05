@@ -8,7 +8,7 @@ import bot.models.Entry;
 import bot.shop.ItemManager;
 import bot.utils.CommandType;
 import bot.utils.Responses;
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 
 import java.text.MessageFormat;
@@ -18,7 +18,7 @@ public class CommandManager {
     private final Map<String, ISlashCommand> commands = new TreeMap<>();
 
     public CommandManager() {
-        final ItemManager items = new ItemManager();
+        final var items = new ItemManager();
 
         this.commands.put("ping", new Ping());
         this.commands.put("init", new Init());
@@ -28,7 +28,6 @@ public class CommandManager {
         this.commands.put("delete", new Delete());
         this.commands.put("feed", new Feed(items));
         this.commands.put("gift", new Gift());
-        this.commands.put("image", new Image());
         this.commands.put("work", new Work());
         this.commands.put("shutdown", new Shutdown());
         this.commands.put("myalpaca", new MyAlpaca());
@@ -43,7 +42,7 @@ public class CommandManager {
         this.commands.put("language", new Language());
     }
 
-    public void handle(final SlashCommandEvent event) {
+    public void handle(final SlashCommandInteractionEvent event) {
         final Locale locale = getLocale(event);
         final ISlashCommand cmd = getCommand(event.getName());
         final Entry user = IDatabase.INSTANCE.getUser(event.getUser().getIdLong());
@@ -86,7 +85,7 @@ public class CommandManager {
         return this.commands.get(name);
     }
 
-    private Locale getLocale(final SlashCommandEvent event) {
+    private Locale getLocale(final SlashCommandInteractionEvent event) {
         return event.getGuild() == null
                 ? Locale.ENGLISH
                 : IDatabase.INSTANCE.getGuildSettings(event.getGuild().getIdLong()).getLocale();

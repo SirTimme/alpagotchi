@@ -4,11 +4,11 @@ import bot.commands.ISlashCommand;
 import bot.models.Entry;
 import bot.utils.CommandType;
 import bot.utils.Env;
-import bot.utils.MessageService;
 import bot.utils.Responses;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,7 +45,7 @@ public class MyAlpaca implements ISlashCommand {
     }
 
     @Override
-    public void execute(final SlashCommandEvent event, final Locale locale, final Entry user) {
+    public void execute(final SlashCommandInteractionEvent event, final Locale locale, final Entry user) {
         final ByteArrayOutputStream bytes = new ByteArrayOutputStream();
         try {
             ImageIO.write(createImage(user), "png", bytes);

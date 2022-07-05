@@ -2,7 +2,6 @@ package bot.components.menus;
 
 import bot.db.IDatabase;
 import bot.models.GuildSettings;
-import bot.utils.MessageService;
 import bot.utils.Responses;
 import net.dv8tion.jda.api.events.interaction.SelectionMenuEvent;
 

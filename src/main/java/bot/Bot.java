@@ -18,8 +18,7 @@ public class Bot {
                       .addEventListeners(new EventHandler())
                       .setActivity(Activity.playing("/help | \uD83E\uDD99 Alpacas"))
                       .build();
-        }
-        catch (final LoginException error) {
+        } catch (final LoginException error) {
             LOGGER.error(error.getMessage());
         }
     }
