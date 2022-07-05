@@ -10,10 +10,10 @@ import bot.utils.Env;
 import bot.utils.Responses;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
-import net.dv8tion.jda.api.interactions.components.Button;
+import net.dv8tion.jda.api.interactions.commands.build.Commands;
+import net.dv8tion.jda.api.interactions.components.buttons.Button;
 
 import java.text.MessageFormat;
 import java.time.Instant;
@@ -24,18 +24,21 @@ public class Init implements ISlashCommand {
     @Override
     public void execute(final SlashCommandInteractionEvent event, final Locale locale, final Entry user) {
         if (user != null) {
-            MessageService.queueReply(event, new MessageFormat(Responses.get("alpacaAlreadyOwned", locale)), true);
+            final var format = new MessageFormat(Responses.get("alpacaAlreadyOwned", locale));
+            final var msg = format.format(new Object[] {});
+
+            event.reply(msg).setEphemeral(true).queue();
             return;
         }
 
-        final Button btnAccept = Button.success(UUID.randomUUID().toString(), "Accept");
-        final Button btnCancel = Button.danger(UUID.randomUUID().toString(), "Decline");
+        final var btnAccept = Button.success(UUID.randomUUID().toString(), "Accept");
+        final var btnCancel = Button.danger(UUID.randomUUID().toString(), "Decline");
 
         ButtonManager.addButton(btnAccept.getId(), new BtnInitAccept());
         ButtonManager.addButton(btnCancel.getId(), new BtnInitCancel());
 
         event.getJDA().retrieveUserById(Env.get("DEV_ID")).queue(dev -> {
-            final MessageEmbed embed = new EmbedBuilder()
+            final var embed = new EmbedBuilder()
                     .setTitle(Responses.get("userInformation", locale))
                     .setDescription(Responses.get("initIntro", locale))
                     .setThumbnail(event.getJDA().getSelfUser().getAvatarUrl())
@@ -45,13 +48,13 @@ public class Init implements ISlashCommand {
                     .setTimestamp(Instant.now())
                     .build();
 
-            MessageService.queueComponentReply(event, embed, true, btnAccept, btnCancel);
+            event.replyEmbeds(embed).addActionRow(btnAccept, btnCancel).queue();
         });
     }
 
     @Override
     public CommandData getCommandData() {
-        return new CommandData("init", "Initializes a new alpaca");
+        return Commands.slash("init", "Initializes a new alpaca");
     }
 
     @Override

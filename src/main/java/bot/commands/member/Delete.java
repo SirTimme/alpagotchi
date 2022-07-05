@@ -7,10 +7,10 @@ import bot.components.buttons.ButtonManager;
 import bot.models.Entry;
 import bot.utils.CommandType;
 import bot.utils.Responses;
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
-import net.dv8tion.jda.api.interactions.components.Button;
+import net.dv8tion.jda.api.interactions.commands.build.Commands;
+import net.dv8tion.jda.api.interactions.components.buttons.Button;
 
 import java.text.MessageFormat;
 import java.util.Locale;
@@ -36,7 +36,7 @@ public class Delete implements ISlashCommand {
 
     @Override
     public CommandData getCommandData() {
-        return new CommandData("delete", "Deletes your personal data");
+        return Commands.slash("delete", "Deletes your personal data");
     }
 
     @Override

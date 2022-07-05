@@ -6,10 +6,10 @@ import bot.models.Entry;
 import bot.shop.ItemManager;
 import bot.utils.CommandType;
 import bot.utils.Responses;
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.Command;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
+import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 
 import java.text.MessageFormat;
@@ -37,16 +37,7 @@ public class Feed implements ISlashCommand {
 			return;
 		}
 
-		final var itemAmount = (int) event.getOption("amount").getAsLong();
-
-		if (itemAmount > 5) {
-			final var format = new MessageFormat(Responses.get("fedTooManyItems", locale));
-			final var msg = format.format(new Object[]{ });
-
-			event.reply(msg).setEphemeral(true).queue();
-			return;
-		}
-
+		final var itemAmount = event.getOption("amount").getAsInt();
 		final var item = this.items.getItemByName(event.getOption("item").getAsString());
 		final var newItemAmount = user.getItem(item.getName()) - itemAmount;
 
@@ -82,7 +73,7 @@ public class Feed implements ISlashCommand {
 
 	@Override
 	public CommandData getCommandData() {
-		return new CommandData("feed", "Feeds your alpaca items")
+		return Commands.slash("feed", "Feeds your alpaca items")
 				.addOptions(
 						new OptionData(STRING, "item", "The item to feed", true)
 								.addChoices(
@@ -93,7 +84,7 @@ public class Feed implements ISlashCommand {
 										new Command.Choice("lemonade", "lemonade"),
 										new Command.Choice("cacao", "cacao")
 								),
-						new OptionData(INTEGER, "amount", "The amount of items", true)
+						new OptionData(INTEGER, "amount", "The amount of items", true).setRequiredRange(1, 5)
 				);
 	}
 

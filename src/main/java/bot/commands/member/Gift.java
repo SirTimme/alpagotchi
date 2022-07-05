@@ -5,10 +5,10 @@ import bot.db.IDatabase;
 import bot.models.Entry;
 import bot.utils.CommandType;
 import bot.utils.Responses;
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.Command;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
+import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 
 import java.text.MessageFormat;
@@ -40,16 +40,7 @@ public class Gift implements ISlashCommand {
 		}
 
 		final var amount = (int) event.getOption("amount").getAsLong();
-
-		if (amount > 5) {
-			final var format = new MessageFormat(Responses.get("giftedTooManyItems", locale));
-			final var msg = format.format(new Object[] {});
-
-			event.reply(msg).setEphemeral(true).queue();
-			return;
-		}
-
-		final String selectedItem = event.getOption("item").getAsString();
+		final var selectedItem = event.getOption("item").getAsString();
 
 		if (user.getItem(selectedItem) - amount < 0) {
 			final var format = new MessageFormat(Responses.get("notEnoughItems", locale));
@@ -65,15 +56,15 @@ public class Gift implements ISlashCommand {
 		IDatabase.INSTANCE.updateUser(selectedDBUser);
 		IDatabase.INSTANCE.updateUser(user);
 
-		final MessageFormat format = new MessageFormat(Responses.get("giftSuccessful", locale));
-		final String msg = format.format(new Object[]{ amount, selectedItem, selectedUser.getName() });
+		final var format = new MessageFormat(Responses.get("giftSuccessful", locale));
+		final var msg = format.format(new Object[]{ amount, selectedItem, selectedUser.getName() });
 
 		event.reply(msg).queue();
 	}
 
 	@Override
 	public CommandData getCommandData() {
-		return new CommandData("gift", "Gifts another user items")
+		return Commands.slash("gift", "Gifts another user items")
 				.addOptions(
 						new OptionData(USER, "user", "The user you want to gift to", true),
 						new OptionData(STRING, "item", "The item to gift", true)
@@ -85,7 +76,7 @@ public class Gift implements ISlashCommand {
 										new Command.Choice("lemonade", "lemonade"),
 										new Command.Choice("cacao", "cacao")
 								),
-						new OptionData(INTEGER, "amount", "The amount of gifted items", true)
+						new OptionData(INTEGER, "amount", "The amount of gifted items", true).setRequiredRange(1,5)
 				);
 	}
 

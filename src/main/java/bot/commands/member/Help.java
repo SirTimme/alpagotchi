@@ -7,9 +7,9 @@ import bot.utils.CommandType;
 import bot.utils.Env;
 import bot.utils.Responses;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
+import net.dv8tion.jda.api.interactions.commands.build.Commands;
 
 import java.time.Instant;
 import java.util.Locale;
@@ -39,7 +39,7 @@ public class Help implements ISlashCommand {
 
     @Override
     public CommandData getCommandData() {
-        return new CommandData("help", "Shows all commands of Alpagotchi");
+        return Commands.slash("help", "Shows all commands of Alpagotchi");
     }
 
     @Override
