@@ -1,9 +1,8 @@
 package bot.components.menus;
 
-import net.dv8tion.jda.api.events.interaction.SelectionMenuEvent;
-
+import net.dv8tion.jda.api.events.interaction.component.SelectMenuInteractionEvent;
 import java.util.Locale;
 
 public interface IMenu {
-    void execute(final SelectionMenuEvent event, final Locale locale);
+    void execute(final SelectMenuInteractionEvent event, final Locale locale);
 }

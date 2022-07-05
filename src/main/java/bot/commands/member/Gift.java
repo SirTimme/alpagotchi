@@ -77,7 +77,8 @@ public class Gift implements ISlashCommand {
 										new Command.Choice("cacao", "cacao")
 								),
 						new OptionData(INTEGER, "amount", "The amount of gifted items", true).setRequiredRange(1,5)
-				);
+				)
+				.setGuildOnly(true);
 	}
 
 	@Override

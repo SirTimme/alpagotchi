@@ -8,6 +8,7 @@ import bot.utils.Env;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
+import net.dv8tion.jda.api.interactions.commands.build.Commands;
 
 import java.time.Instant;
 import java.util.Locale;
@@ -47,13 +48,13 @@ public class Inventory implements ISlashCommand {
                     true)
             );
 
-            MessageService.queueEmbedReply(event, embed.build(), false);
+            event.replyEmbeds(embed.build()).queue();
         });
     }
 
     @Override
     public CommandData getCommandData() {
-        return new CommandData("inventory", "Shows your items for your alpaca");
+        return Commands.slash("inventory", "Shows your items for your alpaca");
     }
 
     @Override

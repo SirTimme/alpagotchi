@@ -53,6 +53,7 @@ public class Update implements ISlashCommand {
 	@Override
 	public CommandData getCommandData() {
 		return Commands.slash("update", "Refreshes all slashcommands")
+					   .setGuildOnly(true)
 					   .setDefaultPermissions(DefaultMemberPermissions.DISABLED);
 	}
 

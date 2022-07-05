@@ -10,9 +10,15 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;
 
 public class EventHandler extends ListenerAdapter {
-    private final CommandManager commands = new CommandManager();
-    private final MenuManager menus = new MenuManager();
-    private final ButtonManager buttons = new ButtonManager();
+    private final CommandManager commands;
+    private final MenuManager menus;
+    private final ButtonManager buttons;
+
+    public EventHandler() {
+        this.commands = new CommandManager();
+        this.menus = new MenuManager();
+        this.buttons = new ButtonManager();
+    }
 
     @Override
     public void onSlashCommandInteraction(final @NotNull SlashCommandInteractionEvent event) {

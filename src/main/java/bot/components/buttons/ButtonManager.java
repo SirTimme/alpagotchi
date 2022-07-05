@@ -1,7 +1,9 @@
 package bot.components.buttons;
 
-import net.dv8tion.jda.api.events.interaction.ButtonClickEvent;
-import net.dv8tion.jda.api.interactions.components.Button;
+import bot.db.IDatabase;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
+import net.dv8tion.jda.api.interactions.components.buttons.Button;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -9,9 +11,9 @@ import java.util.stream.Collectors;
 public class ButtonManager {
     private static final Map<String, IButton> buttons = new HashMap<>();
 
-    public void handle(final ButtonClickEvent event) {
+    public void handle(final ButtonInteractionEvent event) {
         final IButton button = buttons.get(event.getComponentId());
-        final Locale locale = MessageService.getLocale(event);
+        final Locale locale = getLocale(event);
 
         button.execute(event, locale);
 
@@ -26,5 +28,11 @@ public class ButtonManager {
 
     public static void addButton(final String key, final IButton button) {
         buttons.put(key, button);
+    }
+
+    private Locale getLocale(final ButtonInteractionEvent event) {
+        return event.getGuild() == null
+                ? Locale.ENGLISH
+                : IDatabase.INSTANCE.getGuildSettings(event.getGuild().getIdLong()).getLocale();
     }
 }

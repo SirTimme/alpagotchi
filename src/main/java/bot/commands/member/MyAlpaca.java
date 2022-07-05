@@ -7,9 +7,9 @@ import bot.utils.Env;
 import bot.utils.Responses;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
+import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,8 +33,8 @@ public class MyAlpaca implements ISlashCommand {
     public MyAlpaca() {
         final File folder = new File("src/main/resources/outfits");
         try {
-            for (final File file : folder.listFiles()) {
-                final String name = file.getName().split("\\.")[0];
+            for (final var file : folder.listFiles()) {
+                final var name = file.getName().split("\\.")[0];
 
                 this.images.put(name, ImageIO.read(file));
             }
@@ -46,7 +46,7 @@ public class MyAlpaca implements ISlashCommand {
 
     @Override
     public void execute(final SlashCommandInteractionEvent event, final Locale locale, final Entry user) {
-        final ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        final var bytes = new ByteArrayOutputStream();
         try {
             ImageIO.write(createImage(user), "png", bytes);
         }
@@ -55,7 +55,7 @@ public class MyAlpaca implements ISlashCommand {
         }
 
         event.getJDA().retrieveUserById(Env.get("DEV_ID")).queue(dev -> {
-            final MessageEmbed embed = new EmbedBuilder()
+            final var embed = new EmbedBuilder()
                     .setTitle(user.getNickname())
                     .setDescription("_Have a llamazing day!_")
                     .addField("Work", getCooldownMsg(user.getWork(), locale), true)
@@ -66,13 +66,13 @@ public class MyAlpaca implements ISlashCommand {
                     .setImage("attachment://alpagotchi.png")
                     .build();
 
-            MessageService.queueImageReply(event, embed, bytes.toByteArray(), false);
+            event.replyEmbeds(embed).addFile(bytes.toByteArray(), "alpagotchi.png").queue();
         });
     }
 
     @Override
     public CommandData getCommandData() {
-        return new CommandData("myalpaca", "Shows your alpaca with its stats");
+        return Commands.slash("myalpaca", "Shows your alpaca with its stats");
     }
 
     @Override
