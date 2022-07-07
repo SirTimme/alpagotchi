@@ -16,10 +16,10 @@ import java.util.Locale;
 public class Count implements ISlashCommand {
 	@Override
 	public void execute(final SlashCommandInteractionEvent event, final Locale locale, final Entry user) {
-		final var msg = new MessageFormat(Responses.get("count", locale));
-		final var content = msg.format(new Object[]{ IDatabase.INSTANCE.getEntries(), event.getJDA().getGuilds().size() });
+		final var format = new MessageFormat(Responses.get("count", locale));
+		final var msg = format.format(new Object[]{ IDatabase.INSTANCE.getEntries(), event.getJDA().getGuilds().size() });
 
-		event.reply(content).queue();
+		event.reply(msg).queue();
 	}
 
 	@Override

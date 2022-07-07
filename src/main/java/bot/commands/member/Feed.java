@@ -42,7 +42,7 @@ public class Feed implements ISlashCommand {
 		final var newItemAmount = user.getItem(item.getName()) - itemAmount;
 
 		if (newItemAmount < 0) {
-			final var format = new MessageFormat(Responses.get("fedTooManyItems", locale));
+			final var format = new MessageFormat(Responses.get("notEnoughItems", locale));
 			final var msg = format.format(new Object[]{ });
 
 			event.reply(msg).setEphemeral(true).queue();

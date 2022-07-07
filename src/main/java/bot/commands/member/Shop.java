@@ -25,7 +25,7 @@ public class Shop implements ISlashCommand {
     @Override
     public void execute(final SlashCommandInteractionEvent event, final Locale locale, final Entry user) {
         event.getJDA().retrieveUserById(Env.get("DEV_ID")).queue(dev -> {
-            final EmbedBuilder embed = new EmbedBuilder()
+            final var embed = new EmbedBuilder()
                     .setTitle("Shop")
                     .setThumbnail("https://cdn.discordapp.com/attachments/795637300661977132/839072735182323732/shop.png")
                     .setFooter("Created by " + dev.getName(), dev.getAvatarUrl())

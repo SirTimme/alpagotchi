@@ -14,27 +14,23 @@ import java.text.MessageFormat;
 import java.util.Locale;
 
 public class Shutdown implements ISlashCommand {
-	@Override
-	public void execute(final SlashCommandInteractionEvent event, final Locale locale, final Entry user) {
-		if (!event.getMember().getId().equals(Env.get("DEV_ID"))) {
-			return;
-		}
+    @Override
+    public void execute(final SlashCommandInteractionEvent event, final Locale locale, final Entry user) {
+        final var format = new MessageFormat(Responses.get("shutdown", locale));
+        final var msg = format.format(new Object[]{ event.getJDA().getSelfUser().getName() });
 
-		final var format = new MessageFormat(Responses.get("shutdown", locale));
-		final var msg = format.format(new Object[]{ event.getJDA().getSelfUser().getName() });
+        event.reply(msg).complete();
+        event.getJDA().shutdown();
+    }
 
-		event.reply(msg).complete();
-		event.getJDA().shutdown();
-	}
+    @Override
+    public CommandData getCommandData() {
+        return Commands.slash("shutdown", "Shutdowns Alpagotchi")
+                       .setDefaultPermissions(DefaultMemberPermissions.DISABLED);
+    }
 
-	@Override
-	public CommandData getCommandData() {
-		return Commands.slash("shutdown", "Shutdowns Alpagotchi")
-					   .setDefaultPermissions(DefaultMemberPermissions.DISABLED);
-	}
-
-	@Override
-	public CommandType getCommandType() {
-		return CommandType.DEV;
-	}
+    @Override
+    public CommandType getCommandType() {
+        return CommandType.DEV;
+    }
 }
