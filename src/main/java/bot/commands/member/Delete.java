@@ -26,7 +26,7 @@ public class Delete implements ISlashCommand {
         ButtonManager.addButton(btnCancel.getId(), new BtnDeleteCancel());
 
         final var format = new MessageFormat(Responses.get("dataDeletion", locale));
-        final var msg = format.format(new Object[] {});
+        final var msg = format.format(new Object());
 
         event.reply(msg)
              .addActionRow(btnSuccess, btnCancel)

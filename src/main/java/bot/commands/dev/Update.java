@@ -29,7 +29,7 @@ public class Update implements ISlashCommand {
 		final Guild guild = event.getJDA().getGuildById(Env.get("DEV_GUILD"));
 		if (guild == null) {
 			final var format = new MessageFormat(Responses.get("guildOnly", locale));
-			final var msg = format.format(new Object[] {});
+			final var msg = format.format(new Object());
 
 			event.reply(msg).setEphemeral(true).queue();
 			return;
