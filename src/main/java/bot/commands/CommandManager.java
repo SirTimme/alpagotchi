@@ -48,7 +48,7 @@ public class CommandManager {
 
         if (cmd.getCommandType() == CommandType.USER && user == null) {
             final var format = new MessageFormat(Responses.get("alpacaNotOwned", locale));
-            final var msg = format.format(new Object());
+            final var msg = format.format(new Object[]{});
 
             event.reply(msg).setEphemeral(true).queue();
             return;

@@ -24,7 +24,7 @@ public class Init implements ISlashCommand {
     public void execute(final SlashCommandInteractionEvent event, final Locale locale, final Entry user) {
         if (user != null) {
             final var format = new MessageFormat(Responses.get("alpacaAlreadyOwned", locale));
-            final var msg = format.format(new Object());
+            final var msg = format.format(new Object[]{});
 
             event.reply(msg).setEphemeral(true).queue();
             return;

@@ -18,7 +18,7 @@ public class MenuLanguage implements IMenu {
         IDatabase.INSTANCE.updateGuildSettings(settings);
 
         final var format = new MessageFormat(Responses.get("language", settings.getLocale()));
-        final var msg = format.format(new Object());
+        final var msg = format.format(new Object[]{});
 
         event.editMessage(msg)
              .setActionRows(Collections.emptyList())

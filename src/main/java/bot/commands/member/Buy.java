@@ -31,7 +31,7 @@ public class Buy implements ISlashCommand {
 
 		if (amount > 10) {
 			final var format = new MessageFormat(Responses.get("boughtTooManyItems", locale));
-			final var msg = format.format(new Object());
+			final var msg = format.format(new Object[]{});
 
 			event.reply(msg).setEphemeral(true).queue();
 			return;
@@ -44,7 +44,7 @@ public class Buy implements ISlashCommand {
 
 		if (balance - price < 0) {
 			final var format = new MessageFormat(Responses.get("insufficientBalance", locale));
-			final var msg = format.format(new Object());
+			final var msg = format.format(new Object[]{});
 
 			event.reply(msg).setEphemeral(true).queue();
 			return;

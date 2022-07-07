@@ -14,7 +14,7 @@ public class BtnDeleteAccept implements IButton {
         IDatabase.INSTANCE.deleteUser(event.getUser().getIdLong());
 
         final var format = new MessageFormat(Responses.get("dataSuccess", locale));
-        final var msg = format.format(new Object());
+        final var msg = format.format(new Object[]{});
 
         event.editMessage(msg)
              .setActionRows(Collections.emptyList())

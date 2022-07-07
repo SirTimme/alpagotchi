@@ -23,7 +23,7 @@ public class Gift implements ISlashCommand {
 
 		if (selectedUser.getIdLong() == user.getMemberID()) {
 			final var format = new MessageFormat(Responses.get("giftedYourself", locale));
-			final var msg = format.format(new Object());
+			final var msg = format.format(new Object[]{});
 
 			event.reply(msg).setEphemeral(true).queue();
 			return;
@@ -33,7 +33,7 @@ public class Gift implements ISlashCommand {
 
 		if (selectedDBUser == null) {
 			final var format = new MessageFormat(Responses.get("giftedUserNotInitialized", locale));
-			final var msg = format.format(new Object());
+			final var msg = format.format(new Object[]{});
 
 			event.reply(msg).setEphemeral(true).queue();
 			return;
@@ -44,7 +44,7 @@ public class Gift implements ISlashCommand {
 
 		if (user.getItem(selectedItem) - amount < 0) {
 			final var format = new MessageFormat(Responses.get("notEnoughItems", locale));
-			final var msg = format.format(new Object());
+			final var msg = format.format(new Object[]{});
 
 			event.reply(msg).setEphemeral(true).queue();
 			return;

@@ -21,7 +21,7 @@ public class Sleep implements ISlashCommand {
         final int energy = user.getEnergy();
         if (energy == 100) {
             final var format = new MessageFormat(Responses.get("joyAtMaximum", locale));
-            final var msg = format.format(new Object());
+            final var msg = format.format(new Object[]{});
 
             event.reply(msg).setEphemeral(true).queue();
             return;
@@ -30,7 +30,7 @@ public class Sleep implements ISlashCommand {
         final int duration = event.getOption("duration").getAsInt();
         if (duration < 1 || duration > 100) {
             final var format = new MessageFormat("nonValidNumber", locale);
-            final var msg = format.format(new Object());
+            final var msg = format.format(new Object[]{});
 
             event.reply(msg).setEphemeral(true).queue();
             return;

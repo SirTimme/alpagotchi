@@ -14,7 +14,7 @@ public class BtnInitAccept implements IButton {
         IDatabase.INSTANCE.createUser(event.getUser().getIdLong());
 
         final var format = new MessageFormat(Responses.get("initSuccess", locale));
-        final var msg = format.format(new Object());
+        final var msg = format.format(new Object[]{});
 
         event.editMessage(msg)
              .setActionRows(Collections.emptyList())

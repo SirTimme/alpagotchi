@@ -24,7 +24,7 @@ public class Language implements ISlashCommand {
         final var guild = event.getGuild();
         if (guild == null) {
             final var format = new MessageFormat(Responses.get("guildOnly", locale));
-            final var msg = format.format(new Object());
+            final var msg = format.format(new Object[]{});
 
             event.reply(msg).setEphemeral(true).queue();
             return;
@@ -39,7 +39,7 @@ public class Language implements ISlashCommand {
         MenuManager.addMenu(menuLanguage.getId(), new MenuLanguage());
 
         final var format = new MessageFormat(Responses.get("selectLanguage", locale));
-        final var msg = format.format(new Object());
+        final var msg = format.format(new Object[]{});
 
         event.reply(msg).addActionRow(menuLanguage).queue();
     }

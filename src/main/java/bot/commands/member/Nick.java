@@ -21,7 +21,7 @@ public class Nick implements ISlashCommand {
 		final String nickname = event.getOption("nickname").getAsString();
 		if (nickname.length() > 256) {
 			final var format = new MessageFormat(Responses.get("nicknameTooLong", locale));
-			final var msg = format.format(new Object());
+			final var msg = format.format(new Object[]{});
 
 			event.reply(msg).setEphemeral(true).queue();
 			return;

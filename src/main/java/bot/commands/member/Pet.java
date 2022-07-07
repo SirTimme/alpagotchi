@@ -26,7 +26,7 @@ public class Pet implements ISlashCommand {
         final var joy = user.getJoy();
         if (joy == 100) {
             final var format = new MessageFormat(Responses.get("joyAtMaximum", locale));
-            final var msg = format.format(new Object());
+            final var msg = format.format(new Object[]{});
 
             event.reply(msg).setEphemeral(true).queue();
             return;
