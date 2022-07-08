@@ -50,8 +50,10 @@ public class Sleep implements ISlashCommand {
 
     @Override
     public CommandData getCommandData() {
+        final var option = new OptionData(INTEGER, "duration", "The duration in minutes", true);
+
         return Commands.slash("sleep", "Lets your alpaca sleep for the specified duration to regain energy")
-                       .addOptions(new OptionData(INTEGER, "duration", "The duration in minutes", true));
+                       .addOptions(option);
     }
 
     @Override

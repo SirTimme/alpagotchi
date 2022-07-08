@@ -4,9 +4,7 @@ import bot.commands.CommandManager;
 import bot.commands.ISlashCommand;
 import bot.models.Entry;
 import bot.utils.CommandType;
-import bot.utils.Env;
 import bot.utils.Responses;
-import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.DefaultMemberPermissions;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
@@ -26,21 +24,13 @@ public class Update implements ISlashCommand {
 
     @Override
     public void execute(final SlashCommandInteractionEvent event, final Locale locale, final Entry user) {
-        final Guild guild = event.getJDA().getGuildById(Env.get("DEV_GUILD"));
-        if (guild == null) {
-            final var format = new MessageFormat(Responses.get("guildOnly", locale));
-            final var msg = format.format(new Object[]{});
-
-            event.reply(msg).setEphemeral(true).queue();
-            return;
-        }
-
         event.getJDA()
              .updateCommands()
              .addCommands(this.commands.getCommandDataByTypes(USER, INFO, INIT))
              .queue();
 
-        guild.updateCommands()
+        event.getGuild()
+             .updateCommands()
              .addCommands(this.commands.getCommandDataByTypes(DEV))
              .queue();
 

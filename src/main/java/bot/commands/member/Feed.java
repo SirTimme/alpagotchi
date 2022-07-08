@@ -13,6 +13,7 @@ import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 
 import java.text.MessageFormat;
+import java.util.List;
 import java.util.Locale;
 
 import static net.dv8tion.jda.api.interactions.commands.OptionType.INTEGER;
@@ -73,19 +74,22 @@ public class Feed implements ISlashCommand {
 
 	@Override
 	public CommandData getCommandData() {
+		final var choices = List.of(
+				new Command.Choice("salad", "salad"),
+				new Command.Choice("taco", "taco"),
+				new Command.Choice("steak", "steak"),
+				new Command.Choice("water", "water"),
+				new Command.Choice("lemonade", "lemonade"),
+				new Command.Choice("cacao", "cacao")
+		);
+
+		final var options = List.of(
+				new OptionData(STRING, "item", "The item to feed", true).addChoices(choices),
+				new OptionData(INTEGER, "amount", "The amount of items", true).setRequiredRange(1, 5)
+		);
+
 		return Commands.slash("feed", "Feeds your alpaca items")
-				.addOptions(
-						new OptionData(STRING, "item", "The item to feed", true)
-								.addChoices(
-										new Command.Choice("salad", "salad"),
-										new Command.Choice("taco", "taco"),
-										new Command.Choice("steak", "steak"),
-										new Command.Choice("water", "water"),
-										new Command.Choice("lemonade", "lemonade"),
-										new Command.Choice("cacao", "cacao")
-								),
-						new OptionData(INTEGER, "amount", "The amount of items", true).setRequiredRange(1, 5)
-				);
+					   .addOptions(options);
 	}
 
 	@Override

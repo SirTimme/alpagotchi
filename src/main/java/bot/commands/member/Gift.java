@@ -12,6 +12,7 @@ import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 
 import java.text.MessageFormat;
+import java.util.List;
 import java.util.Locale;
 
 import static net.dv8tion.jda.api.interactions.commands.OptionType.*;
@@ -39,7 +40,7 @@ public class Gift implements ISlashCommand {
 			return;
 		}
 
-		final var amount = (int) event.getOption("amount").getAsLong();
+		final var amount = event.getOption("amount").getAsInt();
 		final var selectedItem = event.getOption("item").getAsString();
 
 		if (user.getItem(selectedItem) - amount < 0) {
@@ -64,21 +65,24 @@ public class Gift implements ISlashCommand {
 
 	@Override
 	public CommandData getCommandData() {
+		final var choices = List.of(
+				new Command.Choice("salad", "salad"),
+				new Command.Choice("taco", "taco"),
+				new Command.Choice("steak", "steak"),
+				new Command.Choice("water", "water"),
+				new Command.Choice("lemonade", "lemonade"),
+				new Command.Choice("cacao", "cacao")
+		);
+
+		final var options = List.of(
+				new OptionData(USER, "user", "The user you want to gift to", true),
+				new OptionData(STRING, "item", "The item to gift", true).addChoices(choices),
+				new OptionData(INTEGER, "amount", "The amount of gifted items", true).setRequiredRange(1,5)
+		);
+
 		return Commands.slash("gift", "Gifts another user items")
-				.addOptions(
-						new OptionData(USER, "user", "The user you want to gift to", true),
-						new OptionData(STRING, "item", "The item to gift", true)
-								.addChoices(
-										new Command.Choice("salad", "salad"),
-										new Command.Choice("taco", "taco"),
-										new Command.Choice("steak", "steak"),
-										new Command.Choice("water", "water"),
-										new Command.Choice("lemonade", "lemonade"),
-										new Command.Choice("cacao", "cacao")
-								),
-						new OptionData(INTEGER, "amount", "The amount of gifted items", true).setRequiredRange(1,5)
-				)
-				.setGuildOnly(true);
+					   .addOptions(options)
+					   .setGuildOnly(true);
 	}
 
 	@Override

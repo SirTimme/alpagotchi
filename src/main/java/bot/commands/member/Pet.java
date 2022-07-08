@@ -47,17 +47,19 @@ public class Pet implements ISlashCommand {
 
     @Override
     public CommandData getCommandData() {
+        final var choices = List.of(
+                new Command.Choice("neck", "neck"),
+                new Command.Choice("head", "head"),
+                new Command.Choice("tail", "tail"),
+                new Command.Choice("leg", "leg"),
+                new Command.Choice("back", "back")
+        );
+
+        final var option = new OptionData(STRING, "spot", "The spot where you want to pet your alpaca", true)
+                .addChoices(choices);
+
         return Commands.slash("pet", "Pets your alpaca to gain joy")
-                       .addOptions(
-                               new OptionData(STRING, "spot", "The spot where you want to pet your alpaca", true)
-                                       .addChoices(
-                                               new Command.Choice("neck", "neck"),
-                                               new Command.Choice("head", "head"),
-                                               new Command.Choice("tail", "tail"),
-                                               new Command.Choice("leg", "leg"),
-                                               new Command.Choice("back", "back")
-                                       )
-                       );
+                       .addOptions(option);
     }
 
     @Override

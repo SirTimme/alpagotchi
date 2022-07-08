@@ -18,7 +18,7 @@ import static net.dv8tion.jda.api.interactions.commands.OptionType.STRING;
 public class Nick implements ISlashCommand {
 	@Override
 	public void execute(final SlashCommandInteractionEvent event, final Locale locale, final Entry user) {
-		final String nickname = event.getOption("nickname").getAsString();
+		final var nickname = event.getOption("nickname").getAsString();
 		if (nickname.length() > 256) {
 			final var format = new MessageFormat(Responses.get("nicknameTooLong", locale));
 			final var msg = format.format(new Object[]{});
@@ -38,8 +38,10 @@ public class Nick implements ISlashCommand {
 
 	@Override
 	public CommandData getCommandData() {
+		final var option = new OptionData(STRING, "nickname", "The new nickname of the alpaca", true);
+
 		return Commands.slash("nick", "Gives your alpaca a new nickname")
-					   .addOptions(new OptionData(STRING, "nickname", "The new nickname of the alpaca", true));
+					   .addOptions(option);
 	}
 
 	@Override

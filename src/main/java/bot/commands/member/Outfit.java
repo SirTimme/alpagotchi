@@ -12,6 +12,7 @@ import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 
 import java.text.MessageFormat;
+import java.util.List;
 import java.util.Locale;
 
 import static net.dv8tion.jda.api.interactions.commands.OptionType.STRING;
@@ -32,15 +33,17 @@ public class Outfit implements ISlashCommand {
 
 	@Override
 	public CommandData getCommandData() {
+		final var choices = List.of(
+				new Command.Choice("default", "default"),
+				new Command.Choice("gentleman", "gentleman"),
+				new Command.Choice("lady", "lady")
+		);
+
+		final var option = new OptionData(STRING, "outfit", "The new outfit of your alpaca", true)
+				.addChoices(choices);
+
 		return Commands.slash("outfit", "Changes the appearance of your alpaca")
-				.addOptions(
-						new OptionData(STRING, "outfit", "The new outfit of your alpaca", true)
-								.addChoices(
-										new Command.Choice("default", "default"),
-										new Command.Choice("gentleman", "gentleman"),
-										new Command.Choice("lady", "lady")
-								)
-				);
+					   .addOptions(option);
 	}
 
 	@Override
