@@ -18,19 +18,15 @@ public class Database implements IDatabase {
     private final MongoCollection<GuildSettings> guilds;
 
     public Database() {
-        final CodecRegistry pojoRegistry = fromProviders(PojoCodecProvider.builder().automatic(true).build());
-        final CodecRegistry codecRegistry = fromRegistries(MongoClientSettings.getDefaultCodecRegistry(), pojoRegistry);
+        final var pojoRegistry = fromProviders(PojoCodecProvider.builder().automatic(true).build());
+        final var codecRegistry = fromRegistries(MongoClientSettings.getDefaultCodecRegistry(), pojoRegistry);
 
-        final MongoClientSettings settings = MongoClientSettings.builder()
-                .applyConnectionString(new ConnectionString(Env.get("DB_URI")))
-                .codecRegistry(codecRegistry)
-                .build();
+        try (final var client = MongoClients.create(Env.get("DB_URI"))) {
+            final var db = client.getDatabase(Env.get("DB_NAME")).withCodecRegistry(codecRegistry);
 
-        final MongoClient client = MongoClients.create(settings);
-        final MongoDatabase db = client.getDatabase(Env.get("DB_NAME"));
-
-        this.entries = db.getCollection("alpacas_manager", Entry.class);
-        this.guilds = db.getCollection("guild_settings", GuildSettings.class);
+            this.entries = db.getCollection("alpacas_manager", Entry.class);
+            this.guilds = db.getCollection("guild_settings", GuildSettings.class);
+        }
     }
 
     @Override
