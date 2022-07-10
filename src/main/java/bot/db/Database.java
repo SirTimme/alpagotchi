@@ -3,7 +3,6 @@ package bot.db;
 import bot.models.Entry;
 import bot.models.GuildSettings;
 import bot.utils.Env;
-import com.mongodb.ConnectionString;
 import com.mongodb.MongoClientSettings;
 import com.mongodb.client.*;
 import org.bson.codecs.configuration.CodecRegistry;
