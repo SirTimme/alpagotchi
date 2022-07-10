@@ -2,23 +2,20 @@ package bot.commands;
 
 import bot.commands.dev.*;
 import bot.commands.member.*;
-import bot.db.IDatabase;
-import bot.models.Entry;
 import bot.shop.ItemManager;
 import bot.utils.CommandType;
-import bot.utils.Responses;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 
-import java.text.MessageFormat;
 import java.util.*;
 
 public class CommandManager {
-    private final Map<String, ISlashCommand> commands = new TreeMap<>();
+    private final Map<String, ISlashCommand> commands;
 
     public CommandManager() {
         final var items = new ItemManager();
 
+        this.commands = new TreeMap<>();
         this.commands.put("ping", new Ping());
         this.commands.put("init", new Init());
         this.commands.put("balance", new Balance());
@@ -42,19 +39,9 @@ public class CommandManager {
     }
 
     public void handle(final SlashCommandInteractionEvent event) {
-        final Locale locale = getLocale(event);
-        final ISlashCommand cmd = getCommand(event.getName());
-        final Entry user = IDatabase.INSTANCE.getUser(event.getUser().getIdLong());
+        final var cmd = getCommandByName(event.getName());
 
-        if (cmd.getCommandType() == CommandType.USER && user == null) {
-            final var format = new MessageFormat(Responses.get("alpacaNotOwned", locale));
-            final var msg = format.format(new Object[]{});
-
-            event.reply(msg).setEphemeral(true).queue();
-            return;
-        }
-
-        cmd.execute(event, locale, user);
+        cmd.execute(event);
     }
 
     public Collection<? extends ISlashCommand> getCommands() {
@@ -69,24 +56,18 @@ public class CommandManager {
                             .toList();
     }
 
-    public String getCommandsAsString() {
-        final StringBuilder sb = new StringBuilder();
+    public String getCommandNames() {
+        final var sb = new StringBuilder();
 
         this.commands.keySet()
                      .stream()
-                     .filter(cmd -> getCommand(cmd).getCommandType() != CommandType.DEV)
-                     .forEach(cmd -> sb.append("`").append(cmd).append("` "));
+                     .filter(name -> getCommandByName(name).getCommandType() != CommandType.DEV)
+                     .forEach(name -> sb.append("`").append(name).append("`").append(" "));
 
         return sb.toString();
     }
 
-    private ISlashCommand getCommand(final String name) {
+    private ISlashCommand getCommandByName(final String name) {
         return this.commands.get(name);
-    }
-
-    private Locale getLocale(final SlashCommandInteractionEvent event) {
-        return event.getGuild() == null
-                ? Locale.ENGLISH
-                : IDatabase.INSTANCE.getGuildSettings(event.getGuild().getIdLong()).getLocale();
     }
 }

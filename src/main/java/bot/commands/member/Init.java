@@ -1,6 +1,6 @@
 package bot.commands.member;
 
-import bot.commands.ISlashCommand;
+import bot.commands.UserCommand;
 import bot.components.buttons.BtnInitAccept;
 import bot.components.buttons.BtnInitCancel;
 import bot.components.buttons.ButtonManager;
@@ -19,7 +19,7 @@ import java.time.Instant;
 import java.util.Locale;
 import java.util.UUID;
 
-public class Init implements ISlashCommand {
+public class Init extends UserCommand {
     @Override
     public void execute(final SlashCommandInteractionEvent event, final Locale locale, final Entry user) {
         if (user != null) {

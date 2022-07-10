@@ -1,6 +1,6 @@
 package bot.commands.member;
 
-import bot.commands.ISlashCommand;
+import bot.commands.UserCommand;
 import bot.components.buttons.BtnDeleteAccept;
 import bot.components.buttons.BtnDeleteCancel;
 import bot.components.buttons.ButtonManager;
@@ -16,7 +16,7 @@ import java.text.MessageFormat;
 import java.util.Locale;
 import java.util.UUID;
 
-public class Delete implements ISlashCommand {
+public class Delete extends UserCommand {
     @Override
     public void execute(final SlashCommandInteractionEvent event, final Locale locale, final Entry user) {
         final var btnSuccess = Button.success(UUID.randomUUID().toString(), "Accept");

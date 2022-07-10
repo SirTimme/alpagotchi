@@ -1,6 +1,7 @@
 package bot.commands.member;
 
 import bot.commands.ISlashCommand;
+import bot.commands.UserCommand;
 import bot.db.IDatabase;
 import bot.models.Entry;
 import bot.shop.ItemManager;
@@ -18,7 +19,7 @@ import java.util.*;
 import static net.dv8tion.jda.api.interactions.commands.OptionType.INTEGER;
 import static net.dv8tion.jda.api.interactions.commands.OptionType.STRING;
 
-public class Buy implements ISlashCommand {
+public class Buy extends UserCommand {
 	private final ItemManager items;
 
 	public Buy(final ItemManager items) {

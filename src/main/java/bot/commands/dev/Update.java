@@ -1,8 +1,7 @@
 package bot.commands.dev;
 
 import bot.commands.CommandManager;
-import bot.commands.ISlashCommand;
-import bot.models.Entry;
+import bot.commands.InfoCommand;
 import bot.utils.CommandType;
 import bot.utils.Responses;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
@@ -13,9 +12,7 @@ import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import java.text.MessageFormat;
 import java.util.*;
 
-import static bot.utils.CommandType.*;
-
-public class Update implements ISlashCommand {
+public class Update extends InfoCommand {
     private final CommandManager commands;
 
     public Update(final CommandManager commands) {
@@ -23,15 +20,15 @@ public class Update implements ISlashCommand {
     }
 
     @Override
-    public void execute(final SlashCommandInteractionEvent event, final Locale locale, final Entry user) {
+    public void execute(final SlashCommandInteractionEvent event, final Locale locale) {
         event.getJDA()
              .updateCommands()
-             .addCommands(this.commands.getCommandDataByTypes(USER, INFO, INIT))
+             .addCommands(this.commands.getCommandDataByTypes(CommandType.USER, CommandType.INFO, CommandType.INIT))
              .queue();
 
         event.getGuild()
              .updateCommands()
-             .addCommands(this.commands.getCommandDataByTypes(DEV))
+             .addCommands(this.commands.getCommandDataByTypes(CommandType.DEV))
              .queue();
 
         final var format = new MessageFormat(Responses.get("update", locale));
@@ -49,6 +46,6 @@ public class Update implements ISlashCommand {
 
     @Override
     public CommandType getCommandType() {
-        return DEV;
+        return CommandType.DEV;
     }
 }

@@ -1,9 +1,7 @@
 package bot.commands.dev;
 
-import bot.commands.ISlashCommand;
-import bot.models.Entry;
+import bot.commands.InfoCommand;
 import bot.utils.CommandType;
-import bot.utils.Env;
 import bot.utils.Responses;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.DefaultMemberPermissions;
@@ -13,9 +11,9 @@ import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import java.text.MessageFormat;
 import java.util.Locale;
 
-public class Shutdown implements ISlashCommand {
+public class Shutdown extends InfoCommand {
     @Override
-    public void execute(final SlashCommandInteractionEvent event, final Locale locale, final Entry user) {
+    public void execute(final SlashCommandInteractionEvent event, final Locale locale) {
         final var format = new MessageFormat(Responses.get("shutdown", locale));
         final var msg = format.format(new Object[]{ event.getJDA().getSelfUser().getName() });
 

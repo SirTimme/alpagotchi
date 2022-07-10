@@ -1,6 +1,6 @@
 package bot.commands.member;
 
-import bot.commands.ISlashCommand;
+import bot.commands.UserCommand;
 import bot.models.Entry;
 import bot.shop.ItemManager;
 import bot.utils.CommandType;
@@ -13,7 +13,7 @@ import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import java.time.Instant;
 import java.util.Locale;
 
-public class Inventory implements ISlashCommand {
+public class Inventory extends UserCommand {
     private final ItemManager items;
 
     public Inventory(final ItemManager items) {
@@ -23,7 +23,7 @@ public class Inventory implements ISlashCommand {
     @Override
     public void execute(final SlashCommandInteractionEvent event, final Locale locale, final Entry user) {
         event.getJDA().retrieveUserById(Env.get("DEV_ID")).queue(dev -> {
-            final EmbedBuilder embed = new EmbedBuilder()
+            final var embed = new EmbedBuilder()
                     .setTitle("Inventory")
                     .setThumbnail("https://cdn.discordapp.com/attachments/795637300661977132/839074173459365908/inventory.png")
                     .addField("__**:meat_on_bone: Hunger items**__", "These items are used to fill up the hunger of your alpaca", false)

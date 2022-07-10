@@ -1,6 +1,6 @@
 package bot.commands.member;
 
-import bot.commands.ISlashCommand;
+import bot.commands.UserCommand;
 import bot.db.IDatabase;
 import bot.models.Entry;
 import bot.shop.ItemManager;
@@ -19,7 +19,7 @@ import java.util.Locale;
 import static net.dv8tion.jda.api.interactions.commands.OptionType.INTEGER;
 import static net.dv8tion.jda.api.interactions.commands.OptionType.STRING;
 
-public class Feed implements ISlashCommand {
+public class Feed extends UserCommand {
 	private final ItemManager items;
 
 	public Feed(final ItemManager items) {

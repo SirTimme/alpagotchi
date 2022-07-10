@@ -1,6 +1,6 @@
 package bot.commands.member;
 
-import bot.commands.ISlashCommand;
+import bot.commands.UserCommand;
 import bot.db.IDatabase;
 import bot.models.Entry;
 import bot.utils.CommandType;
@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-public class Work implements ISlashCommand {
+public class Work extends UserCommand {
     private static final Logger LOGGER = LoggerFactory.getLogger(Work.class);
     private ArrayList<String> json;
 

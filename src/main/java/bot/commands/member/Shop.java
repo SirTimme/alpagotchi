@@ -1,7 +1,6 @@
 package bot.commands.member;
 
-import bot.commands.ISlashCommand;
-import bot.models.Entry;
+import bot.commands.InfoCommand;
 import bot.shop.Item;
 import bot.shop.ItemManager;
 import bot.utils.CommandType;
@@ -15,7 +14,7 @@ import java.time.Instant;
 import java.util.Comparator;
 import java.util.Locale;
 
-public class Shop implements ISlashCommand {
+public class Shop extends InfoCommand {
     private final ItemManager items;
 
     public Shop(final ItemManager items) {
@@ -23,7 +22,7 @@ public class Shop implements ISlashCommand {
     }
 
     @Override
-    public void execute(final SlashCommandInteractionEvent event, final Locale locale, final Entry user) {
+    public void execute(final SlashCommandInteractionEvent event, final Locale locale) {
         event.getJDA().retrieveUserById(Env.get("DEV_ID")).queue(dev -> {
             final var embed = new EmbedBuilder()
                     .setTitle("Shop")

@@ -1,6 +1,6 @@
 package bot.commands.member;
 
-import bot.commands.ISlashCommand;
+import bot.commands.UserCommand;
 import bot.models.Entry;
 import bot.utils.CommandType;
 import bot.utils.Env;
@@ -24,7 +24,7 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
-public class MyAlpaca implements ISlashCommand {
+public class MyAlpaca extends UserCommand {
     private final Map<String, BufferedImage> images = new HashMap<>();
     private static final Logger LOGGER = LoggerFactory.getLogger(MyAlpaca.class);
     private final Color[] colors = { Color.BLACK, Color.RED, Color.ORANGE, Color.YELLOW, Color.GREEN };

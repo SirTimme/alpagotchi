@@ -1,6 +1,6 @@
 package bot.commands.member;
 
-import bot.commands.ISlashCommand;
+import bot.commands.UserCommand;
 import bot.db.IDatabase;
 import bot.models.Entry;
 import bot.utils.CommandType;
@@ -15,7 +15,7 @@ import java.util.Locale;
 
 import static net.dv8tion.jda.api.interactions.commands.OptionType.INTEGER;
 
-public class Sleep implements ISlashCommand {
+public class Sleep extends UserCommand {
     @Override
     public void execute(final SlashCommandInteractionEvent event, final Locale locale, final Entry user) {
         final int energy = user.getEnergy();

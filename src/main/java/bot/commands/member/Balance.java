@@ -1,6 +1,6 @@
 package bot.commands.member;
 
-import bot.commands.ISlashCommand;
+import bot.commands.UserCommand;
 import bot.models.Entry;
 import bot.utils.CommandType;
 import bot.utils.Responses;
@@ -11,7 +11,7 @@ import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import java.text.MessageFormat;
 import java.util.Locale;
 
-public class Balance implements ISlashCommand {
+public class Balance extends UserCommand {
 	@Override
     public void execute(final SlashCommandInteractionEvent event, final Locale locale, final Entry user) {
 		final var format = new MessageFormat(Responses.get("currentBalance", locale));

@@ -1,6 +1,7 @@
 package bot.commands.member;
 
 import bot.commands.ISlashCommand;
+import bot.commands.UserCommand;
 import bot.db.IDatabase;
 import bot.models.Entry;
 import bot.utils.CommandType;
@@ -17,7 +18,7 @@ import java.util.Locale;
 
 import static net.dv8tion.jda.api.interactions.commands.OptionType.*;
 
-public class Gift implements ISlashCommand {
+public class Gift extends UserCommand {
 	@Override
 	public void execute(final SlashCommandInteractionEvent event, final Locale locale, final Entry user) {
 		final var selectedUser = event.getOption("user").getAsUser();

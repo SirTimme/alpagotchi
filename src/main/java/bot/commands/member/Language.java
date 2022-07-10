@@ -1,12 +1,10 @@
 package bot.commands.member;
 
-import bot.commands.ISlashCommand;
+import bot.commands.InfoCommand;
 import bot.components.menus.MenuLanguage;
 import bot.components.menus.MenuManager;
-import bot.models.Entry;
 import bot.utils.CommandType;
 import bot.utils.Responses;
-import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.emoji.Emoji;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.DefaultMemberPermissions;
@@ -18,18 +16,9 @@ import java.text.MessageFormat;
 import java.util.Locale;
 import java.util.UUID;
 
-public class Language implements ISlashCommand {
+public class Language extends InfoCommand {
     @Override
-    public void execute(final SlashCommandInteractionEvent event, final Locale locale, final Entry user) {
-        final var guild = event.getGuild();
-        if (guild == null) {
-            final var format = new MessageFormat(Responses.get("guildOnly", locale));
-            final var msg = format.format(new Object[]{});
-
-            event.reply(msg).setEphemeral(true).queue();
-            return;
-        }
-
+    public void execute(final SlashCommandInteractionEvent event, final Locale locale) {
         final var menuLanguage = SelectMenu.create(UUID.randomUUID().toString())
                                            .setPlaceholder("Available languages")
                                            .addOption("English", "en", Emoji.fromUnicode("\uD83C\uDDFA\uD83C\uDDF8"))

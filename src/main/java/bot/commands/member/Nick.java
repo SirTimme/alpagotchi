@@ -1,6 +1,7 @@
 package bot.commands.member;
 
 import bot.commands.ISlashCommand;
+import bot.commands.UserCommand;
 import bot.db.IDatabase;
 import bot.models.Entry;
 import bot.utils.CommandType;
@@ -15,7 +16,7 @@ import java.util.Locale;
 
 import static net.dv8tion.jda.api.interactions.commands.OptionType.STRING;
 
-public class Nick implements ISlashCommand {
+public class Nick extends UserCommand {
 	@Override
 	public void execute(final SlashCommandInteractionEvent event, final Locale locale, final Entry user) {
 		final var nickname = event.getOption("nickname").getAsString();
