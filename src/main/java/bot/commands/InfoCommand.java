@@ -10,7 +10,7 @@ public abstract class InfoCommand implements ISlashCommand {
     public void execute(final SlashCommandInteractionEvent event) {
         final var locale = event.getGuild() == null
                 ? Locale.ENGLISH
-                : IDatabase.INSTANCE.getGuildSettings(event.getGuild().getIdLong()).getLocale();
+                : IDatabase.INSTANCE.getSettingsById(event.getGuild().getIdLong()).getLocale();
 
         execute(event, locale);
     }

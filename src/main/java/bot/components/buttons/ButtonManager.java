@@ -35,6 +35,6 @@ public class ButtonManager {
     private Locale getLocale(final ButtonInteractionEvent event) {
         return event.getGuild() == null
                 ? Locale.ENGLISH
-                : IDatabase.INSTANCE.getGuildSettings(event.getGuild().getIdLong()).getLocale();
+                : IDatabase.INSTANCE.getSettingsById(event.getGuild().getIdLong()).getLocale();
     }
 }

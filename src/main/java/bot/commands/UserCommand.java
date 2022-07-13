@@ -11,10 +11,10 @@ import java.util.Locale;
 public abstract class UserCommand implements ISlashCommand {
     @Override
     public void execute(final SlashCommandInteractionEvent event) {
-        final var user = IDatabase.INSTANCE.getUser(event.getUser().getIdLong());
+        final var user = IDatabase.INSTANCE.getUserById(event.getUser().getIdLong());
         final var locale = event.getGuild() == null
                 ? Locale.ENGLISH
-                : IDatabase.INSTANCE.getGuildSettings(event.getGuild().getIdLong()).getLocale();
+                : IDatabase.INSTANCE.getSettingsById(event.getGuild().getIdLong()).getLocale();
 
         if (!event.getName().equals("init") && user == null) {
             final var format = new MessageFormat(Responses.get("alpacaNotOwned", locale));

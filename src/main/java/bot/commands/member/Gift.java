@@ -30,7 +30,7 @@ public class Gift extends UserCommand {
             return;
         }
 
-        final var selectedDBUser = IDatabase.INSTANCE.getUser(selectedUser.getIdLong());
+        final var selectedDBUser = IDatabase.INSTANCE.getUserById(selectedUser.getIdLong());
 
         if (selectedDBUser == null) {
             final var format = new MessageFormat(Responses.get("giftedUserNotInitialized", locale));

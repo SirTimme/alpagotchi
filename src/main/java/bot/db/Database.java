@@ -3,9 +3,10 @@ package bot.db;
 import bot.models.Entry;
 import bot.models.GuildSettings;
 import bot.utils.Env;
+import com.mongodb.ConnectionString;
 import com.mongodb.MongoClientSettings;
+import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
-import org.bson.codecs.configuration.CodecRegistry;
 import org.bson.codecs.pojo.PojoCodecProvider;
 
 import static com.mongodb.client.model.Filters.eq;
@@ -13,85 +14,83 @@ import static org.bson.codecs.configuration.CodecRegistries.fromProviders;
 import static org.bson.codecs.configuration.CodecRegistries.fromRegistries;
 
 public class Database implements IDatabase {
-    private static final CodecRegistry pojoRegistry = fromProviders(PojoCodecProvider.builder()
-                                                                                     .automatic(true)
-                                                                                     .build());
-    private static final CodecRegistry codecRegistry = fromRegistries(MongoClientSettings.getDefaultCodecRegistry(), pojoRegistry);
+    private MongoClient client;
 
     @Override
-    public Entry getUser(final long memberID) {
-        try (final var client = MongoClients.create(Env.get("DB_URI"))) {
-            final var db = client.getDatabase(Env.get("DB_NAME")).withCodecRegistry(codecRegistry);
-            final var entries = db.getCollection("alpacas_manager", Entry.class);
+    public void connect() {
+        final var codecRegistry = fromRegistries(
+                MongoClientSettings.getDefaultCodecRegistry(),
+                fromProviders(PojoCodecProvider.builder().automatic(true).build())
+        );
 
-            return entries.find(eq("_id", memberID)).first();
-        }
+        final var settings = MongoClientSettings.builder()
+                                                .applyConnectionString(new ConnectionString(Env.get("DB_URI")))
+                                                .codecRegistry(codecRegistry)
+                                                .build();
+
+        this.client = MongoClients.create(settings);
+    }
+
+    @Override
+    public Entry getUserById(final long memberID) {
+        final var db = this.client.getDatabase(Env.get("DB_NAME"));
+        final var collection = db.getCollection("alpacas_manager", Entry.class);
+
+        return collection.find(eq(memberID)).first();
     }
 
     @Override
     public void updateUser(final Entry entry) {
-        try (final var client = MongoClients.create(Env.get("DB_URI"))) {
-            final var db = client.getDatabase(Env.get("DB_NAME")).withCodecRegistry(codecRegistry);
-            final var entries = db.getCollection("alpacas_manager", Entry.class);
+        final var db = this.client.getDatabase(Env.get("DB_NAME"));
+        final var collection = db.getCollection("alpacas_manager", Entry.class);
 
-            entries.replaceOne(eq("_id", entry.getMemberID()), entry);
-        }
+        collection.replaceOne(eq(entry.getMemberID()), entry);
     }
 
     @Override
-    public void createUser(final long memberID) {
-        try (final var client = MongoClients.create(Env.get("DB_URI"))) {
-            final var db = client.getDatabase(Env.get("DB_NAME")).withCodecRegistry(codecRegistry);
-            final var entries = db.getCollection("alpacas_manager", Entry.class);
+    public void createUserById(final long memberID) {
+        final var db = this.client.getDatabase(Env.get("DB_NAME"));
+        final var collection = db.getCollection("alpacas_manager", Entry.class);
 
-            entries.insertOne(new Entry(memberID));
-        }
+        collection.insertOne(new Entry(memberID));
     }
 
     @Override
-    public void deleteUser(final long memberID) {
-        try (final var client = MongoClients.create(Env.get("DB_URI"))) {
-            final var db = client.getDatabase(Env.get("DB_NAME")).withCodecRegistry(codecRegistry);
-            final var entries = db.getCollection("alpacas_manager", Entry.class);
+    public void deleteUserById(final long memberID) {
+        final var db = this.client.getDatabase(Env.get("DB_NAME"));
+        final var collection = db.getCollection("alpacas_manager", Entry.class);
 
-            entries.deleteOne(eq("_id", memberID));
-        }
+        collection.deleteOne(eq(memberID));
     }
 
     @Override
-    public GuildSettings getGuildSettings(final long guildID) {
-        try (final var client = MongoClients.create(Env.get("DB_URI"))) {
-            final var db = client.getDatabase(Env.get("DB_NAME")).withCodecRegistry(codecRegistry);
-            final var entries = db.getCollection("guild_settings", GuildSettings.class);
+    public GuildSettings getSettingsById(final long guildID) {
+        final var db = this.client.getDatabase(Env.get("DB_NAME"));
+        final var collection = db.getCollection("guild_settings", GuildSettings.class);
 
-            GuildSettings settings = entries.find(eq("_id", guildID)).first();
+        var settings = collection.find(eq(guildID)).first();
 
-            if (settings == null) {
-                settings = new GuildSettings(guildID);
-                entries.insertOne(settings);
-            }
-
-            return settings;
+        if (settings == null) {
+            settings = new GuildSettings(guildID);
+            collection.insertOne(settings);
         }
+
+        return settings;
     }
 
     @Override
-    public void updateGuildSettings(final GuildSettings settings) {
-        try (final var client = MongoClients.create(Env.get("DB_URI"))) {
-            final var db = client.getDatabase(Env.get("DB_NAME")).withCodecRegistry(codecRegistry);
-            final var entries = db.getCollection("guild_settings", GuildSettings.class);
+    public void updateSettings(final GuildSettings settings) {
+        final var db = this.client.getDatabase(Env.get("DB_NAME"));
+        final var collection = db.getCollection("guild_settings", GuildSettings.class);
 
-            entries.replaceOne(eq("_id", settings.getGuildID()), settings);
-        }
+        collection.replaceOne(eq(settings.getGuildID()), settings);
     }
 
     @Override
-    public long getEntries() {
-        try (final var client = MongoClients.create(Env.get("DB_URI"))) {
-            final var db = client.getDatabase(Env.get("DB_NAME")).withCodecRegistry(codecRegistry);
-            final var entries = db.getCollection("alpacas_manager", GuildSettings.class);
+    public long getUserCount() {
+        final var db = this.client.getDatabase(Env.get("DB_NAME"));
+        final var collection = db.getCollection("alpacas_manager", Entry.class);
 
-            return entries.countDocuments();
-        }
+        return collection.countDocuments();
     }
 }

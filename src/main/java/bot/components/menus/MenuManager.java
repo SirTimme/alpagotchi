@@ -25,6 +25,6 @@ public class MenuManager {
     private Locale getLocale(final SelectMenuInteractionEvent event) {
         return event.getGuild() == null
                 ? Locale.ENGLISH
-                : IDatabase.INSTANCE.getGuildSettings(event.getGuild().getIdLong()).getLocale();
+                : IDatabase.INSTANCE.getSettingsById(event.getGuild().getIdLong()).getLocale();
     }
 }

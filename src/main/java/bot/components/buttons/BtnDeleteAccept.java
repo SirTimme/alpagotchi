@@ -11,7 +11,7 @@ import java.util.Locale;
 public class BtnDeleteAccept implements IButton {
     @Override
     public void execute(final ButtonInteractionEvent event, final Locale locale) {
-        IDatabase.INSTANCE.deleteUser(event.getUser().getIdLong());
+        IDatabase.INSTANCE.deleteUserById(event.getUser().getIdLong());
 
         final var format = new MessageFormat(Responses.get("dataSuccess", locale));
         final var msg = format.format(new Object[]{});

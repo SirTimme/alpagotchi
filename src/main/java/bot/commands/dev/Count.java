@@ -16,7 +16,7 @@ public class Count extends InfoCommand {
     @Override
     public void execute(final SlashCommandInteractionEvent event, final Locale locale) {
         final var format = new MessageFormat(Responses.get("count", locale));
-        final var msg = format.format(new Object[]{IDatabase.INSTANCE.getEntries(), event.getJDA().getGuilds().size()});
+        final var msg = format.format(new Object[]{IDatabase.INSTANCE.getUserCount(), event.getJDA().getGuilds().size()});
 
         event.reply(msg).queue();
     }

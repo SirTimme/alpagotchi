@@ -11,7 +11,7 @@ import java.util.Locale;
 public class BtnInitAccept implements IButton {
     @Override
     public void execute(final ButtonInteractionEvent event, final Locale locale) {
-        IDatabase.INSTANCE.createUser(event.getUser().getIdLong());
+        IDatabase.INSTANCE.createUserById(event.getUser().getIdLong());
 
         final var format = new MessageFormat(Responses.get("initSuccess", locale));
         final var msg = format.format(new Object[]{});

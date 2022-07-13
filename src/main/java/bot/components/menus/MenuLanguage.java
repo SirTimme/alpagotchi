@@ -12,10 +12,10 @@ import java.util.Locale;
 public class MenuLanguage implements IMenu {
     @Override
     public void execute(final SelectMenuInteractionEvent event, final Locale locale) {
-        final GuildSettings settings = IDatabase.INSTANCE.getGuildSettings(event.getGuild().getIdLong());
+        final GuildSettings settings = IDatabase.INSTANCE.getSettingsById(event.getGuild().getIdLong());
         settings.setLanguage(event.getValues().get(0));
 
-        IDatabase.INSTANCE.updateGuildSettings(settings);
+        IDatabase.INSTANCE.updateSettings(settings);
 
         final var format = new MessageFormat(Responses.get("language", settings.getLocale()));
         final var msg = format.format(new Object[]{});
