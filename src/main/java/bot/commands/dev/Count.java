@@ -13,22 +13,22 @@ import java.text.MessageFormat;
 import java.util.Locale;
 
 public class Count extends InfoCommand {
-	@Override
-	public void execute(final SlashCommandInteractionEvent event, final Locale locale) {
-		final var format = new MessageFormat(Responses.get("count", locale));
-		final var msg = format.format(new Object[]{ IDatabase.INSTANCE.getEntries(), event.getJDA().getGuilds().size() });
+    @Override
+    public void execute(final SlashCommandInteractionEvent event, final Locale locale) {
+        final var format = new MessageFormat(Responses.get("count", locale));
+        final var msg = format.format(new Object[]{IDatabase.INSTANCE.getEntries(), event.getJDA().getGuilds().size()});
 
-		event.reply(msg).queue();
-	}
+        event.reply(msg).queue();
+    }
 
-	@Override
-	public CommandData getCommandData() {
-		return Commands.slash("count", "Counts all alpacas of Alpagotchi")
-					   .setDefaultPermissions(DefaultMemberPermissions.DISABLED);
-	}
+    @Override
+    public CommandData getCommandData() {
+        return Commands.slash("count", "Counts all alpacas of Alpagotchi")
+                       .setDefaultPermissions(DefaultMemberPermissions.DISABLED);
+    }
 
-	@Override
-	public CommandType getCommandType() {
-		return CommandType.DEV;
-	}
+    @Override
+    public CommandType getCommandType() {
+        return CommandType.DEV;
+    }
 }

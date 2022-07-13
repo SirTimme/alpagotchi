@@ -43,7 +43,7 @@ public class Sleep extends UserCommand {
         IDatabase.INSTANCE.updateUser(user);
 
         final var format = new MessageFormat(Responses.get("sleep", locale));
-        final var msg = format.format(new Object[]{ newEnergy });
+        final var msg = format.format(new Object[]{newEnergy});
 
         event.reply(msg).queue();
     }

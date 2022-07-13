@@ -1,8 +1,6 @@
 package bot.commands.member;
 
-import bot.commands.ISlashCommand;
 import bot.commands.InfoCommand;
-import bot.models.Entry;
 import bot.utils.CommandType;
 import bot.utils.Responses;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
@@ -17,7 +15,7 @@ public class Ping extends InfoCommand {
     public void execute(final SlashCommandInteractionEvent event, final Locale locale) {
         event.getJDA().getRestPing().queue(ping -> {
             final var format = new MessageFormat(Responses.get("ping", locale));
-            final var msg = format.format(new Object[]{ ping });
+            final var msg = format.format(new Object[]{ping});
 
             event.reply(msg).queue();
         });

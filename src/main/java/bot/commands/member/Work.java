@@ -28,7 +28,8 @@ public class Work extends UserCommand {
     public Work() {
         try {
             final var reader = new BufferedReader(new FileReader("src/main/resources/data/messages.json"));
-            final var type = new TypeToken<List<String>>() {}.getType();
+            final var type = new TypeToken<List<String>>() {
+            }.getType();
 
             this.json = new Gson().fromJson(reader, type);
         } catch (final IOException error) {
@@ -41,7 +42,7 @@ public class Work extends UserCommand {
         final long sleep = user.getSleep();
         if (sleep > 0) {
             final var format = new MessageFormat(Responses.get("alpacaSleeping", locale));
-            final var msg = format.format(new Object[]{ sleep });
+            final var msg = format.format(new Object[]{sleep});
 
             event.reply(msg).setEphemeral(true).queue();
             return;
@@ -50,7 +51,7 @@ public class Work extends UserCommand {
         final long work = user.getWork();
         if (work > 0) {
             final var format = new MessageFormat(Responses.get("alpacaAlreadyWorked", locale));
-            final var msg = format.format(new Object[]{ work });
+            final var msg = format.format(new Object[]{work});
 
             event.reply(msg).setEphemeral(true).queue();
             return;
@@ -58,13 +59,17 @@ public class Work extends UserCommand {
 
         final int energy = user.getEnergy();
         if (energy < 10) {
-            event.reply("\uD83E\uDD71 Your alpaca is too tired to work, let it rest first with **/sleep**").setEphemeral(true).queue();
+            event.reply("\uD83E\uDD71 Your alpaca is too tired to work, let it rest first with **/sleep**")
+                 .setEphemeral(true)
+                 .queue();
             return;
         }
 
         final int joy = user.getJoy();
         if (joy < 15) {
-            event.reply(":pensive: Your alpaca is too sad to work, give him some love with **/pet**").setEphemeral(true).queue();
+            event.reply(":pensive: Your alpaca is too sad to work, give him some love with **/pet**")
+                 .setEphemeral(true)
+                 .queue();
             return;
         }
 
@@ -80,7 +85,8 @@ public class Work extends UserCommand {
 
         IDatabase.INSTANCE.updateUser(user);
 
-        event.reply("⛏ " + message + " **Fluffies + " + fluffies + ", Energy - " + energyCost + ", Joy - " + joyCost + "**").queue();
+        event.reply("⛏ " + message + " **Fluffies + " + fluffies + ", Energy - " + energyCost + ", Joy - " + joyCost + "**")
+             .queue();
     }
 
     @Override

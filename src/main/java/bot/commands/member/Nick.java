@@ -1,6 +1,5 @@
 package bot.commands.member;
 
-import bot.commands.ISlashCommand;
 import bot.commands.UserCommand;
 import bot.db.IDatabase;
 import bot.models.Entry;
@@ -17,36 +16,36 @@ import java.util.Locale;
 import static net.dv8tion.jda.api.interactions.commands.OptionType.STRING;
 
 public class Nick extends UserCommand {
-	@Override
-	public void execute(final SlashCommandInteractionEvent event, final Locale locale, final Entry user) {
-		final var nickname = event.getOption("nickname").getAsString();
-		if (nickname.length() > 256) {
-			final var format = new MessageFormat(Responses.get("nicknameTooLong", locale));
-			final var msg = format.format(new Object[]{});
+    @Override
+    public void execute(final SlashCommandInteractionEvent event, final Locale locale, final Entry user) {
+        final var nickname = event.getOption("nickname").getAsString();
+        if (nickname.length() > 256) {
+            final var format = new MessageFormat(Responses.get("nicknameTooLong", locale));
+            final var msg = format.format(new Object[]{});
 
-			event.reply(msg).setEphemeral(true).queue();
-			return;
-		}
+            event.reply(msg).setEphemeral(true).queue();
+            return;
+        }
 
-		user.setNickname(nickname);
-		IDatabase.INSTANCE.updateUser(user);
+        user.setNickname(nickname);
+        IDatabase.INSTANCE.updateUser(user);
 
-		final var format = new MessageFormat(Responses.get("nicknameSuccessful", locale));
-		final var msg = format.format(new Object[]{ nickname });
+        final var format = new MessageFormat(Responses.get("nicknameSuccessful", locale));
+        final var msg = format.format(new Object[]{nickname});
 
-		event.reply(msg).queue();
-	}
+        event.reply(msg).queue();
+    }
 
-	@Override
-	public CommandData getCommandData() {
-		final var option = new OptionData(STRING, "nickname", "The new nickname of the alpaca", true);
+    @Override
+    public CommandData getCommandData() {
+        final var option = new OptionData(STRING, "nickname", "The new nickname of the alpaca", true);
 
-		return Commands.slash("nick", "Gives your alpaca a new nickname")
-					   .addOptions(option);
-	}
+        return Commands.slash("nick", "Gives your alpaca a new nickname")
+                       .addOptions(option);
+    }
 
-	@Override
-	public CommandType getCommandType() {
-		return CommandType.USER;
-	}
+    @Override
+    public CommandType getCommandType() {
+        return CommandType.USER;
+    }
 }

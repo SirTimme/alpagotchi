@@ -1,28 +1,33 @@
 package bot.commands;
 
-import bot.commands.dev.*;
+import bot.commands.dev.Count;
+import bot.commands.dev.Shutdown;
+import bot.commands.dev.Update;
 import bot.commands.member.*;
 import bot.shop.ItemManager;
 import bot.utils.CommandType;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 public class CommandManager {
     private final Map<String, ISlashCommand> commands;
 
     public CommandManager() {
-        final var items = new ItemManager();
+        final var itemManager = new ItemManager();
 
         this.commands = new TreeMap<>();
         this.commands.put("ping", new Ping());
         this.commands.put("init", new Init());
         this.commands.put("balance", new Balance());
-        this.commands.put("buy", new Buy(items));
+        this.commands.put("buy", new Buy(itemManager));
         this.commands.put("count", new Count());
         this.commands.put("delete", new Delete());
-        this.commands.put("feed", new Feed(items));
+        this.commands.put("feed", new Feed(itemManager));
         this.commands.put("gift", new Gift());
         this.commands.put("work", new Work());
         this.commands.put("shutdown", new Shutdown());
@@ -32,26 +37,26 @@ public class CommandManager {
         this.commands.put("sleep", new Sleep());
         this.commands.put("outfit", new Outfit());
         this.commands.put("pet", new Pet());
-        this.commands.put("inventory", new Inventory(items));
-        this.commands.put("shop", new Shop(items));
+        this.commands.put("inventory", new Inventory(itemManager));
+        this.commands.put("shop", new Shop(itemManager));
         this.commands.put("update", new Update(this));
         this.commands.put("language", new Language());
     }
 
     public void handle(final SlashCommandInteractionEvent event) {
-        final var cmd = getCommandByName(event.getName());
+        final var cmd = this.commands.get(event.getName());
 
         cmd.execute(event);
     }
 
-    public Collection<? extends ISlashCommand> getCommands() {
+    public Collection<ISlashCommand> getCommands() {
         return this.commands.values();
     }
 
-    public List<? extends CommandData> getCommandDataByTypes(final CommandType... types) {
+    public List<CommandData> getCommandDataByTypes(final CommandType... types) {
         return this.commands.values()
                             .stream()
-                            .filter(cmd -> Arrays.asList(types).contains(cmd.getCommandType()))
+                            .filter(cmd -> List.of(types).contains(cmd.getCommandType()))
                             .map(ISlashCommand::getCommandData)
                             .toList();
     }
@@ -59,15 +64,11 @@ public class CommandManager {
     public String getCommandNames() {
         final var sb = new StringBuilder();
 
-        this.commands.keySet()
+        this.commands.entrySet()
                      .stream()
-                     .filter(name -> getCommandByName(name).getCommandType() != CommandType.DEV)
-                     .forEach(name -> sb.append("`").append(name).append("`").append(" "));
+                     .filter(entry -> entry.getValue().getCommandType() != CommandType.DEV)
+                     .forEach(entry -> sb.append("`").append(entry.getKey()).append("`").append(" "));
 
         return sb.toString();
-    }
-
-    private ISlashCommand getCommandByName(final String name) {
-        return this.commands.get(name);
     }
 }

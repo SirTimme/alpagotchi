@@ -1,9 +1,7 @@
 package bot.commands.member;
 
 import bot.commands.CommandManager;
-import bot.commands.ISlashCommand;
 import bot.commands.InfoCommand;
-import bot.models.Entry;
 import bot.utils.CommandType;
 import bot.utils.Env;
 import bot.utils.Responses;
@@ -16,10 +14,10 @@ import java.time.Instant;
 import java.util.Locale;
 
 public class Help extends InfoCommand {
-    private final CommandManager commands;
+    private final CommandManager commandManager;
 
-    public Help(final CommandManager commands) {
-        this.commands = commands;
+    public Help(final CommandManager commandManager) {
+        this.commandManager = commandManager;
     }
 
     @Override
@@ -28,7 +26,7 @@ public class Help extends InfoCommand {
             final var embed = new EmbedBuilder()
                     .setTitle(Responses.get("headerHelpEmbed", locale))
                     .setThumbnail("https://cdn.discordapp.com/attachments/795637300661977132/836542447186214942/avatar.png")
-                    .addField("Commands", this.commands.getCommandNames(), true)
+                    .addField("Commands", this.commandManager.getCommandNames(), true)
                     .addField("Need further help or found a bug?", "Join the [Alpagotchi Support](https://discord.gg/DXtYyzGhXR) server!", false)
                     .setFooter("Created by " + dev.getName(), dev.getAvatarUrl())
                     .setTimestamp(Instant.now())

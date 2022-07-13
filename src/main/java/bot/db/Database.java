@@ -4,16 +4,18 @@ import bot.models.Entry;
 import bot.models.GuildSettings;
 import bot.utils.Env;
 import com.mongodb.MongoClientSettings;
-import com.mongodb.client.*;
+import com.mongodb.client.MongoClients;
 import org.bson.codecs.configuration.CodecRegistry;
 import org.bson.codecs.pojo.PojoCodecProvider;
 
-import static com.mongodb.client.model.Filters.*;
+import static com.mongodb.client.model.Filters.eq;
 import static org.bson.codecs.configuration.CodecRegistries.fromProviders;
 import static org.bson.codecs.configuration.CodecRegistries.fromRegistries;
 
 public class Database implements IDatabase {
-    private static final CodecRegistry pojoRegistry = fromProviders(PojoCodecProvider.builder().automatic(true).build());
+    private static final CodecRegistry pojoRegistry = fromProviders(PojoCodecProvider.builder()
+                                                                                     .automatic(true)
+                                                                                     .build());
     private static final CodecRegistry codecRegistry = fromRegistries(MongoClientSettings.getDefaultCodecRegistry(), pojoRegistry);
 
     @Override

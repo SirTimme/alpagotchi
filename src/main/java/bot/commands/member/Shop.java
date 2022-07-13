@@ -32,26 +32,26 @@ public class Shop extends InfoCommand {
                     .setTimestamp(Instant.now());
 
             this.items.getItemsByStat("hunger")
-                    .stream()
-                    .sorted(Comparator.comparingInt(Item::getPrice))
-                    .forEach(item -> embed.addField(
-                                    ":package: " + item.getName(),
-                                    "Saturation: " + item.getSaturation() + "\nPrice: " + item.getPrice(),
-                                    true
-                            )
-                    );
+                      .stream()
+                      .sorted(Comparator.comparingInt(Item::getPrice))
+                      .forEach(item -> embed.addField(
+                                      ":package: " + item.getName(),
+                                      "Saturation: " + item.getSaturation() + "\nPrice: " + item.getPrice(),
+                                      true
+                              )
+                      );
 
             embed.addBlankField(false)
                  .addField("__**:beer: Thirst items**__", "Following items replenish the thirst of your alpaca", false);
 
             this.items.getItemsByStat("thirst")
-                    .stream()
-                    .sorted(Comparator.comparingInt(Item::getPrice))
-                    .forEach(item -> embed.addField(
-                            ":package: " + item.getName(),
-                            "Saturation: " + item.getSaturation() + "\nPrice: " + item.getPrice(),
-                            true)
-                    );
+                      .stream()
+                      .sorted(Comparator.comparingInt(Item::getPrice))
+                      .forEach(item -> embed.addField(
+                              ":package: " + item.getName(),
+                              "Saturation: " + item.getSaturation() + "\nPrice: " + item.getPrice(),
+                              true)
+                      );
 
             event.replyEmbeds(embed.build()).queue();
         });

@@ -20,7 +20,8 @@ public class ItemManager {
     public ItemManager() {
         try {
             final BufferedReader reader = new BufferedReader(new FileReader("src/main/resources/data/items.json"));
-            final Type type = new TypeToken<ArrayList<Item>>() {}.getType();
+            final Type type = new TypeToken<ArrayList<Item>>() {
+            }.getType();
 
             this.items = new Gson().fromJson(reader, type);
         } catch (final IOException error) {

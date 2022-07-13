@@ -15,7 +15,7 @@ public class Shutdown extends InfoCommand {
     @Override
     public void execute(final SlashCommandInteractionEvent event, final Locale locale) {
         final var format = new MessageFormat(Responses.get("shutdown", locale));
-        final var msg = format.format(new Object[]{ event.getJDA().getSelfUser().getName() });
+        final var msg = format.format(new Object[]{event.getJDA().getSelfUser().getName()});
 
         event.reply(msg).complete();
         event.getJDA().shutdown();

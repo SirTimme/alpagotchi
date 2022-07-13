@@ -10,29 +10,30 @@ import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 
 import java.text.MessageFormat;
-import java.util.*;
+import java.util.Locale;
 
+@SuppressWarnings("ConstantConditions")
 public class Update extends InfoCommand {
-    private final CommandManager commands;
+    private final CommandManager commandManager;
 
-    public Update(final CommandManager commands) {
-        this.commands = commands;
+    public Update(final CommandManager commandManager) {
+        this.commandManager = commandManager;
     }
 
     @Override
     public void execute(final SlashCommandInteractionEvent event, final Locale locale) {
         event.getJDA()
              .updateCommands()
-             .addCommands(this.commands.getCommandDataByTypes(CommandType.USER, CommandType.INFO, CommandType.INIT))
+             .addCommands(this.commandManager.getCommandDataByTypes(CommandType.USER, CommandType.INFO, CommandType.INIT))
              .queue();
 
         event.getGuild()
              .updateCommands()
-             .addCommands(this.commands.getCommandDataByTypes(CommandType.DEV))
+             .addCommands(this.commandManager.getCommandDataByTypes(CommandType.DEV))
              .queue();
 
         final var format = new MessageFormat(Responses.get("update", locale));
-        final var msg = format.format(new Object[]{ this.commands.getCommands().size() });
+        final var msg = format.format(new Object[]{this.commandManager.getCommands().size()});
 
         event.reply(msg).queue();
     }

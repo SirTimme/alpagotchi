@@ -41,8 +41,8 @@ public class Init extends UserCommand {
                     .setTitle(Responses.get("userInformation", locale))
                     .setDescription(Responses.get("initIntro", locale))
                     .setThumbnail(event.getJDA().getSelfUser().getAvatarUrl())
-                    .addField(Responses.get("headerStorageId", locale), Responses.get("bodyStorageId", locale),false)
-                    .addField(Responses.get("headerDeletionId", locale), Responses.get("bodyDeletionId", locale),false)
+                    .addField(Responses.get("headerStorageId", locale), Responses.get("bodyStorageId", locale), false)
+                    .addField(Responses.get("headerDeletionId", locale), Responses.get("bodyDeletionId", locale), false)
                     .setFooter("Created by " + dev.getName(), dev.getAvatarUrl())
                     .setTimestamp(Instant.now())
                     .build();

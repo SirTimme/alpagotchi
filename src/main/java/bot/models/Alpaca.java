@@ -13,11 +13,11 @@ public class Alpaca {
 
     @BsonCreator
     public Alpaca(@BsonProperty(value = "outfit") final String outfit,
-                  @BsonProperty(value = "nickname") final String nickname,
-                  @BsonProperty(value = "hunger") final int hunger,
-                  @BsonProperty(value = "thirst") final int thirst,
-                  @BsonProperty(value = "energy") final int energy,
-                  @BsonProperty(value = "joy") final int joy
+            @BsonProperty(value = "nickname") final String nickname,
+            @BsonProperty(value = "hunger") final int hunger,
+            @BsonProperty(value = "thirst") final int thirst,
+            @BsonProperty(value = "energy") final int energy,
+            @BsonProperty(value = "joy") final int joy
     ) {
         this.outfit = outfit;
         this.nickname = nickname;
@@ -31,44 +31,44 @@ public class Alpaca {
         return this.outfit;
     }
 
-    public String getNickname() {
-        return this.nickname;
-    }
-
-    public int getHunger() {
-        return this.hunger;
-    }
-
-    public int getThirst() {
-        return this.thirst;
-    }
-
-    public int getEnergy() {
-        return this.energy;
-    }
-
-    public int getJoy() {
-        return this.joy;
-    }
-
     public void setOutfit(final String outfit) {
         this.outfit = outfit;
+    }
+
+    public String getNickname() {
+        return this.nickname;
     }
 
     public void setNickname(final String nickname) {
         this.nickname = nickname;
     }
 
+    public int getHunger() {
+        return this.hunger;
+    }
+
     public void setHunger(final int hunger) {
         this.hunger = hunger;
+    }
+
+    public int getThirst() {
+        return this.thirst;
     }
 
     public void setThirst(final int thirst) {
         this.thirst = thirst;
     }
 
+    public int getEnergy() {
+        return this.energy;
+    }
+
     public void setEnergy(final int energy) {
         this.energy = energy;
+    }
+
+    public int getJoy() {
+        return this.joy;
     }
 
     public void setJoy(final int joy) {

@@ -4,11 +4,18 @@ import bot.db.IDatabase;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class ButtonManager {
     private static final Map<String, IButton> buttons = new HashMap<>();
+
+    public static void addButton(final String key, final IButton button) {
+        buttons.put(key, button);
+    }
 
     public void handle(final ButtonInteractionEvent event) {
         final IButton button = buttons.get(event.getComponentId());
@@ -23,10 +30,6 @@ public class ButtonManager {
                                       .collect(Collectors.toSet());
 
         buttons.keySet().removeAll(keys);
-    }
-
-    public static void addButton(final String key, final IButton button) {
-        buttons.put(key, button);
     }
 
     private Locale getLocale(final ButtonInteractionEvent event) {

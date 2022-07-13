@@ -70,7 +70,7 @@ public class Pet extends UserCommand {
     private String getMessage(final int joy, final boolean isFavourite, final Locale locale) {
         final String key = isFavourite ? "favouriteSpot" : "normalSpot";
 
-        return new MessageFormat(Responses.get(key, locale)).format(new Object[]{ joy });
+        return new MessageFormat(Responses.get(key, locale)).format(new Object[]{joy});
     }
 
     private int calculateJoy(final int joy, final boolean isFavourite) {
