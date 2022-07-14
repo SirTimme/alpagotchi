@@ -1,34 +1,32 @@
 package bot.commands.member;
 
 import bot.commands.CommandManager;
-import bot.commands.ISlashCommand;
-import bot.models.Entry;
+import bot.commands.InfoCommand;
 import bot.utils.CommandType;
 import bot.utils.Env;
-import bot.utils.MessageService;
 import bot.utils.Responses;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.entities.MessageEmbed;
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
+import net.dv8tion.jda.api.interactions.commands.build.Commands;
 
 import java.time.Instant;
 import java.util.Locale;
 
-public class Help implements ISlashCommand {
-    private final CommandManager commands;
+public class Help extends InfoCommand {
+    private final CommandManager commandManager;
 
-    public Help(final CommandManager commands) {
-        this.commands = commands;
+    public Help(final CommandManager commandManager) {
+        this.commandManager = commandManager;
     }
 
     @Override
-    public void execute(final SlashCommandEvent event, final Locale locale, final Entry user) {
+    public void execute(final SlashCommandInteractionEvent event, final Locale locale) {
         event.getJDA().retrieveUserById(Env.get("DEV_ID")).queue(dev -> {
             final var embed = new EmbedBuilder()
                     .setTitle(Responses.get("headerHelpEmbed", locale))
                     .setThumbnail("https://cdn.discordapp.com/attachments/795637300661977132/836542447186214942/avatar.png")
-                    .addField("Commands", this.commands.getCommandsAsString(), true)
+                    .addField("Commands", this.commandManager.getCommandNames(), true)
                     .addField("Need further help or found a bug?", "Join the [Alpagotchi Support](https://discord.gg/DXtYyzGhXR) server!", false)
                     .setFooter("Created by " + dev.getName(), dev.getAvatarUrl())
                     .setTimestamp(Instant.now())
@@ -40,7 +38,7 @@ public class Help implements ISlashCommand {
 
     @Override
     public CommandData getCommandData() {
-        return new CommandData("help", "Shows all commands of Alpagotchi");
+        return Commands.slash("help", "Shows all commands of Alpagotchi");
     }
 
     @Override

@@ -1,35 +1,36 @@
 package bot.commands.member;
 
-import bot.commands.ISlashCommand;
+import bot.commands.UserCommand;
 import bot.db.IDatabase;
 import bot.models.Entry;
 import bot.utils.CommandType;
-import bot.utils.MessageService;
 import bot.utils.Responses;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
+import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.lang.reflect.Type;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-public class Work implements ISlashCommand {
+public class Work extends UserCommand {
     private static final Logger LOGGER = LoggerFactory.getLogger(Work.class);
     private ArrayList<String> json;
 
     public Work() {
         try {
-            final BufferedReader reader = new BufferedReader(new FileReader("src/main/resources/data/messages.json"));
-            final Type type = new TypeToken<List<String>>() {}.getType();
+            final var reader = new BufferedReader(new FileReader("src/main/resources/data/messages.json"));
+            final var type = new TypeToken<List<String>>() {
+            }.getType();
+
             this.json = new Gson().fromJson(reader, type);
         } catch (final IOException error) {
             LOGGER.error(error.getMessage());
@@ -37,22 +38,22 @@ public class Work implements ISlashCommand {
     }
 
     @Override
-    public void execute(final SlashCommandEvent event, final Locale locale, final Entry user) {
+    public void execute(final SlashCommandInteractionEvent event, final Locale locale, final Entry user) {
         final long sleep = user.getSleep();
         if (sleep > 0) {
-            final MessageFormat msg = new MessageFormat(Responses.get("alpacaSleeping", locale));
-            final String content = msg.format(new Object[]{ sleep });
+            final var format = new MessageFormat(Responses.get("alpacaSleeping", locale));
+            final var msg = format.format(new Object[]{sleep});
 
-            MessageService.queueReply(event, content, true);
+            event.reply(msg).setEphemeral(true).queue();
             return;
         }
 
         final long work = user.getWork();
         if (work > 0) {
-            final MessageFormat msg = new MessageFormat(Responses.get("alpacaAlreadyWorked", locale));
-            final String content = msg.format(new Object[]{ work });
+            final var format = new MessageFormat(Responses.get("alpacaAlreadyWorked", locale));
+            final var msg = format.format(new Object[]{work});
 
-            MessageService.queueReply(event, content, true);
+            event.reply(msg).setEphemeral(true).queue();
             return;
         }
 
@@ -84,12 +85,13 @@ public class Work implements ISlashCommand {
 
         IDatabase.INSTANCE.updateUser(user);
 
-        event.reply("⛏ " + message + " **Fluffies + " + fluffies + ", Energy - " + energyCost + ", Joy - " + joyCost + "**").queue();
+        event.reply("⛏ " + message + " **Fluffies + " + fluffies + ", Energy - " + energyCost + ", Joy - " + joyCost + "**")
+             .queue();
     }
 
     @Override
     public CommandData getCommandData() {
-        return new CommandData("work", "Lets your alpaca work for fluffies");
+        return Commands.slash("work", "Lets your alpaca work for fluffies");
     }
 
     @Override

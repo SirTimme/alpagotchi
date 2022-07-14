@@ -24,7 +24,7 @@
     "stat": "thirst"
   },
   {
-    "name" : "lemonade",
+    "name": "lemonade",
     "price": 25,
     "saturation": 25,
     "stat": "thirst"

@@ -1,18 +1,24 @@
 package bot.components.buttons;
 
 import bot.db.IDatabase;
-import bot.utils.MessageService;
 import bot.utils.Responses;
-import net.dv8tion.jda.api.events.interaction.ButtonClickEvent;
+import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 
 import java.text.MessageFormat;
+import java.util.Collections;
 import java.util.Locale;
 
 public class BtnDeleteAccept implements IButton {
     @Override
-    public void execute(final ButtonClickEvent event, final Locale locale) {
-        IDatabase.INSTANCE.deleteUser(event.getUser().getIdLong());
+    public void execute(final ButtonInteractionEvent event, final Locale locale) {
+        IDatabase.INSTANCE.deleteUserById(event.getUser().getIdLong());
 
-        MessageService.editReply(event, new MessageFormat(Responses.get("dataSuccess", locale)));
+        final var format = new MessageFormat(Responses.get("dataSuccess", locale));
+        final var msg = format.format(new Object[]{});
+
+        event.editMessage(msg)
+             .setActionRows(Collections.emptyList())
+             .setEmbeds(Collections.emptyList())
+             .queue();
     }
 }

@@ -4,19 +4,21 @@ import bot.models.Entry;
 import bot.models.GuildSettings;
 
 public interface IDatabase {
-	IDatabase INSTANCE = new Database();
+    IDatabase INSTANCE = new Database();
 
-	Entry getUser(final long memberID);
+    void connect();
 
-	void updateUser(final Entry DBUser);
+    Entry getUserById(final long memberID);
 
-	void createUser(final long memberID);
+    void updateUser(final Entry entry);
 
-	void deleteUser(final long memberID);
+    void createUserById(final long memberID);
 
-	GuildSettings getGuildSettings(final long guildID);
+    void deleteUserById(final long memberID);
 
-	void updateGuildSettings(final GuildSettings settings);
+    GuildSettings getSettingsById(final long guildID);
 
-	long getEntries();
+    void updateSettings(final GuildSettings settings);
+
+    long getUserCount();
 }

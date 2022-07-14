@@ -1,30 +1,29 @@
 package bot.commands.member;
 
-import bot.commands.ISlashCommand;
-import bot.models.Entry;
+import bot.commands.InfoCommand;
 import bot.utils.CommandType;
-import bot.utils.MessageService;
 import bot.utils.Responses;
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
+import net.dv8tion.jda.api.interactions.commands.build.Commands;
 
 import java.text.MessageFormat;
 import java.util.Locale;
 
-public class Ping implements ISlashCommand {
+public class Ping extends InfoCommand {
     @Override
-    public void execute(final SlashCommandEvent event, final Locale locale, final Entry user) {
+    public void execute(final SlashCommandInteractionEvent event, final Locale locale) {
         event.getJDA().getRestPing().queue(ping -> {
-            final MessageFormat msg = new MessageFormat(Responses.get("ping", locale));
-            final String content = msg.format(new Object[]{ ping });
+            final var format = new MessageFormat(Responses.get("ping", locale));
+            final var msg = format.format(new Object[]{ping});
 
-            MessageService.queueReply(event, content, false);
+            event.reply(msg).queue();
         });
     }
 
     @Override
     public CommandData getCommandData() {
-        return new CommandData("ping", "Displays the current latency of Alpagotchi");
+        return Commands.slash("ping", "Displays the current latency of Alpagotchi");
     }
 
     @Override

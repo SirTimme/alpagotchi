@@ -12,7 +12,7 @@ public class Cooldown {
 
     @BsonCreator
     public Cooldown(@BsonProperty(value = "sleep") final long sleep,
-                    @BsonProperty(value = "work") final long work
+            @BsonProperty(value = "work") final long work
     ) {
         this.sleep = sleep;
         this.work = work;

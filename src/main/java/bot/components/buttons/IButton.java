@@ -1,9 +1,9 @@
 package bot.components.buttons;
 
-import net.dv8tion.jda.api.events.interaction.ButtonClickEvent;
+import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 
 import java.util.Locale;
 
 public interface IButton {
-    void execute(final ButtonClickEvent event, final Locale locale);
+    void execute(final ButtonInteractionEvent event, final Locale locale);
 }

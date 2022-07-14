@@ -1,15 +1,14 @@
 package bot.commands.member;
 
-import bot.commands.ISlashCommand;
+import bot.commands.UserCommand;
 import bot.models.Entry;
 import bot.utils.CommandType;
 import bot.utils.Env;
-import bot.utils.MessageService;
 import bot.utils.Responses;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.entities.MessageEmbed;
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
+import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,37 +24,35 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
-public class MyAlpaca implements ISlashCommand {
-    private final Map<String, BufferedImage> images = new HashMap<>();
+public class MyAlpaca extends UserCommand {
     private static final Logger LOGGER = LoggerFactory.getLogger(MyAlpaca.class);
-    private final Color[] colors = { Color.BLACK, Color.RED, Color.ORANGE, Color.YELLOW, Color.GREEN };
+    private final Map<String, BufferedImage> images = new HashMap<>();
+    private final Color[] colors = {Color.BLACK, Color.RED, Color.ORANGE, Color.YELLOW, Color.GREEN};
 
     public MyAlpaca() {
         final File folder = new File("src/main/resources/outfits");
         try {
-            for (final File file : folder.listFiles()) {
-                final String name = file.getName().split("\\.")[0];
+            for (final var file : folder.listFiles()) {
+                final var name = file.getName().split("\\.")[0];
 
                 this.images.put(name, ImageIO.read(file));
             }
-        }
-        catch (final IOException error) {
+        } catch (final IOException error) {
             LOGGER.error(error.getMessage());
         }
     }
 
     @Override
-    public void execute(final SlashCommandEvent event, final Locale locale, final Entry user) {
-        final ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+    public void execute(final SlashCommandInteractionEvent event, final Locale locale, final Entry user) {
+        final var bytes = new ByteArrayOutputStream();
         try {
             ImageIO.write(createImage(user), "png", bytes);
-        }
-        catch (final IOException error) {
+        } catch (final IOException error) {
             LOGGER.error(error.getMessage());
         }
 
         event.getJDA().retrieveUserById(Env.get("DEV_ID")).queue(dev -> {
-            final MessageEmbed embed = new EmbedBuilder()
+            final var embed = new EmbedBuilder()
                     .setTitle(user.getNickname())
                     .setDescription("_Have a llamazing day!_")
                     .addField("Work", getCooldownMsg(user.getWork(), locale), true)
@@ -66,13 +63,13 @@ public class MyAlpaca implements ISlashCommand {
                     .setImage("attachment://alpagotchi.png")
                     .build();
 
-            MessageService.queueImageReply(event, embed, bytes.toByteArray(), false);
+            event.replyEmbeds(embed).addFile(bytes.toByteArray(), "alpagotchi.png").queue();
         });
     }
 
     @Override
     public CommandData getCommandData() {
-        return new CommandData("myalpaca", "Shows your alpaca with its stats");
+        return Commands.slash("myalpaca", "Shows your alpaca with its stats");
     }
 
     @Override
@@ -88,8 +85,8 @@ public class MyAlpaca implements ISlashCommand {
 
         final BufferedImage background = this.images.get(user.getOutfit());
         final BufferedImage img = new BufferedImage(background.getWidth(),
-                                                    background.getHeight(),
-                                                    BufferedImage.TYPE_INT_RGB);
+                background.getHeight(),
+                BufferedImage.TYPE_INT_RGB);
 
         final Graphics graphics = img.createGraphics();
         graphics.setFont(new Font("SansSerif", Font.BOLD, 15));
@@ -134,7 +131,7 @@ public class MyAlpaca implements ISlashCommand {
     private String getCooldownMsg(final long minutes, final Locale locale) {
         if (minutes > 0) {
             final MessageFormat msg = new MessageFormat(Responses.get("activeCooldown", locale));
-            return msg.format(new Object[]{ minutes });
+            return msg.format(new Object[]{minutes});
         }
         return Responses.get("inactiveCooldown", locale);
     }
