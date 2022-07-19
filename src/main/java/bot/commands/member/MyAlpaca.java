@@ -27,7 +27,7 @@ import java.util.Map;
 public class MyAlpaca extends UserCommand {
     private static final Logger LOGGER = LoggerFactory.getLogger(MyAlpaca.class);
     private final Map<String, BufferedImage> images = new HashMap<>();
-    private final Color[] colors = {Color.BLACK, Color.RED, Color.ORANGE, Color.YELLOW, Color.GREEN};
+    private final Color[] colors = { Color.BLACK, Color.RED, Color.ORANGE, Color.YELLOW, Color.GREEN };
 
     public MyAlpaca() {
         final File folder = new File("src/main/resources/outfits");
@@ -84,9 +84,7 @@ public class MyAlpaca extends UserCommand {
         final int joy = user.getJoy();
 
         final BufferedImage background = this.images.get(user.getOutfit());
-        final BufferedImage img = new BufferedImage(background.getWidth(),
-                background.getHeight(),
-                BufferedImage.TYPE_INT_RGB);
+        final BufferedImage img = new BufferedImage(background.getWidth(), background.getHeight(), BufferedImage.TYPE_INT_RGB);
 
         final Graphics graphics = img.createGraphics();
         graphics.setFont(new Font("SansSerif", Font.BOLD, 15));
@@ -131,7 +129,7 @@ public class MyAlpaca extends UserCommand {
     private String getCooldownMsg(final long minutes, final Locale locale) {
         if (minutes > 0) {
             final MessageFormat msg = new MessageFormat(Responses.get("activeCooldown", locale));
-            return msg.format(new Object[]{minutes});
+            return msg.format(new Object[]{ minutes });
         }
         return Responses.get("inactiveCooldown", locale);
     }

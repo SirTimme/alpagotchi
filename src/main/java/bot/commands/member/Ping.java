@@ -15,7 +15,7 @@ public class Ping extends InfoCommand {
     public void execute(final SlashCommandInteractionEvent event, final Locale locale) {
         event.getJDA().getRestPing().queue(ping -> {
             final var format = new MessageFormat(Responses.get("ping", locale));
-            final var msg = format.format(new Object[]{ping});
+            final var msg = format.format(new Object[]{ ping });
 
             event.reply(msg).queue();
         });

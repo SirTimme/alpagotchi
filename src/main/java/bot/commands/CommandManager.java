@@ -62,13 +62,13 @@ public class CommandManager {
     }
 
     public String getCommandNames() {
-        final var sb = new StringBuilder();
+        final var builder = new StringBuilder();
 
         this.commands.entrySet()
                      .stream()
                      .filter(entry -> entry.getValue().getCommandType() != CommandType.DEV)
-                     .forEach(entry -> sb.append("`").append(entry.getKey()).append("`").append(" "));
+                     .forEach(entry -> builder.append("`").append(entry.getKey()).append("`").append(" "));
 
-        return sb.toString();
+        return builder.toString();
     }
 }

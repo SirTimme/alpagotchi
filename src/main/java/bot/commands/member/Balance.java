@@ -15,7 +15,7 @@ public class Balance extends UserCommand {
     @Override
     public void execute(final SlashCommandInteractionEvent event, final Locale locale, final Entry user) {
         final var format = new MessageFormat(Responses.get("currentBalance", locale));
-        final var msg = format.format(new Object[]{user.getCurrency()});
+        final var msg = format.format(new Object[]{ user.getCurrency() });
 
         event.reply(msg).queue();
     }

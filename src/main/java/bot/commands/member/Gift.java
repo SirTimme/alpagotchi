@@ -58,7 +58,7 @@ public class Gift extends UserCommand {
         IDatabase.INSTANCE.updateUser(user);
 
         final var format = new MessageFormat(Responses.get("giftSuccessful", locale));
-        final var msg = format.format(new Object[]{amount, selectedItem, selectedUser.getName()});
+        final var msg = format.format(new Object[]{ amount, selectedItem, selectedUser.getName() });
 
         event.reply(msg).queue();
     }

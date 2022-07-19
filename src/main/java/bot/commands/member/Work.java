@@ -42,7 +42,7 @@ public class Work extends UserCommand {
         final long sleep = user.getSleep();
         if (sleep > 0) {
             final var format = new MessageFormat(Responses.get("alpacaSleeping", locale));
-            final var msg = format.format(new Object[]{sleep});
+            final var msg = format.format(new Object[]{ sleep });
 
             event.reply(msg).setEphemeral(true).queue();
             return;
@@ -51,7 +51,7 @@ public class Work extends UserCommand {
         final long work = user.getWork();
         if (work > 0) {
             final var format = new MessageFormat(Responses.get("alpacaAlreadyWorked", locale));
-            final var msg = format.format(new Object[]{work});
+            final var msg = format.format(new Object[]{ work });
 
             event.reply(msg).setEphemeral(true).queue();
             return;

@@ -32,7 +32,7 @@ public class Feed extends UserCommand {
 
         if (remainingSleep > 0) {
             final var format = new MessageFormat(Responses.get("alpacaSleeping", locale));
-            final var msg = format.format(new Object[]{remainingSleep});
+            final var msg = format.format(new Object[]{ remainingSleep });
 
             event.reply(msg).setEphemeral(true).queue();
             return;
@@ -67,7 +67,7 @@ public class Feed extends UserCommand {
         IDatabase.INSTANCE.updateUser(user);
 
         final var format = new MessageFormat(Responses.get(item.getStat(), locale));
-        final var msg = format.format(new Object[]{itemAmount, item.getName(), saturation});
+        final var msg = format.format(new Object[]{ itemAmount, item.getName(), saturation });
 
         event.reply(msg).queue();
     }

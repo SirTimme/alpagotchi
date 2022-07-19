@@ -33,7 +33,7 @@ public class Update extends InfoCommand {
              .queue();
 
         final var format = new MessageFormat(Responses.get("update", locale));
-        final var msg = format.format(new Object[]{this.commandManager.getCommands().size()});
+        final var msg = format.format(new Object[]{ this.commandManager.getCommands().size() });
 
         event.reply(msg).queue();
     }
