@@ -19,11 +19,10 @@ import java.util.UUID;
 public class Delete extends UserCommand {
     @Override
     public void execute(final SlashCommandInteractionEvent event, final Locale locale, final Entry user) {
-        final var btnSuccess = Button.success(UUID.randomUUID().toString(), "Accept");
-        final var btnCancel = Button.danger(UUID.randomUUID().toString(), "Cancel");
+        final var userId = event.getUser().getIdLong();
 
-        ButtonManager.addButton(btnSuccess.getId(), new BtnDeleteAccept());
-        ButtonManager.addButton(btnCancel.getId(), new BtnDeleteCancel());
+        final var btnSuccess = Button.success(userId + ":deleteAccept", "Accept");
+        final var btnCancel = Button.danger(userId + ":deleteCancelled", "Cancel");
 
         final var format = new MessageFormat(Responses.get("dataDeletion", locale));
         final var msg = format.format(new Object[]{});

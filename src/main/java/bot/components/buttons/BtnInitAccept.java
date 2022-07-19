@@ -8,7 +8,7 @@ import java.text.MessageFormat;
 import java.util.Collections;
 import java.util.Locale;
 
-public class BtnInitAccept implements IButton {
+public class BtnInitAccept extends MessageButton {
     @Override
     public void execute(final ButtonInteractionEvent event, final Locale locale) {
         IDatabase.INSTANCE.createUserById(event.getUser().getIdLong());

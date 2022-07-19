@@ -1,40 +1,30 @@
 package bot.components.buttons;
 
-import bot.db.IDatabase;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
-import net.dv8tion.jda.api.interactions.components.buttons.Button;
 
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.*;
 
 public class ButtonManager {
-    private static final Map<String, IButton> buttons = new HashMap<>();
+    private final Map<String, IButton> buttons;
 
-    public static void addButton(final String key, final IButton button) {
-        buttons.put(key, button);
+    public ButtonManager() {
+        this.buttons = new TreeMap<>();
+        this.buttons.put("initAccept", new BtnInitAccept());
+        this.buttons.put("initCancelled", new BtnInitCancel());
+        this.buttons.put("deleteAccept", new BtnDeleteAccept());
+        this.buttons.put("deleteCancelled", new BtnDeleteCancel());
     }
 
     public void handle(final ButtonInteractionEvent event) {
-        final IButton button = buttons.get(event.getComponentId());
-        final Locale locale = getLocale(event);
+        final var authorId = event.getComponentId().split(":")[0];
+        final var btnName = event.getComponentId().split(":")[1];
 
-        button.execute(event, locale);
+        if (!authorId.equals(event.getUser().getId())) {
+            return;
+        }
 
-        final Set<String> keys = event.getMessage()
-                                      .getButtons()
-                                      .stream()
-                                      .map(Button::getId)
-                                      .collect(Collectors.toSet());
+        final var btn = buttons.get(btnName);
 
-        buttons.keySet().removeAll(keys);
-    }
-
-    private Locale getLocale(final ButtonInteractionEvent event) {
-        return event.getGuild() == null
-                ? Locale.ENGLISH
-                : IDatabase.INSTANCE.getSettingsById(event.getGuild().getIdLong()).getLocale();
+        btn.execute(event);
     }
 }

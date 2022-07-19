@@ -8,7 +8,7 @@ import java.text.MessageFormat;
 import java.util.Collections;
 import java.util.Locale;
 
-public class BtnDeleteAccept implements IButton {
+public class BtnDeleteAccept extends MessageButton {
     @Override
     public void execute(final ButtonInteractionEvent event, final Locale locale) {
         IDatabase.INSTANCE.deleteUserById(event.getUser().getIdLong());

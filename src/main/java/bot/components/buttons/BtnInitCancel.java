@@ -7,7 +7,7 @@ import java.text.MessageFormat;
 import java.util.Collections;
 import java.util.Locale;
 
-public class BtnInitCancel implements IButton {
+public class BtnInitCancel extends MessageButton {
     @Override
     public void execute(final ButtonInteractionEvent event, final Locale locale) {
         final var format = new MessageFormat(Responses.get("initCancelled", locale));

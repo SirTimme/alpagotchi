@@ -30,11 +30,10 @@ public class Init extends UserCommand {
             return;
         }
 
-        final var btnAccept = Button.success(UUID.randomUUID().toString(), "Accept");
-        final var btnCancel = Button.danger(UUID.randomUUID().toString(), "Decline");
+        final var userId = event.getUser().getIdLong();
 
-        ButtonManager.addButton(btnAccept.getId(), new BtnInitAccept());
-        ButtonManager.addButton(btnCancel.getId(), new BtnInitCancel());
+        final var btnAccept = Button.success(userId + ":initAccept", "Accept");
+        final var btnCancel = Button.danger(userId + ":initCancelled", "Decline");
 
         event.getJDA().retrieveUserById(Env.get("DEV_ID")).queue(dev -> {
             final var embed = new EmbedBuilder()
