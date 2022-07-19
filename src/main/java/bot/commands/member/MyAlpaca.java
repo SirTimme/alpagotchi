@@ -7,6 +7,7 @@ import bot.utils.Env;
 import bot.utils.Responses;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.interactions.DiscordLocale;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import org.slf4j.Logger;
@@ -69,7 +70,8 @@ public class MyAlpaca extends UserCommand {
 
     @Override
     public CommandData getCommandData() {
-        return Commands.slash("myalpaca", "Shows your alpaca with its stats");
+        return Commands.slash("myalpaca", "Shows your alpaca")
+                       .setDescriptionLocalization(DiscordLocale.GERMAN, "Zeigt dein Alpaka");
     }
 
     @Override

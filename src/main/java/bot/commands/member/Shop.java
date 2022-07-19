@@ -7,6 +7,7 @@ import bot.utils.CommandType;
 import bot.utils.Env;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.interactions.DiscordLocale;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 
@@ -59,7 +60,8 @@ public class Shop extends InfoCommand {
 
     @Override
     public CommandData getCommandData() {
-        return Commands.slash("shop", "Shows the shop with all the items to buy");
+        return Commands.slash("shop", "Shows the shop")
+                       .setDescriptionLocalization(DiscordLocale.GERMAN, "Zeigt den Laden");
     }
 
     @Override

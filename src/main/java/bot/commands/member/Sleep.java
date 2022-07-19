@@ -6,6 +6,7 @@ import bot.models.Entry;
 import bot.utils.CommandType;
 import bot.utils.Responses;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.interactions.DiscordLocale;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
@@ -50,9 +51,11 @@ public class Sleep extends UserCommand {
 
     @Override
     public CommandData getCommandData() {
-        final var option = new OptionData(INTEGER, "duration", "The duration in minutes", true);
+        final var option = new OptionData(INTEGER, "duration", "The duration in minutes", true)
+                .setDescriptionLocalization(DiscordLocale.GERMAN, "Die Dauer in Minuten");
 
-        return Commands.slash("sleep", "Lets your alpaca sleep for the specified duration to regain energy")
+        return Commands.slash("sleep", "Let your alpaca sleep to regain energy")
+                       .setDescriptionLocalization(DiscordLocale.GERMAN, "Lässt dein Alpaka schlafen, um Energie zu regenerieren")
                        .addOptions(option);
     }
 

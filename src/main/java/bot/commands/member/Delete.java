@@ -1,20 +1,17 @@
 package bot.commands.member;
 
 import bot.commands.UserCommand;
-import bot.components.buttons.BtnDeleteAccept;
-import bot.components.buttons.BtnDeleteCancel;
-import bot.components.buttons.ButtonManager;
 import bot.models.Entry;
 import bot.utils.CommandType;
 import bot.utils.Responses;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.interactions.DiscordLocale;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
 
 import java.text.MessageFormat;
 import java.util.Locale;
-import java.util.UUID;
 
 public class Delete extends UserCommand {
     @Override
@@ -35,7 +32,8 @@ public class Delete extends UserCommand {
 
     @Override
     public CommandData getCommandData() {
-        return Commands.slash("delete", "Deletes your personal data");
+        return Commands.slash("delete", "Deletes your saved data")
+                       .setDescriptionLocalization(DiscordLocale.GERMAN, "Löscht deine gespeicherten Daten");
     }
 
     @Override

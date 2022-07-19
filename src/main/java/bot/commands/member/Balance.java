@@ -5,6 +5,7 @@ import bot.models.Entry;
 import bot.utils.CommandType;
 import bot.utils.Responses;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.interactions.DiscordLocale;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 
@@ -22,7 +23,8 @@ public class Balance extends UserCommand {
 
     @Override
     public CommandData getCommandData() {
-        return Commands.slash("balance", "Shows your fluffy balance");
+        return Commands.slash("balance", "Shows your balance of fluffies")
+                       .setDescriptionLocalization(DiscordLocale.GERMAN, "Ruft dein Guthaben an Fluffies ab");
     }
 
     @Override

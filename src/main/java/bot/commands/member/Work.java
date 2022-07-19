@@ -8,6 +8,7 @@ import bot.utils.Responses;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.interactions.DiscordLocale;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import org.slf4j.Logger;
@@ -91,7 +92,8 @@ public class Work extends UserCommand {
 
     @Override
     public CommandData getCommandData() {
-        return Commands.slash("work", "Lets your alpaca work for fluffies");
+        return Commands.slash("work", "Let your alpaca work for fluffies")
+                       .setDescriptionLocalization(DiscordLocale.GERMAN, "Lässt dein Alpaka für Fluffies arbeiten");
     }
 
     @Override

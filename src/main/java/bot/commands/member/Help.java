@@ -7,6 +7,7 @@ import bot.utils.Env;
 import bot.utils.Responses;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.interactions.DiscordLocale;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 
@@ -38,7 +39,8 @@ public class Help extends InfoCommand {
 
     @Override
     public CommandData getCommandData() {
-        return Commands.slash("help", "Shows all commands of Alpagotchi");
+        return Commands.slash("help", "Shows all commands of Alpagotchi")
+                       .setDescriptionLocalization(DiscordLocale.GERMAN, "Zeigt alle Befehle von Alpagotchi");
     }
 
     @Override

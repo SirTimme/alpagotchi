@@ -7,6 +7,7 @@ import bot.utils.CommandType;
 import bot.utils.Env;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.interactions.DiscordLocale;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 
@@ -54,7 +55,8 @@ public class Inventory extends UserCommand {
 
     @Override
     public CommandData getCommandData() {
-        return Commands.slash("inventory", "Shows your items for your alpaca");
+        return Commands.slash("inventory", "Shows your items")
+                       .setDescriptionLocalization(DiscordLocale.GERMAN, "Zeigt deine Items");
     }
 
     @Override

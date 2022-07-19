@@ -6,6 +6,7 @@ import bot.models.Entry;
 import bot.utils.CommandType;
 import bot.utils.Responses;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.interactions.DiscordLocale;
 import net.dv8tion.jda.api.interactions.commands.Command;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
@@ -39,10 +40,12 @@ public class Outfit extends UserCommand {
                 new Command.Choice("lady", "lady")
         );
 
-        final var option = new OptionData(STRING, "outfit", "The new outfit of your alpaca", true)
+        final var option = new OptionData(STRING, "outfit", "The new outfit", true)
+                .setDescriptionLocalization(DiscordLocale.GERMAN, "Das neue Outfit")
                 .addChoices(choices);
 
-        return Commands.slash("outfit", "Changes the appearance of your alpaca")
+        return Commands.slash("outfit", "Changes the outfit of your alpaca")
+                       .setDescriptionLocalization(DiscordLocale.GERMAN, "Gibt deinem Alpaka ein neues Outfit")
                        .addOptions(option);
     }
 

@@ -7,6 +7,7 @@ import bot.utils.CommandType;
 import bot.utils.Responses;
 import net.dv8tion.jda.api.entities.emoji.Emoji;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.interactions.DiscordLocale;
 import net.dv8tion.jda.api.interactions.commands.DefaultMemberPermissions;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
@@ -35,7 +36,8 @@ public class Language extends InfoCommand {
 
     @Override
     public CommandData getCommandData() {
-        return Commands.slash("language", "Sets the bots language for this server")
+        return Commands.slash("language", "Sets the used language of Alpagotchi for this server")
+                       .setDescriptionLocalization(DiscordLocale.GERMAN, "Setzt die verwendete Sprache von Alpagotchi für diesen Server")
                        .setGuildOnly(true)
                        .setDefaultPermissions(DefaultMemberPermissions.DISABLED);
     }

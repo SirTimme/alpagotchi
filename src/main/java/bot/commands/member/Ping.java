@@ -4,6 +4,7 @@ import bot.commands.InfoCommand;
 import bot.utils.CommandType;
 import bot.utils.Responses;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.interactions.DiscordLocale;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 
@@ -23,7 +24,8 @@ public class Ping extends InfoCommand {
 
     @Override
     public CommandData getCommandData() {
-        return Commands.slash("ping", "Displays the current latency of Alpagotchi");
+        return Commands.slash("ping", "Displays the current latency of Alpagotchi")
+                       .setDescriptionLocalization(DiscordLocale.GERMAN, "Zeigt die aktuelle Latenz von Alpagotchi an");
     }
 
     @Override

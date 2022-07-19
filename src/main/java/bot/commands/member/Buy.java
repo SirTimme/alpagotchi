@@ -7,6 +7,7 @@ import bot.shop.ItemManager;
 import bot.utils.CommandType;
 import bot.utils.Responses;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.interactions.DiscordLocale;
 import net.dv8tion.jda.api.interactions.commands.Command;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
@@ -65,11 +66,16 @@ public class Buy extends UserCommand {
         );
 
         final var options = List.of(
-                new OptionData(STRING, "item", "The item to buy", true).addChoices(choices),
-                new OptionData(INTEGER, "amount", "The amount of items", true).setRequiredRange(1, 10)
+                new OptionData(STRING, "item", "The item to buy", true)
+                        .setDescriptionLocalization(DiscordLocale.GERMAN, "Das zu kaufende Item")
+                        .addChoices(choices),
+                new OptionData(INTEGER, "amount", "The amount of items", true)
+                        .setDescriptionLocalization(DiscordLocale.GERMAN, "Die Anzahl an Items")
+                        .setRequiredRange(1, 10)
         );
 
-        return Commands.slash("buy", "Buys your alpaca items from the shop")
+        return Commands.slash("buy", "Buys items from the shop")
+                       .setDescriptionLocalization(DiscordLocale.GERMAN, "Kauft Items von dem Laden")
                        .addOptions(options);
     }
 

@@ -7,6 +7,7 @@ import bot.shop.ItemManager;
 import bot.utils.CommandType;
 import bot.utils.Responses;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.interactions.DiscordLocale;
 import net.dv8tion.jda.api.interactions.commands.Command;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
@@ -84,11 +85,16 @@ public class Feed extends UserCommand {
         );
 
         final var options = List.of(
-                new OptionData(STRING, "item", "The item to feed", true).addChoices(choices),
-                new OptionData(INTEGER, "amount", "The amount of items", true).setRequiredRange(1, 5)
+                new OptionData(STRING, "item", "The item to feed", true)
+                        .setDescriptionLocalization(DiscordLocale.GERMAN, "Das zu fütternde Item")
+                        .addChoices(choices),
+                new OptionData(INTEGER, "amount", "The amount of items", true)
+                        .setDescriptionLocalization(DiscordLocale.GERMAN, "Die Anzahl an Items")
+                        .setRequiredRange(1, 5)
         );
 
-        return Commands.slash("feed", "Feeds your alpaca items")
+        return Commands.slash("feed", "Feeds your alpaca")
+                       .setDescriptionLocalization(DiscordLocale.GERMAN, "Füttert dein Alpaka")
                        .addOptions(options);
     }
 

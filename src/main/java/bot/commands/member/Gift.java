@@ -6,6 +6,7 @@ import bot.models.Entry;
 import bot.utils.CommandType;
 import bot.utils.Responses;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.interactions.DiscordLocale;
 import net.dv8tion.jda.api.interactions.commands.Command;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
@@ -75,12 +76,18 @@ public class Gift extends UserCommand {
         );
 
         final var options = List.of(
-                new OptionData(USER, "user", "The user you want to gift to", true),
-                new OptionData(STRING, "item", "The item to gift", true).addChoices(choices),
-                new OptionData(INTEGER, "amount", "The amount of gifted items", true).setRequiredRange(1, 5)
+                new OptionData(USER, "user", "The user you want to gift", true)
+                        .setDescriptionLocalization(DiscordLocale.GERMAN, "Der zu beschenkende User"),
+                new OptionData(STRING, "item", "The item to gift", true)
+                        .setDescriptionLocalization(DiscordLocale.GERMAN, "Das zu schenkende Item")
+                        .addChoices(choices),
+                new OptionData(INTEGER, "amount", "The amount of gifted items", true)
+                        .setDescriptionLocalization(DiscordLocale.GERMAN, "Die Anzahl an Items")
+                        .setRequiredRange(1, 5)
         );
 
-        return Commands.slash("gift", "Gifts another user items")
+        return Commands.slash("gift", "Gifts another user")
+                       .setDescriptionLocalization(DiscordLocale.GERMAN, "Beschenkt einen anderen Nutzer")
                        .addOptions(options)
                        .setGuildOnly(true);
     }

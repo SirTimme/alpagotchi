@@ -5,6 +5,7 @@ import bot.db.IDatabase;
 import bot.utils.CommandType;
 import bot.utils.Responses;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.interactions.DiscordLocale;
 import net.dv8tion.jda.api.interactions.commands.DefaultMemberPermissions;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
@@ -24,6 +25,7 @@ public class Count extends InfoCommand {
     @Override
     public CommandData getCommandData() {
         return Commands.slash("count", "Counts all alpacas of Alpagotchi")
+                       .setDescriptionLocalization(DiscordLocale.GERMAN, "Zählt alle Alpakas von Alpagotchi")
                        .setDefaultPermissions(DefaultMemberPermissions.DISABLED);
     }
 
