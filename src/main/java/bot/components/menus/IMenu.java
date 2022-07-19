@@ -5,5 +5,5 @@ import net.dv8tion.jda.api.events.interaction.component.SelectMenuInteractionEve
 import java.util.Locale;
 
 public interface IMenu {
-    void execute(final SelectMenuInteractionEvent event, final Locale locale);
+    void execute(final SelectMenuInteractionEvent event);
 }

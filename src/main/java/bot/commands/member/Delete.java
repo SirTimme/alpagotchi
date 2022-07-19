@@ -24,10 +24,7 @@ public class Delete extends UserCommand {
         final var format = new MessageFormat(Responses.get("dataDeletion", locale));
         final var msg = format.format(new Object[]{});
 
-        event.reply(msg)
-             .addActionRow(btnSuccess, btnCancel)
-             .setEphemeral(true)
-             .queue();
+        event.reply(msg).addActionRow(btnSuccess, btnCancel).queue();
     }
 
     @Override

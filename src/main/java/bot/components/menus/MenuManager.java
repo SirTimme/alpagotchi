@@ -1,30 +1,29 @@
 package bot.components.menus;
 
-import bot.db.IDatabase;
+import bot.components.menus.language.SelectLanguage;
 import net.dv8tion.jda.api.events.interaction.component.SelectMenuInteractionEvent;
 
-import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
+import java.util.TreeMap;
 
 public class MenuManager {
-    private static final Map<String, IMenu> menus = new HashMap<>();
+    private final Map<String, IMenu> menus;
 
-    public static void addMenu(final String key, final IMenu menu) {
-        menus.put(key, menu);
+    public MenuManager() {
+        this.menus = new TreeMap<>();
+        this.menus.put("language", new SelectLanguage());
     }
 
     public void handle(final SelectMenuInteractionEvent event) {
-        final IMenu menu = menus.get(event.getComponentId());
-        final Locale locale = getLocale(event);
+        final var authorId = event.getComponentId().split(":")[0];
+        final var menuName = event.getComponentId().split(":")[1];
 
-        menu.execute(event, locale);
-        menus.remove(event.getComponentId());
-    }
+        if (!authorId.equals(event.getUser().getId())) {
+            return;
+        }
 
-    private Locale getLocale(final SelectMenuInteractionEvent event) {
-        return event.getGuild() == null
-                ? Locale.ENGLISH
-                : IDatabase.INSTANCE.getSettingsById(event.getGuild().getIdLong()).getLocale();
+        final var menu = menus.get(menuName);
+
+        menu.execute(event);
     }
 }

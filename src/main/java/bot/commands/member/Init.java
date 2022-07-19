@@ -27,7 +27,7 @@ public class Init extends UserCommand {
             return;
         }
 
-        final var userId = event.getUser().getIdLong();
+        final var userId = event.getUser().getId();
 
         final var btnAccept = Button.success(userId + ":initAccept", "Accept");
         final var btnCancel = Button.danger(userId + ":initCancelled", "Decline");

@@ -14,8 +14,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ItemManager {
-    private static final Logger LOGGER = LoggerFactory.getLogger(ItemManager.class); // Logs errors
-    private ArrayList<Item> items; // contains all buyable items
+    private static final Logger LOGGER = LoggerFactory.getLogger(ItemManager.class);
+    private ArrayList<Item> items;
 
     public ItemManager() {
         try {
