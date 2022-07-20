@@ -6,7 +6,8 @@ import bot.components.buttons.init.InitAccept;
 import bot.components.buttons.init.InitCancel;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 
-import java.util.*;
+import java.util.Map;
+import java.util.TreeMap;
 
 public class ButtonManager {
     private final Map<String, IButton> buttons;

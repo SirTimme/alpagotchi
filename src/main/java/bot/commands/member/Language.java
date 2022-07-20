@@ -1,7 +1,6 @@
 package bot.commands.member;
 
 import bot.commands.InfoCommand;
-import bot.components.menus.MenuManager;
 import bot.utils.CommandType;
 import bot.utils.Responses;
 import net.dv8tion.jda.api.entities.emoji.Emoji;
@@ -14,7 +13,6 @@ import net.dv8tion.jda.api.interactions.components.selections.SelectMenu;
 
 import java.text.MessageFormat;
 import java.util.Locale;
-import java.util.UUID;
 
 public class Language extends InfoCommand {
     @Override
