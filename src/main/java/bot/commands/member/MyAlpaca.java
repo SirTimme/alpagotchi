@@ -31,7 +31,7 @@ public class MyAlpaca extends UserCommand {
     private final Color[] colors = { Color.BLACK, Color.RED, Color.ORANGE, Color.YELLOW, Color.GREEN };
 
     public MyAlpaca() {
-        final File folder = new File("src/main/resources/outfits");
+        final var folder = new File("src/main/resources/outfits");
         try {
             for (final var file : folder.listFiles()) {
                 final var name = file.getName().split("\\.")[0];
