@@ -15,13 +15,7 @@ public class MenuManager {
     }
 
     public void handle(final SelectMenuInteractionEvent event) {
-        final var authorId = event.getComponentId().split(":")[0];
         final var menuName = event.getComponentId().split(":")[1];
-
-        if (!authorId.equals(event.getUser().getId())) {
-            return;
-        }
-
         final var menu = menus.get(menuName);
 
         menu.execute(event);
