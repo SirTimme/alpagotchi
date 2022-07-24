@@ -30,7 +30,7 @@ public class Buy extends UserCommand {
     @Override
     public void execute(final SlashCommandInteractionEvent event, final Locale locale, final Entry user) {
         final var amount = event.getOption("amount").getAsInt();
-        final var item = this.itemManager.getItemByName(event.getOption("item").getAsString());
+        final var item = this.itemManager.getItem(event.getOption("item").getAsString());
 
         final var price = amount * item.getPrice();
         final var balance = user.getCurrency();

@@ -26,8 +26,7 @@ public class Help extends InfoCommand {
         event.getJDA().retrieveUserById(Env.get("DEV_ID")).queue(dev -> {
             final var embed = new EmbedBuilder()
                     .setTitle(Responses.get("headerHelpEmbed", locale))
-                    .setThumbnail("https://cdn.discordapp.com/attachments/795637300661977132/836542447186214942/avatar.png")
-                    .addField("Commands", this.commandManager.getCommandNames(), true)
+                    .setDescription("```\n" + this.commandManager.getCommandNames() + "```")
                     .addField("Need further help or found a bug?", "Join the [Alpagotchi Support](https://discord.gg/DXtYyzGhXR) server!", false)
                     .setFooter("Created by " + dev.getName(), dev.getAvatarUrl())
                     .setTimestamp(Instant.now())

@@ -40,7 +40,7 @@ public class Feed extends UserCommand {
         }
 
         final var itemAmount = event.getOption("amount").getAsInt();
-        final var item = this.itemManager.getItemByName(event.getOption("item").getAsString());
+        final var item = this.itemManager.getItem(event.getOption("item").getAsString());
         final var newItemAmount = user.getItem(item.getName()) - itemAmount;
 
         if (newItemAmount < 0) {
@@ -51,7 +51,7 @@ public class Feed extends UserCommand {
             return;
         }
 
-        final var oldValue = user.getStat(item.getStat());
+        final var oldValue = user.getStat(item.getType());
         final var saturation = itemAmount * item.getSaturation();
 
         if (oldValue + saturation > 100) {
@@ -63,11 +63,11 @@ public class Feed extends UserCommand {
         }
 
         user.setItem(item.getName(), newItemAmount);
-        user.setStat(item.getStat(), oldValue + saturation);
+        user.setStat(item.getType(), oldValue + saturation);
 
         IDatabase.INSTANCE.updateUser(user);
 
-        final var format = new MessageFormat(Responses.get(item.getStat(), locale));
+        final var format = new MessageFormat(Responses.get(item.getType(), locale));
         final var msg = format.format(new Object[]{ itemAmount, item.getName(), saturation });
 
         event.reply(msg).queue();

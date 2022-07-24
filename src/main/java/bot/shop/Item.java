@@ -3,14 +3,14 @@ package bot.shop;
 public class Item {
     private final int price;
     private final int saturation;
-    private final String stat;
+    private final String type;
     private final String name;
 
-    public Item(final String name, final int price, final int saturation, final String stat) {
+    public Item(final String name, final int price, final int saturation, final String type) {
         this.name = name;
         this.price = price;
         this.saturation = saturation;
-        this.stat = stat;
+        this.type = type;
     }
 
     public String getName() {
@@ -25,7 +25,7 @@ public class Item {
         return this.saturation;
     }
 
-    public String getStat() {
-        return this.stat;
+    public String getType() {
+        return this.type;
     }
 }

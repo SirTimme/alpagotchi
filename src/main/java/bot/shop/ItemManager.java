@@ -15,32 +15,34 @@ import java.util.List;
 
 public class ItemManager {
     private static final Logger LOGGER = LoggerFactory.getLogger(ItemManager.class);
-    private ArrayList<Item> items;
+    private List<Item> items;
 
     public ItemManager() {
         try {
             final BufferedReader reader = new BufferedReader(new FileReader("src/main/resources/data/items.json"));
-            final Type type = new TypeToken<ArrayList<Item>>() {
+            final Type type = new TypeToken<List<Item>>() {
             }.getType();
 
             this.items = new Gson().fromJson(reader, type);
         } catch (final IOException error) {
             LOGGER.error(error.getMessage());
-            this.items = new ArrayList<>();
         }
     }
 
-    public List<Item> getItemsByStat(final String stat) {
+    public List<Item> getItemsByStat(final String type) {
         return this.items.stream()
-                         .filter(entry -> entry.getStat().equals(stat))
+                         .filter(entry -> entry.getType().equals(type))
                          .toList();
     }
 
-    @Nullable
-    public Item getItemByName(final String search) {
+    public Item getItem(final String name) {
         return this.items.stream()
-                         .filter(item -> item.getName().equals(search))
+                         .filter(item -> item.getName().equals(name))
                          .findAny()
                          .orElse(null);
+    }
+
+    public List<Item> getItems() {
+        return this.items;
     }
 }
