@@ -30,9 +30,10 @@ public class Shop extends UserCommand {
                     .setTitle("Shop")
                     .setDescription("```ansi\n\u001B[1;34mCurrent Balance: " + user.getCurrency() + " Fluffies\n```\n```\n" + buildTable() + "\n```\n```ansi\n\u001B[1;34mHow to buy: /buy <item> <amount>\n```")
                     .setFooter("Created by " + dev.getName(), dev.getAvatarUrl())
-                    .setTimestamp(Instant.now());
+                    .setTimestamp(Instant.now())
+                    .build();
 
-            event.replyEmbeds(embed.build()).queue();
+            event.replyEmbeds(embed).queue();
         });
     }
 
