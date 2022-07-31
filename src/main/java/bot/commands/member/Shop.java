@@ -28,7 +28,7 @@ public class Shop extends UserCommand {
         event.getJDA().retrieveUserById(Env.get("DEV_ID")).queue(dev -> {
             final var embed = new EmbedBuilder()
                     .setTitle("Shop")
-                    .setDescription("```ansi\n\u001B[1;34mCurrent Balance: " + user.getCurrency() + " Fluffies\n```\n```\n" + buildTable() + "\n```\n```ansi\n\u001B[1;34mHow to buy: /buy <item> <amount>\n```")
+                    .setDescription("```ansi\nCurrent Balance: \u001B[1;34m" + user.getCurrency() + " Fluffies\n```\n```\n" + buildTable() + "\n```\n```ansi\nHow to buy: \u001B[1;34m/buy <item> <amount>\n```")
                     .setFooter("Created by " + dev.getName(), dev.getAvatarUrl())
                     .setTimestamp(Instant.now())
                     .build();
