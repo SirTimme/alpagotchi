@@ -20,7 +20,7 @@ public class Init extends UserCommand {
     @Override
     public void execute(final SlashCommandInteractionEvent event, final Locale locale, final Entry user) {
         if (user != null) {
-            final var format = new MessageFormat(Responses.get("alpacaAlreadyOwned", locale));
+            final var format = new MessageFormat(Responses.get("initAlreadyOwned", locale));
             final var msg = format.format(new Object[]{});
 
             event.reply(msg).setEphemeral(true).queue();
@@ -29,17 +29,15 @@ public class Init extends UserCommand {
 
         final var userId = event.getUser().getId();
 
-        final var btnAccept = Button.success(userId + ":initAccept", "Accept");
-        final var btnCancel = Button.danger(userId + ":initCancelled", "Decline");
+        final var btnAccept = Button.success(userId + ":initAccept", Responses.get("buttonAccept", locale));
+        final var btnCancel = Button.danger(userId + ":initCancelled", Responses.get("buttonCancel", locale));
 
         event.getJDA().retrieveUserById(Env.get("DEV_ID")).queue(dev -> {
             final var embed = new EmbedBuilder()
-                    .setTitle(Responses.get("userInformation", locale))
-                    .setDescription(Responses.get("initIntro", locale))
-                    .setThumbnail(event.getJDA().getSelfUser().getAvatarUrl())
-                    .addField(Responses.get("headerStorageId", locale), Responses.get("bodyStorageId", locale), false)
-                    .addField(Responses.get("headerDeletionId", locale), Responses.get("bodyDeletionId", locale), false)
-                    .setFooter("Created by " + dev.getName(), dev.getAvatarUrl())
+                    .setTitle(Responses.get("initEmbedTitle", locale))
+                    .addField(Responses.get("initEmbedStorageFieldTitle", locale), Responses.get("initEmbedStorageFieldBody", locale), false)
+                    .addField(Responses.get("initEmbedDeletionFieldTitle", locale), Responses.get("initEmbedDeletionFieldBody", locale), false)
+                    .setFooter(Responses.get("createdByNotice", locale), dev.getAvatarUrl())
                     .setTimestamp(Instant.now())
                     .build();
 

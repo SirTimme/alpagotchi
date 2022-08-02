@@ -55,11 +55,11 @@ public class MyAlpaca extends UserCommand {
         event.getJDA().retrieveUserById(Env.get("DEV_ID")).queue(dev -> {
             final var embed = new EmbedBuilder()
                     .setTitle(user.getNickname())
-                    .setDescription("_Have a llamazing day!_")
-                    .addField("Work", getCooldownMsg(user.getWork(), locale), true)
-                    .addField("Sleep", getCooldownMsg(user.getSleep(), locale), true)
+                    .setDescription(Responses.get("myalpacaEmbedDescription", locale))
+                    .addField(Responses.get("myalpacaEmbedWorkFieldTitle", locale), getCooldownMsg(user.getWork(), locale), true)
+                    .addField(Responses.get("myalpacaEmbedSleepFieldTitle", locale), getCooldownMsg(user.getSleep(), locale), true)
                     .setThumbnail(event.getUser().getAvatarUrl())
-                    .setFooter("Created by " + dev.getName(), dev.getAvatarUrl())
+                    .setFooter(Responses.get("createdByNotice", locale), dev.getAvatarUrl())
                     .setTimestamp(Instant.now())
                     .setImage("attachment://alpagotchi.png")
                     .build();
@@ -130,9 +130,10 @@ public class MyAlpaca extends UserCommand {
 
     private String getCooldownMsg(final long minutes, final Locale locale) {
         if (minutes > 0) {
-            final MessageFormat msg = new MessageFormat(Responses.get("activeCooldown", locale));
+            final var msg = new MessageFormat(Responses.get("myalpacaCooldownActive", locale));
+
             return msg.format(new Object[]{ minutes });
         }
-        return Responses.get("inactiveCooldown", locale);
+        return Responses.get("myalpacaCooldownInactive", locale);
     }
 }

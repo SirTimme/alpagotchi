@@ -31,7 +31,7 @@ public class Nick extends UserCommand {
         user.setNickname(nickname);
         IDatabase.INSTANCE.updateUser(user);
 
-        final var format = new MessageFormat(Responses.get("nicknameSuccessful", locale));
+        final var format = new MessageFormat(Responses.get("nickname", locale));
         final var msg = format.format(new Object[]{ nickname });
 
         event.reply(msg).queue();

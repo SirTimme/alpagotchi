@@ -19,28 +19,21 @@ import static net.dv8tion.jda.api.interactions.commands.OptionType.INTEGER;
 public class Sleep extends UserCommand {
     @Override
     public void execute(final SlashCommandInteractionEvent event, final Locale locale, final Entry user) {
-        final int energy = user.getEnergy();
+        final var energy = user.getEnergy();
         if (energy == 100) {
-            final var format = new MessageFormat(Responses.get("joyAtMaximum", locale));
+            final var format = new MessageFormat(Responses.get("petJoyAlreadyMaximum", locale));
             final var msg = format.format(new Object[]{});
 
             event.reply(msg).setEphemeral(true).queue();
             return;
         }
 
-        final int duration = event.getOption("duration").getAsInt();
-        if (duration < 1 || duration > 100) {
-            final var format = new MessageFormat("nonValidNumber", locale);
-            final var msg = format.format(new Object[]{});
-
-            event.reply(msg).setEphemeral(true).queue();
-            return;
-        }
-
+        final var duration = event.getOption("duration").getAsInt();
         final var newEnergy = energy + duration > 100 ? 100 - energy : duration;
 
         user.setEnergy(energy + newEnergy);
         user.setSleep(System.currentTimeMillis() + 1000L * 60 * newEnergy);
+
         IDatabase.INSTANCE.updateUser(user);
 
         final var format = new MessageFormat(Responses.get("sleep", locale));
@@ -52,6 +45,7 @@ public class Sleep extends UserCommand {
     @Override
     public CommandData getCommandData() {
         final var option = new OptionData(INTEGER, "duration", "The duration in minutes", true)
+                .setRequiredRange(1, 100)
                 .setDescriptionLocalization(DiscordLocale.GERMAN, "Die Dauer in Minuten");
 
         return Commands.slash("sleep", "Let your alpaca sleep to regain energy")

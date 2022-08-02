@@ -20,12 +20,12 @@ public class Language extends InfoCommand {
         final var userId = event.getUser().getId();
 
         final var menuLanguage = SelectMenu.create(userId + ":language")
-                                           .setPlaceholder("Available languages")
-                                           .addOption("English", "en", Emoji.fromUnicode("\uD83C\uDDFA\uD83C\uDDF8"))
-                                           .addOption("German", "de", Emoji.fromUnicode("\uD83C\uDDE9\uD83C\uDDEA"))
+                                           .setPlaceholder(Responses.get("languagePlaceholder", locale))
+                                           .addOption(Responses.get("englishDisplayName", locale), "en", Emoji.fromUnicode("\uD83C\uDDFA\uD83C\uDDF8"))
+                                           .addOption(Responses.get("germanDisplayName", locale), "de", Emoji.fromUnicode("\uD83C\uDDE9\uD83C\uDDEA"))
                                            .build();
 
-        final var format = new MessageFormat(Responses.get("selectLanguage", locale));
+        final var format = new MessageFormat(Responses.get("languageSelect", locale));
         final var msg = format.format(new Object[]{});
 
         event.reply(msg).addActionRow(menuLanguage).queue();

@@ -17,7 +17,7 @@ public abstract class MessageMenu implements IMenu {
         final var authorId = event.getComponentId().split(":")[0];
 
         if (!authorId.equals(event.getUser().getId())) {
-            final var format = new MessageFormat(Responses.get("notAuthor", locale));
+            final var format = new MessageFormat(Responses.get("errorNotCommandAuthor", locale));
             final var msg = format.format(new Object[]{});
 
             event.reply(msg).setEphemeral(true).queue();

@@ -11,7 +11,7 @@ import java.util.Locale;
 public class DeleteCancel extends MessageButton {
     @Override
     public void execute(final ButtonInteractionEvent event, final Locale locale) {
-        final var format = new MessageFormat(Responses.get("dataCancelled", locale));
+        final var format = new MessageFormat(Responses.get("deleteCancelled", locale));
         final var msg = format.format(new Object[]{});
 
         event.editMessage(msg)

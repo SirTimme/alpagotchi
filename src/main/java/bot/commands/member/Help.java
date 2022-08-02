@@ -25,10 +25,10 @@ public class Help extends InfoCommand {
     public void execute(final SlashCommandInteractionEvent event, final Locale locale) {
         event.getJDA().retrieveUserById(Env.get("DEV_ID")).queue(dev -> {
             final var embed = new EmbedBuilder()
-                    .setTitle(Responses.get("headerHelpEmbed", locale))
+                    .setTitle(Responses.get("helpEmbedTitle", locale))
                     .setDescription("```\n" + this.commandManager.getCommandNames() + "```")
-                    .addField("Need further help or found a bug?", "Join the [Alpagotchi Support](https://discord.gg/DXtYyzGhXR) server!", false)
-                    .setFooter("Created by " + dev.getName(), dev.getAvatarUrl())
+                    .addField(Responses.get("helpJoinFieldTitle", locale), Responses.get("helpJoinFieldBody", locale), false)
+                    .setFooter(Responses.get("createdByNotice", locale), dev.getAvatarUrl())
                     .setTimestamp(Instant.now())
                     .build();
 

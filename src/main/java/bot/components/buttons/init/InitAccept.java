@@ -14,7 +14,7 @@ public class InitAccept extends MessageButton {
     public void execute(final ButtonInteractionEvent event, final Locale locale) {
         IDatabase.INSTANCE.createUserById(event.getUser().getIdLong());
 
-        final var format = new MessageFormat(Responses.get("initSuccess", locale));
+        final var format = new MessageFormat(Responses.get("initSuccessful", locale));
         final var msg = format.format(new Object[]{});
 
         event.editMessage(msg)

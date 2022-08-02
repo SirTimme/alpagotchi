@@ -26,7 +26,7 @@ public class Pet extends UserCommand {
     public void execute(final SlashCommandInteractionEvent event, final Locale locale, final Entry user) {
         final var joy = user.getJoy();
         if (joy == 100) {
-            final var format = new MessageFormat(Responses.get("joyAtMaximum", locale));
+            final var format = new MessageFormat(Responses.get("petJoyAlreadyMaximum", locale));
             final var msg = format.format(new Object[]{});
 
             event.reply(msg).setEphemeral(true).queue();
@@ -35,13 +35,16 @@ public class Pet extends UserCommand {
 
         final var favouriteSpot = this.spots.get((int) (Math.random() * 5));
         final var spot = event.getOption("spot").getAsString();
+
         final var isFavourite = spot.equals(favouriteSpot);
 
         final var value = calculateJoy(joy, isFavourite);
-        final var msg = getMessage(value, isFavourite, locale);
 
         user.setJoy(joy + value);
         IDatabase.INSTANCE.updateUser(user);
+
+        final var format = new MessageFormat(Responses.get(getKey(isFavourite), locale));
+        final var msg = format.format(new Object[] { joy });
 
         event.reply(msg).queue();
     }
@@ -70,10 +73,10 @@ public class Pet extends UserCommand {
         return CommandType.USER;
     }
 
-    private String getMessage(final int joy, final boolean isFavourite, final Locale locale) {
-        final String key = isFavourite ? "favouriteSpot" : "normalSpot";
-
-        return new MessageFormat(Responses.get(key, locale)).format(new Object[]{ joy });
+    private String getKey(final boolean isFavourite) {
+        return isFavourite
+                ? "petFavouriteSpot"
+                : "petNormalSpot";
     }
 
     private int calculateJoy(final int joy, final boolean isFavourite) {

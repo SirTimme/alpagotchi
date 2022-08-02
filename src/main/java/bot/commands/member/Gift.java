@@ -24,7 +24,7 @@ public class Gift extends UserCommand {
         final var selectedUser = event.getOption("user").getAsUser();
 
         if (selectedUser.getIdLong() == user.getMemberID()) {
-            final var format = new MessageFormat(Responses.get("giftedYourself", locale));
+            final var format = new MessageFormat(Responses.get("giftCantGiftYourself", locale));
             final var msg = format.format(new Object[]{});
 
             event.reply(msg).setEphemeral(true).queue();
@@ -34,7 +34,7 @@ public class Gift extends UserCommand {
         final var selectedDBUser = IDatabase.INSTANCE.getUserById(selectedUser.getIdLong());
 
         if (selectedDBUser == null) {
-            final var format = new MessageFormat(Responses.get("giftedUserNotInitialized", locale));
+            final var format = new MessageFormat(Responses.get("giftTargetNotInitialized", locale));
             final var msg = format.format(new Object[]{});
 
             event.reply(msg).setEphemeral(true).queue();
@@ -45,7 +45,7 @@ public class Gift extends UserCommand {
         final var selectedItem = event.getOption("item").getAsString();
 
         if (user.getItem(selectedItem) - amount < 0) {
-            final var format = new MessageFormat(Responses.get("notEnoughItems", locale));
+            final var format = new MessageFormat(Responses.get("feedNotEnoughItems", locale));
             final var msg = format.format(new Object[]{});
 
             event.reply(msg).setEphemeral(true).queue();

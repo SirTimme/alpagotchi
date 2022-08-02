@@ -17,7 +17,7 @@ public abstract class UserCommand implements ISlashCommand {
                 : IDatabase.INSTANCE.getSettingsById(event.getGuild().getIdLong()).getLocale();
 
         if (!event.getName().equals("init") && user == null) {
-            final var format = new MessageFormat(Responses.get("alpacaNotOwned", locale));
+            final var format = new MessageFormat(Responses.get("errorAlpacaNotOwned", locale));
             final var msg = format.format(new Object[]{});
 
             event.reply(msg).setEphemeral(true).queue();

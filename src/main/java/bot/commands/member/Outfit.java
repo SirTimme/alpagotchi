@@ -26,7 +26,7 @@ public class Outfit extends UserCommand {
         user.setOutfit(outfit);
         IDatabase.INSTANCE.updateUser(user);
 
-        final var format = new MessageFormat(Responses.get("alpacaOutfit", locale));
+        final var format = new MessageFormat(Responses.get("outfit", locale));
         final var msg = format.format(new Object[]{ outfit });
 
         event.reply(msg).queue();

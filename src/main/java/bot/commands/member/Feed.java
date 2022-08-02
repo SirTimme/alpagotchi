@@ -3,6 +3,7 @@ package bot.commands.member;
 import bot.commands.UserCommand;
 import bot.db.IDatabase;
 import bot.models.Entry;
+import bot.shop.Item;
 import bot.shop.ItemManager;
 import bot.utils.CommandType;
 import bot.utils.Responses;
@@ -32,7 +33,7 @@ public class Feed extends UserCommand {
         final var remainingSleep = user.getSleep();
 
         if (remainingSleep > 0) {
-            final var format = new MessageFormat(Responses.get("alpacaSleeping", locale));
+            final var format = new MessageFormat(Responses.get("sleepCurrentlySleeping", locale));
             final var msg = format.format(new Object[]{ remainingSleep });
 
             event.reply(msg).setEphemeral(true).queue();
@@ -44,7 +45,7 @@ public class Feed extends UserCommand {
         final var newItemAmount = user.getItem(item.getName()) - itemAmount;
 
         if (newItemAmount < 0) {
-            final var format = new MessageFormat(Responses.get("notEnoughItems", locale));
+            final var format = new MessageFormat(Responses.get("feedNotEnoughItems", locale));
             final var msg = format.format(new Object[]{});
 
             event.reply(msg).setEphemeral(true).queue();
@@ -55,7 +56,7 @@ public class Feed extends UserCommand {
         final var saturation = itemAmount * item.getSaturation();
 
         if (oldValue + saturation > 100) {
-            final var format = new MessageFormat(Responses.get("alpacaOverfeeded", locale));
+            final var format = new MessageFormat(Responses.get("feedTooMuchSaturation", locale));
             final var msg = format.format(new Object[]{});
 
             event.reply(msg).setEphemeral(true).queue();
@@ -67,7 +68,7 @@ public class Feed extends UserCommand {
 
         IDatabase.INSTANCE.updateUser(user);
 
-        final var format = new MessageFormat(Responses.get(item.getType(), locale));
+        final var format = new MessageFormat(Responses.get(getKey(item), locale));
         final var msg = format.format(new Object[]{ itemAmount, item.getName(), saturation });
 
         event.reply(msg).queue();
@@ -101,5 +102,11 @@ public class Feed extends UserCommand {
     @Override
     public CommandType getCommandType() {
         return CommandType.USER;
+    }
+
+    private String getKey(final Item item) {
+        return item.getType().equals("hunger")
+                ? "feedHungerItem"
+                : "feedThirstItem";
     }
 }

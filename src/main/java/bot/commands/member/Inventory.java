@@ -6,6 +6,7 @@ import bot.shop.Item;
 import bot.shop.ItemManager;
 import bot.utils.CommandType;
 import bot.utils.Env;
+import bot.utils.Responses;
 import com.jakewharton.fliptables.FlipTable;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
@@ -29,7 +30,7 @@ public class Inventory extends UserCommand {
             final var embed = new EmbedBuilder()
                     .setTitle("Inventory")
                     .setDescription("```ansi\nCurrent Balance: \u001B[1;34m" + user.getCurrency() + " Fluffies\n```\n```\n" + buildTable(user) + "\n```\n```ansi\nHow to buy: \u001B[1;34m/buy <item> <amount>\n```")
-                    .setFooter("Created by " + dev.getName(), dev.getAvatarUrl())
+                    .setFooter(Responses.get("createdByNotice", locale), dev.getAvatarUrl())
                     .setTimestamp(Instant.now())
                     .build();
 
