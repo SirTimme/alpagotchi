@@ -60,24 +60,20 @@ public class Work extends UserCommand {
 
         final int energy = user.getEnergy();
         if (energy < 10) {
-            event.reply("\uD83E\uDD71 Your alpaca is too tired to work, let it rest first with **/sleep**")
-                 .setEphemeral(true)
-                 .queue();
+            event.reply("\uD83E\uDD71 Your alpaca is too tired to work, let it rest first with **/sleep**").setEphemeral(true).queue();
             return;
         }
 
         final int joy = user.getJoy();
         if (joy < 15) {
-            event.reply(":pensive: Your alpaca is too sad to work, give him some love with **/pet**")
-                 .setEphemeral(true)
-                 .queue();
+            event.reply(":pensive: Your alpaca is too sad to work, give him some love with **/pet**").setEphemeral(true).queue();
             return;
         }
 
-        final String message = getRandomMessage();
-        final int fluffies = (int) (Math.random() * 15 + 1);
-        final int energyCost = (int) (Math.random() * 8 + 1);
-        final int joyCost = (int) (Math.random() * 10 + 2);
+        final var message = getRandomMessage();
+        final var fluffies = (int) (Math.random() * 15 + 1);
+        final var energyCost = (int) (Math.random() * 8 + 1);
+        final var joyCost = (int) (Math.random() * 10 + 2);
 
         user.setCurrency(user.getCurrency() + fluffies);
         user.setEnergy(user.getEnergy() - energyCost);
@@ -86,8 +82,7 @@ public class Work extends UserCommand {
 
         IDatabase.INSTANCE.updateUser(user);
 
-        event.reply("⛏ " + message + " **Fluffies + " + fluffies + ", Energy - " + energyCost + ", Joy - " + joyCost + "**")
-             .queue();
+        event.reply("⛏ " + message + " **Fluffies + " + fluffies + ", Energy - " + energyCost + ", Joy - " + joyCost + "**").queue();
     }
 
     @Override

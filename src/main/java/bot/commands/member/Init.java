@@ -12,7 +12,6 @@ import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
 
-import java.text.MessageFormat;
 import java.time.Instant;
 import java.util.Locale;
 
@@ -20,8 +19,7 @@ public class Init extends UserCommand {
     @Override
     public void execute(final SlashCommandInteractionEvent event, final Locale locale, final Entry user) {
         if (user != null) {
-            final var format = new MessageFormat(Responses.get("initAlreadyOwned", locale));
-            final var msg = format.format(new Object[]{});
+            final var msg = Responses.get("initAlreadyOwned", locale);
 
             event.reply(msg).setEphemeral(true).queue();
             return;

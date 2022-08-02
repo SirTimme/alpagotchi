@@ -20,9 +20,9 @@ public class Sleep extends UserCommand {
     @Override
     public void execute(final SlashCommandInteractionEvent event, final Locale locale, final Entry user) {
         final var energy = user.getEnergy();
+
         if (energy == 100) {
-            final var format = new MessageFormat(Responses.get("petJoyAlreadyMaximum", locale));
-            final var msg = format.format(new Object[]{});
+            final var msg = Responses.get("petJoyAlreadyMaximum", locale);
 
             event.reply(msg).setEphemeral(true).queue();
             return;

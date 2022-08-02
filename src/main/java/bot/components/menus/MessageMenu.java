@@ -4,7 +4,6 @@ import bot.db.IDatabase;
 import bot.utils.Responses;
 import net.dv8tion.jda.api.events.interaction.component.SelectMenuInteractionEvent;
 
-import java.text.MessageFormat;
 import java.util.Locale;
 
 public abstract class MessageMenu implements IMenu {
@@ -17,8 +16,7 @@ public abstract class MessageMenu implements IMenu {
         final var authorId = event.getComponentId().split(":")[0];
 
         if (!authorId.equals(event.getUser().getId())) {
-            final var format = new MessageFormat(Responses.get("errorNotCommandAuthor", locale));
-            final var msg = format.format(new Object[]{});
+            final var msg = Responses.get("errorNotCommandAuthor", locale);
 
             event.reply(msg).setEphemeral(true).queue();
             return;

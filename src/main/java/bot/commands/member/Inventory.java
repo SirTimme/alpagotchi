@@ -14,6 +14,7 @@ import net.dv8tion.jda.api.interactions.DiscordLocale;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 
+import java.text.MessageFormat;
 import java.time.Instant;
 import java.util.Locale;
 
@@ -27,9 +28,12 @@ public class Inventory extends UserCommand {
     @Override
     public void execute(final SlashCommandInteractionEvent event, final Locale locale, final Entry user) {
         event.getJDA().retrieveUserById(Env.get("DEV_ID")).queue(dev -> {
+            final var balanceFormat = new MessageFormat(Responses.get("formattedCurrentBalance", locale));
+            final var balanceMsg = balanceFormat.format(new Object[]{ user.getCurrency() });
+
             final var embed = new EmbedBuilder()
-                    .setTitle("Inventory")
-                    .setDescription("```ansi\nCurrent Balance: \u001B[1;34m" + user.getCurrency() + " Fluffies\n```\n```\n" + buildTable(user) + "\n```\n```ansi\nHow to buy: \u001B[1;34m/buy <item> <amount>\n```")
+                    .setTitle(Responses.get("inventoryEmbedTitle", locale))
+                    .setDescription(balanceMsg + "\n```\n" + buildTable(user) + "\n```\n" + Responses.get("formattedHowToBuy", locale))
                     .setFooter(Responses.get("createdByNotice", locale), dev.getAvatarUrl())
                     .setTimestamp(Instant.now())
                     .build();
@@ -51,10 +55,11 @@ public class Inventory extends UserCommand {
 
     private String buildTable(final Entry user) {
         final String[] header = { "Name", "Saturation", "Quantity" };
-        final var content = this.itemManager.getItems()
-                                            .stream()
-                                            .map(item -> buildRow(item, user))
-                                            .toArray(String[][]::new);
+        final var content = this.itemManager
+                .getItems()
+                .stream()
+                .map(item -> buildRow(item, user))
+                .toArray(String[][]::new);
 
         return FlipTable.of(header, content);
     }

@@ -14,6 +14,7 @@ import net.dv8tion.jda.api.interactions.DiscordLocale;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 
+import java.text.MessageFormat;
 import java.time.Instant;
 import java.util.Locale;
 
@@ -27,9 +28,12 @@ public class Shop extends UserCommand {
     @Override
     public void execute(final SlashCommandInteractionEvent event, final Locale locale, final Entry user) {
         event.getJDA().retrieveUserById(Env.get("DEV_ID")).queue(dev -> {
+            final var format = new MessageFormat(Responses.get("formattedCurrentBalance", locale));
+            final var msg = format.format(new Object[]{ user.getCurrency() });
+
             final var embed = new EmbedBuilder()
-                    .setTitle("Shop")
-                    .setDescription("```ansi\nCurrent Balance: \u001B[1;34m" + user.getCurrency() + " Fluffies\n```\n```\n" + buildTable() + "\n```\n```ansi\nHow to buy: \u001B[1;34m/buy <item> <amount>\n```")
+                    .setTitle(Responses.get("shopEmbedTitle", locale))
+                    .setDescription(msg + "\n```\n" + buildTable() + "\n```\n" + Responses.get("formattedHowToBuy", locale))
                     .setFooter(Responses.get("createdByNotice", locale), dev.getAvatarUrl())
                     .setTimestamp(Instant.now())
                     .build();

@@ -5,7 +5,6 @@ import bot.models.Entry;
 import bot.utils.Responses;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 
-import java.text.MessageFormat;
 import java.util.Locale;
 
 public abstract class UserCommand implements ISlashCommand {
@@ -17,8 +16,7 @@ public abstract class UserCommand implements ISlashCommand {
                 : IDatabase.INSTANCE.getSettingsById(event.getGuild().getIdLong()).getLocale();
 
         if (!event.getName().equals("init") && user == null) {
-            final var format = new MessageFormat(Responses.get("errorAlpacaNotOwned", locale));
-            final var msg = format.format(new Object[]{});
+            final var msg = Responses.get("errorAlpacaNotOwned", locale);
 
             event.reply(msg).setEphemeral(true).queue();
             return;

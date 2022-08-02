@@ -17,8 +17,7 @@ public abstract class MessageButton implements IButton {
         final var authorId = event.getComponentId().split(":")[0];
 
         if (!authorId.equals(event.getUser().getId())) {
-            final var format = new MessageFormat(Responses.get("errorNotCommandAuthor", locale));
-            final var msg = format.format(new Object[]{});
+            final var msg = Responses.get("errorNotCommandAuthor", locale);
 
             event.reply(msg).setEphemeral(true).queue();
             return;

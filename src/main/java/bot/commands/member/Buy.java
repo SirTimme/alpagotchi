@@ -36,8 +36,7 @@ public class Buy extends UserCommand {
         final var balance = user.getCurrency();
 
         if (balance - price < 0) {
-            final var format = new MessageFormat(Responses.get("balanceNotSufficient", locale));
-            final var msg = format.format(new Object[]{});
+            final var msg = Responses.get("balanceNotSufficient", locale);
 
             event.reply(msg).setEphemeral(true).queue();
             return;

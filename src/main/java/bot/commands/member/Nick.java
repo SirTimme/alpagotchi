@@ -21,8 +21,7 @@ public class Nick extends UserCommand {
     public void execute(final SlashCommandInteractionEvent event, final Locale locale, final Entry user) {
         final var nickname = event.getOption("nickname").getAsString();
         if (nickname.length() > 256) {
-            final var format = new MessageFormat(Responses.get("nicknameTooLong", locale));
-            final var msg = format.format(new Object[]{});
+            final var msg = Responses.get("nicknameTooLong", locale);
 
             event.reply(msg).setEphemeral(true).queue();
             return;

@@ -10,7 +10,6 @@ import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
 
-import java.text.MessageFormat;
 import java.util.Locale;
 
 public class Delete extends UserCommand {
@@ -21,8 +20,7 @@ public class Delete extends UserCommand {
         final var btnSuccess = Button.success(userId + ":deleteAccept", Responses.get("buttonAccept", locale));
         final var btnCancel = Button.danger(userId + ":deleteCancelled", Responses.get("buttonCancel", locale));
 
-        final var format = new MessageFormat(Responses.get("deleteWarning", locale));
-        final var msg = format.format(new Object[]{});
+        final var msg = Responses.get("deleteWarning", locale);
 
         event.reply(msg).addActionRow(btnSuccess, btnCancel).queue();
     }

@@ -45,8 +45,7 @@ public class Feed extends UserCommand {
         final var newItemAmount = user.getItem(item.getName()) - itemAmount;
 
         if (newItemAmount < 0) {
-            final var format = new MessageFormat(Responses.get("feedNotEnoughItems", locale));
-            final var msg = format.format(new Object[]{});
+            final var msg = Responses.get("feedNotEnoughItems", locale);
 
             event.reply(msg).setEphemeral(true).queue();
             return;
@@ -56,8 +55,7 @@ public class Feed extends UserCommand {
         final var saturation = itemAmount * item.getSaturation();
 
         if (oldValue + saturation > 100) {
-            final var format = new MessageFormat(Responses.get("feedTooMuchSaturation", locale));
-            final var msg = format.format(new Object[]{});
+            final var msg = Responses.get("feedTooMuchSaturation", locale);
 
             event.reply(msg).setEphemeral(true).queue();
             return;

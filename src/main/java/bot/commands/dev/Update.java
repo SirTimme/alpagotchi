@@ -13,7 +13,6 @@ import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import java.text.MessageFormat;
 import java.util.Locale;
 
-@SuppressWarnings("ConstantConditions")
 public class Update extends InfoCommand {
     private final CommandManager commandManager;
 

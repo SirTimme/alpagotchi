@@ -25,9 +25,9 @@ public class Pet extends UserCommand {
     @Override
     public void execute(final SlashCommandInteractionEvent event, final Locale locale, final Entry user) {
         final var joy = user.getJoy();
+
         if (joy == 100) {
-            final var format = new MessageFormat(Responses.get("petJoyAlreadyMaximum", locale));
-            final var msg = format.format(new Object[]{});
+            final var msg = Responses.get("petJoyAlreadyMaximum", locale);
 
             event.reply(msg).setEphemeral(true).queue();
             return;
@@ -35,9 +35,7 @@ public class Pet extends UserCommand {
 
         final var favouriteSpot = this.spots.get((int) (Math.random() * 5));
         final var spot = event.getOption("spot").getAsString();
-
         final var isFavourite = spot.equals(favouriteSpot);
-
         final var value = calculateJoy(joy, isFavourite);
 
         user.setJoy(joy + value);
