@@ -49,7 +49,7 @@ public class Pet extends UserCommand {
         IDatabase.INSTANCE.updateUser(user);
 
         final var format = new MessageFormat(Responses.get(getKey(isFavourite), locale));
-        final var msg = format.format(new Object[]{ joy });
+        final var msg = format.format(new Object[]{ value });
 
         event.reply(msg).queue();
     }
