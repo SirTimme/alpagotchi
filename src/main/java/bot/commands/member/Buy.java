@@ -39,7 +39,7 @@ public class Buy extends UserCommand {
         final var item = this.itemManager.getItem(itemChoice.getAsString());
 
         // Total price
-        final var price = amount * item.price();
+        final var price = amount * item.getPrice();
 
         // Current balance
         final var balance = user.getCurrency();
@@ -54,11 +54,11 @@ public class Buy extends UserCommand {
 
         // Update db
         user.setCurrency(balance - price);
-        user.setItem(item.name(), user.getItem(item.name()) + amount);
+        user.setItem(item.getName(), user.getItem(item.getName()) + amount);
         IDatabase.INSTANCE.updateUser(user);
 
         final var format = new MessageFormat(Responses.get("buySuccessful", locale));
-        final var msg = format.format(new Object[]{ amount, item.name(), price });
+        final var msg = format.format(new Object[]{ amount, item.getName(), price });
 
         event.reply(msg).queue();
     }

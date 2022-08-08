@@ -64,6 +64,6 @@ public class Shop extends UserCommand {
     }
 
     private String[] buildRow(final Item item) {
-        return new String[]{ item.name(), String.valueOf(item.price()), String.valueOf(item.saturation()) };
+        return new String[]{ item.getName(), String.valueOf(item.getPrice()), String.valueOf(item.getSaturation()) };
     }
 }

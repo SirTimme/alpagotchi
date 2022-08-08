@@ -31,7 +31,7 @@ public class CommandManager {
         this.commands.put("gift", new Gift());
         this.commands.put("work", new Work());
         this.commands.put("shutdown", new Shutdown());
-        this.commands.put("myalpaca", new MyAlpaca());
+        this.commands.put("alpaca", new MyAlpaca());
         this.commands.put("nick", new Nick());
         this.commands.put("help", new Help(this));
         this.commands.put("sleep", new Sleep());

@@ -29,7 +29,7 @@ public class ItemManager {
 
     public Item getItem(final String name) {
         return this.items.stream()
-                         .filter(item -> item.name().equals(name))
+                         .filter(item -> item.getName().equals(name))
                          .findAny()
                          .orElse(null);
     }
