@@ -16,6 +16,7 @@ import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import java.text.MessageFormat;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 import static net.dv8tion.jda.api.interactions.commands.OptionType.INTEGER;
 import static net.dv8tion.jda.api.interactions.commands.OptionType.STRING;
@@ -29,12 +30,21 @@ public class Buy extends UserCommand {
 
     @Override
     public void execute(final SlashCommandInteractionEvent event, final Locale locale, final Entry user) {
-        final var amount = event.getOption("amount").getAsInt();
-        final var item = this.itemManager.getItem(event.getOption("item").getAsString());
+        // Selected amount
+        final var amountChoice =  Objects.requireNonNull(event.getOption("amount"));
+        final var amount = amountChoice.getAsInt();
 
-        final var price = amount * item.getPrice();
+        // Selected item
+        final var itemChoice = Objects.requireNonNull(event.getOption("item"));
+        final var item = this.itemManager.getItem(itemChoice.getAsString());
+
+        // Total price
+        final var price = amount * item.price();
+
+        // Current balance
         final var balance = user.getCurrency();
 
+        // Enough balance?
         if (balance - price < 0) {
             final var msg = Responses.get("balanceNotSufficient", locale);
 
@@ -42,13 +52,13 @@ public class Buy extends UserCommand {
             return;
         }
 
+        // Update db
         user.setCurrency(balance - price);
-        user.setItem(item.getName(), user.getItem(item.getName()) + amount);
-
+        user.setItem(item.name(), user.getItem(item.name()) + amount);
         IDatabase.INSTANCE.updateUser(user);
 
         final var format = new MessageFormat(Responses.get("buySuccessful", locale));
-        final var msg = format.format(new Object[]{ amount, item.getName(), price });
+        final var msg = format.format(new Object[]{ amount, item.name(), price });
 
         event.reply(msg).queue();
     }

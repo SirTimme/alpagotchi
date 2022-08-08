@@ -65,6 +65,6 @@ public class Inventory extends UserCommand {
     }
 
     private String[] buildRow(final Item item, final Entry user) {
-        return new String[]{ item.getName(), String.valueOf(item.getSaturation()), String.valueOf(user.getItem(item.getName())) };
+        return new String[]{ item.name(), String.valueOf(item.saturation()), String.valueOf(user.getItem(item.name())) };
     }
 }

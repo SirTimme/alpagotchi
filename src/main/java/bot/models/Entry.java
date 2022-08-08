@@ -121,7 +121,7 @@ public class Entry {
 
     @BsonIgnore
     public long getWork() {
-        return this.cooldown.getWorkMins();
+        return this.cooldown.getWorkMinutes();
     }
 
     @BsonIgnore
@@ -131,7 +131,7 @@ public class Entry {
 
     @BsonIgnore
     public long getSleep() {
-        return this.cooldown.getSleepMins();
+        return this.cooldown.getSleepMinutes();
     }
 
     @BsonIgnore
@@ -159,4 +159,3 @@ public class Entry {
         this.inventory.setItem(name, amount);
     }
 }
-

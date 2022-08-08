@@ -17,6 +17,7 @@ import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import java.text.MessageFormat;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 import static net.dv8tion.jda.api.interactions.commands.OptionType.INTEGER;
 import static net.dv8tion.jda.api.interactions.commands.OptionType.STRING;
@@ -40,9 +41,15 @@ public class Feed extends UserCommand {
             return;
         }
 
-        final var itemAmount = event.getOption("amount").getAsInt();
-        final var item = this.itemManager.getItem(event.getOption("item").getAsString());
-        final var newItemAmount = user.getItem(item.getName()) - itemAmount;
+        // Selected amount
+        final var amountChoice = Objects.requireNonNull(event.getOption("amount"));
+        final var amount = amountChoice.getAsInt();
+
+        // Selected item
+        final var itemChoice = Objects.requireNonNull(event.getOption("item"));
+        final var item = this.itemManager.getItem(itemChoice.getAsString());
+
+        final var newItemAmount = user.getItem(item.name()) - amount;
 
         if (newItemAmount < 0) {
             final var msg = Responses.get("feedNotEnoughItems", locale);
@@ -51,8 +58,8 @@ public class Feed extends UserCommand {
             return;
         }
 
-        final var oldValue = user.getStat(item.getType());
-        final var saturation = itemAmount * item.getSaturation();
+        final var oldValue = user.getStat(item.type());
+        final var saturation = amount * item.saturation();
 
         if (oldValue + saturation > 100) {
             final var msg = Responses.get("feedTooMuchSaturation", locale);
@@ -61,13 +68,13 @@ public class Feed extends UserCommand {
             return;
         }
 
-        user.setItem(item.getName(), newItemAmount);
-        user.setStat(item.getType(), oldValue + saturation);
+        user.setItem(item.name(), newItemAmount);
+        user.setStat(item.type(), oldValue + saturation);
 
         IDatabase.INSTANCE.updateUser(user);
 
         final var format = new MessageFormat(Responses.get(getKey(item), locale));
-        final var msg = format.format(new Object[]{ itemAmount, item.getName(), saturation });
+        final var msg = format.format(new Object[]{ amount, item.name(), saturation });
 
         event.reply(msg).queue();
     }
@@ -103,7 +110,7 @@ public class Feed extends UserCommand {
     }
 
     private String getKey(final Item item) {
-        return item.getType().equals("hunger")
+        return item.type().equals("hunger")
                 ? "feedHungerItem"
                 : "feedThirstItem";
     }

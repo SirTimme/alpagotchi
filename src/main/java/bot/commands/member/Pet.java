@@ -13,19 +13,19 @@ import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 
 import java.text.MessageFormat;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 import static net.dv8tion.jda.api.interactions.commands.OptionType.STRING;
 
 public class Pet extends UserCommand {
-    private final List<String> spots = Arrays.asList("head", "tail", "leg", "neck", "back");
+    private final List<String> spots = List.of("head", "tail", "leg", "neck", "back");
 
     @Override
     public void execute(final SlashCommandInteractionEvent event, final Locale locale, final Entry user) {
+        // Already max joy?
         final var joy = user.getJoy();
-
         if (joy == 100) {
             final var msg = Responses.get("petJoyAlreadyMaximum", locale);
 
@@ -33,16 +33,23 @@ public class Pet extends UserCommand {
             return;
         }
 
+        // Choose a random spot
         final var favouriteSpot = this.spots.get((int) (Math.random() * 5));
-        final var spot = event.getOption("spot").getAsString();
-        final var isFavourite = spot.equals(favouriteSpot);
-        final var value = calculateJoy(joy, isFavourite);
 
+        // Selected spot
+        final var spotChoice = Objects.requireNonNull(event.getOption("spot"));
+        final var spot = spotChoice.getAsString();
+
+        // Found the favourite Spot?
+        final var isFavourite = spot.equals(favouriteSpot);
+
+        // Update Db
+        final var value = calculateJoy(joy, isFavourite);
         user.setJoy(joy + value);
         IDatabase.INSTANCE.updateUser(user);
 
         final var format = new MessageFormat(Responses.get(getKey(isFavourite), locale));
-        final var msg = format.format(new Object[] { joy });
+        final var msg = format.format(new Object[]{ joy });
 
         event.reply(msg).queue();
     }
@@ -72,9 +79,7 @@ public class Pet extends UserCommand {
     }
 
     private String getKey(final boolean isFavourite) {
-        return isFavourite
-                ? "petFavouriteSpot"
-                : "petNormalSpot";
+        return isFavourite ? "petFavouriteSpot" : "petNormalSpot";
     }
 
     private int calculateJoy(final int joy, final boolean isFavourite) {

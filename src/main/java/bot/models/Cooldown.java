@@ -19,7 +19,7 @@ public class Cooldown {
     }
 
     @BsonIgnore
-    public long getSleepMins() {
+    public long getSleepMinutes() {
         return TimeUnit.MILLISECONDS.toMinutes(this.sleep - System.currentTimeMillis());
     }
 
@@ -32,7 +32,7 @@ public class Cooldown {
     }
 
     @BsonIgnore
-    public long getWorkMins() {
+    public long getWorkMinutes() {
         return TimeUnit.MILLISECONDS.toMinutes(this.work - System.currentTimeMillis());
     }
 

@@ -15,48 +15,58 @@ import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import java.text.MessageFormat;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 import static net.dv8tion.jda.api.interactions.commands.OptionType.*;
 
 public class Gift extends UserCommand {
     @Override
     public void execute(final SlashCommandInteractionEvent event, final Locale locale, final Entry user) {
-        final var selectedUser = event.getOption("user").getAsUser();
+        // Selected user
+        final var userChoice = Objects.requireNonNull(event.getOption("user"));
+        final var targetDiscordUser = userChoice.getAsUser();
 
-        if (selectedUser.getIdLong() == user.getMemberID()) {
+        // You can't gift items to yourself
+        if (targetDiscordUser.getIdLong() == user.getMemberID()) {
             final var msg = Responses.get("giftCantGiftYourself", locale);
 
             event.reply(msg).setEphemeral(true).queue();
             return;
         }
 
-        final var selectedDBUser = IDatabase.INSTANCE.getUserById(selectedUser.getIdLong());
-
-        if (selectedDBUser == null) {
+        // Is the target user initialized?
+        final var targetDbUser = IDatabase.INSTANCE.getUserById(targetDiscordUser.getIdLong());
+        if (targetDbUser == null) {
             final var msg = Responses.get("giftTargetNotInitialized", locale);
 
             event.reply(msg).setEphemeral(true).queue();
             return;
         }
 
-        final var amount = event.getOption("amount").getAsInt();
-        final var selectedItem = event.getOption("item").getAsString();
+        // Selected amount
+        final var amountChoice = Objects.requireNonNull(event.getOption("amount"));
+        final var amount = amountChoice.getAsInt();
 
-        if (user.getItem(selectedItem) - amount < 0) {
+        // Selected item
+        final var itemChoice = Objects.requireNonNull(event.getOption("item"));
+        final var item = itemChoice.getAsString();
+
+        // You can only gift as many items as you possess
+        if (user.getItem(item) - amount < 0) {
             final var msg = Responses.get("feedNotEnoughItems", locale);
 
             event.reply(msg).setEphemeral(true).queue();
             return;
         }
 
-        user.setItem(selectedItem, user.getItem(selectedItem) - amount);
-        selectedDBUser.setItem(selectedItem, selectedDBUser.getItem(selectedItem) + amount);
-
-        IDatabase.INSTANCE.updateUser(selectedDBUser);
+        // Update Db
+        user.setItem(item, user.getItem(item) - amount);
+        targetDbUser.setItem(item, targetDbUser.getItem(item) + amount);
+        IDatabase.INSTANCE.updateUser(targetDbUser);
         IDatabase.INSTANCE.updateUser(user);
 
         final var format = new MessageFormat(Responses.get("giftSuccessful", locale));
-        final var msg = format.format(new Object[]{ amount, selectedItem, selectedUser.getName() });
+        final var msg = format.format(new Object[]{ amount, item, targetDiscordUser.getName() });
 
         event.reply(msg).queue();
     }

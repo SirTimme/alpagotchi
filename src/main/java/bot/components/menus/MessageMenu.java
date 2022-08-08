@@ -22,8 +22,8 @@ public abstract class MessageMenu implements IMenu {
             return;
         }
 
-        execute(event, locale);
+        handle(event);
     }
 
-    protected abstract void execute(final SelectMenuInteractionEvent event, final Locale locale);
+    protected abstract void handle(final SelectMenuInteractionEvent event);
 }

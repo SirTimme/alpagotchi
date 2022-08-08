@@ -15,13 +15,15 @@ import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import java.text.MessageFormat;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 import static net.dv8tion.jda.api.interactions.commands.OptionType.STRING;
 
 public class Outfit extends UserCommand {
     @Override
     public void execute(final SlashCommandInteractionEvent event, final Locale locale, final Entry user) {
-        final var outfit = event.getOption("outfit").getAsString();
+        final var outfitChoice = Objects.requireNonNull(event.getOption("outfit"));
+        final var outfit = outfitChoice.getAsString();
 
         user.setOutfit(outfit);
         IDatabase.INSTANCE.updateUser(user);

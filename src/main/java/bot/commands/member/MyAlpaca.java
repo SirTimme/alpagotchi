@@ -24,6 +24,7 @@ import java.time.Instant;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 
 public class MyAlpaca extends UserCommand {
     private static final Logger LOGGER = LoggerFactory.getLogger(MyAlpaca.class);
@@ -31,9 +32,9 @@ public class MyAlpaca extends UserCommand {
     private final Color[] colors = { Color.BLACK, Color.RED, Color.ORANGE, Color.YELLOW, Color.GREEN };
 
     public MyAlpaca() {
-        final var folder = new File("src/main/resources/outfits");
         try {
-            for (final var file : folder.listFiles()) {
+            final var files = Objects.requireNonNull(new File("src/main/resources/outfits").listFiles());
+            for (final var file : files) {
                 final var name = file.getName().split("\\.")[0];
 
                 this.images.put(name, ImageIO.read(file));
@@ -55,9 +56,9 @@ public class MyAlpaca extends UserCommand {
         event.getJDA().retrieveUserById(Env.get("DEV_ID")).queue(dev -> {
             final var embed = new EmbedBuilder()
                     .setTitle(user.getNickname())
-                    .setDescription(Responses.get("myalpacaEmbedDescription", locale))
-                    .addField(Responses.get("myalpacaEmbedWorkFieldTitle", locale), getCooldownMsg(user.getWork(), locale), true)
-                    .addField(Responses.get("myalpacaEmbedSleepFieldTitle", locale), getCooldownMsg(user.getSleep(), locale), true)
+                    .setDescription(Responses.get("alpacaEmbedDescription", locale))
+                    .addField(Responses.get("alpacaEmbedWorkFieldTitle", locale), getCooldownMsg(user.getWork(), locale), true)
+                    .addField(Responses.get("alpacaEmbedSleepFieldTitle", locale), getCooldownMsg(user.getSleep(), locale), true)
                     .setThumbnail(event.getUser().getAvatarUrl())
                     .setFooter(Responses.get("createdByNotice", locale), dev.getAvatarUrl())
                     .setTimestamp(Instant.now())
@@ -70,7 +71,7 @@ public class MyAlpaca extends UserCommand {
 
     @Override
     public CommandData getCommandData() {
-        return Commands.slash("myalpaca", "Shows your alpaca")
+        return Commands.slash("alpaca", "Shows your alpaca")
                        .setDescriptionLocalization(DiscordLocale.GERMAN, "Zeigt dein Alpaka");
     }
 
@@ -130,10 +131,10 @@ public class MyAlpaca extends UserCommand {
 
     private String getCooldownMsg(final long minutes, final Locale locale) {
         if (minutes > 0) {
-            final var msg = new MessageFormat(Responses.get("myalpacaCooldownActive", locale));
+            final var msg = new MessageFormat(Responses.get("alpacaCooldownActive", locale));
 
             return msg.format(new Object[]{ minutes });
         }
-        return Responses.get("myalpacaCooldownInactive", locale);
+        return Responses.get("alpacaCooldownInactive", locale);
     }
 }

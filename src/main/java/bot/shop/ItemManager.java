@@ -2,7 +2,6 @@ package bot.shop;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -10,7 +9,6 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.lang.reflect.Type;
-import java.util.ArrayList;
 import java.util.List;
 
 public class ItemManager {
@@ -29,15 +27,9 @@ public class ItemManager {
         }
     }
 
-    public List<Item> getItemsByStat(final String type) {
-        return this.items.stream()
-                         .filter(entry -> entry.getType().equals(type))
-                         .toList();
-    }
-
     public Item getItem(final String name) {
         return this.items.stream()
-                         .filter(item -> item.getName().equals(name))
+                         .filter(item -> item.name().equals(name))
                          .findAny()
                          .orElse(null);
     }

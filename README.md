@@ -16,7 +16,7 @@ Alpagotchi [Support Discord](https://discord.gg/DXtYyzGhXR)!
 
 ## Commands
 
-Alpagotchi works only with slashcommands! Simply enter `/` in your bar to execute them.
+Alpagotchi works only with slash commands! Simply enter `/` in your bar to execute them.
 
 | Usage                         | Task                                            |
 |-------------------------------|-------------------------------------------------|

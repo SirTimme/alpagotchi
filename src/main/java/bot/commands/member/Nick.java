@@ -13,13 +13,16 @@ import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 
 import java.text.MessageFormat;
 import java.util.Locale;
+import java.util.Objects;
 
 import static net.dv8tion.jda.api.interactions.commands.OptionType.STRING;
 
 public class Nick extends UserCommand {
     @Override
     public void execute(final SlashCommandInteractionEvent event, final Locale locale, final Entry user) {
-        final var nickname = event.getOption("nickname").getAsString();
+        final var nicknameChoice = Objects.requireNonNull(event.getOption("nickname"));
+        final var nickname = nicknameChoice.getAsString();
+
         if (nickname.length() > 256) {
             final var msg = Responses.get("nicknameTooLong", locale);
 

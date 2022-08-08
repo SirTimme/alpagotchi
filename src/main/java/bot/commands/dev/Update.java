@@ -12,6 +12,7 @@ import net.dv8tion.jda.api.interactions.commands.build.Commands;
 
 import java.text.MessageFormat;
 import java.util.Locale;
+import java.util.Objects;
 
 public class Update extends InfoCommand {
     private final CommandManager commandManager;
@@ -27,8 +28,8 @@ public class Update extends InfoCommand {
              .addCommands(this.commandManager.getCommandDataByTypes(CommandType.USER, CommandType.INFO, CommandType.INIT))
              .queue();
 
-        event.getGuild()
-             .updateCommands()
+        final var guild = Objects.requireNonNull(event.getGuild());
+        guild.updateCommands()
              .addCommands(this.commandManager.getCommandDataByTypes(CommandType.DEV))
              .queue();
 
@@ -40,7 +41,7 @@ public class Update extends InfoCommand {
 
     @Override
     public CommandData getCommandData() {
-        return Commands.slash("update", "Refreshes all slashcommands")
+        return Commands.slash("update", "Refreshes all slash commands")
                        .setDescriptionLocalization(DiscordLocale.GERMAN, "Aktualisiert alle Befehle")
                        .setGuildOnly(true)
                        .setDefaultPermissions(DefaultMemberPermissions.DISABLED);

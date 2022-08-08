@@ -4,7 +4,6 @@ import bot.db.IDatabase;
 import bot.utils.Responses;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 
-import java.text.MessageFormat;
 import java.util.Locale;
 
 public abstract class MessageButton implements IButton {
