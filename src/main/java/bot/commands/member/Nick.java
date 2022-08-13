@@ -7,6 +7,7 @@ import bot.utils.CommandType;
 import bot.utils.Responses;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.DiscordLocale;
+import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
@@ -14,8 +15,6 @@ import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import java.text.MessageFormat;
 import java.util.Locale;
 import java.util.Objects;
-
-import static net.dv8tion.jda.api.interactions.commands.OptionType.STRING;
 
 public class Nick extends UserCommand {
     @Override
@@ -41,7 +40,7 @@ public class Nick extends UserCommand {
 
     @Override
     public CommandData getCommandData() {
-        final var option = new OptionData(STRING, "nickname", "The new nickname", true)
+        final var option = new OptionData(OptionType.STRING, "nickname", "The new nickname", true)
                 .setDescriptionLocalization(DiscordLocale.GERMAN, "Der neue Spitzname");
 
         return Commands.slash("nick", "Gives your alpaca a new nickname")

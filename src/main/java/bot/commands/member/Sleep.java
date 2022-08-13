@@ -7,6 +7,7 @@ import bot.utils.CommandType;
 import bot.utils.Responses;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.DiscordLocale;
+import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
@@ -14,8 +15,6 @@ import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import java.text.MessageFormat;
 import java.util.Locale;
 import java.util.Objects;
-
-import static net.dv8tion.jda.api.interactions.commands.OptionType.INTEGER;
 
 public class Sleep extends UserCommand {
     @Override
@@ -47,7 +46,7 @@ public class Sleep extends UserCommand {
 
     @Override
     public CommandData getCommandData() {
-        final var option = new OptionData(INTEGER, "duration", "The duration in minutes", true)
+        final var option = new OptionData(OptionType.INTEGER, "duration", "The duration in minutes", true)
                 .setRequiredRange(1, 100)
                 .setDescriptionLocalization(DiscordLocale.GERMAN, "Die Dauer in Minuten");
 

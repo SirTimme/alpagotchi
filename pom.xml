@@ -49,12 +49,6 @@
             </plugin>
         </plugins>
     </build>
-<!--    <repositories>-->
-<!--        <repository>-->
-<!--            <id>jitpack</id>-->
-<!--            <url>https://jitpack.io</url>-->
-<!--        </repository>-->
-<!--    </repositories>-->
     <dependencies>
         <dependency>
             <groupId>net.dv8tion</groupId>

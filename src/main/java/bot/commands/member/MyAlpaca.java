@@ -33,7 +33,8 @@ public class MyAlpaca extends UserCommand {
 
     public MyAlpaca() {
         try {
-            final var files = Objects.requireNonNull(new File("src/main/resources/outfits").listFiles());
+            final var folder = new File("src/main/resources/outfits");
+            final var files = Objects.requireNonNull(folder.listFiles());
             for (final var file : files) {
                 final var name = file.getName().split("\\.")[0];
 

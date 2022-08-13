@@ -10,6 +10,7 @@ import bot.utils.Responses;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.DiscordLocale;
 import net.dv8tion.jda.api.interactions.commands.Command;
+import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
@@ -18,9 +19,6 @@ import java.text.MessageFormat;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
-
-import static net.dv8tion.jda.api.interactions.commands.OptionType.INTEGER;
-import static net.dv8tion.jda.api.interactions.commands.OptionType.STRING;
 
 public class Feed extends UserCommand {
     private final ItemManager itemManager;
@@ -91,10 +89,10 @@ public class Feed extends UserCommand {
         );
 
         final var options = List.of(
-                new OptionData(STRING, "item", "The item to feed", true)
+                new OptionData(OptionType.STRING, "item", "The item to feed", true)
                         .setDescriptionLocalization(DiscordLocale.GERMAN, "Das zu fütternde Item")
                         .addChoices(choices),
-                new OptionData(INTEGER, "amount", "The amount of items", true)
+                new OptionData(OptionType.INTEGER, "amount", "The amount of items", true)
                         .setDescriptionLocalization(DiscordLocale.GERMAN, "Die Anzahl an Items")
                         .setRequiredRange(1, 5)
         );

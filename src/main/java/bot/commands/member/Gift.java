@@ -8,6 +8,7 @@ import bot.utils.Responses;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.DiscordLocale;
 import net.dv8tion.jda.api.interactions.commands.Command;
+import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
@@ -16,8 +17,6 @@ import java.text.MessageFormat;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
-
-import static net.dv8tion.jda.api.interactions.commands.OptionType.*;
 
 public class Gift extends UserCommand {
     @Override
@@ -83,12 +82,12 @@ public class Gift extends UserCommand {
         );
 
         final var options = List.of(
-                new OptionData(USER, "user", "The user you want to gift", true)
+                new OptionData(OptionType.USER, "user", "The user you want to gift", true)
                         .setDescriptionLocalization(DiscordLocale.GERMAN, "Der zu beschenkende User"),
-                new OptionData(STRING, "item", "The item to gift", true)
+                new OptionData(OptionType.STRING, "item", "The item to gift", true)
                         .setDescriptionLocalization(DiscordLocale.GERMAN, "Das zu schenkende Item")
                         .addChoices(choices),
-                new OptionData(INTEGER, "amount", "The amount of gifted items", true)
+                new OptionData(OptionType.INTEGER, "amount", "The amount of gifted items", true)
                         .setDescriptionLocalization(DiscordLocale.GERMAN, "Die Anzahl an Items")
                         .setRequiredRange(1, 5)
         );

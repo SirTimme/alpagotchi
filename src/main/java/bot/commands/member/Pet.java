@@ -8,6 +8,7 @@ import bot.utils.Responses;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.DiscordLocale;
 import net.dv8tion.jda.api.interactions.commands.Command;
+import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
@@ -16,8 +17,6 @@ import java.text.MessageFormat;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
-
-import static net.dv8tion.jda.api.interactions.commands.OptionType.STRING;
 
 public class Pet extends UserCommand {
     private final List<String> spots = List.of("head", "tail", "leg", "neck", "back");
@@ -64,7 +63,7 @@ public class Pet extends UserCommand {
                 new Command.Choice("back", "back")
         );
 
-        final var option = new OptionData(STRING, "spot", "The spot to pet", true)
+        final var option = new OptionData(OptionType.STRING, "spot", "The spot to pet", true)
                 .setDescriptionLocalization(DiscordLocale.GERMAN, "Die zu streichelnde Stelle")
                 .addChoices(choices);
 

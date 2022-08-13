@@ -7,20 +7,18 @@ import com.mongodb.ConnectionString;
 import com.mongodb.MongoClientSettings;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
+import com.mongodb.client.model.Filters;
+import org.bson.codecs.configuration.CodecRegistries;
 import org.bson.codecs.pojo.PojoCodecProvider;
-
-import static com.mongodb.client.model.Filters.eq;
-import static org.bson.codecs.configuration.CodecRegistries.fromProviders;
-import static org.bson.codecs.configuration.CodecRegistries.fromRegistries;
 
 public class Database implements IDatabase {
     private MongoClient client;
 
     @Override
     public void connect() {
-        final var codecRegistry = fromRegistries(
+        final var codecRegistry = CodecRegistries.fromRegistries(
                 MongoClientSettings.getDefaultCodecRegistry(),
-                fromProviders(PojoCodecProvider.builder().automatic(true).build())
+                CodecRegistries.fromProviders(PojoCodecProvider.builder().automatic(true).build())
         );
 
         final var settings = MongoClientSettings.builder()
@@ -36,7 +34,7 @@ public class Database implements IDatabase {
         final var db = this.client.getDatabase(Env.get("DB_NAME"));
         final var collection = db.getCollection("alpacas_manager", Entry.class);
 
-        return collection.find(eq(memberID)).first();
+        return collection.find(Filters.eq(memberID)).first();
     }
 
     @Override
@@ -44,7 +42,7 @@ public class Database implements IDatabase {
         final var db = this.client.getDatabase(Env.get("DB_NAME"));
         final var collection = db.getCollection("alpacas_manager", Entry.class);
 
-        collection.replaceOne(eq(entry.getMemberID()), entry);
+        collection.replaceOne(Filters.eq(entry.getMemberID()), entry);
     }
 
     @Override
@@ -60,7 +58,7 @@ public class Database implements IDatabase {
         final var db = this.client.getDatabase(Env.get("DB_NAME"));
         final var collection = db.getCollection("alpacas_manager", Entry.class);
 
-        collection.deleteOne(eq(memberID));
+        collection.deleteOne(Filters.eq(memberID));
     }
 
     @Override
@@ -68,7 +66,7 @@ public class Database implements IDatabase {
         final var db = this.client.getDatabase(Env.get("DB_NAME"));
         final var collection = db.getCollection("guild_settings", GuildSettings.class);
 
-        var settings = collection.find(eq(guildID)).first();
+        var settings = collection.find(Filters.eq(guildID)).first();
 
         if (settings == null) {
             settings = new GuildSettings(guildID);
@@ -83,7 +81,7 @@ public class Database implements IDatabase {
         final var db = this.client.getDatabase(Env.get("DB_NAME"));
         final var collection = db.getCollection("guild_settings", GuildSettings.class);
 
-        collection.replaceOne(eq(settings.getGuildID()), settings);
+        collection.replaceOne(Filters.eq(settings.getGuildID()), settings);
     }
 
     @Override

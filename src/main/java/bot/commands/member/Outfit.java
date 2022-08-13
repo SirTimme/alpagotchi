@@ -8,6 +8,7 @@ import bot.utils.Responses;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.DiscordLocale;
 import net.dv8tion.jda.api.interactions.commands.Command;
+import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
@@ -16,8 +17,6 @@ import java.text.MessageFormat;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
-
-import static net.dv8tion.jda.api.interactions.commands.OptionType.STRING;
 
 public class Outfit extends UserCommand {
     @Override
@@ -42,7 +41,7 @@ public class Outfit extends UserCommand {
                 new Command.Choice("lady", "lady")
         );
 
-        final var option = new OptionData(STRING, "outfit", "The new outfit", true)
+        final var option = new OptionData(OptionType.STRING, "outfit", "The new outfit", true)
                 .setDescriptionLocalization(DiscordLocale.GERMAN, "Das neue Outfit")
                 .addChoices(choices);
 
