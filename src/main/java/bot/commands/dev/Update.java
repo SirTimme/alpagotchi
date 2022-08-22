@@ -28,10 +28,10 @@ public class Update extends InfoCommand {
              .addCommands(this.commandManager.getCommandDataByTypes(CommandType.USER, CommandType.INFO, CommandType.INIT))
              .queue();
 
-        final var guild = Objects.requireNonNull(event.getGuild());
-        guild.updateCommands()
-             .addCommands(this.commandManager.getCommandDataByTypes(CommandType.DEV))
-             .queue();
+        Objects.requireNonNull(event.getGuild())
+               .updateCommands()
+               .addCommands(this.commandManager.getCommandDataByTypes(CommandType.DEV))
+               .queue();
 
         final var format = new MessageFormat(Responses.get("updateCommands", locale));
         final var msg = format.format(new Object[]{ this.commandManager.getCommands().size() });

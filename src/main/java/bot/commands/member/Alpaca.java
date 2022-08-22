@@ -10,6 +10,7 @@ import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEve
 import net.dv8tion.jda.api.interactions.DiscordLocale;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
+import net.dv8tion.jda.api.utils.FileUpload;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,12 +27,12 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 
-public class MyAlpaca extends UserCommand {
-    private static final Logger LOGGER = LoggerFactory.getLogger(MyAlpaca.class);
+public class Alpaca extends UserCommand {
+    private static final Logger LOGGER = LoggerFactory.getLogger(Alpaca.class);
     private final Map<String, BufferedImage> images = new HashMap<>();
     private final Color[] colors = { Color.BLACK, Color.RED, Color.ORANGE, Color.YELLOW, Color.GREEN };
 
-    public MyAlpaca() {
+    public Alpaca() {
         try {
             final var folder = new File("src/main/resources/outfits");
             final var files = Objects.requireNonNull(folder.listFiles());
@@ -66,7 +67,9 @@ public class MyAlpaca extends UserCommand {
                     .setImage("attachment://alpagotchi.png")
                     .build();
 
-            event.replyEmbeds(embed).addFile(bytes.toByteArray(), "alpagotchi.png").queue();
+            event.replyEmbeds(embed)
+                 .addFiles(FileUpload.fromData(bytes.toByteArray(), "alpagotchi.png"))
+                 .queue();
         });
     }
 
@@ -133,7 +136,6 @@ public class MyAlpaca extends UserCommand {
     private String getCooldownMsg(final long minutes, final Locale locale) {
         if (minutes > 0) {
             final var msg = new MessageFormat(Responses.get("alpacaCooldownActive", locale));
-
             return msg.format(new Object[]{ minutes });
         }
         return Responses.get("alpacaCooldownInactive", locale);

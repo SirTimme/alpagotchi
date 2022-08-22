@@ -18,8 +18,9 @@ public class SelectLanguage extends MessageMenu {
         settings.setLanguage(event.getValues().get(0));
         IDatabase.INSTANCE.updateSettings(settings);
 
-        final var msg = Responses.get("language", settings.getLocale());
-
-        event.editMessage(msg).setActionRows(Collections.emptyList()).setEmbeds(Collections.emptyList()).queue();
+        event.editMessage(Responses.get("language", settings.getLocale()))
+             .setComponents(Collections.emptyList())
+             .setEmbeds(Collections.emptyList())
+             .queue();
     }
 }
