@@ -7,7 +7,7 @@ Alpagotchi allows any user to create and take care of their own digital alpaca.
 ## Invite
 
 If you are interested in Alpagotchi and want it to add to your guild you can use
-this [Invite Link](https://discord.com/api/oauth2/authorize?client_id=780910199875567616&permissions=0&scope=bot%20applications.commands)!
+this [Invite Link](https://discord.com/api/oauth2/authorize?client_id=780910199875567616&permissions=265216&scope=bot%20applications.commands)!
 
 ## Help
 
