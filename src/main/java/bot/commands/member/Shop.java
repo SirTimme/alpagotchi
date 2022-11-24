@@ -28,13 +28,13 @@ public class Shop extends UserCommand {
     @Override
     public void execute(final SlashCommandInteractionEvent event, final Locale locale, final Entry user) {
         event.getJDA().retrieveUserById(Env.get("DEV_ID")).queue(dev -> {
-            final var format = new MessageFormat(Responses.get("formattedCurrentBalance", locale));
+            final var format = new MessageFormat(Responses.getLocalizedResponse("formattedCurrentBalance", locale));
             final var msg = format.format(new Object[]{ user.getCurrency() });
 
             final var embed = new EmbedBuilder()
-                    .setTitle(Responses.get("shopEmbedTitle", locale))
-                    .setDescription(msg + "\n```\n" + buildTable() + "\n```\n" + Responses.get("formattedHowToBuy", locale))
-                    .setFooter(Responses.get("createdByNotice", locale), dev.getAvatarUrl())
+                    .setTitle(Responses.getLocalizedResponse("shopEmbedTitle", locale))
+                    .setDescription(msg + "\n```\n" + buildTable(user, locale) + "\n```\n" + Responses.getLocalizedResponse("formattedHowToBuy", locale))
+                    .setFooter(Responses.getLocalizedResponse("createdByNotice", locale), dev.getAvatarUrl())
                     .setTimestamp(Instant.now())
                     .build();
 
@@ -53,17 +53,27 @@ public class Shop extends UserCommand {
         return CommandType.INFO;
     }
 
-    private String buildTable() {
-        final String[] header = { "Name", "Price", "Saturation" };
-        final var content = this.itemManager.getItems()
-                                            .stream()
-                                            .map(this::buildRow)
-                                            .toArray(String[][]::new);
+    private String buildTable(final Entry user, final Locale locale) {
+        final var content = this.itemManager
+                .getItems()
+                .stream()
+                .map(item -> buildRow(item, user, locale))
+                .toArray(String[][]::new);
+
+        final var localizedName = Responses.getLocalizedResponse("inventoryName", locale);
+        final var localizedPrice = Responses.getLocalizedResponse("inventoryPrice", locale);
+        final var localizedQuantity = Responses.getLocalizedResponse("inventoryQuantity", locale);
+
+        final String[] header = { localizedName, localizedPrice, localizedQuantity };
 
         return FlipTable.of(header, content);
     }
 
-    private String[] buildRow(final Item item) {
-        return new String[]{ item.getName(), String.valueOf(item.getPrice()), String.valueOf(item.getSaturation()) };
+    private String[] buildRow(final Item item, final Entry user, final Locale locale) {
+        final var itemName = Responses.getLocalizedResponse(item.getName(), locale);
+        final var saturation = String.valueOf(item.getPrice());
+        final var quantity = String.valueOf(user.getItem(item.getName()));
+
+        return new String[]{ itemName, saturation, quantity };
     }
 }

@@ -28,13 +28,13 @@ public class Inventory extends UserCommand {
     @Override
     public void execute(final SlashCommandInteractionEvent event, final Locale locale, final Entry user) {
         event.getJDA().retrieveUserById(Env.get("DEV_ID")).queue(dev -> {
-            final var balanceFormat = new MessageFormat(Responses.get("formattedCurrentBalance", locale));
+            final var balanceFormat = new MessageFormat(Responses.getLocalizedResponse("formattedCurrentBalance", locale));
             final var balanceMsg = balanceFormat.format(new Object[]{ user.getCurrency() });
 
             final var embed = new EmbedBuilder()
-                    .setTitle(Responses.get("inventoryEmbedTitle", locale))
-                    .setDescription(balanceMsg + "\n```\n" + buildTable(user) + "\n```\n" + Responses.get("formattedHowToBuy", locale))
-                    .setFooter(Responses.get("createdByNotice", locale), dev.getAvatarUrl())
+                    .setTitle(Responses.getLocalizedResponse("inventoryEmbedTitle", locale))
+                    .setDescription(balanceMsg + "\n```\n" + buildTable(user, locale) + "\n```\n" + Responses.getLocalizedResponse("formattedHowToBuy", locale))
+                    .setFooter(Responses.getLocalizedResponse("createdByNotice", locale), dev.getAvatarUrl())
                     .setTimestamp(Instant.now())
                     .build();
 
@@ -53,18 +53,27 @@ public class Inventory extends UserCommand {
         return CommandType.INFO;
     }
 
-    private String buildTable(final Entry user) {
-        final String[] header = { "Name", "Saturation", "Quantity" };
+    private String buildTable(final Entry user, final Locale locale) {
         final var content = this.itemManager
                 .getItems()
                 .stream()
-                .map(item -> buildRow(item, user))
+                .map(item -> buildRow(item, user, locale))
                 .toArray(String[][]::new);
+
+        final var localizedName = Responses.getLocalizedResponse("inventoryName", locale);
+        final var localizedSaturation = Responses.getLocalizedResponse("inventorySaturation", locale);
+        final var localizedQuantity = Responses.getLocalizedResponse("inventoryQuantity", locale);
+
+        final String[] header = { localizedName, localizedSaturation, localizedQuantity };
 
         return FlipTable.of(header, content);
     }
 
-    private String[] buildRow(final Item item, final Entry user) {
-        return new String[]{ item.getName(), String.valueOf(item.getSaturation()), String.valueOf(user.getItem(item.getName())) };
+    private String[] buildRow(final Item item, final Entry user, final Locale locale) {
+        final var itemName = Responses.getLocalizedResponse(item.getName(), locale);
+        final var saturation = String.valueOf(item.getSaturation());
+        final var quantity = String.valueOf(user.getItem(item.getName()));
+
+        return new String[]{ itemName, saturation, quantity };
     }
 }

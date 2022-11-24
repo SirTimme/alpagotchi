@@ -26,7 +26,7 @@ public class Pet extends UserCommand {
         // Already max joy?
         final var joy = user.getJoy();
         if (joy == 100) {
-            final var msg = Responses.get("petJoyAlreadyMaximum", locale);
+            final var msg = Responses.getLocalizedResponse("petJoyAlreadyMaximum", locale);
 
             event.reply(msg).setEphemeral(true).queue();
             return;
@@ -47,7 +47,7 @@ public class Pet extends UserCommand {
         user.setJoy(joy + value);
         IDatabase.INSTANCE.updateUser(user);
 
-        final var format = new MessageFormat(Responses.get(getKey(isFavourite), locale));
+        final var format = new MessageFormat(Responses.getLocalizedResponse(getKey(isFavourite), locale));
         final var msg = format.format(new Object[]{ value });
 
         event.reply(msg).queue();

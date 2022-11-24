@@ -16,7 +16,7 @@ import java.util.Locale;
 public class Count extends InfoCommand {
     @Override
     public void execute(final SlashCommandInteractionEvent event, final Locale locale) {
-        final var format = new MessageFormat(Responses.get("countAlpacas", locale));
+        final var format = new MessageFormat(Responses.getLocalizedResponse("countAlpacas", locale));
         final var msg = format.format(new Object[]{ IDatabase.INSTANCE.getUserCount(), event.getJDA().getGuilds().size() });
 
         event.reply(msg).queue();

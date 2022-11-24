@@ -32,7 +32,7 @@ public class Feed extends UserCommand {
         final var remainingSleep = user.getSleep();
 
         if (remainingSleep > 0) {
-            final var format = new MessageFormat(Responses.get("sleepCurrentlySleeping", locale));
+            final var format = new MessageFormat(Responses.getLocalizedResponse("sleepCurrentlySleeping", locale));
             final var msg = format.format(new Object[]{ remainingSleep });
 
             event.reply(msg).setEphemeral(true).queue();
@@ -50,7 +50,7 @@ public class Feed extends UserCommand {
         final var newItemAmount = user.getItem(item.getName()) - amount;
 
         if (newItemAmount < 0) {
-            final var msg = Responses.get("feedNotEnoughItems", locale);
+            final var msg = Responses.getLocalizedResponse("feedNotEnoughItems", locale);
 
             event.reply(msg).setEphemeral(true).queue();
             return;
@@ -60,7 +60,7 @@ public class Feed extends UserCommand {
         final var saturation = amount * item.getSaturation();
 
         if (oldValue + saturation > 100) {
-            final var msg = Responses.get("feedTooMuchSaturation", locale);
+            final var msg = Responses.getLocalizedResponse("feedTooMuchSaturation", locale);
 
             event.reply(msg).setEphemeral(true).queue();
             return;
@@ -71,7 +71,7 @@ public class Feed extends UserCommand {
 
         IDatabase.INSTANCE.updateUser(user);
 
-        final var format = new MessageFormat(Responses.get(getKey(item), locale));
+        final var format = new MessageFormat(Responses.getLocalizedResponse(getKey(item), locale));
         final var msg = format.format(new Object[]{ amount, item.getName(), saturation });
 
         event.reply(msg).queue();

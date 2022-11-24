@@ -23,7 +23,7 @@ public class Nick extends UserCommand {
         final var nickname = nicknameChoice.getAsString();
 
         if (nickname.length() > 256) {
-            final var msg = Responses.get("nicknameTooLong", locale);
+            final var msg = Responses.getLocalizedResponse("nicknameTooLong", locale);
 
             event.reply(msg).setEphemeral(true).queue();
             return;
@@ -32,7 +32,7 @@ public class Nick extends UserCommand {
         user.setNickname(nickname);
         IDatabase.INSTANCE.updateUser(user);
 
-        final var format = new MessageFormat(Responses.get("nickname", locale));
+        final var format = new MessageFormat(Responses.getLocalizedResponse("nickname", locale));
         final var msg = format.format(new Object[]{ nickname });
 
         event.reply(msg).queue();

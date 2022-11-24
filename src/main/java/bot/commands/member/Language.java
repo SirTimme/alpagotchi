@@ -9,7 +9,7 @@ import net.dv8tion.jda.api.interactions.DiscordLocale;
 import net.dv8tion.jda.api.interactions.commands.DefaultMemberPermissions;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
-import net.dv8tion.jda.api.interactions.components.selections.SelectMenu;
+import net.dv8tion.jda.api.interactions.components.selections.StringSelectMenu;
 
 import java.util.Locale;
 
@@ -18,14 +18,14 @@ public class Language extends InfoCommand {
     public void execute(final SlashCommandInteractionEvent event, final Locale locale) {
         final var userId = event.getUser().getId();
 
-        final var menuLanguage = SelectMenu
+        final var menuLanguage = StringSelectMenu
                 .create(userId + ":language")
-                .setPlaceholder(Responses.get("languagePlaceholder", locale))
-                .addOption(Responses.get("englishDisplayName", locale), "en", Emoji.fromUnicode("\uD83C\uDDFA\uD83C\uDDF8"))
-                .addOption(Responses.get("germanDisplayName", locale), "de", Emoji.fromUnicode("\uD83C\uDDE9\uD83C\uDDEA"))
+                .setPlaceholder(Responses.getLocalizedResponse("languagePlaceholder", locale))
+                .addOption(Responses.getLocalizedResponse("englishDisplayName", locale), "en", Emoji.fromUnicode("\uD83C\uDDFA\uD83C\uDDF8"))
+                .addOption(Responses.getLocalizedResponse("germanDisplayName", locale), "de", Emoji.fromUnicode("\uD83C\uDDE9\uD83C\uDDEA"))
                 .build();
 
-        final var msg = Responses.get("languageSelect", locale);
+        final var msg = Responses.getLocalizedResponse("languageSelect", locale);
 
         event.reply(msg).addActionRow(menuLanguage).queue();
     }

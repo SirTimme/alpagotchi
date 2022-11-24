@@ -22,7 +22,7 @@ public class Sleep extends UserCommand {
         // Already max energy?
         final var energy = user.getEnergy();
         if (energy == 100) {
-            final var msg = Responses.get("petJoyAlreadyMaximum", locale);
+            final var msg = Responses.getLocalizedResponse("petJoyAlreadyMaximum", locale);
 
             event.reply(msg).setEphemeral(true).queue();
             return;
@@ -38,7 +38,7 @@ public class Sleep extends UserCommand {
         user.setSleep(System.currentTimeMillis() + 1000L * 60 * newEnergy);
         IDatabase.INSTANCE.updateUser(user);
 
-        final var format = new MessageFormat(Responses.get("sleep", locale));
+        final var format = new MessageFormat(Responses.getLocalizedResponse("sleep", locale));
         final var msg = format.format(new Object[]{ newEnergy });
 
         event.reply(msg).queue();

@@ -1,7 +1,7 @@
 package bot.components.menus;
 
 import bot.components.menus.language.SelectLanguage;
-import net.dv8tion.jda.api.events.interaction.component.SelectMenuInteractionEvent;
+import net.dv8tion.jda.api.events.interaction.component.StringSelectInteractionEvent;
 
 import java.util.Map;
 import java.util.TreeMap;
@@ -14,7 +14,7 @@ public class MenuManager {
         this.menus.put("language", new SelectLanguage());
     }
 
-    public void handle(final SelectMenuInteractionEvent event) {
+    public void handle(final StringSelectInteractionEvent event) {
         final var menuName = event.getComponentId().split(":")[1];
         final var menu = menus.get(menuName);
 

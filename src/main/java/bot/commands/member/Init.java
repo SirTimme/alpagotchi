@@ -19,7 +19,7 @@ public class Init extends UserCommand {
     @Override
     public void execute(final SlashCommandInteractionEvent event, final Locale locale, final Entry user) {
         if (user != null) {
-            final var msg = Responses.get("initAlreadyOwned", locale);
+            final var msg = Responses.getLocalizedResponse("initAlreadyOwned", locale);
 
             event.reply(msg).setEphemeral(true).queue();
             return;
@@ -27,15 +27,15 @@ public class Init extends UserCommand {
 
         final var userId = event.getUser().getId();
 
-        final var btnAccept = Button.success(userId + ":initAccept", Responses.get("buttonAccept", locale));
-        final var btnCancel = Button.danger(userId + ":initCancelled", Responses.get("buttonCancel", locale));
+        final var btnAccept = Button.success(userId + ":initAccept", Responses.getLocalizedResponse("buttonAccept", locale));
+        final var btnCancel = Button.danger(userId + ":initCancelled", Responses.getLocalizedResponse("buttonCancel", locale));
 
         event.getJDA().retrieveUserById(Env.get("DEV_ID")).queue(dev -> {
             final var embed = new EmbedBuilder()
-                    .setTitle(Responses.get("initEmbedTitle", locale))
-                    .addField(Responses.get("initEmbedStorageFieldTitle", locale), Responses.get("initEmbedStorageFieldBody", locale), false)
-                    .addField(Responses.get("initEmbedDeletionFieldTitle", locale), Responses.get("initEmbedDeletionFieldBody", locale), false)
-                    .setFooter(Responses.get("createdByNotice", locale), dev.getAvatarUrl())
+                    .setTitle(Responses.getLocalizedResponse("initEmbedTitle", locale))
+                    .addField(Responses.getLocalizedResponse("initEmbedStorageFieldTitle", locale), Responses.getLocalizedResponse("initEmbedStorageFieldBody", locale), false)
+                    .addField(Responses.getLocalizedResponse("initEmbedDeletionFieldTitle", locale), Responses.getLocalizedResponse("initEmbedDeletionFieldBody", locale), false)
+                    .setFooter(Responses.getLocalizedResponse("createdByNotice", locale), dev.getAvatarUrl())
                     .setTimestamp(Instant.now())
                     .build();
 

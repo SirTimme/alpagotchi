@@ -15,7 +15,7 @@ import java.util.Locale;
 public class Balance extends UserCommand {
     @Override
     public void execute(final SlashCommandInteractionEvent event, final Locale locale, final Entry user) {
-        final var format = new MessageFormat(Responses.get("balance", locale));
+        final var format = new MessageFormat(Responses.getLocalizedResponse("balance", locale));
         final var msg = format.format(new Object[]{ user.getCurrency() });
 
         event.reply(msg).queue();

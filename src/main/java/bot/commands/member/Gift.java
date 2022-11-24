@@ -27,7 +27,7 @@ public class Gift extends UserCommand {
 
         // You can't gift items to yourself
         if (targetDiscordUser.getIdLong() == user.getMemberID()) {
-            final var msg = Responses.get("giftCantGiftYourself", locale);
+            final var msg = Responses.getLocalizedResponse("giftCantGiftYourself", locale);
 
             event.reply(msg).setEphemeral(true).queue();
             return;
@@ -36,7 +36,7 @@ public class Gift extends UserCommand {
         // Is the target user initialized?
         final var targetDbUser = IDatabase.INSTANCE.getUserById(targetDiscordUser.getIdLong());
         if (targetDbUser == null) {
-            final var msg = Responses.get("giftTargetNotInitialized", locale);
+            final var msg = Responses.getLocalizedResponse("giftTargetNotInitialized", locale);
 
             event.reply(msg).setEphemeral(true).queue();
             return;
@@ -52,7 +52,7 @@ public class Gift extends UserCommand {
 
         // You can only gift as many items as you possess
         if (user.getItem(item) - amount < 0) {
-            final var msg = Responses.get("feedNotEnoughItems", locale);
+            final var msg = Responses.getLocalizedResponse("feedNotEnoughItems", locale);
 
             event.reply(msg).setEphemeral(true).queue();
             return;
@@ -64,7 +64,7 @@ public class Gift extends UserCommand {
         IDatabase.INSTANCE.updateUser(targetDbUser);
         IDatabase.INSTANCE.updateUser(user);
 
-        final var format = new MessageFormat(Responses.get("giftSuccessful", locale));
+        final var format = new MessageFormat(Responses.getLocalizedResponse("giftSuccessful", locale));
         final var msg = format.format(new Object[]{ amount, item, targetDiscordUser.getName() });
 
         event.reply(msg).queue();

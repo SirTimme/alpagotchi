@@ -44,7 +44,7 @@ public class Buy extends UserCommand {
 
         // Enough balance?
         if (balance - price < 0) {
-            final var msg = Responses.get("balanceNotSufficient", locale);
+            final var msg = Responses.getLocalizedResponse("balanceNotSufficient", locale);
 
             event.reply(msg).setEphemeral(true).queue();
             return;
@@ -55,7 +55,7 @@ public class Buy extends UserCommand {
         user.setItem(item.getName(), user.getItem(item.getName()) + amount);
         IDatabase.INSTANCE.updateUser(user);
 
-        final var format = new MessageFormat(Responses.get("buySuccessful", locale));
+        final var format = new MessageFormat(Responses.getLocalizedResponse("buySuccessful", locale));
         final var msg = format.format(new Object[]{ amount, item.getName(), price });
 
         event.reply(msg).queue();

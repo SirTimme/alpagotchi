@@ -10,7 +10,7 @@ import java.util.Locale;
 public class InitCancel extends MessageButton {
     @Override
     public void execute(final ButtonInteractionEvent event, final Locale locale) {
-        event.editMessage(Responses.get("initCancelled", locale))
+        event.editMessage(Responses.getLocalizedResponse("initCancelled", locale))
              .setComponents(Collections.emptyList())
              .setEmbeds(Collections.emptyList())
              .queue();

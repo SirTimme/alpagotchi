@@ -13,7 +13,7 @@ public class DeleteAccept extends MessageButton {
     public void execute(final ButtonInteractionEvent event, final Locale locale) {
         IDatabase.INSTANCE.deleteUserById(event.getUser().getIdLong());
 
-        event.editMessage(Responses.get("deleteSuccessful", locale))
+        event.editMessage(Responses.getLocalizedResponse("deleteSuccessful", locale))
              .setComponents(Collections.emptyList())
              .setEmbeds(Collections.emptyList())
              .queue();

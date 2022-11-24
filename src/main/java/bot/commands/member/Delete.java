@@ -17,10 +17,10 @@ public class Delete extends UserCommand {
     public void execute(final SlashCommandInteractionEvent event, final Locale locale, final Entry user) {
         final var userId = event.getUser().getIdLong();
 
-        final var btnSuccess = Button.success(userId + ":deleteAccept", Responses.get("buttonAccept", locale));
-        final var btnCancel = Button.danger(userId + ":deleteCancelled", Responses.get("buttonCancel", locale));
+        final var btnSuccess = Button.success(userId + ":deleteAccept", Responses.getLocalizedResponse("buttonAccept", locale));
+        final var btnCancel = Button.danger(userId + ":deleteCancelled", Responses.getLocalizedResponse("buttonCancel", locale));
 
-        final var msg = Responses.get("deleteWarning", locale);
+        final var msg = Responses.getLocalizedResponse("deleteWarning", locale);
 
         event.reply(msg).addActionRow(btnSuccess, btnCancel).queue();
     }

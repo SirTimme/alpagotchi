@@ -5,7 +5,7 @@ import bot.components.buttons.ButtonManager;
 import bot.components.menus.MenuManager;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
-import net.dv8tion.jda.api.events.interaction.component.SelectMenuInteractionEvent;
+import net.dv8tion.jda.api.events.interaction.component.StringSelectInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;
 
@@ -31,7 +31,7 @@ public class EventHandler extends ListenerAdapter {
     }
 
     @Override
-    public void onSelectMenuInteraction(final @NotNull SelectMenuInteractionEvent event) {
+    public void onStringSelectInteraction(final @NotNull StringSelectInteractionEvent event) {
         this.menuManager.handle(event);
     }
 }
