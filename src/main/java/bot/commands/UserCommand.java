@@ -22,7 +22,7 @@ public abstract class UserCommand implements ISlashCommand {
             return;
         }
 
-        execute(event, locale, user);
+        execute(event, locale, new Entry(23L));
     }
 
     protected abstract void execute(final SlashCommandInteractionEvent event, final Locale locale, final Entry user);

@@ -34,7 +34,8 @@ public class Gift extends UserCommand {
         }
 
         // Is the target user initialized?
-        final var targetDbUser = IDatabase.INSTANCE.getUserById(targetDiscordUser.getIdLong());
+        // final var targetDbUser = IDatabase.INSTANCE.getUserById(targetDiscordUser.getIdLong());
+        final var targetDbUser = new Entry(23L);
         if (targetDbUser == null) {
             final var msg = Responses.getLocalizedResponse("giftTargetNotInitialized", locale);
 

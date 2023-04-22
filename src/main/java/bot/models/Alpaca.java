@@ -1,9 +1,13 @@
 package bot.models;
 
-import org.bson.codecs.pojo.annotations.BsonCreator;
-import org.bson.codecs.pojo.annotations.BsonProperty;
+import jakarta.persistence.*;
 
+@Entity
+@Table(name = "alpacas")
 public class Alpaca {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
     private String outfit;
     private String nickname;
     private int hunger;
@@ -11,13 +15,13 @@ public class Alpaca {
     private int energy;
     private int joy;
 
-    @BsonCreator
-    public Alpaca(@BsonProperty(value = "outfit") final String outfit,
-            @BsonProperty(value = "nickname") final String nickname,
-            @BsonProperty(value = "hunger") final int hunger,
-            @BsonProperty(value = "thirst") final int thirst,
-            @BsonProperty(value = "energy") final int energy,
-            @BsonProperty(value = "joy") final int joy
+    public Alpaca(
+            final String outfit,
+            final String nickname,
+            final int hunger,
+            final int thirst,
+            final int energy,
+            final int joy
     ) {
         this.outfit = outfit;
         this.nickname = nickname;
