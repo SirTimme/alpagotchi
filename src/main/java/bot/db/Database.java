@@ -1,5 +1,6 @@
 package bot.db;
 
+import bot.models.Alpaca;
 import bot.models.Entry;
 import bot.models.GuildSettings;
 import bot.utils.Env;
@@ -23,12 +24,13 @@ public class Database implements IDatabase {
                                                                           .build();
 
     @Override
-    public Entry getUserById(final long memberID) {
+    public Alpaca getUserById(final long memberID) {
         try (final var client = MongoClients.create(clientSettings)) {
             final var db = client.getDatabase(Env.get("DB_NAME"));
             final var collection = db.getCollection("alpacas_manager", Entry.class);
 
-            return collection.find(Filters.eq(memberID)).first();
+            // return collection.find(Filters.eq(memberID)).first();
+            return new Alpaca("d", "d", 100, 100, 100, 100);
         }
     }
 
