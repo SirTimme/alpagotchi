@@ -14,9 +14,7 @@ public class PostgresDB implements IDatabase {
     public PostgresDB() {
         final var registry = new StandardServiceRegistryBuilder()
                 .configure()
-                .applySetting("hibernate.connection.url", Env.get("POSTGRES_DB"))
-                .applySetting("hibernate.connection.username", Env.get("POSTGRES_USER"))
-                .applySetting("hibernate.connection.password", Env.get("POSTGRES_PASSWORD"))
+                .applySetting("hibernate.connection.url", Env.get("POSTGRES_URL"))
                 .build();
 
         sessionFactory = new MetadataSources(registry).buildMetadata().buildSessionFactory();
