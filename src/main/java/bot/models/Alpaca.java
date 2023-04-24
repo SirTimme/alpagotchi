@@ -8,21 +8,28 @@ public class Alpaca {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    private String outfit;
-    private String nickname;
-    private int hunger;
-    private int thirst;
-    private int energy;
-    private int joy;
 
-    public Alpaca(
-            final String outfit,
-            final String nickname,
-            final int hunger,
-            final int thirst,
-            final int energy,
-            final int joy
-    ) {
+    @Column(name = "outfit", nullable = false)
+    private String outfit = "default";
+
+    @Column(name = "nickname", nullable = false)
+    private String nickname = "alpaca";
+
+    @Column(name = "hunger", nullable = false)
+    private int hunger = 100;
+
+    @Column(name = "thirst", nullable = false)
+    private int thirst = 100;
+
+    @Column(name = "energy", nullable = false)
+    private int energy = 100;
+
+    @Column(name = "joy", nullable = false)
+    private int joy = 100;
+
+    public Alpaca() { }
+
+    public Alpaca(String outfit, String nickname, int hunger, int thirst, int energy, int joy) {
         this.outfit = outfit;
         this.nickname = nickname;
         this.hunger = hunger;
