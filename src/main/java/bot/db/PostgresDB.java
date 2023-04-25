@@ -43,7 +43,8 @@ public class PostgresDB implements IDatabase {
     public void createUserById(long userId) {
         var alpaca = new Alpaca();
         var inventory = new Inventory();
-        var user = new User(userId, alpaca, inventory);
+        var cooldown = new Cooldown();
+        var user = new User(userId, alpaca, inventory, cooldown);
 
         var session = this.sessionFactory.openSession();
         var transaction = session.beginTransaction();
