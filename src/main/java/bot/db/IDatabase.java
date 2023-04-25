@@ -1,13 +1,13 @@
 package bot.db;
 
-import bot.models.Alpaca;
 import bot.models.Entry;
 import bot.models.GuildSettings;
+import bot.models.User;
 
 public interface IDatabase {
     IDatabase INSTANCE = new PostgresDB();
 
-    Alpaca getUserById(final long memberID);
+    User getUserById(final long userId);
 
     void updateUser(final Entry entry);
 
