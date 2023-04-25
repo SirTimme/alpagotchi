@@ -9,6 +9,9 @@ public class Alpaca {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    @OneToOne(mappedBy = "alpaca")
+    private User user;
+
     @Column(name = "outfit", nullable = false)
     private String outfit = "default";
 
