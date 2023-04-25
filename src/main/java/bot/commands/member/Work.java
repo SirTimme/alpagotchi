@@ -2,7 +2,7 @@ package bot.commands.member;
 
 import bot.commands.UserCommand;
 import bot.db.IDatabase;
-import bot.models.Entry;
+import bot.models.User;
 import bot.utils.CommandType;
 import bot.utils.Responses;
 import com.google.gson.Gson;
@@ -39,7 +39,7 @@ public class Work extends UserCommand {
     }
 
     @Override
-    public void execute(final SlashCommandInteractionEvent event, final Locale locale, final Entry user) {
+    public void execute(final SlashCommandInteractionEvent event, final Locale locale, final User user) {
         final long sleep = user.getSleep();
         if (sleep > 0) {
             final var format = new MessageFormat(Responses.getLocalizedResponse("sleepCurrentlySleeping", locale));

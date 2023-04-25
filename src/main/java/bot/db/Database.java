@@ -1,8 +1,8 @@
 package bot.db;
 
 import bot.models.Alpaca;
-import bot.models.Entry;
 import bot.models.GuildSettings;
+import bot.models.User;
 import bot.utils.Env;
 import com.mongodb.ConnectionString;
 import com.mongodb.MongoClientSettings;
@@ -35,12 +35,12 @@ public class Database implements IDatabase {
     }
 
     @Override
-    public void updateUser(final Entry entry) {
+    public void updateUser(final User user) {
         try (final var client = MongoClients.create(clientSettings)) {
             final var db = client.getDatabase(Env.get("DB_NAME"));
             final var collection = db.getCollection("alpacas_manager", Entry.class);
 
-            collection.replaceOne(Filters.eq(entry.getMemberID()), entry);
+            collection.replaceOne(Filters.eq(user.getMemberID()), user);
         }
     }
 

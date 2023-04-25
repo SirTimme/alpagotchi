@@ -2,7 +2,7 @@ package bot.commands.member;
 
 import bot.commands.UserCommand;
 import bot.db.IDatabase;
-import bot.models.Entry;
+import bot.models.User;
 import bot.shop.Item;
 import bot.shop.ItemManager;
 import bot.utils.CommandType;
@@ -28,7 +28,7 @@ public class Feed extends UserCommand {
     }
 
     @Override
-    public void execute(final SlashCommandInteractionEvent event, final Locale locale, final Entry user) {
+    public void execute(final SlashCommandInteractionEvent event, final Locale locale, final User user) {
         final var remainingSleep = user.getSleep();
 
         if (remainingSleep > 0) {

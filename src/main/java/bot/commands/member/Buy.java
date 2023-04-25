@@ -2,7 +2,7 @@ package bot.commands.member;
 
 import bot.commands.UserCommand;
 import bot.db.IDatabase;
-import bot.models.Entry;
+import bot.models.User;
 import bot.shop.ItemManager;
 import bot.utils.CommandType;
 import bot.utils.Responses;
@@ -14,6 +14,7 @@ import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 
+import java.lang.reflect.Method;
 import java.text.MessageFormat;
 import java.util.List;
 import java.util.Locale;
@@ -27,7 +28,7 @@ public class Buy extends UserCommand {
     }
 
     @Override
-    public void execute(final SlashCommandInteractionEvent event, final Locale locale, final Entry user) {
+    public void execute(final SlashCommandInteractionEvent event, final Locale locale, final User user) {
         // Selected amount
         final var amountChoice =  Objects.requireNonNull(event.getOption("amount"));
         final var amount = amountChoice.getAsInt();
@@ -40,7 +41,7 @@ public class Buy extends UserCommand {
         final var price = amount * item.getPrice();
 
         // Current balance
-        final var balance = user.getCurrency();
+        final var balance = user.getInventory().getCurrency();
 
         // Enough balance?
         if (balance - price < 0) {
@@ -51,8 +52,35 @@ public class Buy extends UserCommand {
         }
 
         // Update db
-        user.setCurrency(balance - price);
-        user.setItem(item.getName(), user.getItem(item.getName()) + amount);
+        user.getInventory().setCurrency(balance - price);
+
+        switch (item.getName()) {
+            case "salad" ->  {
+                var oldAmount = user.getInventory().getSalad();
+                user.getInventory().setSalad(oldAmount + amount);
+            }
+            case "taco" ->  {
+                var oldAmount = user.getInventory().getTaco();
+                user.getInventory().setTaco(oldAmount + amount);
+            }
+            case "steak" ->  {
+                var oldAmount = user.getInventory().getSteak();
+                user.getInventory().setSteak(oldAmount + amount);
+            }
+            case "water" ->  {
+                var oldAmount = user.getInventory().getWater();
+                user.getInventory().setWater(oldAmount + amount);
+            }
+            case "lemonade" ->  {
+                var oldAmount = user.getInventory().getLemonade();
+                user.getInventory().setLemonade(oldAmount + amount);
+            }
+            case "cacao" ->  {
+                var oldAmount = user.getInventory().getCacao();
+                user.getInventory().setCacao(oldAmount + amount);
+            }
+        }
+
         IDatabase.INSTANCE.updateUser(user);
 
         final var format = new MessageFormat(Responses.getLocalizedResponse("buySuccessful", locale));

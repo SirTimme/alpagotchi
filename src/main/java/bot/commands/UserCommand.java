@@ -1,7 +1,7 @@
 package bot.commands;
 
 import bot.db.IDatabase;
-import bot.models.Entry;
+import bot.models.User;
 import bot.utils.Responses;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 
@@ -22,8 +22,8 @@ public abstract class UserCommand implements ISlashCommand {
             return;
         }
 
-        execute(event, locale, new Entry(23L));
+        execute(event, locale, user);
     }
 
-    protected abstract void execute(final SlashCommandInteractionEvent event, final Locale locale, final Entry user);
+    protected abstract void execute(final SlashCommandInteractionEvent event, final Locale locale, final User user);
 }

@@ -1,6 +1,5 @@
 package bot.db;
 
-import bot.models.Entry;
 import bot.models.GuildSettings;
 import bot.models.User;
 
@@ -9,7 +8,7 @@ public interface IDatabase {
 
     User getUserById(final long userId);
 
-    void updateUser(final Entry entry);
+    void updateUser(final User user);
 
     void createUserById(final long memberID);
 
