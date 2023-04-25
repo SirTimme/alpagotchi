@@ -1,7 +1,7 @@
 package bot.commands.member;
 
 import bot.commands.UserCommand;
-import bot.models.Entry;
+import bot.models.User;
 import bot.shop.Item;
 import bot.shop.ItemManager;
 import bot.utils.CommandType;
@@ -26,7 +26,7 @@ public class Shop extends UserCommand {
     }
 
     @Override
-    public void execute(final SlashCommandInteractionEvent event, final Locale locale, final Entry user) {
+    public void execute(final SlashCommandInteractionEvent event, final Locale locale, final User user) {
         event.getJDA().retrieveUserById(Env.get("DEV_ID")).queue(dev -> {
             final var format = new MessageFormat(Responses.getLocalizedResponse("formattedCurrentBalance", locale));
             final var msg = format.format(new Object[]{ user.getCurrency() });

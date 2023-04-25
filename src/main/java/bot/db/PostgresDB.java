@@ -35,7 +35,7 @@ public class PostgresDB implements IDatabase {
     }
 
     @Override
-    public void updateUser(Entry entry) {
+    public void updateUser(User user) {
 
     }
 

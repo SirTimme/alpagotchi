@@ -2,7 +2,7 @@ package bot.commands.member;
 
 import bot.commands.UserCommand;
 import bot.db.IDatabase;
-import bot.models.Entry;
+import bot.models.User;
 import bot.utils.CommandType;
 import bot.utils.Responses;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
@@ -18,7 +18,7 @@ import java.util.Objects;
 
 public class Nick extends UserCommand {
     @Override
-    public void execute(final SlashCommandInteractionEvent event, final Locale locale, final Entry user) {
+    public void execute(final SlashCommandInteractionEvent event, final Locale locale, final User user) {
         final var nicknameChoice = Objects.requireNonNull(event.getOption("nickname"));
         final var nickname = nicknameChoice.getAsString();
 

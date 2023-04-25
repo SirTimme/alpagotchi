@@ -1,7 +1,7 @@
 package bot.commands.member;
 
 import bot.commands.UserCommand;
-import bot.models.Entry;
+import bot.models.User;
 import bot.utils.CommandType;
 import bot.utils.Env;
 import bot.utils.Responses;
@@ -47,7 +47,7 @@ public class Alpaca extends UserCommand {
     }
 
     @Override
-    public void execute(final SlashCommandInteractionEvent event, final Locale locale, final Entry user) {
+    public void execute(final SlashCommandInteractionEvent event, final Locale locale, final User user) {
         final var bytes = new ByteArrayOutputStream();
         try {
             ImageIO.write(createImage(user), "png", bytes);
@@ -56,11 +56,15 @@ public class Alpaca extends UserCommand {
         }
 
         event.getJDA().retrieveUserById(Env.get("DEV_ID")).queue(dev -> {
+            final var workCooldown = user.getCooldown().getWork();
+            final var sleepCooldown = user.getCooldown().getSleep();
+            final var nickname = user.getAlpaca().getNickname();
+
             final var embed = new EmbedBuilder()
-                    .setTitle(user.getNickname())
+                    .setTitle(nickname)
                     .setDescription(Responses.getLocalizedResponse("alpacaEmbedDescription", locale))
-                    .addField(Responses.getLocalizedResponse("alpacaEmbedWorkFieldTitle", locale), getCooldownMsg(user.getWork(), locale), true)
-                    .addField(Responses.getLocalizedResponse("alpacaEmbedSleepFieldTitle", locale), getCooldownMsg(user.getSleep(), locale), true)
+                    .addField(Responses.getLocalizedResponse("alpacaEmbedWorkFieldTitle", locale), getCooldownMsg(workCooldown, locale), true)
+                    .addField(Responses.getLocalizedResponse("alpacaEmbedSleepFieldTitle", locale), getCooldownMsg(sleepCooldown, locale), true)
                     .setThumbnail(event.getUser().getAvatarUrl())
                     .setFooter(Responses.getLocalizedResponse("createdByNotice", locale), dev.getAvatarUrl())
                     .setTimestamp(Instant.now())
@@ -84,13 +88,13 @@ public class Alpaca extends UserCommand {
         return CommandType.USER;
     }
 
-    private BufferedImage createImage(final Entry user) {
-        final int hunger = user.getHunger();
-        final int thirst = user.getThirst();
-        final int energy = user.getEnergy();
-        final int joy = user.getJoy();
+    private BufferedImage createImage(final User user) {
+        final int hunger = user.getAlpaca().getHunger();
+        final int thirst = user.getAlpaca().getThirst();
+        final int energy = user.getAlpaca().getEnergy();
+        final int joy = user.getAlpaca().getJoy();
 
-        final BufferedImage background = this.images.get(user.getOutfit());
+        final BufferedImage background = this.images.get(user.getAlpaca().getOutfit());
         final BufferedImage img = new BufferedImage(background.getWidth(), background.getHeight(), BufferedImage.TYPE_INT_RGB);
 
         final Graphics graphics = img.createGraphics();

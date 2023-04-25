@@ -1,7 +1,7 @@
 package bot.commands.member;
 
 import bot.commands.UserCommand;
-import bot.models.Entry;
+import bot.models.User;
 import bot.utils.CommandType;
 import bot.utils.Env;
 import bot.utils.Responses;
@@ -17,7 +17,7 @@ import java.util.Locale;
 
 public class Init extends UserCommand {
     @Override
-    public void execute(final SlashCommandInteractionEvent event, final Locale locale, final Entry user) {
+    public void execute(final SlashCommandInteractionEvent event, final Locale locale, final User user) {
         if (user != null) {
             final var msg = Responses.getLocalizedResponse("initAlreadyOwned", locale);
 
