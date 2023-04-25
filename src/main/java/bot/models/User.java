@@ -3,7 +3,7 @@ package bot.models;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "users")
+@Table(name = "users", indexes = @Index(name = "idx_user_id", unique = true, columnList = "user_id"))
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -13,16 +13,21 @@ public class User {
     private long userId;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "alpaca_id", nullable = false)
+    @JoinColumn(name = "alpaca_id")
     private Alpaca alpaca;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "inventory_id")
+    private Inventory inventory;
 
     public User() {
 
     }
 
-    public User(long userId, Alpaca alpaca) {
+    public User(long userId, Alpaca alpaca, Inventory inventory) {
         this.userId = userId;
         this.alpaca = alpaca;
+        this.inventory = inventory;
     }
 
     public long getUserId() {

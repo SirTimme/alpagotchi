@@ -20,5 +20,6 @@
 
         <mapping class="bot.models.User"/>
         <mapping class="bot.models.Alpaca"/>
+        <mapping class="bot.models.Inventory"/>
     </session-factory>
 </hibernate-configuration>
