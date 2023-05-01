@@ -21,14 +21,8 @@ public class PostgresDB implements IDatabase {
     @Override
     public User getUserById(long userId) {
         var session = this.sessionFactory.openSession();
-        var transaction = session.beginTransaction();
 
-        var user = session
-                .createQuery("FROM users u where u.user_id = :user_id", User.class)
-                .setParameter("user_id", userId)
-                .getSingleResult();
-
-        transaction.commit();
+        var user = session.bySimpleNaturalId(User.class).load(userId);
         session.close();
 
         return user;
@@ -36,7 +30,9 @@ public class PostgresDB implements IDatabase {
 
     @Override
     public void updateUser(User user) {
-
+        var session = this.sessionFactory.openSession();
+        session.flush();
+        session.close();
     }
 
     @Override
@@ -55,8 +51,18 @@ public class PostgresDB implements IDatabase {
     }
 
     @Override
-    public void deleteUserById(long memberID) {
+    public void deleteUserById(long userId) {
+        var session = this.sessionFactory.openSession();
+        var transaction = session.beginTransaction();
 
+        var user = session
+                .createQuery("FROM User u where u.userId = :userId", User.class)
+                .setParameter("userId", userId)
+                .getSingleResult();
+
+        session.remove(user);
+        transaction.commit();
+        session.close();
     }
 
     @Override

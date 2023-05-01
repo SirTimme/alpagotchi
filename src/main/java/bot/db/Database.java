@@ -30,7 +30,7 @@ public class Database implements IDatabase {
             final var collection = db.getCollection("alpacas_manager", Entry.class);
 
             // return collection.find(Filters.eq(memberID)).first();
-            return new Alpaca("d", "d", 100, 100, 100, 100);
+            return null;
         }
     }
 

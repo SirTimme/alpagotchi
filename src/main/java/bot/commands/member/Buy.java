@@ -30,12 +30,10 @@ public class Buy extends UserCommand {
     @Override
     public void execute(final SlashCommandInteractionEvent event, final Locale locale, final User user) {
         // Selected amount
-        final var amountChoice =  Objects.requireNonNull(event.getOption("amount"));
-        final var amount = amountChoice.getAsInt();
+        final var amount = event.getOption("amount").getAsInt();
 
         // Selected item
-        final var itemChoice = Objects.requireNonNull(event.getOption("item"));
-        final var item = this.itemManager.getItem(itemChoice.getAsString());
+        final var item = this.itemManager.getItem(event.getOption("item").getAsString());
 
         // Total price
         final var price = amount * item.getPrice();
@@ -46,42 +44,13 @@ public class Buy extends UserCommand {
         // Enough balance?
         if (balance - price < 0) {
             final var msg = Responses.getLocalizedResponse("balanceNotSufficient", locale);
-
             event.reply(msg).setEphemeral(true).queue();
             return;
         }
 
         // Update db
         user.getInventory().setCurrency(balance - price);
-
-        switch (item.getName()) {
-            case "salad" ->  {
-                var oldAmount = user.getInventory().getSalad();
-                user.getInventory().setSalad(oldAmount + amount);
-            }
-            case "taco" ->  {
-                var oldAmount = user.getInventory().getTaco();
-                user.getInventory().setTaco(oldAmount + amount);
-            }
-            case "steak" ->  {
-                var oldAmount = user.getInventory().getSteak();
-                user.getInventory().setSteak(oldAmount + amount);
-            }
-            case "water" ->  {
-                var oldAmount = user.getInventory().getWater();
-                user.getInventory().setWater(oldAmount + amount);
-            }
-            case "lemonade" ->  {
-                var oldAmount = user.getInventory().getLemonade();
-                user.getInventory().setLemonade(oldAmount + amount);
-            }
-            case "cacao" ->  {
-                var oldAmount = user.getInventory().getCacao();
-                user.getInventory().setCacao(oldAmount + amount);
-            }
-        }
-
-        IDatabase.INSTANCE.updateUser(user);
+        item.updateItem(user, amount);
 
         final var format = new MessageFormat(Responses.getLocalizedResponse("buySuccessful", locale));
         final var msg = format.format(new Object[]{ amount, item.getName(), price });
