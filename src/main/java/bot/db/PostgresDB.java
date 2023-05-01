@@ -55,10 +55,7 @@ public class PostgresDB implements IDatabase {
         var session = this.sessionFactory.openSession();
         var transaction = session.beginTransaction();
 
-        var user = session
-                .createQuery("FROM User u where u.userId = :userId", User.class)
-                .setParameter("userId", userId)
-                .getSingleResult();
+        var user = session.bySimpleNaturalId(User.class).load(userId);
 
         session.remove(user);
         transaction.commit();
