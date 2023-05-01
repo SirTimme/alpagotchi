@@ -2,7 +2,7 @@ package bot.commands.member;
 
 import bot.commands.UserCommand;
 import bot.models.User;
-import bot.shop.Item;
+import bot.shop.IConsumable;
 import bot.shop.ItemManager;
 import bot.utils.CommandType;
 import bot.utils.Env;
@@ -69,7 +69,7 @@ public class Inventory extends UserCommand {
         return FlipTable.of(header, content);
     }
 
-    private String[] buildRow(final Item item, final Entry user, final Locale locale) {
+    private String[] buildRow(final IConsumable item, final Entry user, final Locale locale) {
         final var itemName = Responses.getLocalizedResponse(item.getName(), locale);
         final var saturation = String.valueOf(item.getSaturation());
         final var quantity = String.valueOf(user.getItem(item.getName()));

@@ -9,9 +9,6 @@ public class Alpaca {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @OneToOne(mappedBy = "alpaca")
-    private User user;
-
     @Column(name = "outfit", nullable = false)
     private String outfit = "default";
 
@@ -31,15 +28,6 @@ public class Alpaca {
     private int joy = 100;
 
     public Alpaca() { }
-
-    public Alpaca(String outfit, String nickname, int hunger, int thirst, int energy, int joy) {
-        this.outfit = outfit;
-        this.nickname = nickname;
-        this.hunger = hunger;
-        this.thirst = thirst;
-        this.energy = energy;
-        this.joy = joy;
-    }
 
     public String getOutfit() {
         return this.outfit;

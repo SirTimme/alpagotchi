@@ -1,6 +1,7 @@
 package bot.models;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.NaturalId;
 
 @Entity
 @Table(name = "users", indexes = @Index(name = "idx_user_id", unique = true, columnList = "user_id"))
@@ -9,6 +10,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    @NaturalId
     @Column(name = "user_id", nullable = false)
     private long userId;
 

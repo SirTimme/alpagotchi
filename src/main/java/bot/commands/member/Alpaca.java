@@ -38,7 +38,6 @@ public class Alpaca extends UserCommand {
             final var files = Objects.requireNonNull(folder.listFiles());
             for (final var file : files) {
                 final var name = file.getName().split("\\.")[0];
-
                 this.images.put(name, ImageIO.read(file));
             }
         } catch (final IOException error) {

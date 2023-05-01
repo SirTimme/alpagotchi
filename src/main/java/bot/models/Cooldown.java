@@ -9,9 +9,6 @@ public class Cooldown {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @OneToOne(mappedBy = "cooldown")
-    private User user;
-    
     @Column(name = "sleep", nullable = false)
     private long sleep = 0L;
 
@@ -19,11 +16,6 @@ public class Cooldown {
     private long work = 0L;
 
     public Cooldown() { }
-
-    public Cooldown(long sleep, long work) {
-        this.sleep = sleep;
-        this.work = work;
-    }
 
     public long getSleep() {
         return this.sleep;

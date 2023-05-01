@@ -3,7 +3,7 @@ package bot.commands.member;
 import bot.commands.UserCommand;
 import bot.db.IDatabase;
 import bot.models.User;
-import bot.shop.Item;
+import bot.shop.IConsumable;
 import bot.shop.ItemManager;
 import bot.utils.CommandType;
 import bot.utils.Responses;
@@ -47,7 +47,7 @@ public class Feed extends UserCommand {
         final var itemChoice = Objects.requireNonNull(event.getOption("item"));
         final var item = this.itemManager.getItem(itemChoice.getAsString());
 
-        final var newItemAmount = user.getItem(item.getName()) - amount;
+        final var newItemAmount = user.getInventory().getItems().get(item.getName()) - amount;
 
         if (newItemAmount < 0) {
             final var msg = Responses.getLocalizedResponse("feedNotEnoughItems", locale);
@@ -107,7 +107,7 @@ public class Feed extends UserCommand {
         return CommandType.USER;
     }
 
-    private String getKey(final Item item) {
+    private String getKey(final IConsumable item) {
         return item.getType().equals("hunger")
                 ? "feedHungerItem"
                 : "feedThirstItem";

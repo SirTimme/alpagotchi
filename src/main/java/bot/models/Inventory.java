@@ -12,31 +12,28 @@ public class Inventory {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @OneToOne(mappedBy = "inventory")
-    private User user;
-
     @Column(name = "currency", nullable = false)
     private int currency = 0;
 
-    @ElementCollection
-    @CollectionTable(name = "items", joinColumns = @JoinColumn(name = "inventory_id"))
-    @MapKeyColumn(name = "name")
-    @Column(name = "amount", nullable = false)
-    private Map<String, Integer> items = new HashMap<>() {{
-        put("salad", 0);
-        put("taco", 0);
-        put("steak", 0);
-        put("water", 0);
-        put("lemonade", 0);
-        put("cacao", 0);
-    }};
+    @Column(name = "salad", nullable = false)
+    private int salad = 0;
+
+    @Column(name = "taco", nullable = false)
+    private int taco = 0;
+
+    @Column(name = "steak", nullable = false)
+    private int steak = 0;
+
+    @Column(name = "water", nullable = false)
+    private int water = 0;
+
+    @Column(name = "lemonade", nullable = false)
+    private int lemonade = 0;
+
+    @Column(name = "cacao", nullable = false)
+    private int cacao = 0;
 
     public Inventory() { }
-
-    public Inventory(int currency, Map<String, Integer> items) {
-        this.currency = currency;
-        this.items = items;
-    }
 
     public int getCurrency() {
         return this.currency;
@@ -46,11 +43,51 @@ public class Inventory {
         this.currency = currency;
     }
 
-    public Map<String, Integer> getItems() {
-        return this.items;
+    public int getSalad() {
+        return this.salad;
     }
 
-    public void setItems(Map<String, Integer> items) {
-        this.items = items;
+    public void setSalad(int salad) {
+        this.salad = salad;
+    }
+
+    public int getTaco() {
+        return this.taco;
+    }
+
+    public void setTaco(int taco) {
+        this.taco = taco;
+    }
+
+    public int getSteak() {
+        return this.steak;
+    }
+
+    public void setSteak(int steak) {
+        this.steak = steak;
+    }
+
+    public int getWater() {
+        return this.water;
+    }
+
+    public void setWater(int water) {
+        this.water = water;
+    }
+
+    public int getLemonade() {
+        return this.lemonade;
+    }
+
+    public void setLemonade(int lemonade) {
+        this.lemonade = lemonade;
+    }
+
+    public int getCacao() {
+        return this.cacao;
+    }
+
+    public void setCacao(int cacao) {
+        this.cacao = cacao;
     }
 }
