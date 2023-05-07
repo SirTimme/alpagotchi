@@ -34,7 +34,12 @@ public class Init extends UserCommand {
             final var embed = new EmbedBuilder()
                     .setTitle(Responses.getLocalizedResponse("initEmbedTitle", locale))
                     .addField(Responses.getLocalizedResponse("initEmbedStorageFieldTitle", locale), Responses.getLocalizedResponse("initEmbedStorageFieldBody", locale), false)
-                    .addField(Responses.getLocalizedResponse("initEmbedDeletionFieldTitle", locale), Responses.getLocalizedResponse("initEmbedDeletionFieldBody", locale), false)
+                    .addField(Responses.getLocalizedResponse("initEmbedDeletionFieldTitle", locale),
+                              Responses.getLocalizedResponse("initEmbedDeletionFieldBody", locale),
+                              false)
+                    .addField(Responses.getLocalizedResponse("initEmbedAgreementNoticeTitle", locale),
+                              Responses.getLocalizedResponse("initEmbedAgreementNoticeBody", locale),
+                              false)
                     .setFooter(Responses.getLocalizedResponse("createdByNotice", locale), dev.getAvatarUrl())
                     .setTimestamp(Instant.now())
                     .build();
