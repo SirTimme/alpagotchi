@@ -2,37 +2,49 @@ package bot.db;
 
 import bot.models.*;
 import bot.utils.Env;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.Persistence;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class PostgresDB implements IDatabase {
-    private final SessionFactory sessionFactory;
+    private final EntityManagerFactory entityManagerFactory;
 
     public PostgresDB() {
-        final var registry = new StandardServiceRegistryBuilder()
-                .configure()
-                .applySetting("hibernate.connection.url", Env.get("POSTGRES_URL"))
-                .build();
+        final var properties = new HashMap<String, String>() {{
+            put("hibernate.connection.url", Env.get("POSTGRES_URL"));
+        }};
 
-        this.sessionFactory = new MetadataSources(registry).buildMetadata().buildSessionFactory();
+        this.entityManagerFactory = Persistence.createEntityManagerFactory("discord-bot", properties);
     }
 
     @Override
     public User getUserById(long userId) {
-        var session = this.sessionFactory.openSession();
+        var entityManager = this.entityManagerFactory.createEntityManager();
 
-        var user = session.bySimpleNaturalId(User.class).load(userId);
-        session.close();
+        var user = entityManager
+                .unwrap(Session.class)
+                .bySimpleNaturalId(User.class)
+                .load(userId);
+
+        entityManager.close();
 
         return user;
     }
 
     @Override
     public void updateUser(User user) {
-        var session = this.sessionFactory.openSession();
-        session.flush();
-        session.close();
+        var entityManager = this.entityManagerFactory.createEntityManager();
+
+        entityManager.getTransaction().begin();
+        entityManager.getTransaction().commit();
+
+        entityManager.close();
     }
 
     @Override
@@ -42,24 +54,29 @@ public class PostgresDB implements IDatabase {
         var cooldown = new Cooldown();
         var user = new User(userId, alpaca, inventory, cooldown);
 
-        var session = this.sessionFactory.openSession();
-        var transaction = session.beginTransaction();
+        var entityManager = this.entityManagerFactory.createEntityManager();
 
-        session.persist(user);
-        transaction.commit();
-        session.close();
+        entityManager.getTransaction().begin();
+        entityManager.persist(user);
+        entityManager.getTransaction().commit();
+
+        entityManager.close();
     }
 
     @Override
     public void deleteUserById(long userId) {
-        var session = this.sessionFactory.openSession();
-        var transaction = session.beginTransaction();
+        var entityManager = this.entityManagerFactory.createEntityManager();
 
-        var user = session.bySimpleNaturalId(User.class).load(userId);
+        var user = entityManager
+                .unwrap(Session.class)
+                .bySimpleNaturalId(User.class)
+                .load(userId);
 
-        session.remove(user);
-        transaction.commit();
-        session.close();
+        entityManager.getTransaction().begin();
+        entityManager.remove(user);
+        entityManager.getTransaction().commit();
+
+        entityManager.close();
     }
 
     @Override

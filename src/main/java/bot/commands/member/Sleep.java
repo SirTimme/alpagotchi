@@ -1,6 +1,6 @@
 package bot.commands.member;
 
-import bot.commands.UserCommand;
+import bot.commands.MutableUserCommand;
 import bot.db.IDatabase;
 import bot.models.User;
 import bot.utils.CommandType;
@@ -16,7 +16,7 @@ import java.text.MessageFormat;
 import java.util.Locale;
 import java.util.Objects;
 
-public class Sleep extends UserCommand {
+public class Sleep extends MutableUserCommand {
     @Override
     public void execute(final SlashCommandInteractionEvent event, final Locale locale, final User user) {
         // Already max energy?

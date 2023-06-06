@@ -1,6 +1,6 @@
 package bot.commands.member;
 
-import bot.commands.UserCommand;
+import bot.commands.MutableUserCommand;
 import bot.db.IDatabase;
 import bot.models.User;
 import bot.utils.CommandType;
@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-public class Work extends UserCommand {
+public class Work extends MutableUserCommand {
     private static final Logger LOGGER = LoggerFactory.getLogger(Work.class);
     private ArrayList<String> json;
 

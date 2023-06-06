@@ -24,7 +24,7 @@ public class Salad implements IConsumable {
     }
 
     @Override
-    public void updateItem(User user, int newValue) {
+    public void updateInventory(User user, int newValue) {
         final var oldValue = user.getInventory().getSalad();
         user.getInventory().setSalad(oldValue + newValue);
     }

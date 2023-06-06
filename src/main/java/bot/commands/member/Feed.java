@@ -1,6 +1,6 @@
 package bot.commands.member;
 
-import bot.commands.UserCommand;
+import bot.commands.MutableUserCommand;
 import bot.db.IDatabase;
 import bot.models.User;
 import bot.shop.IConsumable;
@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
-public class Feed extends UserCommand {
+public class Feed extends MutableUserCommand {
     private final ItemManager itemManager;
 
     public Feed(final ItemManager itemManager) {
@@ -29,7 +29,7 @@ public class Feed extends UserCommand {
 
     @Override
     public void execute(final SlashCommandInteractionEvent event, final Locale locale, final User user) {
-        final var remainingSleep = user.getSleep();
+        final var remainingSleep = user.getCooldown().getSleep();
 
         if (remainingSleep > 0) {
             final var format = new MessageFormat(Responses.getLocalizedResponse("sleepCurrentlySleeping", locale));

@@ -1,6 +1,6 @@
 package bot.commands.member;
 
-import bot.commands.UserCommand;
+import bot.commands.MutableUserCommand;
 import bot.db.IDatabase;
 import bot.models.User;
 import bot.utils.CommandType;
@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
-public class Pet extends UserCommand {
+public class Pet extends MutableUserCommand {
     private final List<String> spots = List.of("head", "tail", "leg", "neck", "back");
 
     @Override

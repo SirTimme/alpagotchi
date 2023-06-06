@@ -1,6 +1,6 @@
 package bot.commands.member;
 
-import bot.commands.UserCommand;
+import bot.commands.ImmutableUserCommand;
 import bot.models.User;
 import bot.utils.CommandType;
 import bot.utils.Env;
@@ -27,7 +27,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 
-public class Alpaca extends UserCommand {
+public class Alpaca extends ImmutableUserCommand {
     private static final Logger LOGGER = LoggerFactory.getLogger(Alpaca.class);
     private final Map<String, BufferedImage> images = new HashMap<>();
     private final Color[] colors = { Color.BLACK, Color.RED, Color.ORANGE, Color.YELLOW, Color.GREEN };

@@ -1,5 +1,6 @@
 package bot.commands;
 
+import bot.commands.ISlashCommand;
 import bot.db.IDatabase;
 import bot.models.User;
 import bot.utils.Responses;
@@ -7,9 +8,9 @@ import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEve
 
 import java.util.Locale;
 
-public abstract class UserCommand implements ISlashCommand {
+public abstract class ImmutableUserCommand implements ISlashCommand {
     @Override
-    public void execute(final SlashCommandInteractionEvent event) {
+    public void execute(SlashCommandInteractionEvent event) {
         final var user = IDatabase.INSTANCE.getUserById(event.getUser().getIdLong());
         final var locale = event.getGuild() == null
                 ? Locale.ENGLISH
@@ -23,8 +24,6 @@ public abstract class UserCommand implements ISlashCommand {
         }
 
         execute(event, locale, user);
-
-        IDatabase.INSTANCE.updateUser(user);
     }
 
     protected abstract void execute(final SlashCommandInteractionEvent event, final Locale locale, final User user);

@@ -1,7 +1,6 @@
 package bot.commands.member;
 
-import bot.commands.UserCommand;
-import bot.db.IDatabase;
+import bot.commands.MutableUserCommand;
 import bot.models.User;
 import bot.shop.ItemManager;
 import bot.utils.CommandType;
@@ -14,13 +13,11 @@ import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 
-import java.lang.reflect.Method;
 import java.text.MessageFormat;
 import java.util.List;
 import java.util.Locale;
-import java.util.Objects;
 
-public class Buy extends UserCommand {
+public class Buy extends MutableUserCommand {
     private final ItemManager itemManager;
 
     public Buy(final ItemManager itemManager) {
@@ -50,7 +47,7 @@ public class Buy extends UserCommand {
 
         // Update db
         user.getInventory().setCurrency(balance - price);
-        item.updateItem(user, amount);
+        item.updateInventory(user, amount);
 
         final var format = new MessageFormat(Responses.getLocalizedResponse("buySuccessful", locale));
         final var msg = format.format(new Object[]{ amount, item.getName(), price });

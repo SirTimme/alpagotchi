@@ -28,7 +28,7 @@ public class Update extends InfoCommand {
              .addCommands(this.commandManager.getCommandDataByTypes(CommandType.USER, CommandType.INFO, CommandType.INIT))
              .queue();
 
-        Objects.requireNonNull(event.getGuild())
+        event.getGuild()
                .updateCommands()
                .addCommands(this.commandManager.getCommandDataByTypes(CommandType.DEV))
                .queue();

@@ -11,5 +11,5 @@ public interface IConsumable {
 
     String getType();
 
-    void updateItem(User user, int newValue);
+    void updateInventory(User user, int newValue);
 }

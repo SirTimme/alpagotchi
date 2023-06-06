@@ -1,6 +1,6 @@
 package bot.commands.member;
 
-import bot.commands.UserCommand;
+import bot.commands.MutableUserCommand;
 import bot.db.IDatabase;
 import bot.models.User;
 import bot.utils.CommandType;
@@ -16,7 +16,7 @@ import java.text.MessageFormat;
 import java.util.Locale;
 import java.util.Objects;
 
-public class Nick extends UserCommand {
+public class Nick extends MutableUserCommand {
     @Override
     public void execute(final SlashCommandInteractionEvent event, final Locale locale, final User user) {
         final var nicknameChoice = Objects.requireNonNull(event.getOption("nickname"));
