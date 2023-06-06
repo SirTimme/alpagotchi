@@ -1,8 +1,12 @@
 package bot.shop;
 
+import bot.models.User;
+
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.function.BiConsumer;
 
 public class ItemManager {
     private Map<String, IConsumable> items;

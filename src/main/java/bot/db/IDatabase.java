@@ -8,7 +8,7 @@ public interface IDatabase {
 
     User getUserById(final long userId);
 
-    void updateUser(final User user);
+    void updateDatabase(final User user);
 
     void createUserById(final long memberID);
 

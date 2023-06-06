@@ -1,7 +1,5 @@
 package bot.shop;
 
-import bot.models.User;
-
 public interface IConsumable {
     String getName();
 
@@ -10,6 +8,4 @@ public interface IConsumable {
     int getSaturation();
 
     String getType();
-
-    void updateInventory(User user, int newValue);
 }

@@ -23,33 +23,30 @@ public class Pet extends MutableUserCommand {
 
     @Override
     public void execute(final SlashCommandInteractionEvent event, final Locale locale, final User user) {
-        // Already max joy?
-        final var joy = user.getJoy();
+        // already max joy?
+        final var joy = user.getAlpaca().getJoy();
         if (joy == 100) {
             final var msg = Responses.getLocalizedResponse("petJoyAlreadyMaximum", locale);
-
             event.reply(msg).setEphemeral(true).queue();
             return;
         }
 
-        // Choose a random spot
+        // choose a random spot
         final var favouriteSpot = this.spots.get((int) (Math.random() * 5));
 
-        // Selected spot
-        final var spotChoice = Objects.requireNonNull(event.getOption("spot"));
-        final var spot = spotChoice.getAsString();
+        // selected spot
+        final var spot = event.getOption("spot").getAsString();
 
-        // Found the favourite Spot?
+        // found the favourite Spot?
         final var isFavourite = spot.equals(favouriteSpot);
 
         // Update Db
         final var value = calculateJoy(joy, isFavourite);
-        user.setJoy(joy + value);
-        IDatabase.INSTANCE.updateUser(user);
+        user.getAlpaca().setJoy(joy + value);
 
+        // reply to the user
         final var format = new MessageFormat(Responses.getLocalizedResponse(getKey(isFavourite), locale));
         final var msg = format.format(new Object[]{ value });
-
         event.reply(msg).queue();
     }
 
@@ -83,7 +80,6 @@ public class Pet extends MutableUserCommand {
 
     private int calculateJoy(final int joy, final boolean isFavourite) {
         final int value = isFavourite ? (int) (Math.random() * 13 + 5) : (int) (Math.random() * 9 + 3);
-
         return joy + value > 100 ? 100 - joy : value;
     }
 }

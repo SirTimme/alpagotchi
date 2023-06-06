@@ -38,11 +38,10 @@ public class PostgresDB implements IDatabase {
     }
 
     @Override
-    public void updateUser(User user) {
+    public void updateDatabase(User user) {
         var entityManager = this.entityManagerFactory.createEntityManager();
 
-        entityManager.getTransaction().begin();
-        entityManager.getTransaction().commit();
+        entityManager.flush();
 
         entityManager.close();
     }

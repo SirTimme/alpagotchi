@@ -66,4 +66,18 @@ public class User {
     public void setCooldown(Cooldown cooldown) {
         this.cooldown = cooldown;
     }
+
+    @Transient
+    public int getSaturation(String itemType) {
+        return itemType.equals("hunger") ? this.getAlpaca().getHunger() : this.getAlpaca().getThirst();
+    }
+
+    @Transient
+    public void setSaturation(String itemType, int amount) {
+        if (itemType.equals("hunger")) {
+            this.getAlpaca().setHunger(amount);
+        } else {
+            this.getAlpaca().setThirst(amount);
+        }
+    }
 }

@@ -24,7 +24,7 @@ public abstract class MutableUserCommand implements ISlashCommand {
 
         execute(event, locale, user);
 
-        IDatabase.INSTANCE.updateUser(user);
+        IDatabase.INSTANCE.updateDatabase(user);
     }
 
     protected abstract void execute(final SlashCommandInteractionEvent event, final Locale locale, final User user);

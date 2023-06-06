@@ -19,22 +19,22 @@ import java.util.Objects;
 public class Nick extends MutableUserCommand {
     @Override
     public void execute(final SlashCommandInteractionEvent event, final Locale locale, final User user) {
-        final var nicknameChoice = Objects.requireNonNull(event.getOption("nickname"));
-        final var nickname = nicknameChoice.getAsString();
+        // selected nickname
+        final var nickname = event.getOption("nickname").getAsString();
 
+        // discord only allows for 256 char long embed titles
         if (nickname.length() > 256) {
             final var msg = Responses.getLocalizedResponse("nicknameTooLong", locale);
-
             event.reply(msg).setEphemeral(true).queue();
             return;
         }
 
-        user.setNickname(nickname);
-        IDatabase.INSTANCE.updateUser(user);
+        // update nickname
+        user.getAlpaca().setNickname(nickname);
 
+        // reply to the user
         final var format = new MessageFormat(Responses.getLocalizedResponse("nickname", locale));
         final var msg = format.format(new Object[]{ nickname });
-
         event.reply(msg).queue();
     }
 

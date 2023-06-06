@@ -29,7 +29,7 @@ public class Shop extends MutableUserCommand {
     public void execute(final SlashCommandInteractionEvent event, final Locale locale, final User user) {
         event.getJDA().retrieveUserById(Env.get("DEV_ID")).queue(dev -> {
             final var format = new MessageFormat(Responses.getLocalizedResponse("formattedCurrentBalance", locale));
-            final var msg = format.format(new Object[]{ user.getCurrency() });
+            final var msg = format.format(new Object[]{ user.getInventory().getCurrency() });
 
             final var embed = new EmbedBuilder()
                     .setTitle(Responses.getLocalizedResponse("shopEmbedTitle", locale))

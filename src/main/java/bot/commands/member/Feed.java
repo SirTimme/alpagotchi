@@ -29,51 +29,53 @@ public class Feed extends MutableUserCommand {
 
     @Override
     public void execute(final SlashCommandInteractionEvent event, final Locale locale, final User user) {
+        // current sleep cooldown
         final var remainingSleep = user.getCooldown().getSleep();
 
+        // alpaca currently sleeping?
         if (remainingSleep > 0) {
             final var format = new MessageFormat(Responses.getLocalizedResponse("sleepCurrentlySleeping", locale));
             final var msg = format.format(new Object[]{ remainingSleep });
-
             event.reply(msg).setEphemeral(true).queue();
             return;
         }
 
-        // Selected amount
-        final var amountChoice = Objects.requireNonNull(event.getOption("amount"));
-        final var amount = amountChoice.getAsInt();
+        // selected amount
+        final var amount = event.getOption("amount").getAsInt();
 
-        // Selected item
-        final var itemChoice = Objects.requireNonNull(event.getOption("item"));
-        final var item = this.itemManager.getItem(itemChoice.getAsString());
+        // selected item
+        final var item = this.itemManager.getItem(event.getOption("item").getAsString());
 
+        // remove the fed items
         final var newItemAmount = user.getInventory().getItems().get(item.getName()) - amount;
 
+        // trying to feed items you don't have?
         if (newItemAmount < 0) {
             final var msg = Responses.getLocalizedResponse("feedNotEnoughItems", locale);
-
             event.reply(msg).setEphemeral(true).queue();
             return;
         }
 
-        final var oldValue = user.getStat(item.getType());
+        // old saturation value
+        final var oldValue = user.getSaturation(item.getType());
+
+        // new saturation with the fed item(s)
         final var saturation = amount * item.getSaturation();
 
+        // trying to overfeed your alpaca?
         if (oldValue + saturation > 100) {
             final var msg = Responses.getLocalizedResponse("feedTooMuchSaturation", locale);
-
             event.reply(msg).setEphemeral(true).queue();
             return;
         }
 
-        user.setItem(item.getName(), newItemAmount);
-        user.setStat(item.getType(), oldValue + saturation);
+        // update db
+        user.getInventory().setItem(item.getName(), newItemAmount);
+        user.setSaturation(item.getType(), oldValue + saturation);
 
-        IDatabase.INSTANCE.updateUser(user);
-
+        // reply to the user
         final var format = new MessageFormat(Responses.getLocalizedResponse(getKey(item), locale));
         final var msg = format.format(new Object[]{ amount, item.getName(), saturation });
-
         event.reply(msg).queue();
     }
 

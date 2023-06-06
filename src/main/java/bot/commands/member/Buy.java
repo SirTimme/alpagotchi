@@ -26,32 +26,32 @@ public class Buy extends MutableUserCommand {
 
     @Override
     public void execute(final SlashCommandInteractionEvent event, final Locale locale, final User user) {
-        // Selected amount
+        // selected amount
         final var amount = event.getOption("amount").getAsInt();
 
-        // Selected item
+        // selected item
         final var item = this.itemManager.getItem(event.getOption("item").getAsString());
 
-        // Total price
+        // total price
         final var price = amount * item.getPrice();
 
-        // Current balance
+        // current balance
         final var balance = user.getInventory().getCurrency();
 
-        // Enough balance?
+        // sufficient balance?
         if (balance - price < 0) {
             final var msg = Responses.getLocalizedResponse("balanceNotSufficient", locale);
             event.reply(msg).setEphemeral(true).queue();
             return;
         }
 
-        // Update db
+        // update db
         user.getInventory().setCurrency(balance - price);
-        item.updateInventory(user, amount);
+        user.getInventory().setItem(item.getName(), amount);
 
+        // reply to the user
         final var format = new MessageFormat(Responses.getLocalizedResponse("buySuccessful", locale));
         final var msg = format.format(new Object[]{ amount, item.getName(), price });
-
         event.reply(msg).queue();
     }
 

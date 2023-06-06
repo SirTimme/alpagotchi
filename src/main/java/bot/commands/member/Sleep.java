@@ -19,28 +19,25 @@ import java.util.Objects;
 public class Sleep extends MutableUserCommand {
     @Override
     public void execute(final SlashCommandInteractionEvent event, final Locale locale, final User user) {
-        // Already max energy?
-        final var energy = user.getEnergy();
+        // already max energy?
+        final var energy = user.getAlpaca().getEnergy();
         if (energy == 100) {
             final var msg = Responses.getLocalizedResponse("petJoyAlreadyMaximum", locale);
-
             event.reply(msg).setEphemeral(true).queue();
             return;
         }
 
         // Selected duration
-        final var durationChoice = Objects.requireNonNull(event.getOption("duration"));
-        final var duration = durationChoice.getAsInt();
+        final var duration = event.getOption("duration").getAsInt();
 
         // Update db
         final var newEnergy = energy + duration > 100 ? 100 - energy : duration;
-        user.setEnergy(energy + newEnergy);
-        user.setSleep(System.currentTimeMillis() + 1000L * 60 * newEnergy);
-        IDatabase.INSTANCE.updateUser(user);
+        user.getAlpaca().setEnergy(energy + newEnergy);
+        user.getCooldown().setSleep(System.currentTimeMillis() + 1000L * 60 * newEnergy);
 
+        // reply to the user
         final var format = new MessageFormat(Responses.getLocalizedResponse("sleep", locale));
         final var msg = format.format(new Object[]{ newEnergy });
-
         event.reply(msg).queue();
     }
 

@@ -40,7 +40,8 @@ public class Work extends MutableUserCommand {
 
     @Override
     public void execute(final SlashCommandInteractionEvent event, final Locale locale, final User user) {
-        final long sleep = user.getSleep();
+        // is the alpaca currently sleeping?
+        final long sleep = user.getCooldown().getSleep();
         if (sleep > 0) {
             final var format = new MessageFormat(Responses.getLocalizedResponse("sleepCurrentlySleeping", locale));
             final var msg = format.format(new Object[]{ sleep });
@@ -49,22 +50,24 @@ public class Work extends MutableUserCommand {
             return;
         }
 
-        final long work = user.getWork();
+        // did the alpaca already work?
+        final long work = user.getCooldown().getWork();
         if (work > 0) {
             final var format = new MessageFormat(Responses.getLocalizedResponse("workAlreadyWorked", locale));
             final var msg = format.format(new Object[]{ work });
-
             event.reply(msg).setEphemeral(true).queue();
             return;
         }
 
-        final int energy = user.getEnergy();
+        // has the alpaca enough energy?
+        final int energy = user.getAlpaca().getEnergy();
         if (energy < 10) {
             event.reply("\uD83E\uDD71 Your alpaca is too tired to work, let it rest first with **/sleep**").setEphemeral(true).queue();
             return;
         }
 
-        final int joy = user.getJoy();
+        // is the alpaca happy enough?
+        final int joy = user.getAlpaca().getJoy();
         if (joy < 15) {
             event.reply(":pensive: Your alpaca is too sad to work, give him some love with **/pet**").setEphemeral(true).queue();
             return;
@@ -75,13 +78,13 @@ public class Work extends MutableUserCommand {
         final var energyCost = (int) (Math.random() * 8 + 1);
         final var joyCost = (int) (Math.random() * 10 + 2);
 
-        user.setCurrency(user.getCurrency() + fluffies);
-        user.setEnergy(user.getEnergy() - energyCost);
-        user.setJoy(user.getJoy() - joyCost);
-        user.setWork(System.currentTimeMillis() + 1000L * 60 * 20);
+        // update db
+        user.getInventory().setCurrency(user.getInventory().getCurrency() + fluffies);
+        user.getAlpaca().setEnergy(user.getAlpaca().getEnergy() - energyCost);
+        user.getAlpaca().setJoy(user.getAlpaca().getJoy() - joyCost);
+        user.getCooldown().setWork(System.currentTimeMillis() + 1000L * 60 * 20);
 
-        IDatabase.INSTANCE.updateUser(user);
-
+        // reply to the user
         event.reply("⛏ " + message + " **Fluffies + " + fluffies + ", Energy - " + energyCost + ", Joy - " + joyCost + "**").queue();
     }
 

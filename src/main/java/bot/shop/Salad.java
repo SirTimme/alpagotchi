@@ -22,10 +22,4 @@ public class Salad implements IConsumable {
     public String getType() {
         return "hunger";
     }
-
-    @Override
-    public void updateInventory(User user, int newValue) {
-        final var oldValue = user.getInventory().getSalad();
-        user.getInventory().setSalad(oldValue + newValue);
-    }
 }

@@ -21,15 +21,15 @@ import java.util.Objects;
 public class Outfit extends MutableUserCommand {
     @Override
     public void execute(final SlashCommandInteractionEvent event, final Locale locale, final User user) {
-        final var outfitChoice = Objects.requireNonNull(event.getOption("outfit"));
-        final var outfit = outfitChoice.getAsString();
+        // selected outfit
+        final var outfit = event.getOption("outfit").getAsString();
 
-        user.setOutfit(outfit);
-        IDatabase.INSTANCE.updateUser(user);
+        // update outfit
+        user.getAlpaca().setOutfit(outfit);
 
+        // reply to the user
         final var format = new MessageFormat(Responses.getLocalizedResponse("outfit", locale));
         final var msg = format.format(new Object[]{ outfit });
-
         event.reply(msg).queue();
     }
 
