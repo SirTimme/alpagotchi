@@ -6,6 +6,7 @@ import bot.utils.Responses;
 import net.dv8tion.jda.api.events.interaction.component.StringSelectInteractionEvent;
 
 import java.util.Collections;
+import java.util.Locale;
 import java.util.Objects;
 
 public class SelectLanguage extends MessageMenu {
@@ -18,7 +19,7 @@ public class SelectLanguage extends MessageMenu {
         settings.setLanguage(event.getValues().get(0));
         IDatabase.INSTANCE.updateSettings(settings);
 
-        event.editMessage(Responses.getLocalizedResponse("language", settings.getLocale()))
+        event.editMessage(Responses.getLocalizedResponse("language", Locale.ENGLISH))
              .setComponents(Collections.emptyList())
              .setEmbeds(Collections.emptyList())
              .queue();

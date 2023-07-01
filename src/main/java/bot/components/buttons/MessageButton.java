@@ -9,9 +9,7 @@ import java.util.Locale;
 public abstract class MessageButton implements IButton {
     @Override
     public void execute(final ButtonInteractionEvent event) {
-        final var locale = event.getGuild() == null
-                ? Locale.ENGLISH
-                : IDatabase.INSTANCE.getSettingsById(event.getGuild().getIdLong()).getLocale();
+        final var locale = Locale.ENGLISH;
 
         final var authorId = event.getComponentId().split(":")[0];
 

@@ -9,9 +9,7 @@ import java.util.Locale;
 public abstract class MessageMenu implements IMenu {
     @Override
     public void execute(final StringSelectInteractionEvent event) {
-        final var locale = event.getGuild() == null
-                ? Locale.ENGLISH
-                : IDatabase.INSTANCE.getSettingsById(event.getGuild().getIdLong()).getLocale();
+        final var locale = Locale.ENGLISH;
 
         final var authorId = event.getComponentId().split(":")[0];
 

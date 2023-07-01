@@ -12,9 +12,7 @@ public abstract class ImmutableUserCommand implements ISlashCommand {
     @Override
     public void execute(SlashCommandInteractionEvent event) {
         final var user = IDatabase.INSTANCE.getUserById(event.getUser().getIdLong());
-        final var locale = event.getGuild() == null
-                ? Locale.ENGLISH
-                : IDatabase.INSTANCE.getSettingsById(event.getGuild().getIdLong()).getLocale();
+        final var locale = Locale.ENGLISH;
 
         if (!event.getName().equals("init") && user == null) {
             final var msg = Responses.getLocalizedResponse("errorAlpacaNotOwned", locale);

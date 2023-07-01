@@ -1,6 +1,7 @@
 package bot.commands.dev;
 
 import bot.commands.InfoCommand;
+import bot.db.IDatabase;
 import bot.utils.CommandType;
 import bot.utils.Responses;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
@@ -18,6 +19,10 @@ public class Shutdown extends InfoCommand {
         final var format = new MessageFormat(Responses.getLocalizedResponse("shutdown", locale));
         final var msg = format.format(new Object[]{ event.getJDA().getSelfUser().getName() });
 
+        // Shutdown db
+        IDatabase.INSTANCE.shutdown();
+
+        // Shutdown bot
         event.reply(msg).complete();
         event.getJDA().shutdown();
     }

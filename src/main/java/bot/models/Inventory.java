@@ -1,6 +1,8 @@
 package bot.models;
 
 import jakarta.persistence.*;
+
+import java.util.HashMap;
 import java.util.Map;
 
 @Entity
@@ -13,11 +15,18 @@ public class Inventory {
     @Column(name = "currency", nullable = false)
     private int currency = 0;
 
-    @ElementCollection
-    @CollectionTable(name = "item_map", joinColumns = @JoinColumn(name = "item_map_id"))
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "items", joinColumns = @JoinColumn(name = "item_map_id"))
     @MapKeyColumn(name = "item")
     @Column(name = "amount")
-    private Map<String, Integer> items;
+    private Map<String, Integer> items = new HashMap<>() {{
+        put("salad", 0);
+        put("taco", 0);
+        put("steak", 0);
+        put("water", 0);
+        put("lemonade", 0);
+        put("cacao", 0);
+    }};
 
     public Inventory() { }
 

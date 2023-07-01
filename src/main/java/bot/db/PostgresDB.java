@@ -1,26 +1,21 @@
 package bot.db;
 
 import bot.models.*;
-import bot.utils.Env;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.boot.MetadataSources;
-import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class PostgresDB implements IDatabase {
-    private final EntityManagerFactory entityManagerFactory;
+    private EntityManagerFactory entityManagerFactory;
 
-    public PostgresDB() {
-        final var properties = new HashMap<String, String>() {{
-            put("hibernate.connection.url", Env.get("POSTGRES_URL"));
-        }};
+    @Override
+    public void init() {
+        this.entityManagerFactory = Persistence.createEntityManagerFactory("discord-bot");
+    }
 
-        this.entityManagerFactory = Persistence.createEntityManagerFactory("discord-bot", properties);
+    @Override
+    public void shutdown() {
+        this.entityManagerFactory.close();
     }
 
     @Override
@@ -41,7 +36,9 @@ public class PostgresDB implements IDatabase {
     public void updateDatabase(User user) {
         var entityManager = this.entityManagerFactory.createEntityManager();
 
-        entityManager.flush();
+        entityManager.getTransaction().begin();
+        entityManager.merge(user);
+        entityManager.getTransaction().commit();
 
         entityManager.close();
     }

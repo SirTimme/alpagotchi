@@ -11,9 +11,7 @@ public abstract class MutableUserCommand implements ISlashCommand {
     @Override
     public void execute(final SlashCommandInteractionEvent event) {
         final var user = IDatabase.INSTANCE.getUserById(event.getUser().getIdLong());
-        final var locale = event.getGuild() == null
-                ? Locale.ENGLISH
-                : IDatabase.INSTANCE.getSettingsById(event.getGuild().getIdLong()).getLocale();
+        final var locale = Locale.ENGLISH;
 
         if (!event.getName().equals("init") && user == null) {
             final var msg = Responses.getLocalizedResponse("errorAlpacaNotOwned", locale);
@@ -23,8 +21,6 @@ public abstract class MutableUserCommand implements ISlashCommand {
         }
 
         execute(event, locale, user);
-
-        IDatabase.INSTANCE.updateDatabase(user);
     }
 
     protected abstract void execute(final SlashCommandInteractionEvent event, final Locale locale, final User user);

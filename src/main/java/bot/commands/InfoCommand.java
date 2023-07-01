@@ -8,9 +8,7 @@ import java.util.Locale;
 public abstract class InfoCommand implements ISlashCommand {
     @Override
     public void execute(final SlashCommandInteractionEvent event) {
-        final var locale = event.getGuild() == null
-                ? Locale.ENGLISH
-                : IDatabase.INSTANCE.getSettingsById(event.getGuild().getIdLong()).getLocale();
+        final var locale = Locale.ENGLISH;
 
         execute(event, locale);
     }
