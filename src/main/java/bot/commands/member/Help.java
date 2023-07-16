@@ -23,7 +23,7 @@ public class Help extends InfoCommand {
 
     @Override
     public void execute(final SlashCommandInteractionEvent event, final Locale locale) {
-        event.getJDA().retrieveUserById(Env.get("DEV_ID")).queue(dev -> {
+        event.getJDA().retrieveUserById(System.getenv("DEV_ID")).queue(dev -> {
             final var embed = new EmbedBuilder()
                     .setTitle(Responses.getLocalizedResponse("helpEmbedTitle", locale))
                     .setDescription("```\n" + this.commandManager.getCommandNames() + "```")

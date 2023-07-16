@@ -34,12 +34,9 @@ public class Alpaca extends ImmutableUserCommand {
 
     public Alpaca() {
         try {
-            final var folder = new File("src/main/resources/outfits");
-            final var files = Objects.requireNonNull(folder.listFiles());
-            for (final var file : files) {
-                final var name = file.getName().split("\\.")[0];
-                this.images.put(name, ImageIO.read(file));
-            }
+            this.images.put("default", ImageIO.read(getClass().getResourceAsStream("/outfits/default.png")));
+            this.images.put("gentleman", ImageIO.read(getClass().getResourceAsStream("/outfits/gentleman.png")));
+            this.images.put("lady", ImageIO.read(getClass().getResourceAsStream("/outfits/lady.png")));
         } catch (final IOException error) {
             LOGGER.error(error.getMessage());
         }
@@ -54,7 +51,7 @@ public class Alpaca extends ImmutableUserCommand {
             LOGGER.error(error.getMessage());
         }
 
-        event.getJDA().retrieveUserById(Env.get("DEV_ID")).queue(dev -> {
+        event.getJDA().retrieveUserById(System.getenv("DEV_ID")).queue(dev -> {
             final var workCooldown = user.getCooldown().getWork();
             final var sleepCooldown = user.getCooldown().getSleep();
             final var nickname = user.getAlpaca().getNickname();
