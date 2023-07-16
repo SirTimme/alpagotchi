@@ -3,7 +3,6 @@ package bot.commands.member;
 import bot.commands.MutableUserCommand;
 import bot.models.User;
 import bot.utils.CommandType;
-import bot.utils.Env;
 import bot.utils.Responses;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
@@ -30,7 +29,7 @@ public class Init extends MutableUserCommand {
         final var btnAccept = Button.success(userId + ":initAccept", Responses.getLocalizedResponse("buttonAccept", locale));
         final var btnCancel = Button.danger(userId + ":initCancelled", Responses.getLocalizedResponse("buttonCancel", locale));
 
-        event.getJDA().retrieveUserById(Env.get("DEV_ID")).queue(dev -> {
+        event.getJDA().retrieveUserById(System.getenv("DEV_ID")).queue(dev -> {
             final var embed = new EmbedBuilder()
                     .setTitle(Responses.getLocalizedResponse("initEmbedTitle", locale))
                     .addField(Responses.getLocalizedResponse("initEmbedStorageFieldTitle", locale), Responses.getLocalizedResponse("initEmbedStorageFieldBody", locale), false)

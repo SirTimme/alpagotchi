@@ -5,7 +5,6 @@ import bot.models.User;
 import bot.shop.IConsumable;
 import bot.shop.ItemManager;
 import bot.utils.CommandType;
-import bot.utils.Env;
 import bot.utils.Responses;
 import com.jakewharton.fliptables.FlipTable;
 import net.dv8tion.jda.api.EmbedBuilder;
