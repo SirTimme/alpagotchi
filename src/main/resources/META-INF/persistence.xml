@@ -7,19 +7,23 @@
 
     <persistence-unit name="discord-bot">
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+
         <class>bot.models.User</class>
         <class>bot.models.Alpaca</class>
         <class>bot.models.Cooldown</class>
         <class>bot.models.Inventory</class>
+        <class>bot.models.GuildSettings</class>
+
         <properties>
             <property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver"/>
             <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect"/>
-            <property name="hbm2ddl.auto" value="update"/>
+            <property name="hibernate.hbm2ddl.auto" value="update"/>
+            <property name="hibernate.schema_update.unique_constraint_strategy" value="RECREATE_QUIETLY"/>
             <property name="hibernate.hikari.minimumIdle" value="5"/>
             <property name="hibernate.hikari.maximumPoolSize" value="10"/>
             <property name="hibernate.hikari.idleTimeout" value="30000"/>
             <property name="hibernate.hikari.dataSourceClassName" value="org.postgresql.ds.PGSimpleDataSource"/>
-            <property name="hibernate.hikari.dataSource.url" value="jdbc:postgresql://localhost/alpagotchi"/>
+            <property name="hibernate.hikari.dataSource.url" value="jdbc:postgresql://database/alpagotchi"/>
             <property name="hibernate.hikari.dataSource.user" value="alpacaAdmin"/>
             <property name="hibernate.hikari.dataSource.password" value="382duhg"/>
             <property name="hibernate.connection.provider_class" value="org.hibernate.hikaricp.internal.HikariCPConnectionProvider"/>

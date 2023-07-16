@@ -1,6 +1,6 @@
 package bot.commands.member;
 
-import bot.commands.InfoCommand;
+import bot.commands.InfoSlashCommand;
 import bot.utils.CommandType;
 import bot.utils.Responses;
 import net.dv8tion.jda.api.entities.emoji.Emoji;
@@ -13,7 +13,7 @@ import net.dv8tion.jda.api.interactions.components.selections.StringSelectMenu;
 
 import java.util.Locale;
 
-public class Language extends InfoCommand {
+public class Language extends InfoSlashCommand {
     @Override
     public void execute(final SlashCommandInteractionEvent event, final Locale locale) {
         final var userId = event.getUser().getId();

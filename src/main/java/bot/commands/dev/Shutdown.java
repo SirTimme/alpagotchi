@@ -1,6 +1,6 @@
 package bot.commands.dev;
 
-import bot.commands.InfoCommand;
+import bot.commands.InfoSlashCommand;
 import bot.db.IDatabase;
 import bot.utils.CommandType;
 import bot.utils.Responses;
@@ -13,7 +13,7 @@ import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import java.text.MessageFormat;
 import java.util.Locale;
 
-public class Shutdown extends InfoCommand {
+public class Shutdown extends InfoSlashCommand {
     @Override
     public void execute(final SlashCommandInteractionEvent event, final Locale locale) {
         final var format = new MessageFormat(Responses.getLocalizedResponse("shutdown", locale));

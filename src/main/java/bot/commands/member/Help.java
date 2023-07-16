@@ -1,9 +1,8 @@
 package bot.commands.member;
 
 import bot.commands.CommandManager;
-import bot.commands.InfoCommand;
+import bot.commands.InfoSlashCommand;
 import bot.utils.CommandType;
-import bot.utils.Env;
 import bot.utils.Responses;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
@@ -14,7 +13,7 @@ import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import java.time.Instant;
 import java.util.Locale;
 
-public class Help extends InfoCommand {
+public class Help extends InfoSlashCommand {
     private final CommandManager commandManager;
 
     public Help(final CommandManager commandManager) {

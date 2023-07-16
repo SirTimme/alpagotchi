@@ -1,6 +1,6 @@
 package bot.commands.member;
 
-import bot.commands.MutableUserCommand;
+import bot.commands.UserSlashCommand;
 import bot.db.IDatabase;
 import bot.models.User;
 import bot.utils.CommandType;
@@ -13,11 +13,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.text.MessageFormat;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-public class Work extends MutableUserCommand {
+public class Work extends UserSlashCommand {
     private static final Logger LOGGER = LoggerFactory.getLogger(Work.class);
     private List<String> json;
 

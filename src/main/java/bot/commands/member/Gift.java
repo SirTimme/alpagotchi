@@ -1,6 +1,6 @@
 package bot.commands.member;
 
-import bot.commands.MutableUserCommand;
+import bot.commands.UserSlashCommand;
 import bot.db.IDatabase;
 import bot.models.User;
 import bot.utils.CommandType;
@@ -17,7 +17,7 @@ import java.text.MessageFormat;
 import java.util.List;
 import java.util.Locale;
 
-public class Gift extends MutableUserCommand {
+public class Gift extends UserSlashCommand {
     @Override
     public void execute(final SlashCommandInteractionEvent event, final Locale locale, final User user) {
         // selected user

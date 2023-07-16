@@ -1,6 +1,6 @@
 package bot.commands.member;
 
-import bot.commands.MutableUserCommand;
+import bot.commands.UserSlashCommand;
 import bot.models.User;
 import bot.shop.ItemManager;
 import bot.utils.CommandType;
@@ -17,7 +17,7 @@ import java.text.MessageFormat;
 import java.util.List;
 import java.util.Locale;
 
-public class Buy extends MutableUserCommand {
+public class Buy extends UserSlashCommand {
     private final ItemManager itemManager;
 
     public Buy(final ItemManager itemManager) {

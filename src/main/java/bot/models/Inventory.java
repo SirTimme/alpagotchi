@@ -15,7 +15,7 @@ public class Inventory {
     @Column(name = "currency", nullable = false)
     private int currency = 0;
 
-    @ElementCollection(fetch = FetchType.EAGER)
+    @ElementCollection
     @CollectionTable(name = "items", joinColumns = @JoinColumn(name = "item_map_id"))
     @MapKeyColumn(name = "item")
     @Column(name = "amount")

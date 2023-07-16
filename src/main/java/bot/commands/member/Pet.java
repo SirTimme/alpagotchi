@@ -1,7 +1,6 @@
 package bot.commands.member;
 
-import bot.commands.MutableUserCommand;
-import bot.db.IDatabase;
+import bot.commands.UserSlashCommand;
 import bot.models.User;
 import bot.utils.CommandType;
 import bot.utils.Responses;
@@ -16,9 +15,8 @@ import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import java.text.MessageFormat;
 import java.util.List;
 import java.util.Locale;
-import java.util.Objects;
 
-public class Pet extends MutableUserCommand {
+public class Pet extends UserSlashCommand {
     private final List<String> spots = List.of("head", "tail", "leg", "neck", "back");
 
     @Override

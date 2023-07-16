@@ -21,9 +21,9 @@ public class ButtonManager {
     }
 
     public void handle(final ButtonInteractionEvent event) {
-        final var btnName = event.getComponentId().split(":")[1];
-        final var btn = buttons.get(btnName);
+        final var buttonName = event.getComponentId().split(":")[1];
+        final var button = buttons.get(buttonName);
 
-        btn.execute(event);
+        button.execute(event);
     }
 }

@@ -1,6 +1,6 @@
 package bot.commands.member;
 
-import bot.commands.MutableUserCommand;
+import bot.commands.UserSlashCommand;
 import bot.models.User;
 import bot.shop.IConsumable;
 import bot.shop.ItemManager;
@@ -17,7 +17,7 @@ import java.text.MessageFormat;
 import java.time.Instant;
 import java.util.Locale;
 
-public class Inventory extends MutableUserCommand {
+public class Inventory extends UserSlashCommand {
     private final ItemManager itemManager;
 
     public Inventory(final ItemManager itemManager) {
@@ -71,7 +71,7 @@ public class Inventory extends MutableUserCommand {
     private String[] buildRow(final IConsumable item, final User user, final Locale locale) {
         final var itemName = Responses.getLocalizedResponse(item.getName(), locale);
         final var saturation = String.valueOf(item.getSaturation());
-        final var quantity = String.valueOf(0);
+        final var quantity = String.valueOf(user.getInventory().getItems().get(item.getName()));
 
         return new String[]{ itemName, saturation, quantity };
     }

@@ -23,9 +23,9 @@ public class PostgresDB implements IDatabase {
         var entityManager = this.entityManagerFactory.createEntityManager();
 
         var user = entityManager
-                .unwrap(Session.class)
-                .bySimpleNaturalId(User.class)
-                .load(userId);
+            .unwrap(Session.class)
+            .bySimpleNaturalId(User.class)
+            .load(userId);
 
         entityManager.close();
 
@@ -76,17 +76,35 @@ public class PostgresDB implements IDatabase {
     }
 
     @Override
-    public GuildSettings getSettingsById(long guildID) {
-        return null;
+    public GuildSettings getSettingsById(long guildId) {
+        var entityManager = this.entityManagerFactory.createEntityManager();
+
+        var settings = entityManager
+                .unwrap(Session.class)
+                .bySimpleNaturalId(GuildSettings.class)
+                .load(guildId);
+
+        entityManager.close();
+
+        return settings;
     }
 
     @Override
     public void updateSettings(GuildSettings settings) {
+        var entityManager = this.entityManagerFactory.createEntityManager();
 
+        entityManager.getTransaction().begin();
+        entityManager.merge(settings);
+        entityManager.getTransaction().commit();
+
+        entityManager.close();
     }
 
     @Override
     public long getUserCount() {
-        return 0;
+        var entityManager = this.entityManagerFactory.createEntityManager();
+        var query = entityManager.createQuery("SELECT COUNT(*) FROM User");
+
+        return (long) query.getSingleResult();
     }
 }

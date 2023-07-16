@@ -1,6 +1,6 @@
 package bot.commands.member;
 
-import bot.commands.MutableUserCommand;
+import bot.commands.UserSlashCommand;
 import bot.db.IDatabase;
 import bot.models.User;
 import bot.utils.CommandType;
@@ -16,9 +16,8 @@ import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import java.text.MessageFormat;
 import java.util.List;
 import java.util.Locale;
-import java.util.Objects;
 
-public class Outfit extends MutableUserCommand {
+public class Outfit extends UserSlashCommand {
     @Override
     public void execute(final SlashCommandInteractionEvent event, final Locale locale, final User user) {
         // selected outfit
@@ -26,6 +25,9 @@ public class Outfit extends MutableUserCommand {
 
         // update outfit
         user.getAlpaca().setOutfit(outfit);
+
+        // update db
+        IDatabase.INSTANCE.updateDatabase(user);
 
         // reply to the user
         final var format = new MessageFormat(Responses.getLocalizedResponse("outfit", locale));

@@ -1,6 +1,6 @@
 package bot.commands.member;
 
-import bot.commands.MutableUserCommand;
+import bot.commands.UserSlashCommand;
 import bot.models.User;
 import bot.shop.IConsumable;
 import bot.shop.ItemManager;
@@ -17,7 +17,7 @@ import java.text.MessageFormat;
 import java.time.Instant;
 import java.util.Locale;
 
-public class Shop extends MutableUserCommand {
+public class Shop extends UserSlashCommand {
     private final ItemManager itemManager;
 
     public Shop(final ItemManager itemManager) {
@@ -26,7 +26,7 @@ public class Shop extends MutableUserCommand {
 
     @Override
     public void execute(final SlashCommandInteractionEvent event, final Locale locale, final User user) {
-        event.getJDA().retrieveUserById(Env.get("DEV_ID")).queue(dev -> {
+        event.getJDA().retrieveUserById(System.getenv("DEV_ID")).queue(dev -> {
             final var format = new MessageFormat(Responses.getLocalizedResponse("formattedCurrentBalance", locale));
             final var msg = format.format(new Object[]{ user.getInventory().getCurrency() });
 

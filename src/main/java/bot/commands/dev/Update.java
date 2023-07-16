@@ -1,7 +1,7 @@
 package bot.commands.dev;
 
 import bot.commands.CommandManager;
-import bot.commands.InfoCommand;
+import bot.commands.InfoSlashCommand;
 import bot.utils.CommandType;
 import bot.utils.Responses;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
@@ -12,9 +12,8 @@ import net.dv8tion.jda.api.interactions.commands.build.Commands;
 
 import java.text.MessageFormat;
 import java.util.Locale;
-import java.util.Objects;
 
-public class Update extends InfoCommand {
+public class Update extends InfoSlashCommand {
     private final CommandManager commandManager;
 
     public Update(final CommandManager commandManager) {

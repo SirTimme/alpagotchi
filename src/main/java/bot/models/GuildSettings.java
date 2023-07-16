@@ -1,23 +1,38 @@
 package bot.models;
 
+import bot.utils.LocaleConverter;
+import jakarta.persistence.*;
+import org.hibernate.annotations.NaturalId;
+
+import java.util.Locale;
+
+@Entity
+@Table(name = "guild_settings", indexes = @Index(name = "idx_guild_id", unique = true, columnList = "guild_id"))
 public class GuildSettings {
-    private final long guildID;
-    private String language;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
 
-    public GuildSettings(final long guildID) {
-        this.guildID = guildID;
-        this.language = "en";
+    @NaturalId
+    @Column(name = "guild_id", nullable = false)
+    private long guildId;
+
+    @Column(name = "locale", nullable = false)
+    @Convert(converter = LocaleConverter.class)
+    private Locale locale = Locale.ENGLISH;
+
+    public GuildSettings() { }
+
+    public GuildSettings(long guildId, Locale locale) {
+        this.guildId = guildId;
+        this.locale = locale;
     }
 
-    public long getGuildID() {
-        return this.guildID;
+    public Locale getLocale() {
+        return this.locale;
     }
 
-    public String getLanguage() {
-        return this.language;
-    }
-
-    public void setLanguage(final String language) {
-        this.language = language;
+    public void setLocale(Locale locale) {
+        this.locale = locale;
     }
 }

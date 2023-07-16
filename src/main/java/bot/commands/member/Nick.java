@@ -1,7 +1,6 @@
 package bot.commands.member;
 
-import bot.commands.MutableUserCommand;
-import bot.db.IDatabase;
+import bot.commands.UserSlashCommand;
 import bot.models.User;
 import bot.utils.CommandType;
 import bot.utils.Responses;
@@ -14,9 +13,8 @@ import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 
 import java.text.MessageFormat;
 import java.util.Locale;
-import java.util.Objects;
 
-public class Nick extends MutableUserCommand {
+public class Nick extends UserSlashCommand {
     @Override
     public void execute(final SlashCommandInteractionEvent event, final Locale locale, final User user) {
         // selected nickname
