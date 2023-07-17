@@ -5,12 +5,20 @@ import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 import org.hibernate.Session;
 
+import java.util.HashMap;
+
 public class PostgresDB implements IDatabase {
     private EntityManagerFactory entityManagerFactory;
 
     @Override
     public void init() {
-        this.entityManagerFactory = Persistence.createEntityManagerFactory("discord-bot");
+        final var properties = new HashMap<String, String>() {{
+            put("hibernate.hikari.dataSource.url", System.getenv("POSTGRES_URL"));
+            put("hibernate.hikari.dataSource.user", System.getenv("POSTGRES_USER"));
+            put("hibernate.hikari.dataSource.password", System.getenv("POSTGRES_PASSWORD"));
+        }};
+
+        this.entityManagerFactory = Persistence.createEntityManagerFactory("discord-bot", properties);
     }
 
     @Override
