@@ -1,6 +1,6 @@
-package bot.shop;
+package bot.shop.foods;
 
-import bot.models.User;
+import bot.shop.IConsumable;
 
 public class Salad implements IConsumable {
     @Override
@@ -20,6 +20,6 @@ public class Salad implements IConsumable {
 
     @Override
     public String getType() {
-        return "hunger";
+        return "food";
     }
 }
