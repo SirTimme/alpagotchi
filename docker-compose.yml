@@ -25,18 +25,18 @@ services:
         POSTGRES_USER: ${POSTGRES_USER}
         POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
         POSTGRES_URL: ${POSTGRES_URL}
-    restart: on-failure
     depends_on:
       - database
+    restart: on-failure
 
   adminer:
     container_name: adminer
     image: adminer
+    depends_on:
+      - database
     restart: on-failure
     ports:
       - "8080:8080"
-    depends_on:
-      - database
 
 volumes:
   pg-data:
