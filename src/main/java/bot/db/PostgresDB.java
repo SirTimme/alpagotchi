@@ -13,9 +13,9 @@ public class PostgresDB implements IDatabase {
     @Override
     public void init() {
         final var properties = new HashMap<String, String>() {{
-            put("hibernate.hikari.dataSource.url", System.getenv("POSTGRES_URL"));
             put("hibernate.hikari.dataSource.user", System.getenv("POSTGRES_USER"));
             put("hibernate.hikari.dataSource.password", System.getenv("POSTGRES_PASSWORD"));
+            put("hibernate.hikari.dataSource.url", System.getenv("POSTGRES_URL"));
         }};
 
         this.entityManagerFactory = Persistence.createEntityManagerFactory("discord-bot", properties);
@@ -31,9 +31,9 @@ public class PostgresDB implements IDatabase {
         var entityManager = this.entityManagerFactory.createEntityManager();
 
         var user = entityManager
-            .unwrap(Session.class)
-            .bySimpleNaturalId(User.class)
-            .load(userId);
+                .unwrap(Session.class)
+                .bySimpleNaturalId(User.class)
+                .load(userId);
 
         entityManager.close();
 
