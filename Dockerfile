@@ -1,7 +1,11 @@
 FROM maven:3.9.3 AS build
-COPY src /home/app/src
-COPY pom.xml /home/app
-RUN mvn -f /home/app/pom.xml clean package
+ENV HOME=/home/app
+RUN mkdir -p $HOME
+WORKDIR $HOME
+ADD pom.xml $HOME
+RUN mvn verify
+ADD src $HOME/src
+RUN mvn package
 
 FROM openjdk:17
 WORKDIR /home/app
@@ -15,4 +19,4 @@ ARG POSTGRES_URL=""
 ENV POSTGRES_URL=$POSTGRES_URL
 ENV DEV_ID=483012399893577729
 COPY --from=build /home/app/target/Alpagotchi-jar-with-dependencies.jar app.jar
-ENTRYPOINT ["java", "-jar", "app.jar"]
+ENTRYPOINT java -jar app.jar
