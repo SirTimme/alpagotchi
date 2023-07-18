@@ -1,6 +1,7 @@
 package bot.commands.member;
 
 import bot.commands.UserSlashCommand;
+import bot.db.IDatabase;
 import bot.models.User;
 import bot.utils.CommandType;
 import bot.utils.Responses;
@@ -33,9 +34,12 @@ public class Sleep extends UserSlashCommand {
         user.getAlpaca().setEnergy(energy + newEnergy);
         user.getCooldown().setSleep(System.currentTimeMillis() + 1000L * 60 * newEnergy);
 
+        IDatabase.INSTANCE.updateUser(user);
+
         // reply to the user
         final var format = new MessageFormat(Responses.getLocalizedResponse("sleep", locale));
         final var msg = format.format(new Object[]{ newEnergy });
+
         event.reply(msg).queue();
     }
 

@@ -23,7 +23,7 @@ public class GuildSettings {
 
     public GuildSettings() { }
 
-    public GuildSettings(long guildId, Locale locale) {
+    public GuildSettings(final long guildId, final Locale locale) {
         this.guildId = guildId;
         this.locale = locale;
     }
@@ -32,7 +32,7 @@ public class GuildSettings {
         return this.locale;
     }
 
-    public void setLocale(Locale locale) {
+    public void setLocale(final Locale locale) {
         this.locale = locale;
     }
 }

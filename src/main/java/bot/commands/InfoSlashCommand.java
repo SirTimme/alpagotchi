@@ -7,7 +7,7 @@ import java.util.Locale;
 
 public abstract class InfoSlashCommand implements ISlashCommand {
     @Override
-    public void execute(SlashCommandInteractionEvent event) {
+    public void execute(final SlashCommandInteractionEvent event) {
         final var locale = Utils.retrieveLocale(event);
 
         execute(event, locale);

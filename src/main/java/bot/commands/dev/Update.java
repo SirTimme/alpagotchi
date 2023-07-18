@@ -28,9 +28,9 @@ public class Update extends InfoSlashCommand {
              .queue();
 
         event.getGuild()
-               .updateCommands()
-               .addCommands(this.commandManager.getCommandDataByTypes(CommandType.DEV))
-               .queue();
+             .updateCommands()
+             .addCommands(this.commandManager.getCommandDataByTypes(CommandType.DEV))
+             .queue();
 
         final var format = new MessageFormat(Responses.getLocalizedResponse("updateCommands", locale));
         final var msg = format.format(new Object[]{ this.commandManager.getCommands().size() });

@@ -1,6 +1,7 @@
 package bot.commands.member;
 
 import bot.commands.UserSlashCommand;
+import bot.db.IDatabase;
 import bot.models.User;
 import bot.utils.CommandType;
 import bot.utils.Responses;
@@ -42,9 +43,12 @@ public class Pet extends UserSlashCommand {
         final var value = calculateJoy(joy, isFavourite);
         user.getAlpaca().setJoy(joy + value);
 
+        IDatabase.INSTANCE.updateUser(user);
+
         // reply to the user
         final var format = new MessageFormat(Responses.getLocalizedResponse(getKey(isFavourite), locale));
         final var msg = format.format(new Object[]{ value });
+
         event.reply(msg).queue();
     }
 

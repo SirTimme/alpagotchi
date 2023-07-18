@@ -1,6 +1,7 @@
 package bot.commands.member;
 
 import bot.commands.UserSlashCommand;
+import bot.db.IDatabase;
 import bot.models.User;
 import bot.shop.ItemManager;
 import bot.utils.CommandType;
@@ -41,17 +42,21 @@ public class Buy extends UserSlashCommand {
         // sufficient balance?
         if (balance - price < 0) {
             final var msg = Responses.getLocalizedResponse("balanceNotSufficient", locale);
+
             event.reply(msg).setEphemeral(true).queue();
             return;
         }
 
         // update db
         user.getInventory().setCurrency(balance - price);
-        user.getInventory().setItem(item.getName(), amount);
+        user.getInventory().getItems().put(item.getName(), amount);
+
+        IDatabase.INSTANCE.updateUser(user);
 
         // reply to the user
         final var format = new MessageFormat(Responses.getLocalizedResponse("buySuccessful", locale));
         final var msg = format.format(new Object[]{ amount, item.getName(), price });
+
         event.reply(msg).queue();
     }
 

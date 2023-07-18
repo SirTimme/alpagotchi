@@ -11,7 +11,7 @@ public class PostgresDB implements IDatabase {
     private EntityManagerFactory entityManagerFactory;
 
     @Override
-    public void init() {
+    public void initDatabase() {
         final var properties = new HashMap<String, String>() {{
             put("hibernate.hikari.dataSource.user", System.getenv("POSTGRES_USER"));
             put("hibernate.hikari.dataSource.password", System.getenv("POSTGRES_PASSWORD"));
@@ -22,15 +22,15 @@ public class PostgresDB implements IDatabase {
     }
 
     @Override
-    public void shutdown() {
+    public void shutdownDatabase() {
         this.entityManagerFactory.close();
     }
 
     @Override
-    public User getUserById(long userId) {
-        var entityManager = this.entityManagerFactory.createEntityManager();
+    public User getUserById(final long userId) {
+        final var entityManager = this.entityManagerFactory.createEntityManager();
 
-        var user = entityManager
+        final var user = entityManager
                 .unwrap(Session.class)
                 .bySimpleNaturalId(User.class)
                 .load(userId);
@@ -41,24 +41,13 @@ public class PostgresDB implements IDatabase {
     }
 
     @Override
-    public void updateDatabase(User user) {
-        var entityManager = this.entityManagerFactory.createEntityManager();
+    public void createUserById(final long userId) {
+        final var alpaca = new Alpaca();
+        final var inventory = new Inventory();
+        final var cooldown = new Cooldown();
+        final var user = new User(userId, alpaca, inventory, cooldown);
 
-        entityManager.getTransaction().begin();
-        entityManager.merge(user);
-        entityManager.getTransaction().commit();
-
-        entityManager.close();
-    }
-
-    @Override
-    public void createUserById(long userId) {
-        var alpaca = new Alpaca();
-        var inventory = new Inventory();
-        var cooldown = new Cooldown();
-        var user = new User(userId, alpaca, inventory, cooldown);
-
-        var entityManager = this.entityManagerFactory.createEntityManager();
+        final var entityManager = this.entityManagerFactory.createEntityManager();
 
         entityManager.getTransaction().begin();
         entityManager.persist(user);
@@ -68,10 +57,21 @@ public class PostgresDB implements IDatabase {
     }
 
     @Override
-    public void deleteUserById(long userId) {
-        var entityManager = this.entityManagerFactory.createEntityManager();
+    public void updateUser(final User user) {
+        final var entityManager = this.entityManagerFactory.createEntityManager();
 
-        var user = entityManager
+        entityManager.getTransaction().begin();
+        entityManager.merge(user);
+        entityManager.getTransaction().commit();
+
+        entityManager.close();
+    }
+
+    @Override
+    public void deleteUserById(final long userId) {
+        final var entityManager = this.entityManagerFactory.createEntityManager();
+
+        final var user = entityManager
                 .unwrap(Session.class)
                 .bySimpleNaturalId(User.class)
                 .load(userId);
@@ -84,10 +84,10 @@ public class PostgresDB implements IDatabase {
     }
 
     @Override
-    public GuildSettings getSettingsById(long guildId) {
-        var entityManager = this.entityManagerFactory.createEntityManager();
+    public GuildSettings getSettingsById(final long guildId) {
+        final var entityManager = this.entityManagerFactory.createEntityManager();
 
-        var settings = entityManager
+        final var settings = entityManager
                 .unwrap(Session.class)
                 .bySimpleNaturalId(GuildSettings.class)
                 .load(guildId);
@@ -98,8 +98,8 @@ public class PostgresDB implements IDatabase {
     }
 
     @Override
-    public void updateSettings(GuildSettings settings) {
-        var entityManager = this.entityManagerFactory.createEntityManager();
+    public void updateSettings(final GuildSettings settings) {
+        final var entityManager = this.entityManagerFactory.createEntityManager();
 
         entityManager.getTransaction().begin();
         entityManager.merge(settings);
@@ -110,8 +110,8 @@ public class PostgresDB implements IDatabase {
 
     @Override
     public long getUserCount() {
-        var entityManager = this.entityManagerFactory.createEntityManager();
-        var query = entityManager.createQuery("SELECT COUNT(*) FROM User");
+        final var entityManager = this.entityManagerFactory.createEntityManager();
+        final var query = entityManager.createQuery("SELECT COUNT(*) FROM User");
 
         return (long) query.getSingleResult();
     }

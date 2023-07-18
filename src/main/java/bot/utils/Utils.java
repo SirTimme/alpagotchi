@@ -23,13 +23,13 @@ public class Utils {
     }
 
     private static Locale retrieveLocale(final Guild guild) {
-        var locale = Locale.ENGLISH;
+        final var locale = Locale.ENGLISH;
 
         if (guild == null) {
             return locale;
         }
 
-        GuildSettings settings;
+        final GuildSettings settings;
         if ((settings = IDatabase.INSTANCE.getSettingsById(guild.getIdLong())) == null) {
             return locale;
         } else {

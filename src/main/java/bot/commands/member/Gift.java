@@ -31,8 +31,8 @@ public class Gift extends UserSlashCommand {
         }
 
         // Is the target user initialized?
-        final var targetDbUser = IDatabase.INSTANCE.getUserById(targetDiscordUser.getIdLong());
-        if (targetDbUser == null) {
+        final var targetUser = IDatabase.INSTANCE.getUserById(targetDiscordUser.getIdLong());
+        if (targetUser == null) {
             final var msg = Responses.getLocalizedResponse("giftTargetNotInitialized", locale);
             event.reply(msg).setEphemeral(true).queue();
             return;
@@ -45,15 +45,21 @@ public class Gift extends UserSlashCommand {
         final var item = event.getOption("item").getAsString();
 
         // you can only gift as many items as you possess
-        if (user.getInventory().getAmount(item) - amount < 0) {
+        if (user.getInventory().getItems().get(item) - amount < 0) {
             final var msg = Responses.getLocalizedResponse("feedNotEnoughItems", locale);
             event.reply(msg).setEphemeral(true).queue();
             return;
         }
 
+        final var newSourceItemAmount = user.getInventory().getItems().get(item) - amount;
+        final var newTargetItemAmount = targetUser.getInventory().getItems().get(item) + amount;
+
         // Modify values accordingly
-        user.getInventory().setItem(item, user.getInventory().getAmount(item) - amount);
-        targetDbUser.getInventory().setItem(item, targetDbUser.getInventory().getAmount(item) + amount);
+        user.getInventory().getItems().put(item, newSourceItemAmount);
+        targetUser.getInventory().getItems().put(item, newTargetItemAmount);
+
+        IDatabase.INSTANCE.updateUser(user);
+        IDatabase.INSTANCE.updateUser(targetUser);
 
         // reply to the user
         final var format = new MessageFormat(Responses.getLocalizedResponse("giftSuccessful", locale));

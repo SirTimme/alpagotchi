@@ -9,16 +9,14 @@ import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEve
 import net.dv8tion.jda.api.interactions.DiscordLocale;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.text.MessageFormat;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 public class Work extends UserSlashCommand {
-    private static final Logger LOGGER = LoggerFactory.getLogger(Work.class);
-    private List<String> json;
+    private final List<String> json;
 
     public Work() {
         this.json = List.of("hello", "world");
@@ -27,7 +25,7 @@ public class Work extends UserSlashCommand {
     @Override
     public void execute(final SlashCommandInteractionEvent event, final Locale locale, final User user) {
         // is the alpaca currently sleeping?
-        final long sleep = user.getCooldown().getSleep();
+        final long sleep = TimeUnit.MILLISECONDS.toMinutes(user.getCooldown().getSleep() - System.currentTimeMillis());
         if (sleep > 0) {
             final var format = new MessageFormat(Responses.getLocalizedResponse("sleepCurrentlySleeping", locale));
             final var msg = format.format(new Object[]{ sleep });
@@ -37,7 +35,7 @@ public class Work extends UserSlashCommand {
         }
 
         // did the alpaca already work?
-        final long work = user.getCooldown().getWork();
+        final long work = TimeUnit.MILLISECONDS.toMinutes(user.getCooldown().getWork() - System.currentTimeMillis());
         if (work > 0) {
             final var format = new MessageFormat(Responses.getLocalizedResponse("workAlreadyWorked", locale));
             final var msg = format.format(new Object[]{ work });
@@ -70,7 +68,7 @@ public class Work extends UserSlashCommand {
         user.getAlpaca().setJoy(user.getAlpaca().getJoy() - joyCost);
         user.getCooldown().setWork(System.currentTimeMillis() + 1000L * 60 * 20);
 
-        IDatabase.INSTANCE.updateDatabase(user);
+        IDatabase.INSTANCE.updateUser(user);
 
         // reply to the user
         event.reply("⛏ " + message + " **Fluffies + " + fluffies + ", Energy - " + energyCost + ", Joy - " + joyCost + "**").queue();

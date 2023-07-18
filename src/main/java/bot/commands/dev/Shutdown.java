@@ -20,7 +20,7 @@ public class Shutdown extends InfoSlashCommand {
         final var msg = format.format(new Object[]{ event.getJDA().getSelfUser().getName() });
 
         // Shutdown db
-        IDatabase.INSTANCE.shutdown();
+        IDatabase.INSTANCE.shutdownDatabase();
 
         // Shutdown bot
         event.reply(msg).complete();

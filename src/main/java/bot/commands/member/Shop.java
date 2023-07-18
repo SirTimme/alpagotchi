@@ -71,8 +71,8 @@ public class Shop extends UserSlashCommand {
     private String[] buildRow(final IConsumable item, final User user, final Locale locale) {
         final var itemName = Responses.getLocalizedResponse(item.getName(), locale);
         final var saturation = String.valueOf(item.getPrice());
-        final var quantity = String.valueOf(0);
+        final var quantity = user.getInventory().getItems().get(item.getName());
 
-        return new String[]{ itemName, saturation, quantity };
+        return new String[]{ itemName, saturation, String.valueOf(quantity) };
     }
 }

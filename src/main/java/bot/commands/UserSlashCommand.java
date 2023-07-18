@@ -10,7 +10,7 @@ import java.util.Locale;
 
 public abstract class UserSlashCommand implements ISlashCommand {
     @Override
-    public void execute(SlashCommandInteractionEvent event) {
+    public void execute(final SlashCommandInteractionEvent event) {
         final var user = IDatabase.INSTANCE.getUserById(event.getUser().getIdLong());
         final var locale = Utils.retrieveLocale(event);
 

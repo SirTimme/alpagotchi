@@ -28,7 +28,7 @@ public class User {
 
     public User() { }
 
-    public User(long userId, Alpaca alpaca, Inventory inventory, Cooldown cooldown) {
+    public User(final long userId, final Alpaca alpaca, final Inventory inventory, final Cooldown cooldown) {
         this.userId = userId;
         this.alpaca = alpaca;
         this.inventory = inventory;
@@ -47,7 +47,7 @@ public class User {
         return this.alpaca;
     }
 
-    public void setAlpaca(Alpaca alpaca) {
+    public void setAlpaca(final Alpaca alpaca) {
         this.alpaca = alpaca;
     }
 
@@ -55,7 +55,7 @@ public class User {
         return this.inventory;
     }
 
-    public void setInventory(Inventory inventory) {
+    public void setInventory(final Inventory inventory) {
         this.inventory = inventory;
     }
 
@@ -63,21 +63,7 @@ public class User {
         return this.cooldown;
     }
 
-    public void setCooldown(Cooldown cooldown) {
+    public void setCooldown(final Cooldown cooldown) {
         this.cooldown = cooldown;
-    }
-
-    @Transient
-    public int getSaturation(String itemType) {
-        return itemType.equals("hunger") ? this.getAlpaca().getHunger() : this.getAlpaca().getThirst();
-    }
-
-    @Transient
-    public void setSaturation(String itemType, int amount) {
-        if (itemType.equals("hunger")) {
-            this.getAlpaca().setHunger(amount);
-        } else {
-            this.getAlpaca().setThirst(amount);
-        }
     }
 }

@@ -1,6 +1,8 @@
 package bot.models;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -19,6 +21,7 @@ public class Inventory {
     @CollectionTable(name = "items", joinColumns = @JoinColumn(name = "item_map_id"))
     @MapKeyColumn(name = "item")
     @Column(name = "amount")
+    @Fetch(FetchMode.JOIN)
     private Map<String, Integer> items = new HashMap<>() {{
         put("salad", 0);
         put("taco", 0);
@@ -34,7 +37,7 @@ public class Inventory {
         return this.currency;
     }
 
-    public void setCurrency(int currency) {
+    public void setCurrency(final int currency) {
         this.currency = currency;
     }
 
@@ -42,17 +45,7 @@ public class Inventory {
         return this.items;
     }
 
-    public void setItems(Map<String, Integer> items) {
+    public void setItems(final Map<String, Integer> items) {
         this.items = items;
-    }
-
-    @Transient
-    public int getAmount(String itemName) {
-        return this.items.get(itemName);
-    }
-
-    @Transient
-    public void setItem(String itemName, int amount) {
-        this.items.replace(itemName, amount);
     }
 }

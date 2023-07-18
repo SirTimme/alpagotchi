@@ -8,7 +8,7 @@ import net.dv8tion.jda.api.entities.Activity;
 public class Bot {
     public static void main(final String[] args) {
         // Init db
-        IDatabase.INSTANCE.init();
+        IDatabase.INSTANCE.initDatabase();
 
         // Start the bot
         JDABuilder.createLight(System.getenv("TOKEN"))

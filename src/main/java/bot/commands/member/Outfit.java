@@ -27,7 +27,7 @@ public class Outfit extends UserSlashCommand {
         user.getAlpaca().setOutfit(outfit);
 
         // update db
-        IDatabase.INSTANCE.updateDatabase(user);
+        IDatabase.INSTANCE.updateUser(user);
 
         // reply to the user
         final var format = new MessageFormat(Responses.getLocalizedResponse("outfit", locale));

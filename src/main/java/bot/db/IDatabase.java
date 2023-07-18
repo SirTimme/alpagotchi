@@ -6,15 +6,15 @@ import bot.models.User;
 public interface IDatabase {
     IDatabase INSTANCE = new PostgresDB();
 
-    void init();
+    void initDatabase();
 
-    void shutdown();
+    void shutdownDatabase();
 
     User getUserById(final long userId);
 
-    void updateDatabase(final User user);
-
     void createUserById(final long memberID);
+
+    void updateUser(final User user);
 
     void deleteUserById(final long memberID);
 

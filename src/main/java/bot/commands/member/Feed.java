@@ -1,6 +1,7 @@
 package bot.commands.member;
 
 import bot.commands.UserSlashCommand;
+import bot.db.IDatabase;
 import bot.models.User;
 import bot.shop.IConsumable;
 import bot.shop.ItemManager;
@@ -55,7 +56,7 @@ public class Feed extends UserSlashCommand {
         }
 
         // old saturation value
-        final var oldValue = user.getSaturation(item.getType());
+        final var oldValue = retrieveItemSaturation(user, item);
 
         // new saturation with the fed item(s)
         final var saturation = amount * item.getSaturation();
@@ -68,12 +69,20 @@ public class Feed extends UserSlashCommand {
         }
 
         // update db
-        user.getInventory().setItem(item.getName(), newItemAmount);
-        user.setSaturation(item.getType(), oldValue + saturation);
+        user.getInventory().getItems().put(item.getName(), newItemAmount);
+
+        if (item.getType().equals("food")) {
+            user.getAlpaca().setHunger(oldValue + saturation);
+        } else {
+            user.getAlpaca().setThirst(oldValue + saturation);
+        }
+
+        IDatabase.INSTANCE.updateUser(user);
 
         // reply to the user
         final var format = new MessageFormat(Responses.getLocalizedResponse(getKey(item), locale));
         final var msg = format.format(new Object[]{ amount, item.getName(), saturation });
+
         event.reply(msg).queue();
     }
 
@@ -111,5 +120,9 @@ public class Feed extends UserSlashCommand {
         return item.getType().equals("hunger")
                 ? "feedHungerItem"
                 : "feedThirstItem";
+    }
+
+    private int retrieveItemSaturation(final User user, final IConsumable item) {
+        return item.getType().equals("food") ? user.getAlpaca().getHunger() : user.getAlpaca().getThirst();
     }
 }

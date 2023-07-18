@@ -23,6 +23,7 @@ import java.time.Instant;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 public class Alpaca extends UserSlashCommand {
     private static final Logger LOGGER = LoggerFactory.getLogger(Alpaca.class);
@@ -49,8 +50,8 @@ public class Alpaca extends UserSlashCommand {
         }
 
         event.getJDA().retrieveUserById(System.getenv("DEV_ID")).queue(dev -> {
-            final var workCooldown = user.getCooldown().getWork();
-            final var sleepCooldown = user.getCooldown().getSleep();
+            final var workCooldown = TimeUnit.MILLISECONDS.toMinutes(user.getCooldown().getWork() - System.currentTimeMillis());
+            final var sleepCooldown = TimeUnit.MILLISECONDS.toMinutes(user.getCooldown().getSleep() - System.currentTimeMillis());
             final var nickname = user.getAlpaca().getNickname();
 
             final var embed = new EmbedBuilder()
