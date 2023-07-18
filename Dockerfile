@@ -8,7 +8,8 @@ ADD src $HOME/src
 RUN mvn package
 
 FROM openjdk:17
-WORKDIR /home/app
+ENV HOME=/home/app
+WORKDIR $HOME
 ARG TOKEN=""
 ENV TOKEN=$TOKEN
 ARG POSTGRES_USER=""
@@ -18,5 +19,5 @@ ENV POSTGRES_PASSWORD=$POSTGRES_PASSWORD
 ARG POSTGRES_URL=""
 ENV POSTGRES_URL=$POSTGRES_URL
 ENV DEV_ID=483012399893577729
-COPY --from=build /home/app/target/Alpagotchi-jar-with-dependencies.jar app.jar
-ENTRYPOINT java -jar app.jar
+COPY --from=build $HOME/target/Alpagotchi-jar-with-dependencies.jar app.jar
+CMD java -jar app.jar
