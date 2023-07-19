@@ -1,4 +1,4 @@
-version: '3.6'
+version: '3.8'
 
 name: alpagotchi
 services:
@@ -35,6 +35,8 @@ services:
     depends_on:
       - database
     restart: on-failure
+    environment:
+      ADMINER_DESIGN: pepa-linha-dark
     ports:
       - "8080:8080"
 
