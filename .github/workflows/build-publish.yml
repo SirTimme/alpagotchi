@@ -1,7 +1,6 @@
 name: Build and publish
 
-on:
-  push:
+on: push
 
 jobs:
   maven:
