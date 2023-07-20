@@ -1,11 +1,6 @@
 name: Build and publish docker image
 
 on:
-  push:
-    branches:
-      - main
-      - migrate-to-sql
-  workflow_dispatch:
   workflow_run:
     workflows:
       - maven
