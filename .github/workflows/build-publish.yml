@@ -39,7 +39,7 @@ jobs:
         uses: docker/metadata-action@v4
         with:
           images: |
-            23118/alpagotchi
+            alpagotchi/discord-bot
           tags: |
             type=semver,pattern={{version}}
           flavor: |
