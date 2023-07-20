@@ -45,6 +45,7 @@ public class CommandManager {
 
     public void handle(final SlashCommandInteractionEvent event) {
         final var cmd = this.commands.get(event.getName());
+
         cmd.execute(event);
     }
 
