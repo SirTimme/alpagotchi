@@ -10,7 +10,6 @@ import net.dv8tion.jda.api.interactions.DiscordLocale;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 
-import java.text.MessageFormat;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
@@ -27,19 +26,14 @@ public class Work extends UserSlashCommand {
         // is the alpaca currently sleeping?
         final long sleep = TimeUnit.MILLISECONDS.toMinutes(user.getCooldown().getSleep() - System.currentTimeMillis());
         if (sleep > 0) {
-            final var format = new MessageFormat(Responses.getLocalizedResponse("sleepCurrentlySleeping", locale));
-            final var msg = format.format(new Object[]{ sleep });
-
-            event.reply(msg).setEphemeral(true).queue();
+            event.reply(Responses.getLocalizedResponse("sleepCurrentlySleeping", locale, sleep)).setEphemeral(true).queue();
             return;
         }
 
         // did the alpaca already work?
         final long work = TimeUnit.MILLISECONDS.toMinutes(user.getCooldown().getWork() - System.currentTimeMillis());
         if (work > 0) {
-            final var format = new MessageFormat(Responses.getLocalizedResponse("workAlreadyWorked", locale));
-            final var msg = format.format(new Object[]{ work });
-            event.reply(msg).setEphemeral(true).queue();
+            event.reply(Responses.getLocalizedResponse("sleepCurrentlySleeping", locale, work)).setEphemeral(true).queue();
             return;
         }
 
@@ -62,12 +56,11 @@ public class Work extends UserSlashCommand {
         final var energyCost = (int) (Math.random() * 8 + 1);
         final var joyCost = (int) (Math.random() * 10 + 2);
 
-        // update db
+        // update data
         user.getInventory().setCurrency(user.getInventory().getCurrency() + fluffies);
         user.getAlpaca().setEnergy(user.getAlpaca().getEnergy() - energyCost);
         user.getAlpaca().setJoy(user.getAlpaca().getJoy() - joyCost);
         user.getCooldown().setWork(System.currentTimeMillis() + 1000L * 60 * 20);
-
         IDatabase.INSTANCE.updateUser(user);
 
         // reply to the user

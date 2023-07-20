@@ -33,9 +33,7 @@ public class Feed extends UserSlashCommand {
 
         // alpaca currently sleeping?
         if (remainingSleep > 0) {
-            final var format = new MessageFormat(Responses.getLocalizedResponse("sleepCurrentlySleeping", locale));
-            final var msg = format.format(new Object[]{ remainingSleep });
-            event.reply(msg).setEphemeral(true).queue();
+            event.reply(Responses.getLocalizedResponse("sleepCurrentlySleeping", locale, remainingSleep)).setEphemeral(true).queue();
             return;
         }
 
@@ -50,8 +48,7 @@ public class Feed extends UserSlashCommand {
 
         // trying to feed items you don't have?
         if (newItemAmount < 0) {
-            final var msg = Responses.getLocalizedResponse("feedNotEnoughItems", locale);
-            event.reply(msg).setEphemeral(true).queue();
+            event.reply(Responses.getLocalizedResponse("feedNotEnoughItems", locale)).setEphemeral(true).queue();
             return;
         }
 
@@ -63,8 +60,7 @@ public class Feed extends UserSlashCommand {
 
         // trying to overfeed your alpaca?
         if (oldValue + saturation > 100) {
-            final var msg = Responses.getLocalizedResponse("feedTooMuchSaturation", locale);
-            event.reply(msg).setEphemeral(true).queue();
+            event.reply(Responses.getLocalizedResponse("feedTooMuchSaturation", locale)).setEphemeral(true).queue();
             return;
         }
 
@@ -80,10 +76,7 @@ public class Feed extends UserSlashCommand {
         IDatabase.INSTANCE.updateUser(user);
 
         // reply to the user
-        final var format = new MessageFormat(Responses.getLocalizedResponse(getKey(item), locale));
-        final var msg = format.format(new Object[]{ amount, item.getName(), saturation });
-
-        event.reply(msg).queue();
+        event.reply(Responses.getLocalizedResponse(getKey(item), locale, amount, item.getName(), saturation)).queue();
     }
 
     @Override
@@ -117,7 +110,7 @@ public class Feed extends UserSlashCommand {
     }
 
     private String getKey(final IConsumable item) {
-        return item.getType().equals("hunger")
+        return item.getType().equals("food")
                 ? "feedHungerItem"
                 : "feedThirstItem";
     }

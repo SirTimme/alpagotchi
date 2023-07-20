@@ -25,8 +25,7 @@ public class Pet extends UserSlashCommand {
         // already max joy?
         final var joy = user.getAlpaca().getJoy();
         if (joy == 100) {
-            final var msg = Responses.getLocalizedResponse("petJoyAlreadyMaximum", locale);
-            event.reply(msg).setEphemeral(true).queue();
+            event.reply(Responses.getLocalizedResponse("petJoyAlreadyMaximum", locale)).setEphemeral(true).queue();
             return;
         }
 
@@ -39,17 +38,14 @@ public class Pet extends UserSlashCommand {
         // found the favourite Spot?
         final var isFavourite = spot.equals(favouriteSpot);
 
-        // Update Db
         final var value = calculateJoy(joy, isFavourite);
-        user.getAlpaca().setJoy(joy + value);
 
+        // update data
+        user.getAlpaca().setJoy(joy + value);
         IDatabase.INSTANCE.updateUser(user);
 
         // reply to the user
-        final var format = new MessageFormat(Responses.getLocalizedResponse(getKey(isFavourite), locale));
-        final var msg = format.format(new Object[]{ value });
-
-        event.reply(msg).queue();
+        event.reply(Responses.getLocalizedResponse(getKey(isFavourite), locale, value)).queue();
     }
 
     @Override

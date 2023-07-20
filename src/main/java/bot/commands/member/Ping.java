@@ -8,18 +8,12 @@ import net.dv8tion.jda.api.interactions.DiscordLocale;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 
-import java.text.MessageFormat;
 import java.util.Locale;
 
 public class Ping extends InfoSlashCommand {
     @Override
     public void execute(final SlashCommandInteractionEvent event, final Locale locale) {
-        event.getJDA().getRestPing().queue(ping -> {
-            final var format = new MessageFormat(Responses.getLocalizedResponse("ping", locale));
-            final var msg = format.format(new Object[]{ ping });
-
-            event.reply(msg).queue();
-        });
+        event.getJDA().getRestPing().queue(ping -> event.reply(Responses.getLocalizedResponse("ping", locale, ping)).queue());
     }
 
     @Override

@@ -41,9 +41,7 @@ public class Buy extends UserSlashCommand {
 
         // sufficient balance?
         if (balance - price < 0) {
-            final var msg = Responses.getLocalizedResponse("balanceNotSufficient", locale);
-
-            event.reply(msg).setEphemeral(true).queue();
+            event.reply(Responses.getLocalizedResponse("balanceNotSufficient", locale)).setEphemeral(true).queue();
             return;
         }
 
@@ -54,10 +52,7 @@ public class Buy extends UserSlashCommand {
         IDatabase.INSTANCE.updateUser(user);
 
         // reply to the user
-        final var format = new MessageFormat(Responses.getLocalizedResponse("buySuccessful", locale));
-        final var msg = format.format(new Object[]{ amount, item.getName(), price });
-
-        event.reply(msg).queue();
+        event.reply(Responses.getLocalizedResponse("buySuccessful", locale, amount, item.getName(), price)).queue();
     }
 
     @Override

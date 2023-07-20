@@ -16,10 +16,10 @@ import java.util.Locale;
 public class Count extends InfoSlashCommand {
     @Override
     public void execute(final SlashCommandInteractionEvent event, final Locale locale) {
-        final var format = new MessageFormat(Responses.getLocalizedResponse("countAlpacas", locale));
-        final var msg = format.format(new Object[]{ IDatabase.INSTANCE.getUserCount(), event.getJDA().getGuilds().size() });
+        final var userCount = IDatabase.INSTANCE.getUserCount();
+        final var guildSize = event.getJDA().getGuilds().size();
 
-        event.reply(msg).queue();
+        event.reply(Responses.getLocalizedResponse("countAlpacas", locale, userCount, guildSize)).queue();
     }
 
     @Override

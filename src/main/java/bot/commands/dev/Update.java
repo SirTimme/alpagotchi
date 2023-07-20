@@ -10,7 +10,6 @@ import net.dv8tion.jda.api.interactions.commands.DefaultMemberPermissions;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 
-import java.text.MessageFormat;
 import java.util.Locale;
 
 public class Update extends InfoSlashCommand {
@@ -32,10 +31,7 @@ public class Update extends InfoSlashCommand {
              .addCommands(this.commandManager.getCommandDataByTypes(CommandType.DEV))
              .queue();
 
-        final var format = new MessageFormat(Responses.getLocalizedResponse("updateCommands", locale));
-        final var msg = format.format(new Object[]{ this.commandManager.getCommands().size() });
-
-        event.reply(msg).queue();
+        event.reply(Responses.getLocalizedResponse("updateCommands", locale, this.commandManager.getCommands().size())).queue();
     }
 
     @Override

@@ -25,9 +25,7 @@ public class Language extends InfoSlashCommand {
                 .addOption(Responses.getLocalizedResponse("germanDisplayName", locale), "de", Emoji.fromUnicode("\uD83C\uDDE9\uD83C\uDDEA"))
                 .build();
 
-        final var msg = Responses.getLocalizedResponse("languageSelect", locale);
-
-        event.reply(msg).addActionRow(menuLanguage).queue();
+        event.reply(Responses.getLocalizedResponse("languageSelect", locale)).addActionRow(menuLanguage).queue();
     }
 
     @Override

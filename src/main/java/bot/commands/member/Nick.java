@@ -22,8 +22,7 @@ public class Nick extends UserSlashCommand {
 
         // discord only allows for 256 char long embed titles
         if (nickname.length() > 256) {
-            final var msg = Responses.getLocalizedResponse("nicknameTooLong", locale);
-            event.reply(msg).setEphemeral(true).queue();
+            event.reply(Responses.getLocalizedResponse("nicknameTooLong", locale)).setEphemeral(true).queue();
             return;
         }
 
@@ -31,9 +30,7 @@ public class Nick extends UserSlashCommand {
         user.getAlpaca().setNickname(nickname);
 
         // reply to the user
-        final var format = new MessageFormat(Responses.getLocalizedResponse("nickname", locale));
-        final var msg = format.format(new Object[]{ nickname });
-        event.reply(msg).queue();
+        event.reply(Responses.getLocalizedResponse("nickname", locale, nickname)).queue();
     }
 
     @Override

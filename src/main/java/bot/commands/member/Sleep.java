@@ -21,26 +21,22 @@ public class Sleep extends UserSlashCommand {
         // already max energy?
         final var energy = user.getAlpaca().getEnergy();
         if (energy == 100) {
-            final var msg = Responses.getLocalizedResponse("petJoyAlreadyMaximum", locale);
-            event.reply(msg).setEphemeral(true).queue();
+            event.reply(Responses.getLocalizedResponse("petJoyAlreadyMaximum", locale)).setEphemeral(true).queue();
             return;
         }
 
         // Selected duration
         final var duration = event.getOption("duration").getAsInt();
 
-        // Update db
         final var newEnergy = energy + duration > 100 ? 100 - energy : duration;
+
+        // Update data
         user.getAlpaca().setEnergy(energy + newEnergy);
         user.getCooldown().setSleep(System.currentTimeMillis() + 1000L * 60 * newEnergy);
-
         IDatabase.INSTANCE.updateUser(user);
 
         // reply to the user
-        final var format = new MessageFormat(Responses.getLocalizedResponse("sleep", locale));
-        final var msg = format.format(new Object[]{ newEnergy });
-
-        event.reply(msg).queue();
+        event.reply(Responses.getLocalizedResponse("sleep", locale, newEnergy)).queue();
     }
 
     @Override

@@ -20,9 +20,7 @@ public class Delete extends UserSlashCommand {
         final var btnSuccess = Button.success(userId + ":deleteAccept", Responses.getLocalizedResponse("buttonAccept", locale));
         final var btnCancel = Button.danger(userId + ":deleteCancelled", Responses.getLocalizedResponse("buttonCancel", locale));
 
-        final var msg = Responses.getLocalizedResponse("deleteWarning", locale);
-
-        event.reply(msg).addActionRow(btnSuccess, btnCancel).queue();
+        event.reply(Responses.getLocalizedResponse("deleteWarning", locale)).addActionRow(btnSuccess, btnCancel).queue();
     }
 
     @Override

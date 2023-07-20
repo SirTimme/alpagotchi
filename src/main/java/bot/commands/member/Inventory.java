@@ -27,8 +27,7 @@ public class Inventory extends UserSlashCommand {
     @Override
     public void execute(final SlashCommandInteractionEvent event, final Locale locale, final User user) {
         event.getJDA().retrieveUserById(System.getenv("DEV_ID")).queue(dev -> {
-            final var balanceFormat = new MessageFormat(Responses.getLocalizedResponse("formattedCurrentBalance", locale));
-            final var balanceMsg = balanceFormat.format(new Object[]{ user.getInventory().getCurrency() });
+            final var balanceMsg = Responses.getLocalizedResponse("formattedCurrentBalance", locale, user.getInventory().getCurrency());
 
             final var embed = new EmbedBuilder()
                     .setTitle(Responses.getLocalizedResponse("inventoryEmbedTitle", locale))

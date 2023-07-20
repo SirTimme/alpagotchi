@@ -23,16 +23,12 @@ public class Outfit extends UserSlashCommand {
         // selected outfit
         final var outfit = event.getOption("outfit").getAsString();
 
-        // update outfit
+        // update data
         user.getAlpaca().setOutfit(outfit);
-
-        // update db
         IDatabase.INSTANCE.updateUser(user);
 
         // reply to the user
-        final var format = new MessageFormat(Responses.getLocalizedResponse("outfit", locale));
-        final var msg = format.format(new Object[]{ outfit });
-        event.reply(msg).queue();
+        event.reply(Responses.getLocalizedResponse("outfit", locale, outfit)).queue();
     }
 
     @Override

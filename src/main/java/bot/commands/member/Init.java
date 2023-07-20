@@ -18,9 +18,7 @@ public class Init extends UserSlashCommand {
     @Override
     public void execute(final SlashCommandInteractionEvent event, final Locale locale, final User user) {
         if (user != null) {
-            final var msg = Responses.getLocalizedResponse("initAlreadyOwned", locale);
-
-            event.reply(msg).setEphemeral(true).queue();
+            event.reply(Responses.getLocalizedResponse("initAlreadyOwned", locale)).setEphemeral(true).queue();
             return;
         }
 
