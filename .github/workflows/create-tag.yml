@@ -3,7 +3,8 @@ name: Create tag
 on:
   push:
     branches:
-      - migrate-to-sql
+      - main
+      - 'feature/**'
 
 jobs:
   tag:
