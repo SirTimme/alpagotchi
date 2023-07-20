@@ -2,8 +2,8 @@ name: Build and publish
 
 on:
   push:
-    branches:
-      - migrate-to-sql
+    tags:
+      - v*
 
 jobs:
   maven:
@@ -34,14 +34,6 @@ jobs:
     needs: maven
 
     steps:
-      - name: Bump version and push tag
-        uses: mathieudutour/github-tag-action@v6.1
-        id: tag_version
-        with:
-          github_token: ${{ secrets.ACCESS_TOKEN }}
-          release_branches: |
-            .*
-
       - name: Collect Docker Metadata
         id: meta
         uses: docker/metadata-action@v4

@@ -1,0 +1,22 @@
+name: Create tag
+
+on:
+  push:
+    branches:
+      - migrate-to-sql
+
+jobs:
+  tag:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Bump version and push tag
+        uses: mathieudutour/github-tag-action@v6.1
+        id: tag_version
+        with:
+          github_token: ${{ secrets.ACCESS_TOKEN }}
+          release_branches: |
+            .*
