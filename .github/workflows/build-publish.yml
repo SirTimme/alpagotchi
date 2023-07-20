@@ -34,7 +34,7 @@ jobs:
     needs: maven
 
     steps:
-      - name: Collect Docker Metadata
+      - name: Create SemVer tag for Docker image
         id: meta
         uses: docker/metadata-action@v4
         with:
