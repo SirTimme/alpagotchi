@@ -4,8 +4,8 @@ on:
   workflow_run:
     workflows:
       - maven
-    type:
-      - complete
+    types:
+      - completed
 
 jobs:
   docker:
