@@ -19,5 +19,5 @@ ENV POSTGRES_PASSWORD=$POSTGRES_PASSWORD
 ARG POSTGRES_URL=""
 ENV POSTGRES_URL=$POSTGRES_URL
 ENV DEV_ID=483012399893577729
-COPY --from=build $HOME/target/Alpagotchi-jar-with-dependencies.jar Alpagotchi.jar
-CMD java -jar Alpagotchi.jar
+COPY --from=build $HOME/target/Alpagotchi-jar-with-dependencies.jar alpagotchi.jar
+CMD java -jar alpagotchi.jar
