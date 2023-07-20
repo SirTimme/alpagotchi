@@ -52,6 +52,7 @@ jobs:
             type=semver,pattern={{version}}
           flavor: |
             latest=auto
+
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
 
