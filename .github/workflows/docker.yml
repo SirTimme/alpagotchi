@@ -2,8 +2,7 @@ name: Build and publish docker image
 
 on:
   workflow_run:
-    workflows:
-      - Build java project with Maven
+    workflows: [ Build java project with Maven ]
     types:
       - completed
 
