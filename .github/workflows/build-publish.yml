@@ -31,6 +31,12 @@ jobs:
     needs: maven
 
     steps:
+      - name: Bump version and push tag
+        uses: hennejg/github-tag-action@v4.1.jh1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          release-branches: .*
+
       - name: Collect Docker Metadata
         id: meta
         uses: docker/metadata-action@v4
@@ -38,7 +44,7 @@ jobs:
           images: |
             23118/alpagotchi
           tags: |
-            type=sha
+            type=semver,pattern={{version}}
           flavor: |
             latest=auto
       - name: Set up QEMU
