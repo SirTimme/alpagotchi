@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - main
-      - 'feature/**'
 
 jobs:
   tag:
@@ -19,5 +18,3 @@ jobs:
         id: tag_version
         with:
           github_token: ${{ secrets.ACCESS_TOKEN }}
-          release_branches: |
-            .*
