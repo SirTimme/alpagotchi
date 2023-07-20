@@ -27,6 +27,10 @@ public class Utils {
         return TimeUnit.MILLISECONDS.toMinutes(cooldown - System.currentTimeMillis());
     }
 
+    public static long setCooldown(final int minutes) {
+        return System.currentTimeMillis() + 1000L * 60 * minutes;
+    }
+
     private static Locale retrieveLocale(final Guild guild) {
         final var locale = Locale.ENGLISH;
 

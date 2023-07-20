@@ -5,6 +5,7 @@ import bot.db.IDatabase;
 import bot.models.User;
 import bot.utils.CommandType;
 import bot.utils.Responses;
+import bot.utils.Utils;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.DiscordLocale;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
@@ -24,14 +25,14 @@ public class Work extends UserSlashCommand {
     @Override
     public void execute(final SlashCommandInteractionEvent event, final Locale locale, final User user) {
         // is the alpaca currently sleeping?
-        final long sleep = TimeUnit.MILLISECONDS.toMinutes(user.getCooldown().getSleep() - System.currentTimeMillis());
+        final long sleep = Utils.cooldownToMinutes(user.getCooldown().getSleep());
         if (sleep > 0) {
             event.reply(Responses.getLocalizedResponse("sleepCurrentlySleeping", locale, sleep)).setEphemeral(true).queue();
             return;
         }
 
         // did the alpaca already work?
-        final long work = TimeUnit.MILLISECONDS.toMinutes(user.getCooldown().getWork() - System.currentTimeMillis());
+        final long work = Utils.cooldownToMinutes(user.getCooldown().getWork());
         if (work > 0) {
             event.reply(Responses.getLocalizedResponse("sleepCurrentlySleeping", locale, work)).setEphemeral(true).queue();
             return;
@@ -60,7 +61,7 @@ public class Work extends UserSlashCommand {
         user.getInventory().setCurrency(user.getInventory().getCurrency() + fluffies);
         user.getAlpaca().setEnergy(user.getAlpaca().getEnergy() - energyCost);
         user.getAlpaca().setJoy(user.getAlpaca().getJoy() - joyCost);
-        user.getCooldown().setWork(System.currentTimeMillis() + 1000L * 60 * 20);
+        user.getCooldown().setWork(Utils.setCooldown(20));
         IDatabase.INSTANCE.updateUser(user);
 
         // reply to the user

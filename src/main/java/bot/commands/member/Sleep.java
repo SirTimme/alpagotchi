@@ -5,6 +5,7 @@ import bot.db.IDatabase;
 import bot.models.User;
 import bot.utils.CommandType;
 import bot.utils.Responses;
+import bot.utils.Utils;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.DiscordLocale;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
@@ -32,7 +33,7 @@ public class Sleep extends UserSlashCommand {
 
         // Update data
         user.getAlpaca().setEnergy(energy + newEnergy);
-        user.getCooldown().setSleep(System.currentTimeMillis() + 1000L * 60 * newEnergy);
+        user.getCooldown().setSleep(Utils.setCooldown(newEnergy));
         IDatabase.INSTANCE.updateUser(user);
 
         // reply to the user
