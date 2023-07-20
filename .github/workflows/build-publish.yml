@@ -35,7 +35,8 @@ jobs:
         uses: hennejg/github-tag-action@v4.1.jh1
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          release-branches: .*
+          release_branches: |
+            .*
 
       - name: Collect Docker Metadata
         id: meta
