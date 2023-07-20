@@ -1,27 +1,21 @@
 package bot.models;
 
-import org.bson.codecs.pojo.annotations.BsonCreator;
-import org.bson.codecs.pojo.annotations.BsonIgnore;
-import org.bson.codecs.pojo.annotations.BsonProperty;
+import jakarta.persistence.*;
 
-import java.util.concurrent.TimeUnit;
-
+@Entity
+@Table(name = "cooldowns")
 public class Cooldown {
-    private long sleep;
-    private long work;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
 
-    @BsonCreator
-    public Cooldown(@BsonProperty(value = "sleep") final long sleep,
-            @BsonProperty(value = "work") final long work
-    ) {
-        this.sleep = sleep;
-        this.work = work;
-    }
+    @Column(name = "sleep", nullable = false)
+    private long sleep = 0L;
 
-    @BsonIgnore
-    public long getSleepMinutes() {
-        return TimeUnit.MILLISECONDS.toMinutes(this.sleep - System.currentTimeMillis());
-    }
+    @Column(name = "work", nullable = false)
+    private long work = 0L;
+
+    public Cooldown() { }
 
     public long getSleep() {
         return this.sleep;
@@ -29,11 +23,6 @@ public class Cooldown {
 
     public void setSleep(final long sleep) {
         this.sleep = sleep;
-    }
-
-    @BsonIgnore
-    public long getWorkMinutes() {
-        return TimeUnit.MILLISECONDS.toMinutes(this.work - System.currentTimeMillis());
     }
 
     public long getWork() {

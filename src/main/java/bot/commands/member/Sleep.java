@@ -1,10 +1,11 @@
 package bot.commands.member;
 
-import bot.commands.UserCommand;
+import bot.commands.UserSlashCommand;
 import bot.db.IDatabase;
-import bot.models.Entry;
+import bot.models.User;
 import bot.utils.CommandType;
 import bot.utils.Responses;
+import bot.utils.Utils;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.DiscordLocale;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
@@ -14,34 +15,29 @@ import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 
 import java.text.MessageFormat;
 import java.util.Locale;
-import java.util.Objects;
 
-public class Sleep extends UserCommand {
+public class Sleep extends UserSlashCommand {
     @Override
-    public void execute(final SlashCommandInteractionEvent event, final Locale locale, final Entry user) {
-        // Already max energy?
-        final var energy = user.getEnergy();
+    public void execute(final SlashCommandInteractionEvent event, final Locale locale, final User user) {
+        // already max energy?
+        final var energy = user.getAlpaca().getEnergy();
         if (energy == 100) {
-            final var msg = Responses.getLocalizedResponse("petJoyAlreadyMaximum", locale);
-
-            event.reply(msg).setEphemeral(true).queue();
+            event.reply(Responses.getLocalizedResponse("petJoyAlreadyMaximum", locale)).setEphemeral(true).queue();
             return;
         }
 
         // Selected duration
-        final var durationChoice = Objects.requireNonNull(event.getOption("duration"));
-        final var duration = durationChoice.getAsInt();
+        final var duration = event.getOption("duration").getAsInt();
 
-        // Update db
         final var newEnergy = energy + duration > 100 ? 100 - energy : duration;
-        user.setEnergy(energy + newEnergy);
-        user.setSleep(System.currentTimeMillis() + 1000L * 60 * newEnergy);
+
+        // Update data
+        user.getAlpaca().setEnergy(energy + newEnergy);
+        user.getCooldown().setSleep(Utils.setCooldown(newEnergy));
         IDatabase.INSTANCE.updateUser(user);
 
-        final var format = new MessageFormat(Responses.getLocalizedResponse("sleep", locale));
-        final var msg = format.format(new Object[]{ newEnergy });
-
-        event.reply(msg).queue();
+        // reply to the user
+        event.reply(Responses.getLocalizedResponse("sleep", locale, newEnergy)).queue();
     }
 
     @Override

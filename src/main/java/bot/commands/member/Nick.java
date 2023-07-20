@@ -1,8 +1,7 @@
 package bot.commands.member;
 
-import bot.commands.UserCommand;
-import bot.db.IDatabase;
-import bot.models.Entry;
+import bot.commands.UserSlashCommand;
+import bot.models.User;
 import bot.utils.CommandType;
 import bot.utils.Responses;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
@@ -14,28 +13,24 @@ import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 
 import java.text.MessageFormat;
 import java.util.Locale;
-import java.util.Objects;
 
-public class Nick extends UserCommand {
+public class Nick extends UserSlashCommand {
     @Override
-    public void execute(final SlashCommandInteractionEvent event, final Locale locale, final Entry user) {
-        final var nicknameChoice = Objects.requireNonNull(event.getOption("nickname"));
-        final var nickname = nicknameChoice.getAsString();
+    public void execute(final SlashCommandInteractionEvent event, final Locale locale, final User user) {
+        // selected nickname
+        final var nickname = event.getOption("nickname").getAsString();
 
+        // discord only allows for 256 char long embed titles
         if (nickname.length() > 256) {
-            final var msg = Responses.getLocalizedResponse("nicknameTooLong", locale);
-
-            event.reply(msg).setEphemeral(true).queue();
+            event.reply(Responses.getLocalizedResponse("nicknameTooLong", locale)).setEphemeral(true).queue();
             return;
         }
 
-        user.setNickname(nickname);
-        IDatabase.INSTANCE.updateUser(user);
+        // update nickname
+        user.getAlpaca().setNickname(nickname);
 
-        final var format = new MessageFormat(Responses.getLocalizedResponse("nickname", locale));
-        final var msg = format.format(new Object[]{ nickname });
-
-        event.reply(msg).queue();
+        // reply to the user
+        event.reply(Responses.getLocalizedResponse("nickname", locale, nickname)).queue();
     }
 
     @Override

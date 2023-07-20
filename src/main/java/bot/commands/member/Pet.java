@@ -1,8 +1,8 @@
 package bot.commands.member;
 
-import bot.commands.UserCommand;
+import bot.commands.UserSlashCommand;
 import bot.db.IDatabase;
-import bot.models.Entry;
+import bot.models.User;
 import bot.utils.CommandType;
 import bot.utils.Responses;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
@@ -16,41 +16,36 @@ import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import java.text.MessageFormat;
 import java.util.List;
 import java.util.Locale;
-import java.util.Objects;
 
-public class Pet extends UserCommand {
+public class Pet extends UserSlashCommand {
     private final List<String> spots = List.of("head", "tail", "leg", "neck", "back");
 
     @Override
-    public void execute(final SlashCommandInteractionEvent event, final Locale locale, final Entry user) {
-        // Already max joy?
-        final var joy = user.getJoy();
+    public void execute(final SlashCommandInteractionEvent event, final Locale locale, final User user) {
+        // already max joy?
+        final var joy = user.getAlpaca().getJoy();
         if (joy == 100) {
-            final var msg = Responses.getLocalizedResponse("petJoyAlreadyMaximum", locale);
-
-            event.reply(msg).setEphemeral(true).queue();
+            event.reply(Responses.getLocalizedResponse("petJoyAlreadyMaximum", locale)).setEphemeral(true).queue();
             return;
         }
 
-        // Choose a random spot
+        // choose a random spot
         final var favouriteSpot = this.spots.get((int) (Math.random() * 5));
 
-        // Selected spot
-        final var spotChoice = Objects.requireNonNull(event.getOption("spot"));
-        final var spot = spotChoice.getAsString();
+        // selected spot
+        final var spot = event.getOption("spot").getAsString();
 
-        // Found the favourite Spot?
+        // found the favourite Spot?
         final var isFavourite = spot.equals(favouriteSpot);
 
-        // Update Db
         final var value = calculateJoy(joy, isFavourite);
-        user.setJoy(joy + value);
+
+        // update data
+        user.getAlpaca().setJoy(joy + value);
         IDatabase.INSTANCE.updateUser(user);
 
-        final var format = new MessageFormat(Responses.getLocalizedResponse(getKey(isFavourite), locale));
-        final var msg = format.format(new Object[]{ value });
-
-        event.reply(msg).queue();
+        // reply to the user
+        event.reply(Responses.getLocalizedResponse(getKey(isFavourite), locale, value)).queue();
     }
 
     @Override
@@ -83,7 +78,6 @@ public class Pet extends UserCommand {
 
     private int calculateJoy(final int joy, final boolean isFavourite) {
         final int value = isFavourite ? (int) (Math.random() * 13 + 5) : (int) (Math.random() * 9 + 3);
-
         return joy + value > 100 ? 100 - joy : value;
     }
 }

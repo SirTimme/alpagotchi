@@ -1,48 +1,38 @@
 package bot.models;
 
-import org.bson.codecs.pojo.annotations.BsonCreator;
-import org.bson.codecs.pojo.annotations.BsonIgnore;
-import org.bson.codecs.pojo.annotations.BsonProperty;
+import bot.utils.LocaleConverter;
+import jakarta.persistence.*;
+import org.hibernate.annotations.NaturalId;
 
 import java.util.Locale;
 
+@Entity
+@Table(name = "guild_settings", indexes = @Index(name = "idx_guild_id", unique = true, columnList = "guild_id"))
 public class GuildSettings {
-    @BsonProperty(value = "_id")
-    private final long guildID;
-    private String language;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
 
-    public GuildSettings(final long guildID) {
-        this.guildID = guildID;
-        this.language = "en";
+    @NaturalId
+    @Column(name = "guild_id", nullable = false)
+    private long guildId;
+
+    @Column(name = "locale", nullable = false)
+    @Convert(converter = LocaleConverter.class)
+    private Locale locale = Locale.ENGLISH;
+
+    public GuildSettings() { }
+
+    public GuildSettings(final long guildId, final Locale locale) {
+        this.guildId = guildId;
+        this.locale = locale;
     }
 
-    @BsonCreator
-    public GuildSettings(@BsonProperty(value = "_id") final long guildID,
-            @BsonProperty(value = "language") final String language
-    ) {
-        this.guildID = guildID;
-        this.language = language;
-    }
-
-    public long getGuildID() {
-        return this.guildID;
-    }
-
-    public String getLanguage() {
-        return this.language;
-    }
-
-    public void setLanguage(final String language) {
-        this.language = language;
-    }
-
-    @BsonIgnore
     public Locale getLocale() {
-        return Locale.forLanguageTag(this.language);
+        return this.locale;
     }
 
-    @BsonIgnore
     public void setLocale(final Locale locale) {
-        this.language = locale.toLanguageTag();
+        this.locale = locale;
     }
 }

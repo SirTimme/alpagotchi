@@ -1,8 +1,8 @@
 package bot.commands.member;
 
-import bot.commands.UserCommand;
+import bot.commands.UserSlashCommand;
 import bot.db.IDatabase;
-import bot.models.Entry;
+import bot.models.User;
 import bot.shop.ItemManager;
 import bot.utils.CommandType;
 import bot.utils.Responses;
@@ -17,9 +17,8 @@ import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import java.text.MessageFormat;
 import java.util.List;
 import java.util.Locale;
-import java.util.Objects;
 
-public class Buy extends UserCommand {
+public class Buy extends UserSlashCommand {
     private final ItemManager itemManager;
 
     public Buy(final ItemManager itemManager) {
@@ -27,38 +26,33 @@ public class Buy extends UserCommand {
     }
 
     @Override
-    public void execute(final SlashCommandInteractionEvent event, final Locale locale, final Entry user) {
-        // Selected amount
-        final var amountChoice =  Objects.requireNonNull(event.getOption("amount"));
-        final var amount = amountChoice.getAsInt();
+    public void execute(final SlashCommandInteractionEvent event, final Locale locale, final User user) {
+        // selected amount
+        final var amount = event.getOption("amount").getAsInt();
 
-        // Selected item
-        final var itemChoice = Objects.requireNonNull(event.getOption("item"));
-        final var item = this.itemManager.getItem(itemChoice.getAsString());
+        // selected item
+        final var item = this.itemManager.getItem(event.getOption("item").getAsString());
 
-        // Total price
+        // total price
         final var price = amount * item.getPrice();
 
-        // Current balance
-        final var balance = user.getCurrency();
+        // current balance
+        final var balance = user.getInventory().getCurrency();
 
-        // Enough balance?
+        // sufficient balance?
         if (balance - price < 0) {
-            final var msg = Responses.getLocalizedResponse("balanceNotSufficient", locale);
-
-            event.reply(msg).setEphemeral(true).queue();
+            event.reply(Responses.getLocalizedResponse("balanceNotSufficient", locale)).setEphemeral(true).queue();
             return;
         }
 
-        // Update db
-        user.setCurrency(balance - price);
-        user.setItem(item.getName(), user.getItem(item.getName()) + amount);
+        // update db
+        user.getInventory().setCurrency(balance - price);
+        user.getInventory().getItems().put(item.getName(), amount);
+
         IDatabase.INSTANCE.updateUser(user);
 
-        final var format = new MessageFormat(Responses.getLocalizedResponse("buySuccessful", locale));
-        final var msg = format.format(new Object[]{ amount, item.getName(), price });
-
-        event.reply(msg).queue();
+        // reply to the user
+        event.reply(Responses.getLocalizedResponse("buySuccessful", locale, amount, item.getName(), price)).queue();
     }
 
     @Override

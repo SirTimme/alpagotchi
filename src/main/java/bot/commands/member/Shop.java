@@ -1,11 +1,10 @@
 package bot.commands.member;
 
-import bot.commands.UserCommand;
-import bot.models.Entry;
-import bot.shop.Item;
+import bot.commands.UserSlashCommand;
+import bot.models.User;
+import bot.shop.IConsumable;
 import bot.shop.ItemManager;
 import bot.utils.CommandType;
-import bot.utils.Env;
 import bot.utils.Responses;
 import com.jakewharton.fliptables.FlipTable;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -18,7 +17,7 @@ import java.text.MessageFormat;
 import java.time.Instant;
 import java.util.Locale;
 
-public class Shop extends UserCommand {
+public class Shop extends UserSlashCommand {
     private final ItemManager itemManager;
 
     public Shop(final ItemManager itemManager) {
@@ -26,10 +25,9 @@ public class Shop extends UserCommand {
     }
 
     @Override
-    public void execute(final SlashCommandInteractionEvent event, final Locale locale, final Entry user) {
-        event.getJDA().retrieveUserById(Env.get("DEV_ID")).queue(dev -> {
-            final var format = new MessageFormat(Responses.getLocalizedResponse("formattedCurrentBalance", locale));
-            final var msg = format.format(new Object[]{ user.getCurrency() });
+    public void execute(final SlashCommandInteractionEvent event, final Locale locale, final User user) {
+        event.getJDA().retrieveUserById(System.getenv("DEV_ID")).queue(dev -> {
+            final var msg = Responses.getLocalizedResponse("formattedCurrentBalance", locale, user.getInventory().getCurrency());
 
             final var embed = new EmbedBuilder()
                     .setTitle(Responses.getLocalizedResponse("shopEmbedTitle", locale))
@@ -53,7 +51,7 @@ public class Shop extends UserCommand {
         return CommandType.INFO;
     }
 
-    private String buildTable(final Entry user, final Locale locale) {
+    private String buildTable(final User user, final Locale locale) {
         final var content = this.itemManager
                 .getItems()
                 .stream()
@@ -69,11 +67,11 @@ public class Shop extends UserCommand {
         return FlipTable.of(header, content);
     }
 
-    private String[] buildRow(final Item item, final Entry user, final Locale locale) {
+    private String[] buildRow(final IConsumable item, final User user, final Locale locale) {
         final var itemName = Responses.getLocalizedResponse(item.getName(), locale);
         final var saturation = String.valueOf(item.getPrice());
-        final var quantity = String.valueOf(user.getItem(item.getName()));
+        final var quantity = user.getInventory().getItems().get(item.getName());
 
-        return new String[]{ itemName, saturation, quantity };
+        return new String[]{ itemName, saturation, String.valueOf(quantity) };
     }
 }

@@ -1,10 +1,10 @@
 package bot.commands.member;
 
-import bot.commands.UserCommand;
-import bot.models.Entry;
+import bot.commands.UserSlashCommand;
+import bot.models.User;
 import bot.utils.CommandType;
-import bot.utils.Env;
 import bot.utils.Responses;
+import bot.utils.Utils;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.DiscordLocale;
@@ -18,36 +18,31 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.IOException;
 import java.text.MessageFormat;
 import java.time.Instant;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 
-public class Alpaca extends UserCommand {
+public class Alpaca extends UserSlashCommand {
     private static final Logger LOGGER = LoggerFactory.getLogger(Alpaca.class);
     private final Map<String, BufferedImage> images = new HashMap<>();
     private final Color[] colors = { Color.BLACK, Color.RED, Color.ORANGE, Color.YELLOW, Color.GREEN };
 
     public Alpaca() {
         try {
-            final var folder = new File("src/main/resources/outfits");
-            final var files = Objects.requireNonNull(folder.listFiles());
-            for (final var file : files) {
-                final var name = file.getName().split("\\.")[0];
-
-                this.images.put(name, ImageIO.read(file));
-            }
+            this.images.put("default", ImageIO.read(getClass().getResourceAsStream("/outfits/default.png")));
+            this.images.put("gentleman", ImageIO.read(getClass().getResourceAsStream("/outfits/gentleman.png")));
+            this.images.put("lady", ImageIO.read(getClass().getResourceAsStream("/outfits/lady.png")));
         } catch (final IOException error) {
             LOGGER.error(error.getMessage());
         }
     }
 
     @Override
-    public void execute(final SlashCommandInteractionEvent event, final Locale locale, final Entry user) {
+    public void execute(final SlashCommandInteractionEvent event, final Locale locale, final User user) {
         final var bytes = new ByteArrayOutputStream();
         try {
             ImageIO.write(createImage(user), "png", bytes);
@@ -55,12 +50,16 @@ public class Alpaca extends UserCommand {
             LOGGER.error(error.getMessage());
         }
 
-        event.getJDA().retrieveUserById(Env.get("DEV_ID")).queue(dev -> {
+        event.getJDA().retrieveUserById(System.getenv("DEV_ID")).queue(dev -> {
+            final var workCooldown = Utils.cooldownToMinutes(user.getCooldown().getWork());
+            final var sleepCooldown = Utils.cooldownToMinutes(user.getCooldown().getSleep());
+            final var nickname = user.getAlpaca().getNickname();
+
             final var embed = new EmbedBuilder()
-                    .setTitle(user.getNickname())
+                    .setTitle(nickname)
                     .setDescription(Responses.getLocalizedResponse("alpacaEmbedDescription", locale))
-                    .addField(Responses.getLocalizedResponse("alpacaEmbedWorkFieldTitle", locale), getCooldownMsg(user.getWork(), locale), true)
-                    .addField(Responses.getLocalizedResponse("alpacaEmbedSleepFieldTitle", locale), getCooldownMsg(user.getSleep(), locale), true)
+                    .addField(Responses.getLocalizedResponse("alpacaEmbedWorkFieldTitle", locale), getCooldownMsg(workCooldown, locale), true)
+                    .addField(Responses.getLocalizedResponse("alpacaEmbedSleepFieldTitle", locale), getCooldownMsg(sleepCooldown, locale), true)
                     .setThumbnail(event.getUser().getAvatarUrl())
                     .setFooter(Responses.getLocalizedResponse("createdByNotice", locale), dev.getAvatarUrl())
                     .setTimestamp(Instant.now())
@@ -84,13 +83,13 @@ public class Alpaca extends UserCommand {
         return CommandType.USER;
     }
 
-    private BufferedImage createImage(final Entry user) {
-        final int hunger = user.getHunger();
-        final int thirst = user.getThirst();
-        final int energy = user.getEnergy();
-        final int joy = user.getJoy();
+    private BufferedImage createImage(final User user) {
+        final int hunger = user.getAlpaca().getHunger();
+        final int thirst = user.getAlpaca().getThirst();
+        final int energy = user.getAlpaca().getEnergy();
+        final int joy = user.getAlpaca().getJoy();
 
-        final BufferedImage background = this.images.get(user.getOutfit());
+        final BufferedImage background = this.images.get(user.getAlpaca().getOutfit());
         final BufferedImage img = new BufferedImage(background.getWidth(), background.getHeight(), BufferedImage.TYPE_INT_RGB);
 
         final Graphics graphics = img.createGraphics();

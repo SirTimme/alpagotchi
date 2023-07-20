@@ -1,40 +1,34 @@
 package bot.shop;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import bot.shop.drinks.Cacao;
+import bot.shop.drinks.Lemonade;
+import bot.shop.drinks.Water;
+import bot.shop.foods.Salad;
+import bot.shop.foods.Steak;
+import bot.shop.foods.Taco;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
-import java.lang.reflect.Type;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 public class ItemManager {
-    private static final Logger LOGGER = LoggerFactory.getLogger(ItemManager.class);
-    private List<Item> items;
+    private final Map<String, IConsumable> items;
 
     public ItemManager() {
-        try {
-            final BufferedReader reader = new BufferedReader(new FileReader("src/main/resources/data/items.json"));
-            final Type type = new TypeToken<List<Item>>() {
-            }.getType();
-
-            this.items = new Gson().fromJson(reader, type);
-        } catch (final IOException error) {
-            LOGGER.error(error.getMessage());
-        }
+        this.items = new TreeMap<>();
+        this.items.put("salad", new Salad());
+        this.items.put("taco", new Taco());
+        this.items.put("steak", new Steak());
+        this.items.put("water", new Water());
+        this.items.put("lemonade", new Lemonade());
+        this.items.put("cacao", new Cacao());
     }
 
-    public Item getItem(final String name) {
-        return this.items.stream()
-                         .filter(item -> item.getName().equals(name))
-                         .findAny()
-                         .orElse(null);
+    public IConsumable getItem(final String itemName) {
+        return this.items.get(itemName);
     }
 
-    public List<Item> getItems() {
-        return this.items;
+    public List<IConsumable> getItems() {
+        return this.items.values().stream().toList();
     }
 }

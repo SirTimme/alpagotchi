@@ -1,16 +1,20 @@
 package bot.db;
 
-import bot.models.Entry;
 import bot.models.GuildSettings;
+import bot.models.User;
 
 public interface IDatabase {
-    IDatabase INSTANCE = new Database();
+    IDatabase INSTANCE = new PostgresDB();
 
-    Entry getUserById(final long memberID);
+    void initDatabase();
 
-    void updateUser(final Entry entry);
+    void shutdownDatabase();
+
+    User getUserById(final long userId);
 
     void createUserById(final long memberID);
+
+    void updateUser(final User user);
 
     void deleteUserById(final long memberID);
 

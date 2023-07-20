@@ -1,9 +1,8 @@
 package bot.commands.member;
 
-import bot.commands.UserCommand;
-import bot.models.Entry;
+import bot.commands.UserSlashCommand;
+import bot.models.User;
 import bot.utils.CommandType;
-import bot.utils.Env;
 import bot.utils.Responses;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
@@ -15,13 +14,11 @@ import net.dv8tion.jda.api.interactions.components.buttons.Button;
 import java.time.Instant;
 import java.util.Locale;
 
-public class Init extends UserCommand {
+public class Init extends UserSlashCommand {
     @Override
-    public void execute(final SlashCommandInteractionEvent event, final Locale locale, final Entry user) {
+    public void execute(final SlashCommandInteractionEvent event, final Locale locale, final User user) {
         if (user != null) {
-            final var msg = Responses.getLocalizedResponse("initAlreadyOwned", locale);
-
-            event.reply(msg).setEphemeral(true).queue();
+            event.reply(Responses.getLocalizedResponse("initAlreadyOwned", locale)).setEphemeral(true).queue();
             return;
         }
 
@@ -30,7 +27,7 @@ public class Init extends UserCommand {
         final var btnAccept = Button.success(userId + ":initAccept", Responses.getLocalizedResponse("buttonAccept", locale));
         final var btnCancel = Button.danger(userId + ":initCancelled", Responses.getLocalizedResponse("buttonCancel", locale));
 
-        event.getJDA().retrieveUserById(Env.get("DEV_ID")).queue(dev -> {
+        event.getJDA().retrieveUserById(System.getenv("DEV_ID")).queue(dev -> {
             final var embed = new EmbedBuilder()
                     .setTitle(Responses.getLocalizedResponse("initEmbedTitle", locale))
                     .addField(Responses.getLocalizedResponse("initEmbedStorageFieldTitle", locale), Responses.getLocalizedResponse("initEmbedStorageFieldBody", locale), false)

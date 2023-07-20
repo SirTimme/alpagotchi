@@ -1,8 +1,8 @@
 package bot.commands.member;
 
-import bot.commands.UserCommand;
+import bot.commands.UserSlashCommand;
 import bot.db.IDatabase;
-import bot.models.Entry;
+import bot.models.User;
 import bot.utils.CommandType;
 import bot.utils.Responses;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
@@ -16,21 +16,19 @@ import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import java.text.MessageFormat;
 import java.util.List;
 import java.util.Locale;
-import java.util.Objects;
 
-public class Outfit extends UserCommand {
+public class Outfit extends UserSlashCommand {
     @Override
-    public void execute(final SlashCommandInteractionEvent event, final Locale locale, final Entry user) {
-        final var outfitChoice = Objects.requireNonNull(event.getOption("outfit"));
-        final var outfit = outfitChoice.getAsString();
+    public void execute(final SlashCommandInteractionEvent event, final Locale locale, final User user) {
+        // selected outfit
+        final var outfit = event.getOption("outfit").getAsString();
 
-        user.setOutfit(outfit);
+        // update data
+        user.getAlpaca().setOutfit(outfit);
         IDatabase.INSTANCE.updateUser(user);
 
-        final var format = new MessageFormat(Responses.getLocalizedResponse("outfit", locale));
-        final var msg = format.format(new Object[]{ outfit });
-
-        event.reply(msg).queue();
+        // reply to the user
+        event.reply(Responses.getLocalizedResponse("outfit", locale, outfit)).queue();
     }
 
     @Override

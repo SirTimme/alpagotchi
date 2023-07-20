@@ -1,21 +1,37 @@
 package bot.models;
 
-import org.bson.codecs.pojo.annotations.BsonCreator;
-import org.bson.codecs.pojo.annotations.BsonProperty;
+import jakarta.persistence.*;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import java.util.HashMap;
+import java.util.Map;
 
+@Entity
+@Table(name = "inventories")
 public class Inventory {
-    private final HashMap<String, Integer> items;
-    private int currency;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
 
-    @BsonCreator
-    public Inventory(@BsonProperty(value = "currency") final int currency,
-            @BsonProperty(value = "items") final HashMap<String, Integer> items
-    ) {
-        this.currency = currency;
-        this.items = items;
-    }
+    @Column(name = "currency", nullable = false)
+    private int currency = 0;
+
+    @ElementCollection
+    @CollectionTable(name = "items", joinColumns = @JoinColumn(name = "item_map_id"))
+    @MapKeyColumn(name = "item")
+    @Column(name = "amount")
+    @Fetch(FetchMode.JOIN)
+    private Map<String, Integer> items = new HashMap<>() {{
+        put("salad", 0);
+        put("taco", 0);
+        put("steak", 0);
+        put("water", 0);
+        put("lemonade", 0);
+        put("cacao", 0);
+    }};
+
+    public Inventory() { }
 
     public int getCurrency() {
         return this.currency;
@@ -25,15 +41,11 @@ public class Inventory {
         this.currency = currency;
     }
 
-    public HashMap<String, Integer> getItems() {
+    public Map<String, Integer> getItems() {
         return this.items;
     }
 
-    public int getItemByName(final String name) {
-        return this.items.get(name);
-    }
-
-    public void setItem(final String item, final int newValue) {
-        this.items.replace(item, newValue);
+    public void setItems(final Map<String, Integer> items) {
+        this.items = items;
     }
 }

@@ -1,9 +1,9 @@
 package bot.commands.member;
 
-import bot.commands.UserCommand;
+import bot.commands.UserSlashCommand;
 import bot.db.IDatabase;
-import bot.models.Entry;
-import bot.shop.Item;
+import bot.models.User;
+import bot.shop.IConsumable;
 import bot.shop.ItemManager;
 import bot.utils.CommandType;
 import bot.utils.Responses;
@@ -18,9 +18,8 @@ import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import java.text.MessageFormat;
 import java.util.List;
 import java.util.Locale;
-import java.util.Objects;
 
-public class Feed extends UserCommand {
+public class Feed extends UserSlashCommand {
     private final ItemManager itemManager;
 
     public Feed(final ItemManager itemManager) {
@@ -28,53 +27,56 @@ public class Feed extends UserCommand {
     }
 
     @Override
-    public void execute(final SlashCommandInteractionEvent event, final Locale locale, final Entry user) {
-        final var remainingSleep = user.getSleep();
+    public void execute(final SlashCommandInteractionEvent event, final Locale locale, final User user) {
+        // current sleep cooldown
+        final var remainingSleep = user.getCooldown().getSleep();
 
+        // alpaca currently sleeping?
         if (remainingSleep > 0) {
-            final var format = new MessageFormat(Responses.getLocalizedResponse("sleepCurrentlySleeping", locale));
-            final var msg = format.format(new Object[]{ remainingSleep });
-
-            event.reply(msg).setEphemeral(true).queue();
+            event.reply(Responses.getLocalizedResponse("sleepCurrentlySleeping", locale, remainingSleep)).setEphemeral(true).queue();
             return;
         }
 
-        // Selected amount
-        final var amountChoice = Objects.requireNonNull(event.getOption("amount"));
-        final var amount = amountChoice.getAsInt();
+        // selected amount
+        final var amount = event.getOption("amount").getAsInt();
 
-        // Selected item
-        final var itemChoice = Objects.requireNonNull(event.getOption("item"));
-        final var item = this.itemManager.getItem(itemChoice.getAsString());
+        // selected item
+        final var item = this.itemManager.getItem(event.getOption("item").getAsString());
 
-        final var newItemAmount = user.getItem(item.getName()) - amount;
+        // remove the fed items
+        final var newItemAmount = user.getInventory().getItems().get(item.getName()) - amount;
 
+        // trying to feed items you don't have?
         if (newItemAmount < 0) {
-            final var msg = Responses.getLocalizedResponse("feedNotEnoughItems", locale);
-
-            event.reply(msg).setEphemeral(true).queue();
+            event.reply(Responses.getLocalizedResponse("feedNotEnoughItems", locale)).setEphemeral(true).queue();
             return;
         }
 
-        final var oldValue = user.getStat(item.getType());
+        // old saturation value
+        final var oldValue = retrieveItemSaturation(user, item);
+
+        // new saturation with the fed item(s)
         final var saturation = amount * item.getSaturation();
 
+        // trying to overfeed your alpaca?
         if (oldValue + saturation > 100) {
-            final var msg = Responses.getLocalizedResponse("feedTooMuchSaturation", locale);
-
-            event.reply(msg).setEphemeral(true).queue();
+            event.reply(Responses.getLocalizedResponse("feedTooMuchSaturation", locale)).setEphemeral(true).queue();
             return;
         }
 
-        user.setItem(item.getName(), newItemAmount);
-        user.setStat(item.getType(), oldValue + saturation);
+        // update db
+        user.getInventory().getItems().put(item.getName(), newItemAmount);
+
+        if (item.getType().equals("food")) {
+            user.getAlpaca().setHunger(oldValue + saturation);
+        } else {
+            user.getAlpaca().setThirst(oldValue + saturation);
+        }
 
         IDatabase.INSTANCE.updateUser(user);
 
-        final var format = new MessageFormat(Responses.getLocalizedResponse(getKey(item), locale));
-        final var msg = format.format(new Object[]{ amount, item.getName(), saturation });
-
-        event.reply(msg).queue();
+        // reply to the user
+        event.reply(Responses.getLocalizedResponse(getKey(item), locale, amount, item.getName(), saturation)).queue();
     }
 
     @Override
@@ -107,9 +109,13 @@ public class Feed extends UserCommand {
         return CommandType.USER;
     }
 
-    private String getKey(final Item item) {
-        return item.getType().equals("hunger")
+    private String getKey(final IConsumable item) {
+        return item.getType().equals("food")
                 ? "feedHungerItem"
                 : "feedThirstItem";
+    }
+
+    private int retrieveItemSaturation(final User user, final IConsumable item) {
+        return item.getType().equals("food") ? user.getAlpaca().getHunger() : user.getAlpaca().getThirst();
     }
 }
