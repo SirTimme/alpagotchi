@@ -2,7 +2,9 @@ package bot.commands.dev;
 
 import bot.commands.InfoSlashCommand;
 import bot.db.IDatabase;
+import bot.models.User;
 import bot.utils.CommandType;
+import bot.utils.Responses;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.DiscordLocale;
 import net.dv8tion.jda.api.interactions.commands.Command;
@@ -19,7 +21,25 @@ import java.util.Locale;
 public class Set extends InfoSlashCommand {
     @Override
     protected void execute(final SlashCommandInteractionEvent event, final Locale locale) {
-        event.reply("Received modifying request").queue();
+        // is the targeted user present in the database?
+        final var userId = event.getOption("user-id").getAsUser().getIdLong();
+        final var dbUser = IDatabase.INSTANCE.getUserById(userId);
+        if (dbUser == null) {
+            event.reply(Responses.getLocalizedResponse("giftTargetNotInitialized", locale)).setEphemeral(true).queue();
+            return;
+        }
+
+        final var newValue = event.getOption("new-value").getAsInt();
+
+        final var response = switch (event.getSubcommandName()) {
+            case "balance" -> modifyBalance(dbUser, newValue, locale);
+            case "item" -> modifyItems(event, dbUser, newValue, locale);
+            default -> "Defying the laws of nature, this path was reached";
+        };
+
+        IDatabase.INSTANCE.updateUser(dbUser);
+
+        event.reply(response).setEphemeral(true).queue();
     }
 
     @Override
@@ -39,14 +59,14 @@ public class Set extends InfoSlashCommand {
                         .addChoices(itemChoices),
                 new OptionData(OptionType.USER, "user-id", "The id of the user you want to modify", true)
                         .setDescriptionLocalization(DiscordLocale.GERMAN, "Die Id von dem zu modifizierenden Nutzer"),
-                new OptionData(OptionType.INTEGER, "new-amount", "The new item amount", true)
+                new OptionData(OptionType.INTEGER, "new-value", "The new item amount", true)
                         .setDescriptionLocalization(DiscordLocale.GERMAN, "Die neue Anzahl an Items")
         );
 
         final var balanceOptions = List.of(
                 new OptionData(OptionType.USER, "user-id", "The id of the user you want to modify", true)
                         .setDescriptionLocalization(DiscordLocale.GERMAN, "Die Id von dem zu modifizierenden Nutzer"),
-                new OptionData(OptionType.INTEGER, "new-balance", "The new balance", true)
+                new OptionData(OptionType.INTEGER, "new-value", "The new balance", true)
                         .setDescriptionLocalization(DiscordLocale.GERMAN, "Das neue Guthaben")
         );
 
@@ -68,5 +88,16 @@ public class Set extends InfoSlashCommand {
     @Override
     public CommandType getCommandType() {
         return CommandType.DEV;
+    }
+
+    private String modifyBalance(final User dbUser, final int newValue, final Locale locale) {
+        dbUser.getInventory().setCurrency(newValue);
+        return Responses.getLocalizedResponse("balanceModified", locale, dbUser.getUserId(), newValue);
+    }
+
+    private String modifyItems(final SlashCommandInteractionEvent event, final User dbUser, final int newValue, final Locale locale) {
+        final var item = event.getOption("item-name").getAsString();
+        dbUser.getInventory().getItems().put(item, newValue);
+        return Responses.getLocalizedResponse("itemsModified", locale, item, dbUser.getUserId(), newValue);
     }
 }
