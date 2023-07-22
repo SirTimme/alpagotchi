@@ -11,7 +11,6 @@ import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 
-import java.text.MessageFormat;
 import java.util.Locale;
 
 public class Nick extends UserSlashCommand {
@@ -22,7 +21,7 @@ public class Nick extends UserSlashCommand {
 
         // discord only allows for 256 char long embed titles
         if (nickname.length() > 256) {
-            event.reply(Responses.getLocalizedResponse("nicknameTooLong", locale)).setEphemeral(true).queue();
+            event.reply(Responses.getLocalizedResponse("nickname.error.tooLong", locale)).setEphemeral(true).queue();
             return;
         }
 
@@ -30,7 +29,7 @@ public class Nick extends UserSlashCommand {
         user.getAlpaca().setNickname(nickname);
 
         // reply to the user
-        event.reply(Responses.getLocalizedResponse("nickname", locale, nickname)).queue();
+        event.reply(Responses.getLocalizedResponse("nickname.successful", locale, nickname)).queue();
     }
 
     @Override

@@ -11,48 +11,39 @@ import net.dv8tion.jda.api.interactions.DiscordLocale;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 
-import java.util.List;
 import java.util.Locale;
-import java.util.concurrent.TimeUnit;
 
 public class Work extends UserSlashCommand {
-    private final List<String> json;
-
-    public Work() {
-        this.json = List.of("hello", "world");
-    }
-
     @Override
     public void execute(final SlashCommandInteractionEvent event, final Locale locale, final User user) {
         // is the alpaca currently sleeping?
         final long sleep = Utils.cooldownToMinutes(user.getCooldown().getSleep());
         if (sleep > 0) {
-            event.reply(Responses.getLocalizedResponse("sleepCurrentlySleeping", locale, sleep)).setEphemeral(true).queue();
+            event.reply(Responses.getLocalizedResponse("work.error.currentlySleeping", locale, sleep)).setEphemeral(true).queue();
             return;
         }
 
         // did the alpaca already work?
         final long work = Utils.cooldownToMinutes(user.getCooldown().getWork());
         if (work > 0) {
-            event.reply(Responses.getLocalizedResponse("workAlreadyWorked", locale, work)).setEphemeral(true).queue();
+            event.reply(Responses.getLocalizedResponse("work.error.alreadyWorked", locale, work)).setEphemeral(true).queue();
             return;
         }
 
         // has the alpaca enough energy?
         final int energy = user.getAlpaca().getEnergy();
         if (energy < 10) {
-            event.reply("\uD83E\uDD71 Your alpaca is too tired to work, let it rest first with **/sleep**").setEphemeral(true).queue();
+            event.reply(Responses.getLocalizedResponse("work.error.tooTired", locale)).setEphemeral(true).queue();
             return;
         }
 
         // is the alpaca happy enough?
         final int joy = user.getAlpaca().getJoy();
         if (joy < 15) {
-            event.reply(":pensive: Your alpaca is too sad to work, give him some love with **/pet**").setEphemeral(true).queue();
+            event.reply(Responses.getLocalizedResponse("work.error.tooSad", locale)).setEphemeral(true).queue();
             return;
         }
 
-        final var message = getRandomMessage();
         final var fluffies = (int) (Math.random() * 15 + 1);
         final var energyCost = (int) (Math.random() * 8 + 1);
         final var joyCost = (int) (Math.random() * 10 + 2);
@@ -65,7 +56,7 @@ public class Work extends UserSlashCommand {
         IDatabase.INSTANCE.updateUser(user);
 
         // reply to the user
-        event.reply("⛏ " + message + " **Fluffies + " + fluffies + ", Energy - " + energyCost + ", Joy - " + joyCost + "**").queue();
+        event.reply(Responses.getLocalizedResponse("work.successful", locale)).queue();
     }
 
     @Override
@@ -77,9 +68,5 @@ public class Work extends UserSlashCommand {
     @Override
     public CommandType getCommandType() {
         return CommandType.USER;
-    }
-
-    private String getRandomMessage() {
-        return this.json.get((int) (Math.random() * this.json.size()));
     }
 }

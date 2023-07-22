@@ -13,7 +13,6 @@ import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 
-import java.text.MessageFormat;
 import java.util.List;
 import java.util.Locale;
 
@@ -28,7 +27,7 @@ public class Outfit extends UserSlashCommand {
         IDatabase.INSTANCE.updateUser(user);
 
         // reply to the user
-        event.reply(Responses.getLocalizedResponse("outfit", locale, outfit)).queue();
+        event.reply(Responses.getLocalizedResponse("outfit.successful", locale, outfit)).queue();
     }
 
     @Override

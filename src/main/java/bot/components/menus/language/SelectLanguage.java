@@ -19,7 +19,7 @@ public class SelectLanguage extends MessageMenu {
         if (settings == null) {
             IDatabase.INSTANCE.updateSettings(new GuildSettings(event.getGuild().getIdLong(), locale));
 
-            event.editMessage(Responses.getLocalizedResponse("language", locale))
+            event.editMessage(Responses.getLocalizedResponse("language.successful", locale))
                  .setComponents(Collections.emptyList())
                  .setEmbeds(Collections.emptyList())
                  .queue();
@@ -31,7 +31,7 @@ public class SelectLanguage extends MessageMenu {
         IDatabase.INSTANCE.updateSettings(settings);
 
         // reply to the user
-        event.editMessage(Responses.getLocalizedResponse("language", locale))
+        event.editMessage(Responses.getLocalizedResponse("language.successful", locale))
              .setComponents(Collections.emptyList())
              .setEmbeds(Collections.emptyList())
              .queue();

@@ -10,7 +10,7 @@ import java.util.Locale;
 public class DeleteCancel extends MessageButton {
     @Override
     public void execute(final ButtonInteractionEvent event, final Locale locale) {
-        event.editMessage(Responses.getLocalizedResponse("deleteCancelled", locale))
+        event.editMessage(Responses.getLocalizedResponse("delete.cancelled", locale))
              .setComponents(Collections.emptyList())
              .setEmbeds(Collections.emptyList())
              .queue();

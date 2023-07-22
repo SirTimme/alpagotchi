@@ -14,7 +14,7 @@ import java.util.Locale;
 public class Balance extends UserSlashCommand {
     @Override
     public void execute(final SlashCommandInteractionEvent event, final Locale locale, final User user) {
-        event.reply(Responses.getLocalizedResponse("balance", locale, user.getInventory().getCurrency())).queue();
+        event.reply(Responses.getLocalizedResponse("balance.successful", locale, user.getInventory().getCurrency())).queue();
     }
 
     @Override

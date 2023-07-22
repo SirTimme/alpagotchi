@@ -13,7 +13,6 @@ import net.dv8tion.jda.api.interactions.DiscordLocale;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 
-import java.text.MessageFormat;
 import java.time.Instant;
 import java.util.Locale;
 
@@ -27,12 +26,13 @@ public class Inventory extends UserSlashCommand {
     @Override
     public void execute(final SlashCommandInteractionEvent event, final Locale locale, final User user) {
         event.getJDA().retrieveUserById(System.getenv("DEV_ID")).queue(dev -> {
-            final var balanceMsg = Responses.getLocalizedResponse("formattedCurrentBalance", locale, user.getInventory().getCurrency());
+            final var balanceMsg = Responses.getLocalizedResponse("general.embed.formattedBalance", locale, user.getInventory().getCurrency());
+            final var howToBuyMsg = Responses.getLocalizedResponse("general.embed.formattedHowToBuy", locale);
 
             final var embed = new EmbedBuilder()
-                    .setTitle(Responses.getLocalizedResponse("inventoryEmbedTitle", locale))
-                    .setDescription(balanceMsg + "\n```\n" + buildTable(user, locale) + "\n```\n" + Responses.getLocalizedResponse("formattedHowToBuy", locale))
-                    .setFooter(Responses.getLocalizedResponse("createdByNotice", locale), dev.getAvatarUrl())
+                    .setTitle(Responses.getLocalizedResponse("inventory.embed.title", locale))
+                    .setDescription(balanceMsg + "\n```\n" + buildTable(user, locale) + "\n```\n" + howToBuyMsg)
+                    .setFooter(Responses.getLocalizedResponse("general.embed.footNote.createdBy", locale), dev.getAvatarUrl())
                     .setTimestamp(Instant.now())
                     .build();
 
@@ -58,9 +58,9 @@ public class Inventory extends UserSlashCommand {
                 .map(item -> buildRow(item, user, locale))
                 .toArray(String[][]::new);
 
-        final var localizedName = Responses.getLocalizedResponse("inventoryName", locale);
-        final var localizedSaturation = Responses.getLocalizedResponse("inventorySaturation", locale);
-        final var localizedQuantity = Responses.getLocalizedResponse("inventoryQuantity", locale);
+        final var localizedName = Responses.getLocalizedResponse("inventory.item.name", locale);
+        final var localizedSaturation = Responses.getLocalizedResponse("inventory.item.saturation", locale);
+        final var localizedQuantity = Responses.getLocalizedResponse("inventory.item.quantity", locale);
 
         final String[] header = { localizedName, localizedSaturation, localizedQuantity };
 

@@ -13,7 +13,7 @@ import java.util.Locale;
 public class Ping extends InfoSlashCommand {
     @Override
     public void execute(final SlashCommandInteractionEvent event, final Locale locale) {
-        event.getJDA().getRestPing().queue(ping -> event.reply(Responses.getLocalizedResponse("ping", locale, ping)).queue());
+        event.getJDA().getRestPing().queue(ping -> event.reply(Responses.getLocalizedResponse("ping.successful", locale, ping)).queue());
     }
 
     @Override
