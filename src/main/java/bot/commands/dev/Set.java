@@ -31,14 +31,17 @@ public class Set extends InfoSlashCommand {
 
         final var newValue = event.getOption("new-value").getAsInt();
 
+        // obtain response based on used subcommand
         final var response = switch (event.getSubcommandName()) {
             case "balance" -> modifyBalance(dbUser, newValue, locale);
             case "item" -> modifyItems(event, dbUser, newValue, locale);
-            default -> "Defying the laws of nature, this path was reached";
+            default -> Responses.getLocalizedResponse("errorUnreachablePath", locale);
         };
 
+        // update db
         IDatabase.INSTANCE.updateUser(dbUser);
 
+        // reply to the user
         event.reply(response).setEphemeral(true).queue();
     }
 
