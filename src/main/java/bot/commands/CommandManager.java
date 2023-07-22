@@ -1,6 +1,7 @@
 package bot.commands;
 
 import bot.commands.dev.Count;
+import bot.commands.dev.Set;
 import bot.commands.dev.Shutdown;
 import bot.commands.dev.Update;
 import bot.commands.member.*;
@@ -41,6 +42,7 @@ public class CommandManager {
         this.commands.put("shop", new Shop(itemManager));
         this.commands.put("update", new Update(this));
         this.commands.put("language", new Language());
+        this.commands.put("set", new Set());
     }
 
     public void handle(final SlashCommandInteractionEvent event) {

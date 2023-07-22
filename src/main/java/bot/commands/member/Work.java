@@ -34,7 +34,7 @@ public class Work extends UserSlashCommand {
         // did the alpaca already work?
         final long work = Utils.cooldownToMinutes(user.getCooldown().getWork());
         if (work > 0) {
-            event.reply(Responses.getLocalizedResponse("sleepCurrentlySleeping", locale, work)).setEphemeral(true).queue();
+            event.reply(Responses.getLocalizedResponse("workAlreadyWorked", locale, work)).setEphemeral(true).queue();
             return;
         }
 
