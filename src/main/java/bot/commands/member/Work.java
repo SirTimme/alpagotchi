@@ -11,17 +11,9 @@ import net.dv8tion.jda.api.interactions.DiscordLocale;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 
-import java.util.List;
 import java.util.Locale;
-import java.util.concurrent.TimeUnit;
 
 public class Work extends UserSlashCommand {
-    private final List<String> json;
-
-    public Work() {
-        this.json = List.of("hello", "world");
-    }
-
     @Override
     public void execute(final SlashCommandInteractionEvent event, final Locale locale, final User user) {
         // is the alpaca currently sleeping?
@@ -52,7 +44,6 @@ public class Work extends UserSlashCommand {
             return;
         }
 
-        final var message = getRandomMessage();
         final var fluffies = (int) (Math.random() * 15 + 1);
         final var energyCost = (int) (Math.random() * 8 + 1);
         final var joyCost = (int) (Math.random() * 10 + 2);
@@ -77,9 +68,5 @@ public class Work extends UserSlashCommand {
     @Override
     public CommandType getCommandType() {
         return CommandType.USER;
-    }
-
-    private String getRandomMessage() {
-        return this.json.get((int) (Math.random() * this.json.size()));
     }
 }
