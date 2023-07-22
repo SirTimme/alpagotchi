@@ -68,7 +68,7 @@ public class Inventory extends UserSlashCommand {
     }
 
     private String[] buildRow(final IConsumable item, final User user, final Locale locale) {
-        final var itemName = Responses.getLocalizedResponse(item.getName(), locale);
+        final var itemName = Responses.getLocalizedResponse("general.item." + item.getName(), locale);
         final var saturation = String.valueOf(item.getSaturation());
         final var quantity = String.valueOf(user.getInventory().getItems().get(item.getName()));
 
