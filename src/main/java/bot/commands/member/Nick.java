@@ -1,6 +1,7 @@
 package bot.commands.member;
 
 import bot.commands.UserSlashCommand;
+import bot.db.IDatabase;
 import bot.models.User;
 import bot.utils.CommandType;
 import bot.utils.Responses;
@@ -27,6 +28,9 @@ public class Nick extends UserSlashCommand {
 
         // update nickname
         user.getAlpaca().setNickname(nickname);
+
+        // update db
+        IDatabase.INSTANCE.updateUser(user);
 
         // reply to the user
         event.reply(Responses.getLocalizedResponse("nickname.successful", locale, nickname)).queue();
