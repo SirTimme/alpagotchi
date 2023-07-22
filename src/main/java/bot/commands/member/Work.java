@@ -27,28 +27,28 @@ public class Work extends UserSlashCommand {
         // is the alpaca currently sleeping?
         final long sleep = Utils.cooldownToMinutes(user.getCooldown().getSleep());
         if (sleep > 0) {
-            event.reply(Responses.getLocalizedResponse("sleepCurrentlySleeping", locale, sleep)).setEphemeral(true).queue();
+            event.reply(Responses.getLocalizedResponse("work.error.currentlySleeping", locale, sleep)).setEphemeral(true).queue();
             return;
         }
 
         // did the alpaca already work?
         final long work = Utils.cooldownToMinutes(user.getCooldown().getWork());
         if (work > 0) {
-            event.reply(Responses.getLocalizedResponse("workAlreadyWorked", locale, work)).setEphemeral(true).queue();
+            event.reply(Responses.getLocalizedResponse("work.error.alreadyWorked", locale, work)).setEphemeral(true).queue();
             return;
         }
 
         // has the alpaca enough energy?
         final int energy = user.getAlpaca().getEnergy();
         if (energy < 10) {
-            event.reply("\uD83E\uDD71 Your alpaca is too tired to work, let it rest first with **/sleep**").setEphemeral(true).queue();
+            event.reply(Responses.getLocalizedResponse("work.error.tooTired", locale)).setEphemeral(true).queue();
             return;
         }
 
         // is the alpaca happy enough?
         final int joy = user.getAlpaca().getJoy();
         if (joy < 15) {
-            event.reply(":pensive: Your alpaca is too sad to work, give him some love with **/pet**").setEphemeral(true).queue();
+            event.reply(Responses.getLocalizedResponse("work.error.tooSad", locale)).setEphemeral(true).queue();
             return;
         }
 
@@ -65,7 +65,7 @@ public class Work extends UserSlashCommand {
         IDatabase.INSTANCE.updateUser(user);
 
         // reply to the user
-        event.reply("⛏ " + message + " **Fluffies + " + fluffies + ", Energy - " + energyCost + ", Joy - " + joyCost + "**").queue();
+        event.reply(Responses.getLocalizedResponse("work.successful", locale)).queue();
     }
 
     @Override

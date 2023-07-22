@@ -18,26 +18,28 @@ public class Init extends UserSlashCommand {
     @Override
     public void execute(final SlashCommandInteractionEvent event, final Locale locale, final User user) {
         if (user != null) {
-            event.reply(Responses.getLocalizedResponse("initAlreadyOwned", locale)).setEphemeral(true).queue();
+            event.reply(Responses.getLocalizedResponse("init.error.alreadyOwned", locale)).setEphemeral(true).queue();
             return;
         }
 
         final var userId = event.getUser().getId();
 
-        final var btnAccept = Button.success(userId + ":initAccept", Responses.getLocalizedResponse("buttonAccept", locale));
-        final var btnCancel = Button.danger(userId + ":initCancelled", Responses.getLocalizedResponse("buttonCancel", locale));
+        final var btnAccept = Button.success(userId + ":initAccept", Responses.getLocalizedResponse("button.accept", locale));
+        final var btnCancel = Button.danger(userId + ":initCancelled", Responses.getLocalizedResponse("button.cancel", locale));
 
         event.getJDA().retrieveUserById(System.getenv("DEV_ID")).queue(dev -> {
             final var embed = new EmbedBuilder()
-                    .setTitle(Responses.getLocalizedResponse("initEmbedTitle", locale))
-                    .addField(Responses.getLocalizedResponse("initEmbedStorageFieldTitle", locale), Responses.getLocalizedResponse("initEmbedStorageFieldBody", locale), false)
-                    .addField(Responses.getLocalizedResponse("initEmbedDeletionFieldTitle", locale),
-                              Responses.getLocalizedResponse("initEmbedDeletionFieldBody", locale),
+                    .setTitle(Responses.getLocalizedResponse("init.embed.title", locale))
+                    .addField(Responses.getLocalizedResponse("init.embed.field.title.storage", locale),
+                              Responses.getLocalizedResponse("init.embed.field.body.storage", locale),
                               false)
-                    .addField(Responses.getLocalizedResponse("initEmbedAgreementNoticeTitle", locale),
-                              Responses.getLocalizedResponse("initEmbedAgreementNoticeBody", locale),
+                    .addField(Responses.getLocalizedResponse("init.embed.field.title.deletion", locale),
+                              Responses.getLocalizedResponse("init.embed.field.body.deletion", locale),
                               false)
-                    .setFooter(Responses.getLocalizedResponse("createdByNotice", locale), dev.getAvatarUrl())
+                    .addField(Responses.getLocalizedResponse("init.embed.field.title.agreement", locale),
+                              Responses.getLocalizedResponse("init.embed.field.body.agreement", locale),
+                              false)
+                    .setFooter(Responses.getLocalizedResponse("general.embed.footNote.createdBy", locale), dev.getAvatarUrl())
                     .setTimestamp(Instant.now())
                     .build();
 

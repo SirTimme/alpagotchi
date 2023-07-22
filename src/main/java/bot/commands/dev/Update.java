@@ -31,7 +31,7 @@ public class Update extends InfoSlashCommand {
              .addCommands(this.commandManager.getCommandDataByTypes(CommandType.DEV))
              .queue();
 
-        event.reply(Responses.getLocalizedResponse("updateCommands", locale, this.commandManager.getCommands().size())).queue();
+        event.reply(Responses.getLocalizedResponse("update.successful", locale, this.commandManager.getCommands().size())).queue();
     }
 
     @Override

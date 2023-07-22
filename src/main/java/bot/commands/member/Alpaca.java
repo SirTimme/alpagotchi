@@ -24,7 +24,6 @@ import java.time.Instant;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 public class Alpaca extends UserSlashCommand {
     private static final Logger LOGGER = LoggerFactory.getLogger(Alpaca.class);
@@ -57,11 +56,11 @@ public class Alpaca extends UserSlashCommand {
 
             final var embed = new EmbedBuilder()
                     .setTitle(nickname)
-                    .setDescription(Responses.getLocalizedResponse("alpacaEmbedDescription", locale))
-                    .addField(Responses.getLocalizedResponse("alpacaEmbedWorkFieldTitle", locale), getCooldownMsg(workCooldown, locale), true)
-                    .addField(Responses.getLocalizedResponse("alpacaEmbedSleepFieldTitle", locale), getCooldownMsg(sleepCooldown, locale), true)
+                    .setDescription(Responses.getLocalizedResponse("alpaca.embed.description", locale))
+                    .addField(Responses.getLocalizedResponse("alpaca.embed.field.title.work", locale), getCooldownMsg(workCooldown, locale), true)
+                    .addField(Responses.getLocalizedResponse("alpaca.embed.field.title.sleep", locale), getCooldownMsg(sleepCooldown, locale), true)
                     .setThumbnail(event.getUser().getAvatarUrl())
-                    .setFooter(Responses.getLocalizedResponse("createdByNotice", locale), dev.getAvatarUrl())
+                    .setFooter(Responses.getLocalizedResponse("general.embed.footNote.createdBy", locale), dev.getAvatarUrl())
                     .setTimestamp(Instant.now())
                     .setImage("attachment://alpagotchi.png")
                     .build();
@@ -134,9 +133,9 @@ public class Alpaca extends UserSlashCommand {
 
     private String getCooldownMsg(final long minutes, final Locale locale) {
         if (minutes > 0) {
-            final var msg = new MessageFormat(Responses.getLocalizedResponse("alpacaCooldownActive", locale));
+            final var msg = new MessageFormat(Responses.getLocalizedResponse("alpaca.cooldown.active", locale));
             return msg.format(new Object[]{ minutes });
         }
-        return Responses.getLocalizedResponse("alpacaCooldownInactive", locale);
+        return Responses.getLocalizedResponse("alpaca.cooldown.inactive", locale);
     }
 }

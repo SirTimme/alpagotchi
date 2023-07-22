@@ -13,7 +13,6 @@ import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 
-import java.text.MessageFormat;
 import java.util.List;
 import java.util.Locale;
 
@@ -25,14 +24,14 @@ public class Gift extends UserSlashCommand {
 
         // you can't gift items to yourself
         if (targetDiscordUser.getIdLong() == user.getUserId()) {
-            event.reply(Responses.getLocalizedResponse("giftCantGiftYourself", locale)).setEphemeral(true).queue();
+            event.reply(Responses.getLocalizedResponse("gift.error.cantGiftYourself", locale)).setEphemeral(true).queue();
             return;
         }
 
         // Is the target user initialized?
         final var targetUser = IDatabase.INSTANCE.getUserById(targetDiscordUser.getIdLong());
         if (targetUser == null) {
-            event.reply(Responses.getLocalizedResponse("giftTargetNotInitialized", locale)).setEphemeral(true).queue();
+            event.reply(Responses.getLocalizedResponse("general.error.targetNotInitialized", locale)).setEphemeral(true).queue();
             return;
         }
 
@@ -44,7 +43,7 @@ public class Gift extends UserSlashCommand {
 
         // you can only gift as many items as you possess
         if (user.getInventory().getItems().get(item) - amount < 0) {
-            event.reply(Responses.getLocalizedResponse("feedNotEnoughItems", locale)).setEphemeral(true).queue();
+            event.reply(Responses.getLocalizedResponse("general.error.notEnoughItems", locale)).setEphemeral(true).queue();
             return;
         }
 
@@ -59,7 +58,7 @@ public class Gift extends UserSlashCommand {
         IDatabase.INSTANCE.updateUser(targetUser);
 
         // reply to the user
-        event.reply(Responses.getLocalizedResponse("giftSuccessful", locale, amount, item, targetDiscordUser.getName())).queue();
+        event.reply(Responses.getLocalizedResponse("gift.successful", locale, amount, item, targetDiscordUser.getName())).queue();
     }
 
     @Override

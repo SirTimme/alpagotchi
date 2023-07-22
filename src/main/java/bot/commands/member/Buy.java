@@ -14,7 +14,6 @@ import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 
-import java.text.MessageFormat;
 import java.util.List;
 import java.util.Locale;
 
@@ -41,7 +40,7 @@ public class Buy extends UserSlashCommand {
 
         // sufficient balance?
         if (balance - price < 0) {
-            event.reply(Responses.getLocalizedResponse("balanceNotSufficient", locale)).setEphemeral(true).queue();
+            event.reply(Responses.getLocalizedResponse("balance.error.balanceNotSufficient", locale)).setEphemeral(true).queue();
             return;
         }
 
@@ -52,7 +51,7 @@ public class Buy extends UserSlashCommand {
         IDatabase.INSTANCE.updateUser(user);
 
         // reply to the user
-        event.reply(Responses.getLocalizedResponse("buySuccessful", locale, amount, item.getName(), price)).queue();
+        event.reply(Responses.getLocalizedResponse("buy.successful", locale, amount, item.getName(), price)).queue();
     }
 
     @Override

@@ -13,7 +13,7 @@ public class InitAccept extends MessageButton {
     public void execute(final ButtonInteractionEvent event, final Locale locale) {
         IDatabase.INSTANCE.createUserById(event.getUser().getIdLong());
 
-        event.editMessage(Responses.getLocalizedResponse("initSuccessful", locale))
+        event.editMessage(Responses.getLocalizedResponse("init.successful", locale))
              .setComponents(Collections.emptyList())
              .setEmbeds(Collections.emptyList())
              .queue();

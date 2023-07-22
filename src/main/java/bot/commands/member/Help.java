@@ -24,12 +24,12 @@ public class Help extends InfoSlashCommand {
     public void execute(final SlashCommandInteractionEvent event, final Locale locale) {
         event.getJDA().retrieveUserById(System.getenv("DEV_ID")).queue(dev -> {
             final var embed = new EmbedBuilder()
-                    .setTitle(Responses.getLocalizedResponse("helpEmbedTitle", locale))
+                    .setTitle(Responses.getLocalizedResponse("help.embed.title", locale))
                     .setDescription("```\n" + this.commandManager.getCommandNames() + "```")
-                    .addField(Responses.getLocalizedResponse("helpJoinFieldTitle", locale),
-                              Responses.getLocalizedResponse("helpJoinFieldBody", locale),
+                    .addField(Responses.getLocalizedResponse("help.embed.field.title.join", locale),
+                              Responses.getLocalizedResponse("help.embed.field.body.join", locale),
                               false)
-                    .setFooter(Responses.getLocalizedResponse("createdByNotice", locale), dev.getAvatarUrl())
+                    .setFooter(Responses.getLocalizedResponse("general.embed.footNote.createdBy", locale), dev.getAvatarUrl())
                     .setTimestamp(Instant.now())
                     .build();
 

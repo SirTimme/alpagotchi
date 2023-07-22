@@ -13,7 +13,6 @@ import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 
-import java.text.MessageFormat;
 import java.util.Locale;
 
 public class Sleep extends UserSlashCommand {
@@ -22,7 +21,7 @@ public class Sleep extends UserSlashCommand {
         // already max energy?
         final var energy = user.getAlpaca().getEnergy();
         if (energy == 100) {
-            event.reply(Responses.getLocalizedResponse("petJoyAlreadyMaximum", locale)).setEphemeral(true).queue();
+            event.reply(Responses.getLocalizedResponse("pet.error.joyAtMaximum", locale)).setEphemeral(true).queue();
             return;
         }
 
@@ -37,7 +36,7 @@ public class Sleep extends UserSlashCommand {
         IDatabase.INSTANCE.updateUser(user);
 
         // reply to the user
-        event.reply(Responses.getLocalizedResponse("sleep", locale, newEnergy)).queue();
+        event.reply(Responses.getLocalizedResponse("sleep.successful", locale, newEnergy)).queue();
     }
 
     @Override

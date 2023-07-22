@@ -20,12 +20,12 @@ public class Language extends InfoSlashCommand {
 
         final var menuLanguage = StringSelectMenu
                 .create(userId + ":language")
-                .setPlaceholder(Responses.getLocalizedResponse("languagePlaceholder", locale))
-                .addOption(Responses.getLocalizedResponse("englishDisplayName", locale), "en", Emoji.fromUnicode("\uD83C\uDDFA\uD83C\uDDF8"))
-                .addOption(Responses.getLocalizedResponse("germanDisplayName", locale), "de", Emoji.fromUnicode("\uD83C\uDDE9\uD83C\uDDEA"))
+                .setPlaceholder(Responses.getLocalizedResponse("language.placeholder", locale))
+                .addOption(Responses.getLocalizedResponse("general.displayName.english", locale), "en", Emoji.fromUnicode("\uD83C\uDDFA\uD83C\uDDF8"))
+                .addOption(Responses.getLocalizedResponse("general.displayName.german", locale), "de", Emoji.fromUnicode("\uD83C\uDDE9\uD83C\uDDEA"))
                 .build();
 
-        event.reply(Responses.getLocalizedResponse("languageSelect", locale)).addActionRow(menuLanguage).queue();
+        event.reply(Responses.getLocalizedResponse("language.select", locale)).addActionRow(menuLanguage).queue();
     }
 
     @Override

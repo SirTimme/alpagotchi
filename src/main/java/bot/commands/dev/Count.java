@@ -10,7 +10,6 @@ import net.dv8tion.jda.api.interactions.commands.DefaultMemberPermissions;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 
-import java.text.MessageFormat;
 import java.util.Locale;
 
 public class Count extends InfoSlashCommand {
@@ -19,7 +18,7 @@ public class Count extends InfoSlashCommand {
         final var userCount = IDatabase.INSTANCE.getUserCount();
         final var guildSize = event.getJDA().getGuilds().size();
 
-        event.reply(Responses.getLocalizedResponse("countAlpacas", locale, userCount, guildSize)).queue();
+        event.reply(Responses.getLocalizedResponse("count.alpacas", locale, userCount, guildSize)).queue();
     }
 
     @Override

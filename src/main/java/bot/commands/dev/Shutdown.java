@@ -19,7 +19,7 @@ public class Shutdown extends InfoSlashCommand {
         IDatabase.INSTANCE.shutdownDatabase();
 
         // Shutdown bot
-        event.reply(Responses.getLocalizedResponse("shutdown", locale, event.getJDA().getSelfUser().getName())).complete();
+        event.reply(Responses.getLocalizedResponse("shutdown.successful", locale, event.getJDA().getSelfUser().getName())).complete();
         event.getJDA().shutdown();
     }
 

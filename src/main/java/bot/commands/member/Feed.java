@@ -15,7 +15,6 @@ import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 
-import java.text.MessageFormat;
 import java.util.List;
 import java.util.Locale;
 
@@ -33,7 +32,7 @@ public class Feed extends UserSlashCommand {
 
         // alpaca currently sleeping?
         if (remainingSleep > 0) {
-            event.reply(Responses.getLocalizedResponse("sleepCurrentlySleeping", locale, remainingSleep)).setEphemeral(true).queue();
+            event.reply(Responses.getLocalizedResponse("work.error.currentlySleeping", locale, remainingSleep)).setEphemeral(true).queue();
             return;
         }
 
@@ -48,7 +47,7 @@ public class Feed extends UserSlashCommand {
 
         // trying to feed items you don't have?
         if (newItemAmount < 0) {
-            event.reply(Responses.getLocalizedResponse("feedNotEnoughItems", locale)).setEphemeral(true).queue();
+            event.reply(Responses.getLocalizedResponse("general.error.notEnoughItems", locale)).setEphemeral(true).queue();
             return;
         }
 
@@ -60,7 +59,7 @@ public class Feed extends UserSlashCommand {
 
         // trying to overfeed your alpaca?
         if (oldValue + saturation > 100) {
-            event.reply(Responses.getLocalizedResponse("feedTooMuchSaturation", locale)).setEphemeral(true).queue();
+            event.reply(Responses.getLocalizedResponse("feed.error.tooMuchSaturation", locale)).setEphemeral(true).queue();
             return;
         }
 
@@ -110,9 +109,7 @@ public class Feed extends UserSlashCommand {
     }
 
     private String getKey(final IConsumable item) {
-        return item.getType().equals("food")
-                ? "feedHungerItem"
-                : "feedThirstItem";
+        return item.getType().equals("food") ? "feed.feedItem.food" : "feed.feedItem.drink";
     }
 
     private int retrieveItemSaturation(final User user, final IConsumable item) {

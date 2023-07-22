@@ -13,7 +13,6 @@ import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 
-import java.text.MessageFormat;
 import java.util.List;
 import java.util.Locale;
 
@@ -25,7 +24,7 @@ public class Pet extends UserSlashCommand {
         // already max joy?
         final var joy = user.getAlpaca().getJoy();
         if (joy == 100) {
-            event.reply(Responses.getLocalizedResponse("petJoyAlreadyMaximum", locale)).setEphemeral(true).queue();
+            event.reply(Responses.getLocalizedResponse("pet.error.joyAtMaximum", locale)).setEphemeral(true).queue();
             return;
         }
 
@@ -72,9 +71,7 @@ public class Pet extends UserSlashCommand {
         return CommandType.USER;
     }
 
-    private String getKey(final boolean isFavourite) {
-        return isFavourite ? "petFavouriteSpot" : "petNormalSpot";
-    }
+    private String getKey(final boolean isFavourite) { return isFavourite ? "pet.spot.favourite" : "pet.spot.normal"; }
 
     private int calculateJoy(final int joy, final boolean isFavourite) {
         final int value = isFavourite ? (int) (Math.random() * 13 + 5) : (int) (Math.random() * 9 + 3);

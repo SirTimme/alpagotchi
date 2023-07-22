@@ -15,7 +15,7 @@ public abstract class UserSlashCommand implements ISlashCommand {
         final var locale = Utils.retrieveLocale(event);
 
         if (!event.getName().equals("init") && user == null) {
-            final var msg = Responses.getLocalizedResponse("errorAlpacaNotOwned", locale);
+            final var msg = Responses.getLocalizedResponse("general.error.noAlpaca", locale);
             event.reply(msg).setEphemeral(true).queue();
             return;
         }
