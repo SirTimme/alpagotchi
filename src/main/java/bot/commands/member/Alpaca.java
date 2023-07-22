@@ -132,10 +132,8 @@ public class Alpaca extends UserSlashCommand {
     }
 
     private String getCooldownMsg(final long minutes, final Locale locale) {
-        if (minutes > 0) {
-            final var msg = new MessageFormat(Responses.getLocalizedResponse("alpaca.cooldown.active", locale));
-            return msg.format(new Object[]{ minutes });
-        }
-        return Responses.getLocalizedResponse("alpaca.cooldown.inactive", locale);
+        return minutes > 0
+                ? Responses.getLocalizedResponse("alpaca.cooldown.active", locale, minutes)
+                : Responses.getLocalizedResponse("alpaca.cooldown.inactive", locale);
     }
 }

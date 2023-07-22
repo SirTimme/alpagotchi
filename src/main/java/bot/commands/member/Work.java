@@ -56,7 +56,7 @@ public class Work extends UserSlashCommand {
         IDatabase.INSTANCE.updateUser(user);
 
         // reply to the user
-        event.reply(Responses.getLocalizedResponse("work.successful", locale)).queue();
+        event.reply(Responses.getLocalizedResponse("work.successful", locale, fluffies, energyCost, joyCost)).queue();
     }
 
     @Override
