@@ -8,19 +8,11 @@
 
 <h3 align="center">Alpagotchi allows any user to create and take care of their own digital alpaca.</h3>
 
----
-
 <div align="center">
     <img alt="Alpagotchi" src="src/main/resources/assets/showcase.png" />
 </div>
 
----
-
-<h3 align="center">
-    Alpagotchi works only with slash commands! 
-    Simply enter <b>/</b> in your bar to execute them.
-</h3>
-
+## Commands overview
 
 | Usage                         | Task                                            |
 |-------------------------------|-------------------------------------------------|
@@ -40,3 +32,70 @@
 | delete                        | Deletes all of your stored data                 |
 | init                          | Initialize your alpaca in the database          |
 | language                      | Sets the bots' language within a guild          |
+
+## Self-hosting
+
+Alpagotchi provides a docker image to host it yourself. The docker image can be found on [dockerhub](https://hub.docker.com/r/alpagotchi/discord-bot).\
+Since Alpagotchi needs a postgres database to run, a docker-compose file is provided to configure all required services:
+
+````yml
+version: '3.8'
+
+name: alpagotchi
+services:
+  database:
+    container_name: database
+    image: postgres
+    restart: on-failure
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      - pg-data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  bot:
+    container_name: bot
+    image: alpagotchi/discord-bot
+    depends_on:
+      - database
+    restart: on-failure
+    environment:
+      TOKEN: ${TOKEN}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_URL: ${POSTGRES_URL}
+
+  adminer:
+    container_name: adminer
+    image: adminer
+    depends_on:
+      - database
+    restart: on-failure
+    environment:
+      ADMINER_DESIGN: pepa-linha-dark
+    ports:
+      - "8080:8080"
+
+volumes:
+  pg-data:
+    name: pg-data
+````
+The `adminer` service is optional and just provides a GUI for the postgres database
+
+The directory structure below is needed for Alpagotchi to be able to run:
+````txt
+/
+├── docker-compose.yml
+└── .env
+````
+The `.env` file needs the following entries:
+````
+TOKEN=                  // The token obtained at the bot page at the discord developer portal
+POSTGRES_USER=          // The username of the postgres user
+POSTGRES_PASSWORD=      // The password of the postgres user
+POSTGRES_URL=           // The whole jdbc url of the postgres database
+POSTGRES_DB=            // The name of the database
+````
