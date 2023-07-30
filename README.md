@@ -12,7 +12,7 @@
     <img alt="Alpagotchi" src="src/main/resources/assets/showcase.png" />
 </div>
 
-## Commands overview
+<h2 align=center>Commands overview</h2>
 
 | Usage                         | Task                                            |
 |-------------------------------|-------------------------------------------------|
@@ -21,23 +21,22 @@
 | gift [@user] [itemName] [1-5] | Gifts the amount of items to the mentioned user |
 | help                          | Displays all commands of Alpagotchi             |
 | inventory                     | Shows the bought items from the shop            |
-| myalpaca                      | Shows your alpaca and his stats                 |
+| alpaca                        | Shows your alpaca and his stats                 |
 | nick [nickname]               | Gives your alpaca a nickname                    |
 | pet                           | Increases joy of your alpaca                    |
 | shop                          | Displays all items which can be bought          |
 | balance                       | Shows your balance of fluffies                  |
 | work                          | Work to earn a random amount of fluffies        |
-| sleep [minutes]               | Let your alpaca sleeps  and regenerates energy  |
+| sleep [minutes]               | Let your alpaca sleep and regenerates energy    |
 | outfit [outfit]               | Change the appearance of your alpaca            |
 | delete                        | Deletes all of your stored data                 |
 | init                          | Initialize your alpaca in the database          |
 | language                      | Sets the bots' language within a guild          |
 
-## Self-hosting
+<h2 align=center>Self-hosting</h2>
 
 Alpagotchi provides a docker image to host it yourself. The docker image can be found on [dockerhub](https://hub.docker.com/r/alpagotchi/discord-bot).\
-Since Alpagotchi needs a postgres database to run, a docker-compose file is provided to configure all required services:
-
+The `docker-compose` file below configures all required services. The `adminer` service is optional and just provides a GUI for the postgres database.
 ````yml
 version: '3.8'
 
@@ -83,10 +82,8 @@ volumes:
   pg-data:
     name: pg-data
 ````
-The `adminer` service is optional and just provides a GUI for the postgres database
-
-The directory structure below is needed for Alpagotchi to be able to run:
-````txt
+The following directory structure is needed for Alpagotchi to be able to run:
+````
 /
 ├── docker-compose.yml
 └── .env
