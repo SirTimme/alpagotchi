@@ -1,22 +1,26 @@
-<img align="right" src="src/main/resources/assets/avatar.png" alt="Avatar"/>
+<h1 align="center">Alpagotchi | Alpaca + Tamagotchi</h1>
 
-# Alpagotchi | Alpaca + Tamagotchi
+<h4 align="center">
+  <a href="https://alpagotchi.github.io" target="_blank">Alpagotchi Website</a> |
+  <a href="https://discord.com/api/oauth2/authorize?client_id=780910199875567616&permissions=265216&scope=bot%20applications.commands" target="_blank">Invite Link</a> |
+  <a href="https://discord.gg/DXtYyzGhXR" target="_blank">Support Discord</a>
+</h4>
 
-Alpagotchi allows any user to create and take care of their own digital alpaca.
+<h3 align="center">Alpagotchi allows any user to create and take care of their own digital alpaca.</h3>
 
-## Invite
+---
 
-If you are interested in Alpagotchi and want it to add to your guild you can use
-this [Invite Link](https://discord.com/api/oauth2/authorize?client_id=780910199875567616&permissions=265216&scope=bot%20applications.commands)!
+<div align="center">
+    <img alt="Alpagotchi" src="src/main/resources/assets/showcase.png" />
+</div>
 
-## Help
+---
 
-If you need additional help or want to report a bug you can join the
-Alpagotchi [Support Discord](https://discord.gg/DXtYyzGhXR)!
+<h3 align="center">
+    Alpagotchi works only with slash commands! 
+    Simply enter <b>/</b> in your bar to execute them.
+</h3>
 
-## Commands
-
-Alpagotchi works only with slash commands! Simply enter `/` in your bar to execute them.
 
 | Usage                         | Task                                            |
 |-------------------------------|-------------------------------------------------|
