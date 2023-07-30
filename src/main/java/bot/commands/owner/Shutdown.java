@@ -1,6 +1,6 @@
-package bot.commands.dev;
+package bot.commands.owner;
 
-import bot.commands.OwnerCommand;
+import bot.commands.types.OwnerCommand;
 import bot.db.IDatabase;
 import bot.utils.CommandType;
 import bot.utils.Responses;
@@ -12,19 +12,21 @@ import net.dv8tion.jda.api.interactions.commands.build.Commands;
 
 import java.util.Locale;
 
-public class Count extends OwnerCommand {
+public class Shutdown extends OwnerCommand {
     @Override
     public void execute(final SlashCommandInteractionEvent event, final Locale locale) {
-        final var userCount = IDatabase.INSTANCE.getUserCount();
-        final var guildSize = event.getJDA().getGuilds().size();
+        // Shutdown db
+        IDatabase.INSTANCE.shutdownDatabase();
 
-        event.reply(Responses.getLocalizedResponse("count.alpacas", locale, userCount, guildSize)).queue();
+        // Shutdown bot
+        event.reply(Responses.getLocalizedResponse("shutdown.successful", locale, event.getJDA().getSelfUser().getName())).complete();
+        event.getJDA().shutdown();
     }
 
     @Override
     public CommandData getCommandData() {
-        return Commands.slash("count", "Counts all alpacas of Alpagotchi")
-                       .setDescriptionLocalization(DiscordLocale.GERMAN, "Zählt alle Alpakas von Alpagotchi")
+        return Commands.slash("shutdown", "Shutdowns Alpagotchi")
+                       .setDescriptionLocalization(DiscordLocale.GERMAN, "Fährt Alpagotchi herunter")
                        .setDefaultPermissions(DefaultMemberPermissions.DISABLED);
     }
 

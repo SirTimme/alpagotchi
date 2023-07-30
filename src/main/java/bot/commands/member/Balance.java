@@ -1,6 +1,6 @@
 package bot.commands.member;
 
-import bot.commands.UserSlashCommand;
+import bot.commands.types.UserSlashCommand;
 import bot.models.User;
 import bot.utils.CommandType;
 import bot.utils.Responses;

@@ -1,6 +1,6 @@
 package bot.commands.member;
 
-import bot.commands.InfoSlashCommand;
+import bot.commands.types.InfoSlashCommand;
 import bot.utils.CommandType;
 import bot.utils.Responses;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;

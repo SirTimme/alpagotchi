@@ -1,5 +1,6 @@
-package bot.commands;
+package bot.commands.types;
 
+import bot.commands.ISlashCommand;
 import bot.db.IDatabase;
 import bot.models.User;
 import bot.utils.Responses;

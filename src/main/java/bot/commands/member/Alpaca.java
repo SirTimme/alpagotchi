@@ -1,6 +1,6 @@
 package bot.commands.member;
 
-import bot.commands.UserSlashCommand;
+import bot.commands.types.UserSlashCommand;
 import bot.models.User;
 import bot.utils.CommandType;
 import bot.utils.Responses;
@@ -19,7 +19,6 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.text.MessageFormat;
 import java.time.Instant;
 import java.util.HashMap;
 import java.util.Locale;

@@ -1,6 +1,6 @@
-package bot.commands.dev;
+package bot.commands.owner;
 
-import bot.commands.OwnerCommand;
+import bot.commands.types.OwnerCommand;
 import bot.commands.CommandManager;
 import bot.utils.CommandType;
 import bot.utils.Responses;

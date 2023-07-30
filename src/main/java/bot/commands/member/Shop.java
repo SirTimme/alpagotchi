@@ -1,6 +1,6 @@
 package bot.commands.member;
 
-import bot.commands.UserSlashCommand;
+import bot.commands.types.UserSlashCommand;
 import bot.models.User;
 import bot.shop.IConsumable;
 import bot.shop.ItemManager;
