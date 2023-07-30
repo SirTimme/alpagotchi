@@ -21,6 +21,7 @@ services:
       context: .
       dockerfile: Dockerfile
       args:
+        OWNER_ID: ${OWNER_ID}
         TOKEN: ${TOKEN}
         POSTGRES_USER: ${POSTGRES_USER}
         POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}

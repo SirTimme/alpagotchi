@@ -68,7 +68,7 @@ public class CommandManager {
 
         this.commands.entrySet()
                      .stream()
-                     .filter(entry -> entry.getValue().getCommandType() != CommandType.DEV)
+                     .filter(entry -> entry.getValue().getCommandType() != CommandType.OWNER)
                      .forEach(entry -> builder.append(entry.getKey()).append("\n"));
 
         return builder.toString();

@@ -1,6 +1,6 @@
 package bot.commands.dev;
 
-import bot.commands.InfoSlashCommand;
+import bot.commands.OwnerCommand;
 import bot.db.IDatabase;
 import bot.utils.CommandType;
 import bot.utils.Responses;
@@ -12,7 +12,7 @@ import net.dv8tion.jda.api.interactions.commands.build.Commands;
 
 import java.util.Locale;
 
-public class Count extends InfoSlashCommand {
+public class Count extends OwnerCommand {
     @Override
     public void execute(final SlashCommandInteractionEvent event, final Locale locale) {
         final var userCount = IDatabase.INSTANCE.getUserCount();
@@ -30,6 +30,6 @@ public class Count extends InfoSlashCommand {
 
     @Override
     public CommandType getCommandType() {
-        return CommandType.DEV;
+        return CommandType.OWNER;
     }
 }
