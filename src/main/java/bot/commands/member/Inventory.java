@@ -25,19 +25,17 @@ public class Inventory extends UserSlashCommand {
 
     @Override
     public void execute(final SlashCommandInteractionEvent event, final Locale locale, final User user) {
-        event.getJDA().retrieveUserById(System.getenv("DEV_ID")).queue(dev -> {
-            final var balanceMsg = Responses.getLocalizedResponse("general.embed.formattedBalance", locale, user.getInventory().getCurrency());
-            final var howToBuyMsg = Responses.getLocalizedResponse("general.embed.formattedHowToBuy", locale);
+        final var balanceMsg = Responses.getLocalizedResponse("general.embed.formattedBalance", locale, user.getInventory().getCurrency());
+        final var howToBuyMsg = Responses.getLocalizedResponse("general.embed.formattedHowToBuy", locale);
 
-            final var embed = new EmbedBuilder()
-                    .setTitle(Responses.getLocalizedResponse("inventory.embed.title", locale))
-                    .setDescription(balanceMsg + "\n```\n" + buildTable(user, locale) + "\n```\n" + howToBuyMsg)
-                    .setFooter(Responses.getLocalizedResponse("general.embed.footNote.createdBy", locale), dev.getAvatarUrl())
-                    .setTimestamp(Instant.now())
-                    .build();
+        final var embed = new EmbedBuilder()
+                .setTitle(Responses.getLocalizedResponse("inventory.embed.title", locale))
+                .setDescription(balanceMsg + "\n```\n" + buildTable(user, locale) + "\n```\n" + howToBuyMsg)
+                .setFooter(Responses.getLocalizedResponse("general.embed.footNote.createdBy", locale))
+                .setTimestamp(Instant.now())
+                .build();
 
-            event.replyEmbeds(embed).queue();
-        });
+        event.replyEmbeds(embed).queue();
     }
 
     @Override
