@@ -1,5 +1,6 @@
 package bot.commands;
 
+import bot.commands.member.Language;
 import bot.commands.owner.Count;
 import bot.commands.owner.Set;
 import bot.commands.owner.Shutdown;

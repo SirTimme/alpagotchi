@@ -5,4 +5,5 @@ public enum CommandType {
     INFO,
     OWNER,
     USER,
+    ADMIN
 }

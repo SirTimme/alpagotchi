@@ -23,7 +23,7 @@ public class Update extends OwnerCommand {
     public void execute(final SlashCommandInteractionEvent event, final Locale locale) {
         event.getJDA()
              .updateCommands()
-             .addCommands(this.commandManager.getCommandDataByTypes(CommandType.USER, CommandType.INFO, CommandType.INIT))
+             .addCommands(this.commandManager.getCommandDataByTypes(CommandType.USER, CommandType.INFO, CommandType.INIT, CommandType.ADMIN))
              .queue();
 
         event.getGuild()

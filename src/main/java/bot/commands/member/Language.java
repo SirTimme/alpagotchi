@@ -3,6 +3,7 @@ package bot.commands.member;
 import bot.commands.types.InfoCommand;
 import bot.utils.CommandType;
 import bot.utils.Responses;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.emoji.Emoji;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.DiscordLocale;
@@ -33,11 +34,11 @@ public class Language extends InfoCommand {
         return Commands.slash("language", "Sets the used language of Alpagotchi for this server")
                        .setDescriptionLocalization(DiscordLocale.GERMAN, "Setzt die verwendete Sprache von Alpagotchi für diesen Server")
                        .setGuildOnly(true)
-                       .setDefaultPermissions(DefaultMemberPermissions.DISABLED);
+                       .setDefaultPermissions(DefaultMemberPermissions.enabledFor(Permission.MANAGE_SERVER));
     }
 
     @Override
     public CommandType getCommandType() {
-        return CommandType.INFO;
+        return CommandType.ADMIN;
     }
 }
