@@ -6,7 +6,7 @@ import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEve
 
 import java.util.Locale;
 
-public abstract class InfoSlashCommand implements ISlashCommand {
+public abstract class InfoCommand implements ISlashCommand {
     @Override
     public void execute(final SlashCommandInteractionEvent event) {
         final var locale = Utils.retrieveLocale(event);
