@@ -1,6 +1,6 @@
 package bot.commands.member;
 
-import bot.commands.UserSlashCommand;
+import bot.commands.types.UserCommand;
 import bot.models.User;
 import bot.utils.CommandType;
 import bot.utils.Responses;
@@ -19,13 +19,12 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.text.MessageFormat;
 import java.time.Instant;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
-public class Alpaca extends UserSlashCommand {
+public class Alpaca extends UserCommand {
     private static final Logger LOGGER = LoggerFactory.getLogger(Alpaca.class);
     private final Map<String, BufferedImage> images = new HashMap<>();
     private final Color[] colors = { Color.BLACK, Color.RED, Color.ORANGE, Color.YELLOW, Color.GREEN };
@@ -49,26 +48,24 @@ public class Alpaca extends UserSlashCommand {
             LOGGER.error(error.getMessage());
         }
 
-        event.getJDA().retrieveUserById(System.getenv("DEV_ID")).queue(dev -> {
-            final var workCooldown = Utils.cooldownToMinutes(user.getCooldown().getWork());
-            final var sleepCooldown = Utils.cooldownToMinutes(user.getCooldown().getSleep());
-            final var nickname = user.getAlpaca().getNickname();
+        final var workCooldown = Utils.cooldownToMinutes(user.getCooldown().getWork());
+        final var sleepCooldown = Utils.cooldownToMinutes(user.getCooldown().getSleep());
+        final var nickname = user.getAlpaca().getNickname();
 
-            final var embed = new EmbedBuilder()
-                    .setTitle(nickname)
-                    .setDescription(Responses.getLocalizedResponse("alpaca.embed.description", locale))
-                    .addField(Responses.getLocalizedResponse("alpaca.embed.field.title.work", locale), getCooldownMsg(workCooldown, locale), true)
-                    .addField(Responses.getLocalizedResponse("alpaca.embed.field.title.sleep", locale), getCooldownMsg(sleepCooldown, locale), true)
-                    .setThumbnail(event.getUser().getAvatarUrl())
-                    .setFooter(Responses.getLocalizedResponse("general.embed.footNote.createdBy", locale), dev.getAvatarUrl())
-                    .setTimestamp(Instant.now())
-                    .setImage("attachment://alpagotchi.png")
-                    .build();
+        final var embed = new EmbedBuilder()
+                .setTitle(nickname)
+                .setDescription(Responses.getLocalizedResponse("alpaca.embed.description", locale))
+                .addField(Responses.getLocalizedResponse("alpaca.embed.field.title.work", locale), getCooldownMsg(workCooldown, locale), true)
+                .addField(Responses.getLocalizedResponse("alpaca.embed.field.title.sleep", locale), getCooldownMsg(sleepCooldown, locale), true)
+                .setThumbnail(event.getUser().getAvatarUrl())
+                .setFooter(Responses.getLocalizedResponse("general.embed.footNote.createdBy", locale), "attachment://author.png")
+                .setTimestamp(Instant.now())
+                .setImage("attachment://alpagotchi.png")
+                .build();
 
-            event.replyEmbeds(embed)
-                 .addFiles(FileUpload.fromData(bytes.toByteArray(), "alpagotchi.png"))
-                 .queue();
-        });
+        event.replyEmbeds(embed)
+             .addFiles(FileUpload.fromData(bytes.toByteArray(), "alpagotchi.png"))
+             .queue();
     }
 
     @Override

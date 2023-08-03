@@ -1,6 +1,6 @@
-package bot.commands.dev;
+package bot.commands.owner;
 
-import bot.commands.InfoSlashCommand;
+import bot.commands.types.OwnerCommand;
 import bot.db.IDatabase;
 import bot.models.User;
 import bot.utils.CommandType;
@@ -18,7 +18,7 @@ import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 import java.util.List;
 import java.util.Locale;
 
-public class Set extends InfoSlashCommand {
+public class Set extends OwnerCommand {
     @Override
     protected void execute(final SlashCommandInteractionEvent event, final Locale locale) {
         // is the targeted user present in the database?
@@ -90,7 +90,7 @@ public class Set extends InfoSlashCommand {
 
     @Override
     public CommandType getCommandType() {
-        return CommandType.DEV;
+        return CommandType.OWNER;
     }
 
     private String modifyBalance(final User dbUser, final int newValue, final Locale locale) {

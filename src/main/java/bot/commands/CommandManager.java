@@ -1,9 +1,10 @@
 package bot.commands;
 
-import bot.commands.dev.Count;
-import bot.commands.dev.Set;
-import bot.commands.dev.Shutdown;
-import bot.commands.dev.Update;
+import bot.commands.member.Language;
+import bot.commands.owner.Count;
+import bot.commands.owner.Set;
+import bot.commands.owner.Shutdown;
+import bot.commands.owner.Update;
 import bot.commands.member.*;
 import bot.shop.ItemManager;
 import bot.utils.CommandType;
@@ -68,7 +69,7 @@ public class CommandManager {
 
         this.commands.entrySet()
                      .stream()
-                     .filter(entry -> entry.getValue().getCommandType() != CommandType.DEV)
+                     .filter(entry -> entry.getValue().getCommandType() != CommandType.OWNER)
                      .forEach(entry -> builder.append(entry.getKey()).append("\n"));
 
         return builder.toString();

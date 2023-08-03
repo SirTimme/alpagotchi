@@ -1,6 +1,6 @@
 package bot.commands.member;
 
-import bot.commands.UserSlashCommand;
+import bot.commands.types.UserCommand;
 import bot.models.User;
 import bot.shop.IConsumable;
 import bot.shop.ItemManager;
@@ -16,7 +16,7 @@ import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import java.time.Instant;
 import java.util.Locale;
 
-public class Inventory extends UserSlashCommand {
+public class Inventory extends UserCommand {
     private final ItemManager itemManager;
 
     public Inventory(final ItemManager itemManager) {
@@ -25,19 +25,17 @@ public class Inventory extends UserSlashCommand {
 
     @Override
     public void execute(final SlashCommandInteractionEvent event, final Locale locale, final User user) {
-        event.getJDA().retrieveUserById(System.getenv("DEV_ID")).queue(dev -> {
-            final var balanceMsg = Responses.getLocalizedResponse("general.embed.formattedBalance", locale, user.getInventory().getCurrency());
-            final var howToBuyMsg = Responses.getLocalizedResponse("general.embed.formattedHowToBuy", locale);
+        final var balanceMsg = Responses.getLocalizedResponse("general.embed.formattedBalance", locale, user.getInventory().getCurrency());
+        final var howToBuyMsg = Responses.getLocalizedResponse("general.embed.formattedHowToBuy", locale);
 
-            final var embed = new EmbedBuilder()
-                    .setTitle(Responses.getLocalizedResponse("inventory.embed.title", locale))
-                    .setDescription(balanceMsg + "\n```\n" + buildTable(user, locale) + "\n```\n" + howToBuyMsg)
-                    .setFooter(Responses.getLocalizedResponse("general.embed.footNote.createdBy", locale), dev.getAvatarUrl())
-                    .setTimestamp(Instant.now())
-                    .build();
+        final var embed = new EmbedBuilder()
+                .setTitle(Responses.getLocalizedResponse("inventory.embed.title", locale))
+                .setDescription(balanceMsg + "\n```\n" + buildTable(user, locale) + "\n```\n" + howToBuyMsg)
+                .setFooter(Responses.getLocalizedResponse("general.embed.footNote.createdBy", locale))
+                .setTimestamp(Instant.now())
+                .build();
 
-            event.replyEmbeds(embed).queue();
-        });
+        event.replyEmbeds(embed).queue();
     }
 
     @Override

@@ -1,7 +1,7 @@
 package bot.commands.member;
 
 import bot.commands.CommandManager;
-import bot.commands.InfoSlashCommand;
+import bot.commands.types.InfoCommand;
 import bot.utils.CommandType;
 import bot.utils.Responses;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -13,7 +13,7 @@ import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import java.time.Instant;
 import java.util.Locale;
 
-public class Help extends InfoSlashCommand {
+public class Help extends InfoCommand {
     private final CommandManager commandManager;
 
     public Help(final CommandManager commandManager) {
@@ -22,19 +22,17 @@ public class Help extends InfoSlashCommand {
 
     @Override
     public void execute(final SlashCommandInteractionEvent event, final Locale locale) {
-        event.getJDA().retrieveUserById(System.getenv("DEV_ID")).queue(dev -> {
-            final var embed = new EmbedBuilder()
-                    .setTitle(Responses.getLocalizedResponse("help.embed.title", locale))
-                    .setDescription("```\n" + this.commandManager.getCommandNames() + "```")
-                    .addField(Responses.getLocalizedResponse("help.embed.field.title.join", locale),
-                              Responses.getLocalizedResponse("help.embed.field.body.join", locale),
-                              false)
-                    .setFooter(Responses.getLocalizedResponse("general.embed.footNote.createdBy", locale), dev.getAvatarUrl())
-                    .setTimestamp(Instant.now())
-                    .build();
+        final var embed = new EmbedBuilder()
+                .setTitle(Responses.getLocalizedResponse("help.embed.title", locale))
+                .setDescription("```\n" + this.commandManager.getCommandNames() + "```")
+                .addField(Responses.getLocalizedResponse("help.embed.field.title.join", locale),
+                          Responses.getLocalizedResponse("help.embed.field.body.join", locale),
+                          false)
+                .setFooter(Responses.getLocalizedResponse("general.embed.footNote.createdBy", locale))
+                .setTimestamp(Instant.now())
+                .build();
 
-            event.replyEmbeds(embed).queue();
-        });
+        event.replyEmbeds(embed).queue();
     }
 
     @Override

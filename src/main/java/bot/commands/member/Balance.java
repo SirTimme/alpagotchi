@@ -1,6 +1,6 @@
 package bot.commands.member;
 
-import bot.commands.UserSlashCommand;
+import bot.commands.types.UserCommand;
 import bot.models.User;
 import bot.utils.CommandType;
 import bot.utils.Responses;
@@ -11,7 +11,7 @@ import net.dv8tion.jda.api.interactions.commands.build.Commands;
 
 import java.util.Locale;
 
-public class Balance extends UserSlashCommand {
+public class Balance extends UserCommand {
     @Override
     public void execute(final SlashCommandInteractionEvent event, final Locale locale, final User user) {
         event.reply(Responses.getLocalizedResponse("balance.successful", locale, user.getInventory().getCurrency())).queue();

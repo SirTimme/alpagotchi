@@ -1,6 +1,6 @@
 package bot.commands.member;
 
-import bot.commands.UserSlashCommand;
+import bot.commands.types.UserCommand;
 import bot.models.User;
 import bot.utils.CommandType;
 import bot.utils.Responses;
@@ -14,7 +14,7 @@ import net.dv8tion.jda.api.interactions.components.buttons.Button;
 import java.time.Instant;
 import java.util.Locale;
 
-public class Init extends UserSlashCommand {
+public class Init extends UserCommand {
     @Override
     public void execute(final SlashCommandInteractionEvent event, final Locale locale, final User user) {
         if (user != null) {
@@ -27,24 +27,22 @@ public class Init extends UserSlashCommand {
         final var btnAccept = Button.success(userId + ":initAccept", Responses.getLocalizedResponse("button.accept", locale));
         final var btnCancel = Button.danger(userId + ":initCancelled", Responses.getLocalizedResponse("button.cancel", locale));
 
-        event.getJDA().retrieveUserById(System.getenv("DEV_ID")).queue(dev -> {
-            final var embed = new EmbedBuilder()
-                    .setTitle(Responses.getLocalizedResponse("init.embed.title", locale))
-                    .addField(Responses.getLocalizedResponse("init.embed.field.title.storage", locale),
-                              Responses.getLocalizedResponse("init.embed.field.body.storage", locale),
-                              false)
-                    .addField(Responses.getLocalizedResponse("init.embed.field.title.deletion", locale),
-                              Responses.getLocalizedResponse("init.embed.field.body.deletion", locale),
-                              false)
-                    .addField(Responses.getLocalizedResponse("init.embed.field.title.agreement", locale),
-                              Responses.getLocalizedResponse("init.embed.field.body.agreement", locale),
-                              false)
-                    .setFooter(Responses.getLocalizedResponse("general.embed.footNote.createdBy", locale), dev.getAvatarUrl())
-                    .setTimestamp(Instant.now())
-                    .build();
+        final var embed = new EmbedBuilder()
+                .setTitle(Responses.getLocalizedResponse("init.embed.title", locale))
+                .addField(Responses.getLocalizedResponse("init.embed.field.title.storage", locale),
+                          Responses.getLocalizedResponse("init.embed.field.body.storage", locale),
+                          false)
+                .addField(Responses.getLocalizedResponse("init.embed.field.title.deletion", locale),
+                          Responses.getLocalizedResponse("init.embed.field.body.deletion", locale),
+                          false)
+                .addField(Responses.getLocalizedResponse("init.embed.field.title.agreement", locale),
+                          Responses.getLocalizedResponse("init.embed.field.body.agreement", locale),
+                          false)
+                .setFooter(Responses.getLocalizedResponse("general.embed.footNote.createdBy", locale))
+                .setTimestamp(Instant.now())
+                .build();
 
-            event.replyEmbeds(embed).addActionRow(btnAccept, btnCancel).queue();
-        });
+        event.replyEmbeds(embed).addActionRow(btnAccept, btnCancel).queue();
     }
 
     @Override

@@ -1,6 +1,6 @@
 package bot.commands.member;
 
-import bot.commands.InfoSlashCommand;
+import bot.commands.types.InfoCommand;
 import bot.utils.CommandType;
 import bot.utils.Responses;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
@@ -10,7 +10,7 @@ import net.dv8tion.jda.api.interactions.commands.build.Commands;
 
 import java.util.Locale;
 
-public class Ping extends InfoSlashCommand {
+public class Ping extends InfoCommand {
     @Override
     public void execute(final SlashCommandInteractionEvent event, final Locale locale) {
         event.getJDA().getRestPing().queue(ping -> event.reply(Responses.getLocalizedResponse("ping.successful", locale, ping)).queue());

@@ -1,5 +1,6 @@
-package bot.commands;
+package bot.commands.types;
 
+import bot.commands.ISlashCommand;
 import bot.db.IDatabase;
 import bot.models.User;
 import bot.utils.Responses;
@@ -8,15 +9,14 @@ import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEve
 
 import java.util.Locale;
 
-public abstract class UserSlashCommand implements ISlashCommand {
+public abstract class UserCommand implements ISlashCommand {
     @Override
     public void execute(final SlashCommandInteractionEvent event) {
         final var user = IDatabase.INSTANCE.getUserById(event.getUser().getIdLong());
         final var locale = Utils.retrieveLocale(event);
 
         if (!event.getName().equals("init") && user == null) {
-            final var msg = Responses.getLocalizedResponse("general.error.noAlpaca", locale);
-            event.reply(msg).setEphemeral(true).queue();
+            event.reply(Responses.getLocalizedResponse("general.error.noAlpaca", locale)).setEphemeral(true).queue();
             return;
         }
 

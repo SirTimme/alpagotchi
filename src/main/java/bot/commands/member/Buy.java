@@ -1,6 +1,6 @@
 package bot.commands.member;
 
-import bot.commands.UserSlashCommand;
+import bot.commands.types.UserCommand;
 import bot.db.IDatabase;
 import bot.models.User;
 import bot.shop.ItemManager;
@@ -17,7 +17,7 @@ import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import java.util.List;
 import java.util.Locale;
 
-public class Buy extends UserSlashCommand {
+public class Buy extends UserCommand {
     private final ItemManager itemManager;
 
     public Buy(final ItemManager itemManager) {

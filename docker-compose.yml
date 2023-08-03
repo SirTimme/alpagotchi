@@ -3,8 +3,7 @@ version: '3.8'
 name: alpagotchi
 services:
   database:
-    container_name: database
-    image: postgres
+    image: postgres:${POSTGRES_VERSION}
     restart: on-failure
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
@@ -16,11 +15,11 @@ services:
       - "5432:5432"
 
   bot:
-    container_name: bot
     build:
       context: .
       dockerfile: Dockerfile
       args:
+        OWNER_ID: ${OWNER_ID}
         TOKEN: ${TOKEN}
         POSTGRES_USER: ${POSTGRES_USER}
         POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
@@ -30,8 +29,7 @@ services:
     restart: on-failure
 
   adminer:
-    container_name: adminer
-    image: adminer
+    image: adminer:${ADMINER_VERSION}
     depends_on:
       - database
     restart: on-failure
@@ -42,4 +40,3 @@ services:
 
 volumes:
   pg-data:
-    name: pg-data

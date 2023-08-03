@@ -1,7 +1,7 @@
-package bot.commands.dev;
+package bot.commands.owner;
 
+import bot.commands.types.OwnerCommand;
 import bot.commands.CommandManager;
-import bot.commands.InfoSlashCommand;
 import bot.utils.CommandType;
 import bot.utils.Responses;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
@@ -12,7 +12,7 @@ import net.dv8tion.jda.api.interactions.commands.build.Commands;
 
 import java.util.Locale;
 
-public class Update extends InfoSlashCommand {
+public class Update extends OwnerCommand {
     private final CommandManager commandManager;
 
     public Update(final CommandManager commandManager) {
@@ -23,12 +23,12 @@ public class Update extends InfoSlashCommand {
     public void execute(final SlashCommandInteractionEvent event, final Locale locale) {
         event.getJDA()
              .updateCommands()
-             .addCommands(this.commandManager.getCommandDataByTypes(CommandType.USER, CommandType.INFO, CommandType.INIT))
+             .addCommands(this.commandManager.getCommandDataByTypes(CommandType.USER, CommandType.INFO, CommandType.INIT, CommandType.ADMIN))
              .queue();
 
         event.getGuild()
              .updateCommands()
-             .addCommands(this.commandManager.getCommandDataByTypes(CommandType.DEV))
+             .addCommands(this.commandManager.getCommandDataByTypes(CommandType.OWNER))
              .queue();
 
         event.reply(Responses.getLocalizedResponse("update.successful", locale, this.commandManager.getCommands().size())).queue();
@@ -44,6 +44,6 @@ public class Update extends InfoSlashCommand {
 
     @Override
     public CommandType getCommandType() {
-        return CommandType.DEV;
+        return CommandType.OWNER;
     }
 }

@@ -1,8 +1,9 @@
 package bot.commands.member;
 
-import bot.commands.InfoSlashCommand;
+import bot.commands.types.InfoCommand;
 import bot.utils.CommandType;
 import bot.utils.Responses;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.emoji.Emoji;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.DiscordLocale;
@@ -13,7 +14,7 @@ import net.dv8tion.jda.api.interactions.components.selections.StringSelectMenu;
 
 import java.util.Locale;
 
-public class Language extends InfoSlashCommand {
+public class Language extends InfoCommand {
     @Override
     public void execute(final SlashCommandInteractionEvent event, final Locale locale) {
         final var userId = event.getUser().getId();
@@ -33,11 +34,11 @@ public class Language extends InfoSlashCommand {
         return Commands.slash("language", "Sets the used language of Alpagotchi for this server")
                        .setDescriptionLocalization(DiscordLocale.GERMAN, "Setzt die verwendete Sprache von Alpagotchi für diesen Server")
                        .setGuildOnly(true)
-                       .setDefaultPermissions(DefaultMemberPermissions.DISABLED);
+                       .setDefaultPermissions(DefaultMemberPermissions.enabledFor(Permission.MANAGE_SERVER));
     }
 
     @Override
     public CommandType getCommandType() {
-        return CommandType.INFO;
+        return CommandType.ADMIN;
     }
 }
