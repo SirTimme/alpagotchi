@@ -1,6 +1,6 @@
 package bot.commands.member;
 
-import bot.commands.types.UserSlashCommand;
+import bot.commands.types.UserCommand;
 import bot.models.User;
 import bot.shop.IConsumable;
 import bot.shop.ItemManager;
@@ -16,7 +16,7 @@ import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import java.time.Instant;
 import java.util.Locale;
 
-public class Inventory extends UserSlashCommand {
+public class Inventory extends UserCommand {
     private final ItemManager itemManager;
 
     public Inventory(final ItemManager itemManager) {

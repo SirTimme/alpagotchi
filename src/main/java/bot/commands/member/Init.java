@@ -1,6 +1,6 @@
 package bot.commands.member;
 
-import bot.commands.types.UserSlashCommand;
+import bot.commands.types.UserCommand;
 import bot.models.User;
 import bot.utils.CommandType;
 import bot.utils.Responses;
@@ -14,7 +14,7 @@ import net.dv8tion.jda.api.interactions.components.buttons.Button;
 import java.time.Instant;
 import java.util.Locale;
 
-public class Init extends UserSlashCommand {
+public class Init extends UserCommand {
     @Override
     public void execute(final SlashCommandInteractionEvent event, final Locale locale, final User user) {
         if (user != null) {

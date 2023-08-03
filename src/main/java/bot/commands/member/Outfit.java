@@ -1,6 +1,6 @@
 package bot.commands.member;
 
-import bot.commands.types.UserSlashCommand;
+import bot.commands.types.UserCommand;
 import bot.db.IDatabase;
 import bot.models.User;
 import bot.utils.CommandType;
@@ -16,7 +16,7 @@ import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import java.util.List;
 import java.util.Locale;
 
-public class Outfit extends UserSlashCommand {
+public class Outfit extends UserCommand {
     @Override
     public void execute(final SlashCommandInteractionEvent event, final Locale locale, final User user) {
         // selected outfit

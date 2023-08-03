@@ -9,7 +9,7 @@ import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEve
 
 import java.util.Locale;
 
-public abstract class UserSlashCommand implements ISlashCommand {
+public abstract class UserCommand implements ISlashCommand {
     @Override
     public void execute(final SlashCommandInteractionEvent event) {
         final var user = IDatabase.INSTANCE.getUserById(event.getUser().getIdLong());

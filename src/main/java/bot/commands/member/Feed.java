@@ -1,6 +1,6 @@
 package bot.commands.member;
 
-import bot.commands.types.UserSlashCommand;
+import bot.commands.types.UserCommand;
 import bot.db.IDatabase;
 import bot.models.User;
 import bot.shop.IConsumable;
@@ -18,7 +18,7 @@ import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import java.util.List;
 import java.util.Locale;
 
-public class Feed extends UserSlashCommand {
+public class Feed extends UserCommand {
     private final ItemManager itemManager;
 
     public Feed(final ItemManager itemManager) {

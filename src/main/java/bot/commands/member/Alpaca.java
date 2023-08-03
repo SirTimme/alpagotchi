@@ -1,6 +1,6 @@
 package bot.commands.member;
 
-import bot.commands.types.UserSlashCommand;
+import bot.commands.types.UserCommand;
 import bot.models.User;
 import bot.utils.CommandType;
 import bot.utils.Responses;
@@ -24,7 +24,7 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
-public class Alpaca extends UserSlashCommand {
+public class Alpaca extends UserCommand {
     private static final Logger LOGGER = LoggerFactory.getLogger(Alpaca.class);
     private final Map<String, BufferedImage> images = new HashMap<>();
     private final Color[] colors = { Color.BLACK, Color.RED, Color.ORANGE, Color.YELLOW, Color.GREEN };
