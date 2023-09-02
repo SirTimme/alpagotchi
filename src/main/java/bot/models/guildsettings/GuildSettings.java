@@ -1,6 +1,6 @@
 package bot.models.guildsettings;
 
-import bot.utils.LocaleConverter;
+import bot.localization.LocaleConverter;
 import jakarta.persistence.*;
 import org.hibernate.annotations.NaturalId;
 
