@@ -8,7 +8,6 @@ import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.StringSelectInteractionEvent;
 
 import java.util.Locale;
-import java.util.concurrent.TimeUnit;
 
 public class Utils {
     public static Locale retrieveLocale(final SlashCommandInteractionEvent event) {
@@ -21,14 +20,6 @@ public class Utils {
 
     public static Locale retrieveLocale(final ButtonInteractionEvent event) {
         return retrieveLocale(event.getGuild());
-    }
-
-    public static long cooldownToMinutes(final long cooldown) {
-        return TimeUnit.MILLISECONDS.toMinutes(cooldown - System.currentTimeMillis());
-    }
-
-    public static long setCooldown(final int minutes) {
-        return System.currentTimeMillis() + 1000L * 60 * minutes;
     }
 
     private static Locale retrieveLocale(final Guild guild) {

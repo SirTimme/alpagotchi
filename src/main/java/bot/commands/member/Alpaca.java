@@ -1,10 +1,10 @@
 package bot.commands.member;
 
 import bot.commands.types.UserCommand;
+import bot.models.cooldown.CooldownUtils;
 import bot.models.user.User;
 import bot.utils.CommandType;
 import bot.utils.Responses;
-import bot.utils.Utils;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.DiscordLocale;
@@ -48,8 +48,8 @@ public class Alpaca extends UserCommand {
             LOGGER.error(error.getMessage());
         }
 
-        final var workCooldown = Utils.cooldownToMinutes(user.getCooldown().getWork());
-        final var sleepCooldown = Utils.cooldownToMinutes(user.getCooldown().getSleep());
+        final var workCooldown = CooldownUtils.toMinutes(user.getCooldown().getWork());
+        final var sleepCooldown = CooldownUtils.toMinutes(user.getCooldown().getSleep());
         final var nickname = user.getAlpaca().getNickname();
 
         final var embed = new EmbedBuilder()
