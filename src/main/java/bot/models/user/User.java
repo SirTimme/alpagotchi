@@ -1,5 +1,8 @@
-package bot.models;
+package bot.models.user;
 
+import bot.models.alpaca.Alpaca;
+import bot.models.cooldown.Cooldown;
+import bot.models.inventory.Inventory;
 import jakarta.persistence.*;
 import org.hibernate.annotations.NaturalId;
 

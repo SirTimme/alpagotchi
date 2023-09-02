@@ -2,7 +2,7 @@ package bot.commands.member;
 
 import bot.commands.types.UserCommand;
 import bot.db.IDatabase;
-import bot.models.User;
+import bot.models.user.User;
 import bot.shop.IConsumable;
 import bot.shop.ItemManager;
 import bot.utils.CommandType;

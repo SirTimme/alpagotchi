@@ -2,7 +2,7 @@ package bot.commands.types;
 
 import bot.commands.ISlashCommand;
 import bot.db.IDatabase;
-import bot.models.User;
+import bot.models.user.User;
 import bot.utils.Responses;
 import bot.utils.Utils;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;

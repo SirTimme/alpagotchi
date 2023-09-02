@@ -2,7 +2,7 @@ package bot.components.menus.language;
 
 import bot.components.menus.MessageMenu;
 import bot.db.IDatabase;
-import bot.models.GuildSettings;
+import bot.models.guildsettings.GuildSettings;
 import bot.utils.Responses;
 import net.dv8tion.jda.api.events.interaction.component.StringSelectInteractionEvent;
 

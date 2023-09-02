@@ -1,6 +1,10 @@
 package bot.db;
 
-import bot.models.*;
+import bot.models.alpaca.Alpaca;
+import bot.models.cooldown.Cooldown;
+import bot.models.guildsettings.GuildSettings;
+import bot.models.inventory.Inventory;
+import bot.models.user.User;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 import org.hibernate.Session;

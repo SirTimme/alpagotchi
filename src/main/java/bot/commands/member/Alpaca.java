@@ -1,7 +1,7 @@
 package bot.commands.member;
 
 import bot.commands.types.UserCommand;
-import bot.models.User;
+import bot.models.user.User;
 import bot.utils.CommandType;
 import bot.utils.Responses;
 import bot.utils.Utils;

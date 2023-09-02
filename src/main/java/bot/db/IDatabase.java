@@ -1,7 +1,7 @@
 package bot.db;
 
-import bot.models.GuildSettings;
-import bot.models.User;
+import bot.models.guildsettings.GuildSettings;
+import bot.models.user.User;
 
 public interface IDatabase {
     IDatabase INSTANCE = new PostgresDB();

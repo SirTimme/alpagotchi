@@ -1,7 +1,7 @@
 package bot.utils;
 
 import bot.db.IDatabase;
-import bot.models.GuildSettings;
+import bot.models.guildsettings.GuildSettings;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;

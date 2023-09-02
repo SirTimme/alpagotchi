@@ -1,4 +1,4 @@
-package bot.models;
+package bot.models.guildsettings;
 
 import bot.utils.LocaleConverter;
 import jakarta.persistence.*;
