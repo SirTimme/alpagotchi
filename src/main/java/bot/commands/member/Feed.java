@@ -5,7 +5,7 @@ import bot.db.IDatabase;
 import bot.models.user.User;
 import bot.shop.IConsumable;
 import bot.shop.ItemManager;
-import bot.utils.CommandType;
+import bot.commands.types.CommandType;
 import bot.localization.LocalizedResponse;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.DiscordLocale;

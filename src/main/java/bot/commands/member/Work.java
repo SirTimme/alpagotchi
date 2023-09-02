@@ -4,7 +4,7 @@ import bot.commands.types.UserCommand;
 import bot.db.IDatabase;
 import bot.models.cooldown.CooldownUtils;
 import bot.models.user.User;
-import bot.utils.CommandType;
+import bot.commands.types.CommandType;
 import bot.localization.LocalizedResponse;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.DiscordLocale;

@@ -1,4 +1,4 @@
-package bot.utils;
+package bot.commands.types;
 
 public enum CommandType {
     INIT,
