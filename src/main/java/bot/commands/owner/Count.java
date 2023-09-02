@@ -3,7 +3,7 @@ package bot.commands.owner;
 import bot.commands.types.OwnerCommand;
 import bot.db.IDatabase;
 import bot.utils.CommandType;
-import bot.utils.Responses;
+import bot.localization.LocalizedResponse;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.DiscordLocale;
 import net.dv8tion.jda.api.interactions.commands.DefaultMemberPermissions;
@@ -18,7 +18,7 @@ public class Count extends OwnerCommand {
         final var userCount = IDatabase.INSTANCE.getUserCount();
         final var guildSize = event.getJDA().getGuilds().size();
 
-        event.reply(Responses.getLocalizedResponse("count.alpacas", locale, userCount, guildSize)).queue();
+        event.reply(LocalizedResponse.get("count.alpacas", locale, userCount, guildSize)).queue();
     }
 
     @Override

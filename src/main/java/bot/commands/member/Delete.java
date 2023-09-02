@@ -3,7 +3,7 @@ package bot.commands.member;
 import bot.commands.types.UserCommand;
 import bot.models.user.User;
 import bot.utils.CommandType;
-import bot.utils.Responses;
+import bot.localization.LocalizedResponse;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.DiscordLocale;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
@@ -17,10 +17,10 @@ public class Delete extends UserCommand {
     public void execute(final SlashCommandInteractionEvent event, final Locale locale, final User user) {
         final var userId = event.getUser().getIdLong();
 
-        final var btnSuccess = Button.success(userId + ":deleteAccept", Responses.getLocalizedResponse("button.accept", locale));
-        final var btnCancel = Button.danger(userId + ":deleteCancelled", Responses.getLocalizedResponse("button.cancel", locale));
+        final var btnSuccess = Button.success(userId + ":deleteAccept", LocalizedResponse.get("button.accept", locale));
+        final var btnCancel = Button.danger(userId + ":deleteCancelled", LocalizedResponse.get("button.cancel", locale));
 
-        event.reply(Responses.getLocalizedResponse("delete.warning", locale)).addActionRow(btnSuccess, btnCancel).queue();
+        event.reply(LocalizedResponse.get("delete.warning", locale)).addActionRow(btnSuccess, btnCancel).queue();
     }
 
     @Override

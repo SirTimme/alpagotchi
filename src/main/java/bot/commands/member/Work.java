@@ -5,7 +5,7 @@ import bot.db.IDatabase;
 import bot.models.cooldown.CooldownUtils;
 import bot.models.user.User;
 import bot.utils.CommandType;
-import bot.utils.Responses;
+import bot.localization.LocalizedResponse;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.DiscordLocale;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
@@ -19,28 +19,28 @@ public class Work extends UserCommand {
         // is the alpaca currently sleeping?
         final long sleep = CooldownUtils.toMinutes(user.getCooldown().getSleep());
         if (sleep > 0) {
-            event.reply(Responses.getLocalizedResponse("work.error.currentlySleeping", locale, sleep)).setEphemeral(true).queue();
+            event.reply(LocalizedResponse.get("work.error.currentlySleeping", locale, sleep)).setEphemeral(true).queue();
             return;
         }
 
         // did the alpaca already work?
         final long work = CooldownUtils.toMinutes(user.getCooldown().getWork());
         if (work > 0) {
-            event.reply(Responses.getLocalizedResponse("work.error.alreadyWorked", locale, work)).setEphemeral(true).queue();
+            event.reply(LocalizedResponse.get("work.error.alreadyWorked", locale, work)).setEphemeral(true).queue();
             return;
         }
 
         // has the alpaca enough energy?
         final int energy = user.getAlpaca().getEnergy();
         if (energy < 10) {
-            event.reply(Responses.getLocalizedResponse("work.error.tooTired", locale)).setEphemeral(true).queue();
+            event.reply(LocalizedResponse.get("work.error.tooTired", locale)).setEphemeral(true).queue();
             return;
         }
 
         // is the alpaca happy enough?
         final int joy = user.getAlpaca().getJoy();
         if (joy < 15) {
-            event.reply(Responses.getLocalizedResponse("work.error.tooSad", locale)).setEphemeral(true).queue();
+            event.reply(LocalizedResponse.get("work.error.tooSad", locale)).setEphemeral(true).queue();
             return;
         }
 
@@ -56,7 +56,7 @@ public class Work extends UserCommand {
         IDatabase.INSTANCE.updateUser(user);
 
         // reply to the user
-        event.reply(Responses.getLocalizedResponse("work.successful", locale, fluffies, energyCost, joyCost)).queue();
+        event.reply(LocalizedResponse.get("work.successful", locale, fluffies, energyCost, joyCost)).queue();
     }
 
     @Override

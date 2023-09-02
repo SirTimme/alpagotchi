@@ -4,7 +4,7 @@ import bot.commands.types.OwnerCommand;
 import bot.db.IDatabase;
 import bot.models.user.User;
 import bot.utils.CommandType;
-import bot.utils.Responses;
+import bot.localization.LocalizedResponse;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.DiscordLocale;
 import net.dv8tion.jda.api.interactions.commands.Command;
@@ -25,7 +25,7 @@ public class Set extends OwnerCommand {
         final var userId = event.getOption("user-id").getAsUser().getIdLong();
         final var dbUser = IDatabase.INSTANCE.getUserById(userId);
         if (dbUser == null) {
-            event.reply(Responses.getLocalizedResponse("general.error.targetNotInitialized", locale)).setEphemeral(true).queue();
+            event.reply(LocalizedResponse.get("general.error.targetNotInitialized", locale)).setEphemeral(true).queue();
             return;
         }
 
@@ -35,7 +35,7 @@ public class Set extends OwnerCommand {
         final var response = switch (event.getSubcommandName()) {
             case "balance" -> modifyBalance(dbUser, newValue, locale);
             case "item" -> modifyItems(event, dbUser, newValue, locale);
-            default -> Responses.getLocalizedResponse("set.error.unreachable", locale);
+            default -> LocalizedResponse.get("set.error.unreachable", locale);
         };
 
         // update db
@@ -95,12 +95,12 @@ public class Set extends OwnerCommand {
 
     private String modifyBalance(final User dbUser, final int newValue, final Locale locale) {
         dbUser.getInventory().setCurrency(newValue);
-        return Responses.getLocalizedResponse("set.modified.balance", locale, dbUser.getUserId(), newValue);
+        return LocalizedResponse.get("set.modified.balance", locale, dbUser.getUserId(), newValue);
     }
 
     private String modifyItems(final SlashCommandInteractionEvent event, final User dbUser, final int newValue, final Locale locale) {
         final var item = event.getOption("item-name").getAsString();
         dbUser.getInventory().getItems().put(item, newValue);
-        return Responses.getLocalizedResponse("set.modified.items", locale, item, dbUser.getUserId(), newValue);
+        return LocalizedResponse.get("set.modified.items", locale, item, dbUser.getUserId(), newValue);
     }
 }

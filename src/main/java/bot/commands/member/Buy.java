@@ -5,7 +5,7 @@ import bot.db.IDatabase;
 import bot.models.user.User;
 import bot.shop.ItemManager;
 import bot.utils.CommandType;
-import bot.utils.Responses;
+import bot.localization.LocalizedResponse;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.DiscordLocale;
 import net.dv8tion.jda.api.interactions.commands.Command;
@@ -40,7 +40,7 @@ public class Buy extends UserCommand {
 
         // sufficient balance?
         if (balance - price < 0) {
-            event.reply(Responses.getLocalizedResponse("balance.error.balanceNotSufficient", locale)).setEphemeral(true).queue();
+            event.reply(LocalizedResponse.get("balance.error.balanceNotSufficient", locale)).setEphemeral(true).queue();
             return;
         }
 
@@ -51,7 +51,7 @@ public class Buy extends UserCommand {
         IDatabase.INSTANCE.updateUser(user);
 
         // reply to the user
-        event.reply(Responses.getLocalizedResponse("buy.successful", locale, amount, item.getName(), price)).queue();
+        event.reply(LocalizedResponse.get("buy.successful", locale, amount, item.getName(), price)).queue();
     }
 
     @Override

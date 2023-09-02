@@ -4,7 +4,7 @@ import bot.commands.types.UserCommand;
 import bot.db.IDatabase;
 import bot.models.user.User;
 import bot.utils.CommandType;
-import bot.utils.Responses;
+import bot.localization.LocalizedResponse;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.DiscordLocale;
 import net.dv8tion.jda.api.interactions.commands.Command;
@@ -24,14 +24,14 @@ public class Gift extends UserCommand {
 
         // you can't gift items to yourself
         if (targetDiscordUser.getIdLong() == user.getUserId()) {
-            event.reply(Responses.getLocalizedResponse("gift.error.cantGiftYourself", locale)).setEphemeral(true).queue();
+            event.reply(LocalizedResponse.get("gift.error.cantGiftYourself", locale)).setEphemeral(true).queue();
             return;
         }
 
         // Is the target user initialized?
         final var targetUser = IDatabase.INSTANCE.getUserById(targetDiscordUser.getIdLong());
         if (targetUser == null) {
-            event.reply(Responses.getLocalizedResponse("general.error.targetNotInitialized", locale)).setEphemeral(true).queue();
+            event.reply(LocalizedResponse.get("general.error.targetNotInitialized", locale)).setEphemeral(true).queue();
             return;
         }
 
@@ -43,7 +43,7 @@ public class Gift extends UserCommand {
 
         // you can only gift as many items as you possess
         if (user.getInventory().getItems().get(item) - amount < 0) {
-            event.reply(Responses.getLocalizedResponse("general.error.notEnoughItems", locale)).setEphemeral(true).queue();
+            event.reply(LocalizedResponse.get("general.error.notEnoughItems", locale)).setEphemeral(true).queue();
             return;
         }
 
@@ -58,7 +58,7 @@ public class Gift extends UserCommand {
         IDatabase.INSTANCE.updateUser(targetUser);
 
         // reply to the user
-        event.reply(Responses.getLocalizedResponse("gift.successful", locale, amount, item, targetDiscordUser.getName())).queue();
+        event.reply(LocalizedResponse.get("gift.successful", locale, amount, item, targetDiscordUser.getName())).queue();
     }
 
     @Override

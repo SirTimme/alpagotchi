@@ -6,7 +6,7 @@ import bot.models.user.User;
 import bot.shop.IConsumable;
 import bot.shop.ItemManager;
 import bot.utils.CommandType;
-import bot.utils.Responses;
+import bot.localization.LocalizedResponse;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.DiscordLocale;
 import net.dv8tion.jda.api.interactions.commands.Command;
@@ -32,7 +32,7 @@ public class Feed extends UserCommand {
 
         // alpaca currently sleeping?
         if (remainingSleep > 0) {
-            event.reply(Responses.getLocalizedResponse("work.error.currentlySleeping", locale, remainingSleep)).setEphemeral(true).queue();
+            event.reply(LocalizedResponse.get("work.error.currentlySleeping", locale, remainingSleep)).setEphemeral(true).queue();
             return;
         }
 
@@ -47,7 +47,7 @@ public class Feed extends UserCommand {
 
         // trying to feed items you don't have?
         if (newItemAmount < 0) {
-            event.reply(Responses.getLocalizedResponse("general.error.notEnoughItems", locale)).setEphemeral(true).queue();
+            event.reply(LocalizedResponse.get("general.error.notEnoughItems", locale)).setEphemeral(true).queue();
             return;
         }
 
@@ -59,7 +59,7 @@ public class Feed extends UserCommand {
 
         // trying to overfeed your alpaca?
         if (oldValue + saturation > 100) {
-            event.reply(Responses.getLocalizedResponse("feed.error.tooMuchSaturation", locale)).setEphemeral(true).queue();
+            event.reply(LocalizedResponse.get("feed.error.tooMuchSaturation", locale)).setEphemeral(true).queue();
             return;
         }
 
@@ -75,7 +75,7 @@ public class Feed extends UserCommand {
         IDatabase.INSTANCE.updateUser(user);
 
         // reply to the user
-        event.reply(Responses.getLocalizedResponse(getKey(item), locale, amount, item.getName(), saturation)).queue();
+        event.reply(LocalizedResponse.get(getKey(item), locale, amount, item.getName(), saturation)).queue();
     }
 
     @Override

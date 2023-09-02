@@ -3,7 +3,7 @@ package bot.commands.owner;
 import bot.commands.types.OwnerCommand;
 import bot.db.IDatabase;
 import bot.utils.CommandType;
-import bot.utils.Responses;
+import bot.localization.LocalizedResponse;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.DiscordLocale;
 import net.dv8tion.jda.api.interactions.commands.DefaultMemberPermissions;
@@ -19,7 +19,7 @@ public class Shutdown extends OwnerCommand {
         IDatabase.INSTANCE.shutdownDatabase();
 
         // Shutdown bot
-        event.reply(Responses.getLocalizedResponse("shutdown.successful", locale, event.getJDA().getSelfUser().getName())).complete();
+        event.reply(LocalizedResponse.get("shutdown.successful", locale, event.getJDA().getSelfUser().getName())).complete();
         event.getJDA().shutdown();
     }
 
