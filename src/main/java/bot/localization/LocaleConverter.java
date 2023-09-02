@@ -1,4 +1,4 @@
-package bot.utils;
+package bot.localization;
 
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;

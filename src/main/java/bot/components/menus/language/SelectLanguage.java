@@ -2,8 +2,8 @@ package bot.components.menus.language;
 
 import bot.components.menus.MessageMenu;
 import bot.db.IDatabase;
-import bot.models.GuildSettings;
-import bot.utils.Responses;
+import bot.models.guildsettings.GuildSettings;
+import bot.localization.LocalizedResponse;
 import net.dv8tion.jda.api.events.interaction.component.StringSelectInteractionEvent;
 
 import java.util.Collections;
@@ -19,7 +19,7 @@ public class SelectLanguage extends MessageMenu {
         if (settings == null) {
             IDatabase.INSTANCE.updateSettings(new GuildSettings(event.getGuild().getIdLong(), locale));
 
-            event.editMessage(Responses.getLocalizedResponse("language.successful", locale))
+            event.editMessage(LocalizedResponse.get("language.successful", locale))
                  .setComponents(Collections.emptyList())
                  .setEmbeds(Collections.emptyList())
                  .queue();
@@ -31,7 +31,7 @@ public class SelectLanguage extends MessageMenu {
         IDatabase.INSTANCE.updateSettings(settings);
 
         // reply to the user
-        event.editMessage(Responses.getLocalizedResponse("language.successful", locale))
+        event.editMessage(LocalizedResponse.get("language.successful", locale))
              .setComponents(Collections.emptyList())
              .setEmbeds(Collections.emptyList())
              .queue();

@@ -3,7 +3,7 @@ package bot.commands.member;
 import bot.commands.CommandManager;
 import bot.commands.types.InfoCommand;
 import bot.utils.CommandType;
-import bot.utils.Responses;
+import bot.localization.LocalizedResponse;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.DiscordLocale;
@@ -23,12 +23,12 @@ public class Help extends InfoCommand {
     @Override
     public void execute(final SlashCommandInteractionEvent event, final Locale locale) {
         final var embed = new EmbedBuilder()
-                .setTitle(Responses.getLocalizedResponse("help.embed.title", locale))
+                .setTitle(LocalizedResponse.get("help.embed.title", locale))
                 .setDescription("```\n" + this.commandManager.getCommandNames() + "```")
-                .addField(Responses.getLocalizedResponse("help.embed.field.title.join", locale),
-                          Responses.getLocalizedResponse("help.embed.field.body.join", locale),
+                .addField(LocalizedResponse.get("help.embed.field.title.join", locale),
+                          LocalizedResponse.get("help.embed.field.body.join", locale),
                           false)
-                .setFooter(Responses.getLocalizedResponse("general.embed.footNote.createdBy", locale))
+                .setFooter(LocalizedResponse.get("general.embed.footNote.createdBy", locale))
                 .setTimestamp(Instant.now())
                 .build();
 

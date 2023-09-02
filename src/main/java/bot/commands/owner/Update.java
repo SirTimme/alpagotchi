@@ -3,7 +3,7 @@ package bot.commands.owner;
 import bot.commands.types.OwnerCommand;
 import bot.commands.CommandManager;
 import bot.utils.CommandType;
-import bot.utils.Responses;
+import bot.localization.LocalizedResponse;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.DiscordLocale;
 import net.dv8tion.jda.api.interactions.commands.DefaultMemberPermissions;
@@ -31,7 +31,7 @@ public class Update extends OwnerCommand {
              .addCommands(this.commandManager.getCommandDataByTypes(CommandType.OWNER))
              .queue();
 
-        event.reply(Responses.getLocalizedResponse("update.successful", locale, this.commandManager.getCommands().size())).queue();
+        event.reply(LocalizedResponse.get("update.successful", locale, this.commandManager.getCommands().size())).queue();
     }
 
     @Override

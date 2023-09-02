@@ -2,9 +2,9 @@ package bot.commands.member;
 
 import bot.commands.types.UserCommand;
 import bot.db.IDatabase;
-import bot.models.User;
+import bot.models.user.User;
 import bot.utils.CommandType;
-import bot.utils.Responses;
+import bot.localization.LocalizedResponse;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.DiscordLocale;
 import net.dv8tion.jda.api.interactions.commands.Command;
@@ -27,7 +27,7 @@ public class Outfit extends UserCommand {
         IDatabase.INSTANCE.updateUser(user);
 
         // reply to the user
-        event.reply(Responses.getLocalizedResponse("outfit.successful", locale, outfit)).queue();
+        event.reply(LocalizedResponse.get("outfit.successful", locale, outfit)).queue();
     }
 
     @Override

@@ -2,9 +2,9 @@ package bot.commands.member;
 
 import bot.commands.types.UserCommand;
 import bot.db.IDatabase;
-import bot.models.User;
+import bot.models.user.User;
 import bot.utils.CommandType;
-import bot.utils.Responses;
+import bot.localization.LocalizedResponse;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.DiscordLocale;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
@@ -22,7 +22,7 @@ public class Nick extends UserCommand {
 
         // discord only allows for 256 char long embed titles
         if (nickname.length() > 256) {
-            event.reply(Responses.getLocalizedResponse("nickname.error.tooLong", locale)).setEphemeral(true).queue();
+            event.reply(LocalizedResponse.get("nickname.error.tooLong", locale)).setEphemeral(true).queue();
             return;
         }
 
@@ -33,7 +33,7 @@ public class Nick extends UserCommand {
         IDatabase.INSTANCE.updateUser(user);
 
         // reply to the user
-        event.reply(Responses.getLocalizedResponse("nickname.successful", locale, nickname)).queue();
+        event.reply(LocalizedResponse.get("nickname.successful", locale, nickname)).queue();
     }
 
     @Override

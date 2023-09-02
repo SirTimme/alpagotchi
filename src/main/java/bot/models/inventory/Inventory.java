@@ -1,4 +1,4 @@
-package bot.models;
+package bot.models.inventory;
 
 import jakarta.persistence.*;
 import org.hibernate.annotations.Fetch;

@@ -1,4 +1,4 @@
-package bot.models;
+package bot.models.alpaca;
 
 import jakarta.persistence.*;
 

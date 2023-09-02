@@ -1,10 +1,10 @@
 package bot.commands.member;
 
 import bot.commands.types.UserCommand;
-import bot.models.User;
+import bot.models.cooldown.CooldownUtils;
+import bot.models.user.User;
 import bot.utils.CommandType;
-import bot.utils.Responses;
-import bot.utils.Utils;
+import bot.localization.LocalizedResponse;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.DiscordLocale;
@@ -48,17 +48,17 @@ public class Alpaca extends UserCommand {
             LOGGER.error(error.getMessage());
         }
 
-        final var workCooldown = Utils.cooldownToMinutes(user.getCooldown().getWork());
-        final var sleepCooldown = Utils.cooldownToMinutes(user.getCooldown().getSleep());
+        final var workCooldown = CooldownUtils.toMinutes(user.getCooldown().getWork());
+        final var sleepCooldown = CooldownUtils.toMinutes(user.getCooldown().getSleep());
         final var nickname = user.getAlpaca().getNickname();
 
         final var embed = new EmbedBuilder()
                 .setTitle(nickname)
-                .setDescription(Responses.getLocalizedResponse("alpaca.embed.description", locale))
-                .addField(Responses.getLocalizedResponse("alpaca.embed.field.title.work", locale), getCooldownMsg(workCooldown, locale), true)
-                .addField(Responses.getLocalizedResponse("alpaca.embed.field.title.sleep", locale), getCooldownMsg(sleepCooldown, locale), true)
+                .setDescription(LocalizedResponse.get("alpaca.embed.description", locale))
+                .addField(LocalizedResponse.get("alpaca.embed.field.title.work", locale), getCooldownMsg(workCooldown, locale), true)
+                .addField(LocalizedResponse.get("alpaca.embed.field.title.sleep", locale), getCooldownMsg(sleepCooldown, locale), true)
                 .setThumbnail(event.getUser().getAvatarUrl())
-                .setFooter(Responses.getLocalizedResponse("general.embed.footNote.createdBy", locale), "attachment://author.png")
+                .setFooter(LocalizedResponse.get("general.embed.footNote.createdBy", locale), "attachment://author.png")
                 .setTimestamp(Instant.now())
                 .setImage("attachment://alpagotchi.png")
                 .build();
@@ -130,7 +130,7 @@ public class Alpaca extends UserCommand {
 
     private String getCooldownMsg(final long minutes, final Locale locale) {
         return minutes > 0
-                ? Responses.getLocalizedResponse("alpaca.cooldown.active", locale, minutes)
-                : Responses.getLocalizedResponse("alpaca.cooldown.inactive", locale);
+                ? LocalizedResponse.get("alpaca.cooldown.active", locale, minutes)
+                : LocalizedResponse.get("alpaca.cooldown.inactive", locale);
     }
 }

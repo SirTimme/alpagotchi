@@ -1,11 +1,11 @@
 package bot.commands.member;
 
 import bot.commands.types.UserCommand;
-import bot.models.User;
+import bot.models.user.User;
 import bot.shop.IConsumable;
 import bot.shop.ItemManager;
 import bot.utils.CommandType;
-import bot.utils.Responses;
+import bot.localization.LocalizedResponse;
 import com.jakewharton.fliptables.FlipTable;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
@@ -25,13 +25,13 @@ public class Inventory extends UserCommand {
 
     @Override
     public void execute(final SlashCommandInteractionEvent event, final Locale locale, final User user) {
-        final var balanceMsg = Responses.getLocalizedResponse("general.embed.formattedBalance", locale, user.getInventory().getCurrency());
-        final var howToBuyMsg = Responses.getLocalizedResponse("general.embed.formattedHowToBuy", locale);
+        final var balanceMsg = LocalizedResponse.get("general.embed.formattedBalance", locale, user.getInventory().getCurrency());
+        final var howToBuyMsg = LocalizedResponse.get("general.embed.formattedHowToBuy", locale);
 
         final var embed = new EmbedBuilder()
-                .setTitle(Responses.getLocalizedResponse("inventory.embed.title", locale))
+                .setTitle(LocalizedResponse.get("inventory.embed.title", locale))
                 .setDescription(balanceMsg + "\n```\n" + buildTable(user, locale) + "\n```\n" + howToBuyMsg)
-                .setFooter(Responses.getLocalizedResponse("general.embed.footNote.createdBy", locale))
+                .setFooter(LocalizedResponse.get("general.embed.footNote.createdBy", locale))
                 .setTimestamp(Instant.now())
                 .build();
 
@@ -56,9 +56,9 @@ public class Inventory extends UserCommand {
                 .map(item -> buildRow(item, user, locale))
                 .toArray(String[][]::new);
 
-        final var localizedName = Responses.getLocalizedResponse("inventory.item.name", locale);
-        final var localizedSaturation = Responses.getLocalizedResponse("inventory.item.saturation", locale);
-        final var localizedQuantity = Responses.getLocalizedResponse("inventory.item.quantity", locale);
+        final var localizedName = LocalizedResponse.get("inventory.item.name", locale);
+        final var localizedSaturation = LocalizedResponse.get("inventory.item.saturation", locale);
+        final var localizedQuantity = LocalizedResponse.get("inventory.item.quantity", locale);
 
         final String[] header = { localizedName, localizedSaturation, localizedQuantity };
 
@@ -66,7 +66,7 @@ public class Inventory extends UserCommand {
     }
 
     private String[] buildRow(final IConsumable item, final User user, final Locale locale) {
-        final var itemName = Responses.getLocalizedResponse("general.item." + item.getName(), locale);
+        final var itemName = LocalizedResponse.get("general.item." + item.getName(), locale);
         final var saturation = String.valueOf(item.getSaturation());
         final var quantity = String.valueOf(user.getInventory().getItems().get(item.getName()));
 

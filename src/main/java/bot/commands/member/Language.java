@@ -2,7 +2,7 @@ package bot.commands.member;
 
 import bot.commands.types.InfoCommand;
 import bot.utils.CommandType;
-import bot.utils.Responses;
+import bot.localization.LocalizedResponse;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.emoji.Emoji;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
@@ -21,12 +21,12 @@ public class Language extends InfoCommand {
 
         final var menuLanguage = StringSelectMenu
                 .create(userId + ":language")
-                .setPlaceholder(Responses.getLocalizedResponse("language.placeholder", locale))
-                .addOption(Responses.getLocalizedResponse("general.displayName.english", locale), "en", Emoji.fromUnicode("\uD83C\uDDFA\uD83C\uDDF8"))
-                .addOption(Responses.getLocalizedResponse("general.displayName.german", locale), "de", Emoji.fromUnicode("\uD83C\uDDE9\uD83C\uDDEA"))
+                .setPlaceholder(LocalizedResponse.get("language.placeholder", locale))
+                .addOption(LocalizedResponse.get("general.displayName.english", locale), "en", Emoji.fromUnicode("\uD83C\uDDFA\uD83C\uDDF8"))
+                .addOption(LocalizedResponse.get("general.displayName.german", locale), "de", Emoji.fromUnicode("\uD83C\uDDE9\uD83C\uDDEA"))
                 .build();
 
-        event.reply(Responses.getLocalizedResponse("language.select", locale)).addActionRow(menuLanguage).queue();
+        event.reply(LocalizedResponse.get("language.select", locale)).addActionRow(menuLanguage).queue();
     }
 
     @Override

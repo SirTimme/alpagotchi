@@ -2,7 +2,7 @@ package bot.commands.member;
 
 import bot.commands.types.InfoCommand;
 import bot.utils.CommandType;
-import bot.utils.Responses;
+import bot.localization.LocalizedResponse;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.DiscordLocale;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
@@ -13,7 +13,7 @@ import java.util.Locale;
 public class Ping extends InfoCommand {
     @Override
     public void execute(final SlashCommandInteractionEvent event, final Locale locale) {
-        event.getJDA().getRestPing().queue(ping -> event.reply(Responses.getLocalizedResponse("ping.successful", locale, ping)).queue());
+        event.getJDA().getRestPing().queue(ping -> event.reply(LocalizedResponse.get("ping.successful", locale, ping)).queue());
     }
 
     @Override

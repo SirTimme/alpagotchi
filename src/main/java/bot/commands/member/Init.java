@@ -1,9 +1,9 @@
 package bot.commands.member;
 
 import bot.commands.types.UserCommand;
-import bot.models.User;
+import bot.models.user.User;
 import bot.utils.CommandType;
-import bot.utils.Responses;
+import bot.localization.LocalizedResponse;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.DiscordLocale;
@@ -18,27 +18,27 @@ public class Init extends UserCommand {
     @Override
     public void execute(final SlashCommandInteractionEvent event, final Locale locale, final User user) {
         if (user != null) {
-            event.reply(Responses.getLocalizedResponse("init.error.alreadyOwned", locale)).setEphemeral(true).queue();
+            event.reply(LocalizedResponse.get("init.error.alreadyOwned", locale)).setEphemeral(true).queue();
             return;
         }
 
         final var userId = event.getUser().getId();
 
-        final var btnAccept = Button.success(userId + ":initAccept", Responses.getLocalizedResponse("button.accept", locale));
-        final var btnCancel = Button.danger(userId + ":initCancelled", Responses.getLocalizedResponse("button.cancel", locale));
+        final var btnAccept = Button.success(userId + ":initAccept", LocalizedResponse.get("button.accept", locale));
+        final var btnCancel = Button.danger(userId + ":initCancelled", LocalizedResponse.get("button.cancel", locale));
 
         final var embed = new EmbedBuilder()
-                .setTitle(Responses.getLocalizedResponse("init.embed.title", locale))
-                .addField(Responses.getLocalizedResponse("init.embed.field.title.storage", locale),
-                          Responses.getLocalizedResponse("init.embed.field.body.storage", locale),
+                .setTitle(LocalizedResponse.get("init.embed.title", locale))
+                .addField(LocalizedResponse.get("init.embed.field.title.storage", locale),
+                          LocalizedResponse.get("init.embed.field.body.storage", locale),
                           false)
-                .addField(Responses.getLocalizedResponse("init.embed.field.title.deletion", locale),
-                          Responses.getLocalizedResponse("init.embed.field.body.deletion", locale),
+                .addField(LocalizedResponse.get("init.embed.field.title.deletion", locale),
+                          LocalizedResponse.get("init.embed.field.body.deletion", locale),
                           false)
-                .addField(Responses.getLocalizedResponse("init.embed.field.title.agreement", locale),
-                          Responses.getLocalizedResponse("init.embed.field.body.agreement", locale),
+                .addField(LocalizedResponse.get("init.embed.field.title.agreement", locale),
+                          LocalizedResponse.get("init.embed.field.body.agreement", locale),
                           false)
-                .setFooter(Responses.getLocalizedResponse("general.embed.footNote.createdBy", locale))
+                .setFooter(LocalizedResponse.get("general.embed.footNote.createdBy", locale))
                 .setTimestamp(Instant.now())
                 .build();
 

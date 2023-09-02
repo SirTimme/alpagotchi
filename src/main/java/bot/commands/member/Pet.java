@@ -2,9 +2,9 @@ package bot.commands.member;
 
 import bot.commands.types.UserCommand;
 import bot.db.IDatabase;
-import bot.models.User;
+import bot.models.user.User;
 import bot.utils.CommandType;
-import bot.utils.Responses;
+import bot.localization.LocalizedResponse;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.DiscordLocale;
 import net.dv8tion.jda.api.interactions.commands.Command;
@@ -24,7 +24,7 @@ public class Pet extends UserCommand {
         // already max joy?
         final var joy = user.getAlpaca().getJoy();
         if (joy == 100) {
-            event.reply(Responses.getLocalizedResponse("pet.error.joyAtMaximum", locale)).setEphemeral(true).queue();
+            event.reply(LocalizedResponse.get("pet.error.joyAtMaximum", locale)).setEphemeral(true).queue();
             return;
         }
 
@@ -44,7 +44,7 @@ public class Pet extends UserCommand {
         IDatabase.INSTANCE.updateUser(user);
 
         // reply to the user
-        event.reply(Responses.getLocalizedResponse(getKey(isFavourite), locale, value)).queue();
+        event.reply(LocalizedResponse.get(getKey(isFavourite), locale, value)).queue();
     }
 
     @Override

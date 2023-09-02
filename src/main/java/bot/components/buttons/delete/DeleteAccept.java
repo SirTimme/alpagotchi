@@ -2,7 +2,7 @@ package bot.components.buttons.delete;
 
 import bot.components.buttons.MessageButton;
 import bot.db.IDatabase;
-import bot.utils.Responses;
+import bot.localization.LocalizedResponse;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 
 import java.util.Collections;
@@ -13,7 +13,7 @@ public class DeleteAccept extends MessageButton {
     public void execute(final ButtonInteractionEvent event, final Locale locale) {
         IDatabase.INSTANCE.deleteUserById(event.getUser().getIdLong());
 
-        event.editMessage(Responses.getLocalizedResponse("delete.successful", locale))
+        event.editMessage(LocalizedResponse.get("delete.successful", locale))
              .setComponents(Collections.emptyList())
              .setEmbeds(Collections.emptyList())
              .queue();
