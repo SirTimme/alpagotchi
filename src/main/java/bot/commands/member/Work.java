@@ -5,7 +5,7 @@ import bot.db.IDatabase;
 import bot.models.User;
 import bot.utils.CommandType;
 import bot.utils.Responses;
-import bot.entities.cooldown.CooldownUtils;
+import bot.utils.Utils;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.DiscordLocale;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
@@ -17,7 +17,7 @@ public class Work extends UserCommand {
     @Override
     public void execute(final SlashCommandInteractionEvent event, final Locale locale, final User user) {
         // is the alpaca currently sleeping?
-        final long sleep = CooldownUtils.cooldownToMinutes(user.getCooldown().getSleep());
+        final long sleep = Utils.cooldownToMinutes(user.getCooldown().getSleep());
         if (sleep > 0) {
             event.reply(Responses.getLocalizedResponse("work.error.currentlySleeping", locale, sleep)).setEphemeral(true).queue();
             return;
