@@ -1,7 +1,6 @@
 package bot.components.buttons;
 
 import bot.utils.Responses;
-import bot.utils.Utils;
 import bot.localization.LocaleUtils;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 
