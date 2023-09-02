@@ -1,14 +1,13 @@
 package bot.components.menus;
 
 import bot.utils.Responses;
-import bot.utils.Utils;
+import bot.localization.LocaleUtils;
 import net.dv8tion.jda.api.events.interaction.component.StringSelectInteractionEvent;
 
 public abstract class MessageMenu implements IMenu {
     @Override
     public void execute(final StringSelectInteractionEvent event) {
-        final var locale = Utils.retrieveLocale(event);
-
+        final var locale = LocaleUtils.getLocale(event);
         final var authorId = event.getComponentId().split(":")[0];
 
         if (!authorId.equals(event.getUser().getId())) {
