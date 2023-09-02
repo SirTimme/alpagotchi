@@ -7,7 +7,7 @@ import bot.commands.owner.Shutdown;
 import bot.commands.owner.Update;
 import bot.commands.member.*;
 import bot.shop.ItemManager;
-import bot.utils.CommandType;
+import bot.commands.types.CommandType;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 
