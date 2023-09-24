@@ -1,10 +1,4 @@
-<h1 align="center">Alpagotchi | Alpaca + Tamagotchi</h1>
-
-<h4 align="center">
-  <a href="https://alpagotchi.github.io" target="_blank">Alpagotchi Website</a> |
-  <a href="https://discord.com/api/oauth2/authorize?client_id=780910199875567616&permissions=265216&scope=bot%20applications.commands" target="_blank">Invite Link</a> |
-  <a href="https://discord.gg/DXtYyzGhXR" target="_blank">Support Discord</a>
-</h4>
+<h1 align="center">Alpagotchi</h1>
 
 <h3 align="center">Alpagotchi allows any user to create and take care of their own digital alpaca.</h3>
 
@@ -12,8 +6,12 @@
     <img alt="Alpagotchi" src="src/main/resources/assets/showcase.png" />
 </div>
 
-<h2 align=center>Commands overview</h2>
+## Table of Contents
+1. [Commands overview](#commands-overview)
+2. [Self-hosting](#self-hosting)
+3. [Useful links](#useful-links)
 
+## Commands overview
 | Usage                         | Task                                            |
 |-------------------------------|-------------------------------------------------|
 | buy [itemName] [1-10]         | Buys the amount of items from the shop          |
@@ -33,10 +31,32 @@
 | init                          | Initialize your alpaca in the database          |
 | language                      | Sets the bots' language within a guild          |
 
-<h2 align=center>Self-hosting</h2>
+## Self-hosting
+Alpagotchi provides a docker image to host it yourself. The docker image can be found on [dockerhub](https://hub.docker.com/r/alpagotchi/discord-bot).
 
-Alpagotchi provides a docker image to host it yourself. The docker image can be found on [dockerhub](https://hub.docker.com/r/alpagotchi/discord-bot).\
-The `docker-compose` file below configures all required services. The `adminer` service is optional and just provides a GUI for the postgres database.
+> [!IMPORTANT]
+> This directory structure is needed for elephas to run:
+> ```
+> /
+> ├── docker-compose.yml
+> └── .env
+> ```
+ 
+The `.env` file needs the following entries:
+
+````
+TOKEN=                  # The bot token
+POSTGRES_USER=          # the database username of your choice
+POSTGRES_PASSWORD=      # the database password of your choice
+POSTGRES_URL=           # the jdbc url of the postgres database
+POSTGRES_DB=            # the database name of your choice
+````
+
+The `docker-compose.yml` configures the following services:
+- postgres database for data storage
+- the discord bot
+- adminer for accessing the database via GUI
+
 ````yml
 version: '3.8'
 
@@ -82,17 +102,9 @@ volumes:
   pg-data:
     name: pg-data
 ````
-The following directory structure is needed for Alpagotchi to be able to run:
-````
-/
-├── docker-compose.yml
-└── .env
-````
-The `.env` file needs the following entries:
-````
-TOKEN=                  // The token obtained at the bot page at the discord developer portal
-POSTGRES_USER=          // The username of the postgres user
-POSTGRES_PASSWORD=      // The password of the postgres user
-POSTGRES_URL=           // The whole jdbc url of the postgres database
-POSTGRES_DB=            // The name of the database
-````
+
+## Useful links
+- [Official Alpagotchi website](https://alpagotchi.github.io) 
+- [Discord invite link of the Alpagotchi bot](https://discord.com/api/oauth2/authorize?client_id=780910199875567616&permissions=265216&scope=bot%20applications.commands)
+- [Discord invite link of the support server](https://discord.gg/DXtYyzGhXR)
+- [Top.gg page of Alpagotchi](https://top.gg/bot/780910199875567616)
