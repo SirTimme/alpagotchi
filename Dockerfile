@@ -1,4 +1,4 @@
-FROM maven:3.9.3 AS build
+FROM maven:3.9.5 AS build
 ENV HOME=/home/app
 RUN mkdir -p $HOME
 WORKDIR $HOME
@@ -7,7 +7,7 @@ RUN mvn verify
 ADD src $HOME/src
 RUN mvn package
 
-FROM openjdk:17
+FROM openjdk:21
 ENV HOME=/home/app
 WORKDIR $HOME
 ARG TOKEN=""
