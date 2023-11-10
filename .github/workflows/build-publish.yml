@@ -23,12 +23,6 @@ jobs:
       - name: Build with Maven
         run: mvn package && cp target/*dependencies*.jar alpagotchi.jar
 
-      - name: Upload build artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: Alpagotchi.jar
-          path: alpagotchi.jar
-
   docker:
     runs-on: ubuntu-latest
     needs: maven
