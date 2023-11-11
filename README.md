@@ -45,7 +45,7 @@ Alpagotchi provides a docker image to host it yourself. The docker image can be 
 The `.env` file needs the following entries:
 
 ````
-TOKEN=                  # The bot token
+TOKEN=                  # the bot token
 POSTGRES_USER=          # the database username of your choice
 POSTGRES_PASSWORD=      # the database password of your choice
 POSTGRES_URL=           # the jdbc url of the postgres database
