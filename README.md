@@ -35,7 +35,7 @@
 Alpagotchi provides a docker image to host it yourself. The docker image can be found on [dockerhub](https://hub.docker.com/r/alpagotchi/discord-bot).
 
 > [!IMPORTANT]
-> This directory structure is needed for elephas to run:
+> This directory structure is needed for Alpagotchi to run:
 > ```
 > /
 > ├── docker-compose.yml
@@ -45,11 +45,17 @@ Alpagotchi provides a docker image to host it yourself. The docker image can be 
 The `.env` file needs the following entries:
 
 ````
-TOKEN=                  # the bot token
-POSTGRES_USER=          # the database username of your choice
-POSTGRES_PASSWORD=      # the database password of your choice
-POSTGRES_URL=           # the jdbc url of the postgres database
-POSTGRES_DB=            # the database name of your choice
+TOKEN=                      # the bot token
+OWNER_ID=                   # your discord user id
+
+ADMINER_VERSION=4.8.1       # the used adminer version
+POSTGRES_VERSION=15.4       # the used postgres version
+ALPAGOTCHI_VERSION=0.3.3    # the current alpagotchi version
+
+POSTGRES_USER=              # the database username of your choice
+POSTGRES_PASSWORD=          # the database password of your choice
+POSTGRES_URL=               # the jdbc url of the postgres database
+POSTGRES_DB=                # the database name of your choice
 ````
 
 The `docker-compose.yml` configures the following services:
@@ -63,8 +69,7 @@ version: '3.8'
 name: alpagotchi
 services:
   database:
-    container_name: database
-    image: postgres
+    image: postgres:${POSTGRES_VERSION}
     restart: on-failure
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
@@ -74,10 +79,10 @@ services:
       - pg-data:/var/lib/postgresql/data
     ports:
       - "5432:5432"
-
+        
   bot:
     container_name: bot
-    image: alpagotchi/discord-bot
+    image: alpagotchi/discord-bot:${ALPAGOTCHI_VERSION}
     depends_on:
       - database
     restart: on-failure
@@ -88,8 +93,7 @@ services:
       POSTGRES_URL: ${POSTGRES_URL}
 
   adminer:
-    container_name: adminer
-    image: adminer
+    image: adminer:${ADMINER_VERSION}
     depends_on:
       - database
     restart: on-failure
@@ -100,7 +104,6 @@ services:
 
 volumes:
   pg-data:
-    name: pg-data
 ````
 
 ## Useful links
