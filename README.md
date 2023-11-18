@@ -48,9 +48,10 @@ The `.env` file needs the following entries:
 TOKEN=                      # the bot token
 OWNER_ID=                   # your discord user id
 
-ADMINER_VERSION=4.8.1       # the used adminer version
-POSTGRES_VERSION=15.4       # the used postgres version
-ALPAGOTCHI_VERSION=0.3.3    # the current alpagotchi version
+# if you leave the version variables empty, Alpagotchi uses default values
+POSTGRES_VERSION=
+ADMINER_VERSION=
+ALPAGOTCHI_VERSION=
 
 POSTGRES_USER=              # the database username of your choice
 POSTGRES_PASSWORD=          # the database password of your choice
@@ -69,7 +70,7 @@ version: '3.8'
 name: alpagotchi
 services:
   database:
-    image: postgres:${POSTGRES_VERSION}
+    image: postgres:${POSTGRES_VERSION:-15.4}
     restart: on-failure
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
@@ -82,7 +83,7 @@ services:
         
   bot:
     container_name: bot
-    image: alpagotchi/discord-bot:${ALPAGOTCHI_VERSION}
+    image: alpagotchi/discord-bot:${ALPAGOTCHI_VERSION:-0.3.3}
     depends_on:
       - database
     restart: on-failure
@@ -93,7 +94,7 @@ services:
       POSTGRES_URL: ${POSTGRES_URL}
 
   adminer:
-    image: adminer:${ADMINER_VERSION}
+    image: adminer:${ADMINER_VERSION:-4.8.1}
     depends_on:
       - database
     restart: on-failure
