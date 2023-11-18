@@ -89,6 +89,7 @@ services:
     restart: on-failure
     environment:
       TOKEN: ${TOKEN}
+      OWNER_ID: ${OWNER_ID}
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_URL: ${POSTGRES_URL}
