@@ -83,7 +83,7 @@ services:
         
   bot:
     container_name: bot
-    image: alpagotchi/discord-bot:${ALPAGOTCHI_VERSION:-0.3.3}
+    image: alpagotchi/discord-bot:${ALPAGOTCHI_VERSION:-0.0.1}
     depends_on:
       - database
     restart: on-failure
