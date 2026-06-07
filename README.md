@@ -39,7 +39,6 @@
 | language                      | Sets the bots' language within a guild          |
 
 ## Self-hosting
-Alpagotchi provides a docker image to host it yourself. The docker image can be found on [dockerhub](https://hub.docker.com/r/alpagotchi/discord-bot).
 
 > [!IMPORTANT]
 > This directory structure is needed for Alpagotchi to run:
