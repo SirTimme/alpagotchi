@@ -1,7 +1,7 @@
 services:
   database:
     image: postgres:${POSTGRES_VERSION}
-    restart: on-failure
+    restart: unless-stopped
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
@@ -23,13 +23,13 @@ services:
         POSTGRES_URL: ${POSTGRES_URL}
     depends_on:
       - database
-    restart: on-failure
+    restart: unless-stopped
 
   adminer:
     image: adminer:${ADMINER_VERSION}
     depends_on:
       - database
-    restart: on-failure
+    restart: unless-stopped
     environment:
       ADMINER_DESIGN: pepa-linha-dark
     ports:
