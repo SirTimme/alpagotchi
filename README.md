@@ -51,18 +51,16 @@
 The `.env` file needs the following entries:
 
 ````
-TOKEN=                      # the bot token
-OWNER_ID=                   # your discord user id
-
-# if you leave the version variables empty, Alpagotchi uses default values
-POSTGRES_VERSION=
-ADMINER_VERSION=
-ALPAGOTCHI_VERSION=
-
+# Postgres
+POSTGRES_VERSION=           # the version of Postgres you want to run (18+ is recommended)
 POSTGRES_USER=              # the database username of your choice
 POSTGRES_PASSWORD=          # the database password of your choice
 POSTGRES_URL=               # the jdbc url of the postgres database
 POSTGRES_DB=                # the database name of your choice
+
+# Alpagotchi
+TOKEN=                      # the bot token
+OWNER_ID=                   # your Discord user id
 ````
 
 The `compose.yaml` configures the following services:
