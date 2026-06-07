@@ -100,7 +100,5 @@ volumes:
 ````
 
 ## Useful links
-- [Official Alpagotchi website](https://alpagotchi.github.io)
-- [Discord invite link of the Alpagotchi bot](https://discord.com/api/oauth2/authorize?client_id=780910199875567616&permissions=265216&scope=bot%20applications.commands)
-- [Discord invite link of the support server](https://discord.gg/DXtYyzGhXR)
-- [Top.gg page of Alpagotchi](https://top.gg/bot/780910199875567616)
+- [Visit the official website](https://alpagotchi.github.io)
+- [Add Alpagotchi to your Discord server](https://discord.com/api/oauth2/authorize?client_id=780910199875567616&permissions=265216&scope=bot%20applications.commands)
