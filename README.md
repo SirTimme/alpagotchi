@@ -67,7 +67,7 @@ The `compose.yaml` configures the following services:
 - a Postgres database for data storage
 - the Discord bot
 
-````yaml
+```yaml
 services:
     database:
         image: postgres:${POSTGRES_VERSION}
@@ -97,7 +97,7 @@ services:
 
 volumes:
     pg-data:
-````
+```
 
 ## Useful links
 - [Visit the official website](https://alpagotchi.github.io)
