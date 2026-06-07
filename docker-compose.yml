@@ -25,15 +25,5 @@ services:
       - database
     restart: unless-stopped
 
-  adminer:
-    image: adminer:${ADMINER_VERSION}
-    depends_on:
-      - database
-    restart: unless-stopped
-    environment:
-      ADMINER_DESIGN: pepa-linha-dark
-    ports:
-      - "8080:8080"
-
 volumes:
   pg-data:
