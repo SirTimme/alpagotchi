@@ -13,12 +13,12 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-      args:
-        OWNER_ID: ${OWNER_ID}
-        TOKEN: ${TOKEN}
-        POSTGRES_USER: ${POSTGRES_USER}
-        POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-        POSTGRES_URL: ${POSTGRES_URL}
+    environment:
+      OWNER_ID: ${OWNER_ID}
+      TOKEN: ${TOKEN}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_URL: ${POSTGRES_URL}
     depends_on:
       - database
     restart: unless-stopped
