@@ -7,6 +7,7 @@ import dev.sirtimme.alpagotchi.models.inventory.Inventory;
 import dev.sirtimme.alpagotchi.models.user.User;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
+import org.hibernate.KeyType;
 import org.hibernate.Session;
 
 import java.util.HashMap;
@@ -35,9 +36,8 @@ public class PostgresDB implements IDatabase {
         final var entityManager = this.entityManagerFactory.createEntityManager();
 
         final var user = entityManager
-                .unwrap(Session.class)
-                .bySimpleNaturalId(User.class)
-                .load(userId);
+            .unwrap(Session.class)
+            .find(User.class, userId, KeyType.NATURAL);
 
         entityManager.close();
 
@@ -76,9 +76,8 @@ public class PostgresDB implements IDatabase {
         final var entityManager = this.entityManagerFactory.createEntityManager();
 
         final var user = entityManager
-                .unwrap(Session.class)
-                .bySimpleNaturalId(User.class)
-                .load(userId);
+            .unwrap(Session.class)
+            .find(User.class, userId, KeyType.NATURAL);
 
         entityManager.getTransaction().begin();
         entityManager.remove(user);
@@ -92,9 +91,8 @@ public class PostgresDB implements IDatabase {
         final var entityManager = this.entityManagerFactory.createEntityManager();
 
         final var settings = entityManager
-                .unwrap(Session.class)
-                .bySimpleNaturalId(GuildSettings.class)
-                .load(guildId);
+            .unwrap(Session.class)
+            .find(GuildSettings.class, guildId, KeyType.NATURAL);
 
         entityManager.close();
 

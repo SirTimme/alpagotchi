@@ -6,6 +6,7 @@ import dev.sirtimme.alpagotchi.commands.types.CommandType;
 import dev.sirtimme.alpagotchi.localization.LocalizedResponse;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.DiscordLocale;
+import net.dv8tion.jda.api.interactions.InteractionContextType;
 import net.dv8tion.jda.api.interactions.commands.DefaultMemberPermissions;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
@@ -38,7 +39,7 @@ public class Update extends OwnerCommand {
     public CommandData getCommandData() {
         return Commands.slash("update", "Refreshes all slash commands")
                        .setDescriptionLocalization(DiscordLocale.GERMAN, "Aktualisiert alle Befehle")
-                       .setGuildOnly(true)
+                       .setContexts(InteractionContextType.GUILD)
                        .setDefaultPermissions(DefaultMemberPermissions.DISABLED);
     }
 

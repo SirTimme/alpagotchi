@@ -5,11 +5,12 @@ import dev.sirtimme.alpagotchi.models.user.User;
 import dev.sirtimme.alpagotchi.commands.types.CommandType;
 import dev.sirtimme.alpagotchi.localization.LocalizedResponse;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.components.actionrow.ActionRow;
+import net.dv8tion.jda.api.components.buttons.Button;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.DiscordLocale;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
-import net.dv8tion.jda.api.interactions.components.buttons.Button;
 
 import java.time.Instant;
 import java.util.Locale;
@@ -42,7 +43,7 @@ public class Init extends UserCommand {
                 .setTimestamp(Instant.now())
                 .build();
 
-        event.replyEmbeds(embed).addActionRow(btnAccept, btnCancel).queue();
+        event.replyEmbeds(embed).addComponents(ActionRow.of(btnAccept, btnCancel)).queue();
     }
 
     @Override

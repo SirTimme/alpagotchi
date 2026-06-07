@@ -4,11 +4,12 @@ import dev.sirtimme.alpagotchi.commands.types.UserCommand;
 import dev.sirtimme.alpagotchi.models.user.User;
 import dev.sirtimme.alpagotchi.commands.types.CommandType;
 import dev.sirtimme.alpagotchi.localization.LocalizedResponse;
+import net.dv8tion.jda.api.components.actionrow.ActionRow;
+import net.dv8tion.jda.api.components.buttons.Button;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.DiscordLocale;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
-import net.dv8tion.jda.api.interactions.components.buttons.Button;
 
 import java.util.Locale;
 
@@ -20,7 +21,7 @@ public class Delete extends UserCommand {
         final var btnSuccess = Button.success(userId + ":deleteAccept", LocalizedResponse.get("button.accept", locale));
         final var btnCancel = Button.danger(userId + ":deleteCancelled", LocalizedResponse.get("button.cancel", locale));
 
-        event.reply(LocalizedResponse.get("delete.warning", locale)).addActionRow(btnSuccess, btnCancel).queue();
+        event.reply(LocalizedResponse.get("delete.warning", locale)).addComponents(ActionRow.of(btnSuccess, btnCancel)).queue();
     }
 
     @Override

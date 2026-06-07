@@ -7,6 +7,7 @@ import dev.sirtimme.alpagotchi.commands.types.CommandType;
 import dev.sirtimme.alpagotchi.localization.LocalizedResponse;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.DiscordLocale;
+import net.dv8tion.jda.api.interactions.InteractionContextType;
 import net.dv8tion.jda.api.interactions.commands.Command;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
@@ -86,7 +87,7 @@ public class Gift extends UserCommand {
         return Commands.slash("gift", "Gifts another user")
                        .setDescriptionLocalization(DiscordLocale.GERMAN, "Beschenkt einen anderen Nutzer")
                        .addOptions(options)
-                       .setGuildOnly(true);
+                       .setContexts(InteractionContextType.GUILD);
     }
 
     @Override
