@@ -44,7 +44,7 @@
 > This directory structure is needed for Alpagotchi to run:
 > ```
 > /
-> ├── docker-compose.yml
+> ├── compose.yaml
 > └── .env
 > ```
 
@@ -65,10 +65,9 @@ POSTGRES_URL=               # the jdbc url of the postgres database
 POSTGRES_DB=                # the database name of your choice
 ````
 
-The `docker-compose.yml` configures the following services:
-- postgres database for data storage
-- the discord bot
-- adminer for accessing the database via GUI
+The `compose.yaml` configures the following services:
+- a Postgres database for data storage
+- the Discord bot
 
 ````yaml
 services:
