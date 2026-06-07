@@ -4,13 +4,15 @@ import dev.sirtimme.alpagotchi.commands.types.InfoCommand;
 import dev.sirtimme.alpagotchi.commands.types.CommandType;
 import dev.sirtimme.alpagotchi.localization.LocalizedResponse;
 import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.components.actionrow.ActionRow;
+import net.dv8tion.jda.api.components.selections.StringSelectMenu;
 import net.dv8tion.jda.api.entities.emoji.Emoji;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.DiscordLocale;
+import net.dv8tion.jda.api.interactions.InteractionContextType;
 import net.dv8tion.jda.api.interactions.commands.DefaultMemberPermissions;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
-import net.dv8tion.jda.api.interactions.components.selections.StringSelectMenu;
 
 import java.util.Locale;
 
@@ -26,14 +28,14 @@ public class Language extends InfoCommand {
                 .addOption(LocalizedResponse.get("general.displayName.german", locale), "de", Emoji.fromUnicode("\uD83C\uDDE9\uD83C\uDDEA"))
                 .build();
 
-        event.reply(LocalizedResponse.get("language.select", locale)).addActionRow(menuLanguage).queue();
+        event.reply(LocalizedResponse.get("language.select", locale)).addComponents(ActionRow.of(menuLanguage)).queue();
     }
 
     @Override
     public CommandData getCommandData() {
         return Commands.slash("language", "Sets the used language of Alpagotchi for this server")
                        .setDescriptionLocalization(DiscordLocale.GERMAN, "Setzt die verwendete Sprache von Alpagotchi für diesen Server")
-                       .setGuildOnly(true)
+                       .setContexts(InteractionContextType.GUILD)
                        .setDefaultPermissions(DefaultMemberPermissions.enabledFor(Permission.MANAGE_SERVER));
     }
 
