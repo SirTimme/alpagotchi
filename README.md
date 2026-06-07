@@ -1,9 +1,9 @@
 <h1 align="center">Alpagotchi</h1>
 
 <div align="center">
-    <img src="https://img.shields.io/badge/Docker-2CA5E0?style=for-the-badge&logo=docker&logoColor=white"/> 
-    <img src="https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white"/> 
-    <img src="https://img.shields.io/badge/Discord-5865F2?style=for-the-badge&logo=discord&logoColor=white"/> 
+    <img src="https://img.shields.io/badge/Docker-2CA5E0?style=for-the-badge&logo=docker&logoColor=white"/>
+    <img src="https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white"/>
+    <img src="https://img.shields.io/badge/Discord-5865F2?style=for-the-badge&logo=discord&logoColor=white"/>
     <img src="https://img.shields.io/badge/apache_maven-C71A36?style=for-the-badge&logo=apachemaven&logoColor=white"/>
 </div>
 
@@ -39,84 +39,66 @@
 | language                      | Sets the bots' language within a guild          |
 
 ## Self-hosting
-Alpagotchi provides a docker image to host it yourself. The docker image can be found on [dockerhub](https://hub.docker.com/r/alpagotchi/discord-bot).
 
 > [!IMPORTANT]
 > This directory structure is needed for Alpagotchi to run:
 > ```
 > /
-> ├── docker-compose.yml
+> ├── compose.yaml
 > └── .env
 > ```
- 
+
 The `.env` file needs the following entries:
 
 ````
-TOKEN=                      # the bot token
-OWNER_ID=                   # your discord user id
-
-# if you leave the version variables empty, Alpagotchi uses default values
-POSTGRES_VERSION=
-ADMINER_VERSION=
-ALPAGOTCHI_VERSION=
-
+# Postgres
+POSTGRES_VERSION=           # the version of Postgres you want to run (18+ is recommended)
 POSTGRES_USER=              # the database username of your choice
 POSTGRES_PASSWORD=          # the database password of your choice
 POSTGRES_URL=               # the jdbc url of the postgres database
 POSTGRES_DB=                # the database name of your choice
+
+# Alpagotchi
+TOKEN=                      # the bot token
+OWNER_ID=                   # your Discord user id
 ````
 
-The `docker-compose.yml` configures the following services:
-- postgres database for data storage
-- the discord bot
-- adminer for accessing the database via GUI
+The `compose.yaml` configures the following services:
+- a Postgres database for data storage
+- the Discord bot
 
-````yml
-version: '3.8'
-
-name: alpagotchi
+```yaml
 services:
-  database:
-    image: postgres:${POSTGRES_VERSION:-15.4}
-    restart: on-failure
-    environment:
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_DB: ${POSTGRES_DB}
-    volumes:
-      - pg-data:/var/lib/postgresql/data
-    ports:
-      - "5432:5432"
-        
-  bot:
-    container_name: bot
-    image: alpagotchi/discord-bot:${ALPAGOTCHI_VERSION:-0.0.1}
-    depends_on:
-      - database
-    restart: on-failure
-    environment:
-      TOKEN: ${TOKEN}
-      OWNER_ID: ${OWNER_ID}
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_URL: ${POSTGRES_URL}
+    database:
+        image: postgres:${POSTGRES_VERSION}
+        container_name: alpagotchi-database
+        restart: unless-stopped
+        environment:
+            POSTGRES_USER: ${POSTGRES_USER}
+            POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+            POSTGRES_DB: ${POSTGRES_DB}
+        volumes:
+            - pg-data:/var/lib/postgresql
 
-  adminer:
-    image: adminer:${ADMINER_VERSION:-4.8.1}
-    depends_on:
-      - database
-    restart: on-failure
-    environment:
-      ADMINER_DESIGN: pepa-linha-dark
-    ports:
-      - "8080:8080"
+    bot:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        container_name: alpagotchi-bot
+        environment:
+            OWNER_ID: ${OWNER_ID}
+            TOKEN: ${TOKEN}
+            POSTGRES_USER: ${POSTGRES_USER}
+            POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+            POSTGRES_URL: ${POSTGRES_URL}
+        depends_on:
+            - database
+        restart: unless-stopped
 
 volumes:
-  pg-data:
-````
+    pg-data:
+```
 
 ## Useful links
-- [Official Alpagotchi website](https://alpagotchi.github.io) 
-- [Discord invite link of the Alpagotchi bot](https://discord.com/api/oauth2/authorize?client_id=780910199875567616&permissions=265216&scope=bot%20applications.commands)
-- [Discord invite link of the support server](https://discord.gg/DXtYyzGhXR)
-- [Top.gg page of Alpagotchi](https://top.gg/bot/780910199875567616)
+- [Visit the official website](https://alpagotchi.github.io)
+- [Add Alpagotchi to your Discord server](https://discord.com/api/oauth2/authorize?client_id=780910199875567616&permissions=265216&scope=bot%20applications.commands)
